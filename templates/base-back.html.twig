@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>{% block title %}Admin{% endblock %}</title>
+  <title>{% block title %}Admin Home{% endblock %}</title>
 
   <!-- Favicons -->
   <link href="{{asset('back-office/img/logo.png')}}" rel="icon">
@@ -38,6 +38,7 @@
 
 <body>
 
+  {%block header%}
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -266,7 +267,9 @@
     </nav><!-- End Icons Navigation -->
 
   </header><!-- End Header -->
+  {%endblock%}
 
+  {%block sidebar%}
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
 
@@ -280,18 +283,8 @@
       </li><!-- End Dashboard Nav -->
 
 
-
-
-
-
-
-
       <!--Bidlou Asemi !!!-->
       <!--Bidlou Asemi !!!-->
-
-
-
-
 
 
       <!-- Gestion User -->
@@ -413,21 +406,13 @@
       <!--Bidlou Asemi !!!-->
 
 
-
-
-
-
-
-
-
-
-
-
-
     </ul>
 
   </aside><!-- End Sidebar-->
+  {%endblock%}
 
+
+  {% block body %}
   <main id="main" class="main">
 
     <div class="pagetitle">
@@ -1075,13 +1060,18 @@
     </section>
 
   </main><!-- End #main -->
+  {% endblock %}
 
+
+  {% block footer %}
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
     <div class="copyright">
       &copy; Copyright <strong><span>Baladity 2024</span></strong>. All Rights Reserved
     </div>
   </footer><!-- End Footer -->
+
+  {% endblock %}
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
