@@ -280,11 +280,9 @@
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
-      </li><!-- End Dashboard Nav -->
+      </li>
+      <!-- End Dashboard Nav -->
 
-
-      <!--Bidlou Asemi !!!-->
-      <!--Bidlou Asemi !!!-->
 
 
       <!-- Gestion User -->
@@ -294,13 +292,13 @@
         </a>
         <ul id="GestionUser-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="GestionUser-general.html">
-              <i class="bi bi-circle"></i><span>Ajouter Tache</span>
+            <a href="ajouteruser.html.twig">
+              <i class="bi bi-circle"></i><span>Ajouter User</span>
             </a>
           </li>
           <li>
             <a href="GestionUser-data.html">
-              <i class="bi bi-circle"></i><span>Liste Tache</span>
+              <i class="bi bi-circle"></i><span>Liste User</span>
             </a>
           </li>
         </ul>
@@ -333,12 +331,12 @@
         <ul id="GestionReclamation-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
             <a href="GestionReclamation-general.html">
-              <i class="bi bi-circle"></i><span>Ajouter Tache</span>
+              <i class="bi bi-circle"></i><span>Ajouter Reclamation</span>
             </a>
           </li>
           <li>
             <a href="GestionReclamation-data.html">
-              <i class="bi bi-circle"></i><span>Liste Tache</span>
+              <i class="bi bi-circle"></i><span>Liste Reclamation</span>
             </a>
           </li>
         </ul>
@@ -352,12 +350,12 @@
         <ul id="GestionEvenement-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
             <a href="GestionEvenement-general.html">
-              <i class="bi bi-circle"></i><span>Ajouter Tache</span>
+              <i class="bi bi-circle"></i><span>Ajouter Evenement</span>
             </a>
           </li>
           <li>
             <a href="GestionEvenement-data.html">
-              <i class="bi bi-circle"></i><span>Liste Tache</span>
+              <i class="bi bi-circle"></i><span>Liste Evenement</span>
             </a>
           </li>
         </ul>
@@ -371,12 +369,12 @@
         <ul id="GestionEquipement-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
             <a href="GestionEquipement-general.html">
-              <i class="bi bi-circle"></i><span>Ajouter Tache</span>
+              <i class="bi bi-circle"></i><span>Ajouter Equipement</span>
             </a>
           </li>
           <li>
             <a href="GestionEquipement-data.html">
-              <i class="bi bi-circle"></i><span>Liste Tache</span>
+              <i class="bi bi-circle"></i><span>Liste Equipement</span>
             </a>
           </li>
         </ul>
@@ -390,21 +388,17 @@
         <ul id="GestionActualite-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
             <a href="GestionActualite-general.html">
-              <i class="bi bi-circle"></i><span>Ajouter Tache</span>
+              <i class="bi bi-circle"></i><span>Ajouter Actualite</span>
             </a>
           </li>
           <li>
             <a href="GestionActualite-data.html">
-              <i class="bi bi-circle"></i><span>Liste Tache</span>
+              <i class="bi bi-circle"></i><span>Liste Actualite</span>
             </a>
           </li>
         </ul>
       </li>
       <!-- Gestion Actualite -->
-
-      
-      <!--Bidlou Asemi !!!-->
-
 
     </ul>
 
@@ -412,7 +406,7 @@
   {%endblock%}
 
 
-  {% block body %}
+  
   <main id="main" class="main">
 
     <div class="pagetitle">
@@ -424,7 +418,7 @@
         </ol>
       </nav>-->
     </div><!-- End Page Title -->
-
+    {% block body %}
     <section class="section dashboard">
       <div class="row">
 
@@ -1058,7 +1052,7 @@
 
       </div>
     </section>
-
+    
   </main><!-- End #main -->
   {% endblock %}
 
