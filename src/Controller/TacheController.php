@@ -5,53 +5,74 @@ namespace App\Controller;
 use App\Entity\tache;
 use App\Form\TacheType;
 use App\Entity\enduser;
+use App\Repository\TacheRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Persistence\ManagerRegistry;
+
 
 class TacheController extends AbstractController
 {
     #[Route('/tache', name: 'app_tache')]
     public function index(): Response
     {
-        return $this->render('tache/index.html.twig', [
-            'controller_name' => 'TacheController',
-        ]);
+        return $this->render('tache/list.html.twig');
     }
 
-    #[Route('/tache/ajouter', name: 'tache_ajouter')]
-    public function ajouter(Request $request): Response
+    #[Route('/tache/list', name: 'tache_list')]
+    public function list(TacheRepository $r): Response
     {
-// Fetch the user entity
+        $xs = $r->findAll();
+        return $this->render('tache/list.html.twig', ['l' => $xs,]);
+    }
 
+    #[Route('/tache/add', name: 'tache_add')]
+    public function add(Request $req, ManagerRegistry $doctrine): Response
+    {
         $userId = 50; // Assuming the user ID is 50
-
-        // Fetch the enduser entity from the database based on $userId
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
 
         if (!$user) {
             throw $this->createNotFoundException('User not found');
         }
 
+        $x= new tache();
+        $x->setIdUser($user);
 
-        $tache = new tache();
-        $tache->setIdUser($user);
-        $form = $this->createForm(TacheType::class, $tache);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Save the task to the database
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($tache);
-            $entityManager->flush();
-
-            // Redirect to the index page or wherever you want
-            return $this->redirectToRoute('app_tache');
+        $form = $this->createForm(TacheType::class, $x);
+        $form->handleRequest($req);
+        if ($form->isSubmitted()) {
+            $em = $doctrine->getManager();
+            $em->persist($x);
+            $em->flush();
+            return $this->redirectToRoute('tache_list');
         }
-
-        return $this->render('tache/ajoutertache.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->renderForm('tache/add.html.twig', ['f' => $form,]);
     }
+    #[Route('/tache/update/{i}', name: 'tache_update')]
+    public function update($i, TacheRepository $rep, Request $req, ManagerRegistry $doctrine): Response
+    {
+        $x = $rep->find($i);
+        $form = $this->createForm(TacheType::class, $x);
+        $form->handleRequest($req);
+
+        if ($form->isSubmitted()) {
+            $em = $doctrine->getManager();
+            $em->flush();
+            return $this->redirectToRoute('tache_list');
+        }
+        return $this->renderForm('tache/add.html.twig', ['f' => $form,]);
+    }
+    #[Route('/tache/delete/{i}', name: 'tache_delete')]
+    public function delete($i, TacheRepository $rep, ManagerRegistry $doctrine): Response
+    {
+        $xs = $rep->find($i);
+        $em = $doctrine->getManager();
+        $em->remove($xs);
+        $em->flush();
+        return $this->redirectToRoute('tache_list');
+    }
+
 }

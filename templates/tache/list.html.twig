@@ -1,0 +1,32 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Liste des Tâches{% endblock %}
+
+{% block body %}
+
+    <table class=" table table-hover ">
+        <thead>
+        <tr class="table-primary">
+            <th scope="col">Titre</th>
+            <th scope="col">Date Fin</th>
+            <th scope="col">Etat</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for task in l %}
+            <tr>
+                <td>{{ task.getTitreT() }}</td>
+                <td>{{ task.getDateFT()|date('d-m-Y') }}</td>
+                <td>{{ task.getEtatT() }}</td>
+                <td>
+                    <form action="{{ path('tache_update', {'i': task.getIdT()}) }}"><button class="btn btn-primary">Modifier</button></form>
+                    <form action="{{ path('tache_delete', {'i': task.getIdT()}) }}"><button class="btn btn-danger">Supprimer</button></form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <button onclick="location.href='{{ path('tache_add') }}'" class="btn btn-outline-primary">Ajouter Tâche</button>
+{% endblock %}
