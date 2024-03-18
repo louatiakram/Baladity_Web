@@ -4,17 +4,20 @@ export default class ScatterController extends DatasetController {
      * @type {any}
      */
     static overrides: any;
+
     /**
-       * @protected
-       */
+     * @protected
+     */
     protected getLabelAndValue(index: any): {
         label: any;
         value: string;
     };
+
     update(mode: any): void;
+
     /**
-       * @protected
-       */
+     * @protected
+     */
     protected getMaxOverflow(): any;
 }
 import DatasetController from "../core/core.datasetController.js";

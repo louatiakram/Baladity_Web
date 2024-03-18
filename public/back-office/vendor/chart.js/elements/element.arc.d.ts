@@ -1,5 +1,6 @@
 import Element from '../core/core.element.js';
-import type { ArcOptions, Point } from '../types/index.js';
+import type {ArcOptions, Point} from '../types/index.js';
+
 export interface ArcProps extends Point {
     startAngle: number;
     endAngle: number;
@@ -7,6 +8,7 @@ export interface ArcProps extends Point {
     outerRadius: number;
     circumference: number;
 }
+
 export default class ArcElement extends Element<ArcProps, ArcOptions> {
     static id: string;
     static defaults: {
@@ -36,15 +38,20 @@ export default class ArcElement extends Element<ArcProps, ArcOptions> {
     outerRadius: number;
     pixelMargin: number;
     startAngle: number;
+
     constructor(cfg: any);
+
     inRange(chartX: number, chartY: number, useFinalPosition: boolean): boolean;
+
     getCenterPoint(useFinalPosition: boolean): {
         x: number;
         y: number;
     };
+
     tooltipPosition(useFinalPosition: boolean): {
         x: number;
         y: number;
     };
+
     draw(ctx: CanvasRenderingContext2D): void;
 }

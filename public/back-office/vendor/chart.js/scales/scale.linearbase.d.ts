@@ -8,13 +8,18 @@ export default class LinearScaleBase extends Scale {
     /** @type {number} */
     _endValue: number;
     _valueRange: number;
+
     parse(raw: any, index: any): number;
+
     handleTickRangeOptions(): void;
+
     getTickLimit(): number;
+
     /**
-       * @protected
-       */
+     * @protected
+     */
     protected computeTickLimit(): number;
+
     getLabelForValue(value: any): string;
 }
 import Scale from "../core/core.scale.js";

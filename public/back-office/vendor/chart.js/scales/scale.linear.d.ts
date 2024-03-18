@@ -4,7 +4,9 @@ export default class LinearScale extends LinearScaleBase {
      * @type {any}
      */
     static defaults: any;
+
     getPixelForValue(value: any): number;
+
     getValueForPixel(pixel: any): number;
 }
 import LinearScaleBase from "./scale.linearbase.js";

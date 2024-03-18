@@ -4,10 +4,12 @@ export default class LineController extends DatasetController {
      * @type {any}
      */
     static overrides: any;
+
     update(mode: any): void;
+
     /**
-       * @protected
-       */
+     * @protected
+     */
     protected getMaxOverflow(): any;
 }
 import DatasetController from "../core/core.datasetController.js";

@@ -13,22 +13,26 @@
  */
 export default class PluginService {
     _init: any[];
+
     /**
-       * Calls enabled plugins for `chart` on the specified hook and with the given args.
-       * This method immediately returns as soon as a plugin explicitly returns false. The
-       * returned value can be used, for instance, to interrupt the current action.
-       * @param {Chart} chart - The chart instance for which plugins should be called.
-       * @param {string} hook - The name of the plugin method to call (e.g. 'beforeUpdate').
-       * @param {object} [args] - Extra arguments to apply to the hook call.
+     * Calls enabled plugins for `chart` on the specified hook and with the given args.
+     * This method immediately returns as soon as a plugin explicitly returns false. The
+     * returned value can be used, for instance, to interrupt the current action.
+     * @param {Chart} chart - The chart instance for which plugins should be called.
+     * @param {string} hook - The name of the plugin method to call (e.g. 'beforeUpdate').
+     * @param {object} [args] - Extra arguments to apply to the hook call.
      * @param {filterCallback} [filter] - Filtering function for limiting which plugins are notified
-       * @returns {boolean} false if any of the plugins return false, else returns true.
-       */
+     * @returns {boolean} false if any of the plugins return false, else returns true.
+     */
     notify(chart: Chart, hook: string, args?: object, filter?: filterCallback): boolean;
+
     /**
-       * @private
-       */
+     * @private
+     */
     private _notify;
+
     invalidate(): void;
+
     _oldCache: {
         plugin: any;
         options: any;
@@ -38,18 +42,20 @@ export default class PluginService {
         options: any;
     }[];
     /**
-       * @param {Chart} chart
-       * @private
-       */
+     * @param {Chart} chart
+     * @private
+     */
     private _descriptors;
+
     _createDescriptors(chart: any, all: any): {
         plugin: any;
         options: any;
     }[];
+
     /**
-       * @param {Chart} chart
-       * @private
-       */
+     * @param {Chart} chart
+     * @private
+     */
     private _notifyStateChanges;
 }
 export type Chart = import('./core.controller.js').default;
