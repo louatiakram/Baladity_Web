@@ -489,6 +489,11 @@ export declare class Chart<
     TData = DefaultDataPoint<TType>,
     TLabel = unknown
 > {
+    static readonly defaults: Defaults;
+    static readonly overrides: Overrides;
+    static readonly version: string;
+    static readonly instances: { [key: string]: Chart };
+    static readonly registry: Registry;
     readonly platform: BasePlatform;
     readonly id: string;
     readonly canvas: HTMLCanvasElement;
@@ -502,14 +507,18 @@ export declare class Chart<
     readonly chartArea: ChartArea;
     readonly scales: { [key: string]: Scale };
     readonly attached: boolean;
-
     readonly legend?: LegendElement<TType>; // Only available if legend plugin is registered and enabled
     readonly tooltip?: TooltipModel<TType>; // Only available if tooltip plugin is registered and enabled
-
     data: ChartData<TType, TData, TLabel>;
     options: ChartOptions<TType>;
 
     constructor(item: ChartItem, config: ChartConfiguration<TType, TData, TLabel> | ChartConfigurationCustomTypesPerDataset<TType, TData, TLabel>);
+
+    static getChart(key: string | CanvasRenderingContext2D | HTMLCanvasElement): Chart | undefined;
+
+    static register(...items: ChartComponentLike[]): void;
+
+    static unregister(...items: ChartComponentLike[]): void;
 
     clear(): this;
 
@@ -572,18 +581,6 @@ export declare class Chart<
     isPluginEnabled(pluginId: string): boolean;
 
     getContext(): { chart: Chart, type: string };
-
-    static readonly defaults: Defaults;
-    static readonly overrides: Overrides;
-    static readonly version: string;
-    static readonly instances: { [key: string]: Chart };
-    static readonly registry: Registry;
-
-    static getChart(key: string | CanvasRenderingContext2D | HTMLCanvasElement): Chart | undefined;
-
-    static register(...items: ChartComponentLike[]): void;
-
-    static unregister(...items: ChartComponentLike[]): void;
 }
 
 export declare const registerables: readonly ChartComponentLike[];
@@ -613,30 +610,26 @@ export declare class DatasetController<
     TDatasetElement extends Element = Element,
     TParsedData = ParsedDataType<TType>,
 > {
-    constructor(chart: Chart, datasetIndex: number);
-
     readonly chart: Chart;
     readonly index: number;
     readonly _cachedMeta: ChartMeta<TType, TElement, TDatasetElement>;
     enableOptionSharing: boolean;
-    // If true, the controller supports the decimation
-    // plugin. Defaults to `false` for all controllers
     // except the LineController
     supportsDecimation: boolean;
+    // If true, the controller supports the decimation
+    // plugin. Defaults to `false` for all controllers
+
+    constructor(chart: Chart, datasetIndex: number);
 
     linkScales(): void;
 
     getAllParsedValues(scale: Scale): number[];
-
-    protected getLabelAndValue(index: number): { label: string; value: string };
 
     updateElements(elements: TElement[], start: number, count: number, mode: UpdateMode): void;
 
     update(mode: UpdateMode): void;
 
     updateIndex(datasetIndex: number): void;
-
-    protected getMaxOverflow(): boolean | number;
 
     draw(): void;
 
@@ -657,6 +650,16 @@ export declare class DatasetController<
     buildOrUpdateElements(resetNewElements?: boolean): void;
 
     getStyle(index: number, active: boolean): AnyObject;
+
+    removeHoverStyle(element: TElement, datasetIndex: number, index: number): void;
+
+    setHoverStyle(element: TElement, datasetIndex: number, index: number): void;
+
+    parse(start: number, count: number): void;
+
+    protected getLabelAndValue(index: number): { label: string; value: string };
+
+    protected getMaxOverflow(): boolean | number;
 
     protected resolveDatasetElementOptions(mode: UpdateMode): AnyObject;
 
@@ -687,12 +690,6 @@ export declare class DatasetController<
      */
 
     protected updateSharedOptions(sharedOptions: AnyObject, mode: UpdateMode, newOptions: AnyObject): void;
-
-    removeHoverStyle(element: TElement, datasetIndex: number, index: number): void;
-
-    setHoverStyle(element: TElement, datasetIndex: number, index: number): void;
-
-    parse(start: number, count: number): void;
 
     protected parsePrimitiveData(meta: ChartMeta<TType, TElement, TDatasetElement>, data: AnyObject[], start: number, count: number): AnyObject[];
 
@@ -883,6 +880,10 @@ export interface Plugin<TType extends ChartType = ChartType, O = AnyObject> exte
      * @default ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove']
      */
     events?: (keyof HTMLElementEventMap)[]
+    /**
+     * Default options used in the plugin
+     */
+    defaults?: Partial<O>;
 
     /**
      * @desc Called when plugin is installed for this chart instance. This hook is also invoked for disabled plugins (options === false).
@@ -1230,11 +1231,6 @@ export interface Plugin<TType extends ChartType = ChartType, O = AnyObject> exte
      * @since 3.0.0
      */
     uninstall?(chart: Chart<TType>, args: EmptyObject, options: O): void;
-
-    /**
-     * Default options used in the plugin
-     */
-    defaults?: Partial<O>;
 }
 
 export declare type ChartComponentLike =
@@ -1831,27 +1827,27 @@ export interface CoreChartOptions<TType extends ChartType> extends ParsingOption
      * @default user's browser setting
      */
     locale: string;
-
-    /**
-     * Called when a resize occurs. Gets passed two arguments: the chart instance and the new size.
-     */
-    onResize(chart: Chart, size: { width: number; height: number }): void;
-
     /**
      * Override the window's default devicePixelRatio.
      * @default window.devicePixelRatio
      */
     devicePixelRatio: number;
-
     interaction: CoreInteractionOptions;
-
     hover: CoreInteractionOptions;
-
     /**
      * The events option defines the browser events that the chart should listen to for tooltips and hovering.
      * @default ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove']
      */
     events: (keyof HTMLElementEventMap)[]
+    layout: Partial<{
+        autoPadding: boolean;
+        padding: Scriptable<Padding, ScriptableContext<TType>>;
+    }>;
+
+    /**
+     * Called when a resize occurs. Gets passed two arguments: the chart instance and the new size.
+     */
+    onResize(chart: Chart, size: { width: number; height: number }): void;
 
     /**
      * Called when any of the events fire. Passed the event, an array of active elements (bars, points, etc), and the chart.
@@ -1862,11 +1858,6 @@ export interface CoreChartOptions<TType extends ChartType> extends ParsingOption
      * Called if the event is of type 'mouseup' or 'click'. Passed the event, an array of active elements, and the chart.
      */
     onClick(event: ChartEvent, elements: ActiveElement[], chart: Chart): void;
-
-    layout: Partial<{
-        autoPadding: boolean;
-        padding: Scriptable<Padding, ScriptableContext<TType>>;
-    }>;
 }
 
 export type AnimationSpec<TType extends ChartType> = {
@@ -2137,10 +2128,10 @@ export interface LineHoverOptions extends CommonHoverOptions {
 export interface LineElement<T extends LineProps = LineProps, O extends LineOptions = LineOptions>
     extends Element<T, O>,
         VisualElement {
-    updateControlPoints(chartArea: ChartArea, indexAxis?: 'x' | 'y'): void;
-
     points: Point[];
     readonly segments: Segment[];
+
+    updateControlPoints(chartArea: ChartArea, indexAxis?: 'x' | 'y'): void;
 
     first(): Point | false;
 
@@ -2589,22 +2580,6 @@ export interface LegendOptions<TType extends ChartType> {
      * @default false
      */
     reverse: boolean;
-
-    /**
-     * A callback that is called when a click event is registered on a label item.
-     */
-    onClick(this: LegendElement<TType>, e: ChartEvent, legendItem: LegendItem, legend: LegendElement<TType>): void;
-
-    /**
-     * A callback that is called when a 'mousemove' event is registered on top of a label item
-     */
-    onHover(this: LegendElement<TType>, e: ChartEvent, legendItem: LegendItem, legend: LegendElement<TType>): void;
-
-    /**
-     * A callback that is called when a 'mousemove' event is registered outside of a previously hovered label item.
-     */
-    onLeave(this: LegendElement<TType>, e: ChartEvent, legendItem: LegendItem, legend: LegendElement<TType>): void;
-
     labels: {
         /**
          * Width of colored box.
@@ -2692,7 +2667,6 @@ export interface LegendOptions<TType extends ChartType> {
      * @default canvas's default
      */
     textDirection: string;
-
     title: {
         /**
          * Is the legend title displayed.
@@ -2715,6 +2689,21 @@ export interface LegendOptions<TType extends ChartType> {
          */
         text: string;
     };
+
+    /**
+     * A callback that is called when a click event is registered on a label item.
+     */
+    onClick(this: LegendElement<TType>, e: ChartEvent, legendItem: LegendItem, legend: LegendElement<TType>): void;
+
+    /**
+     * A callback that is called when a 'mousemove' event is registered on top of a label item
+     */
+    onHover(this: LegendElement<TType>, e: ChartEvent, legendItem: LegendItem, legend: LegendElement<TType>): void;
+
+    /**
+     * A callback that is called when a 'mousemove' event is registered outside of a previously hovered label item.
+     */
+    onLeave(this: LegendElement<TType>, e: ChartEvent, legendItem: LegendItem, legend: LegendElement<TType>): void;
 }
 
 export declare const SubTitle: Plugin;
@@ -2942,30 +2931,20 @@ export interface TooltipOptions<TType extends ChartType = ChartType> extends Cor
      * @default true
      */
     enabled: Scriptable<boolean, ScriptableTooltipContext<TType>>;
-
-    /**
-     *   See external tooltip section.
-     */
-    external(this: TooltipModel<TType>, args: { chart: Chart; tooltip: TooltipModel<TType> }): void;
-
     /**
      * The mode for positioning the tooltip
      */
     position: Scriptable<TooltipPositioner, ScriptableTooltipContext<TType>>
-
     /**
      * Override the tooltip alignment calculations
      */
     xAlign: Scriptable<TooltipXAlignment, ScriptableTooltipContext<TType>>;
     yAlign: Scriptable<TooltipYAlignment, ScriptableTooltipContext<TType>>;
-
     /**
      * Sort tooltip items.
      */
     itemSort: (a: TooltipItem<TType>, b: TooltipItem<TType>, data: ChartData) => number;
-
     filter: (e: TooltipItem<TType>, index: number, array: TooltipItem<TType>[], data: ChartData) => boolean;
-
     /**
      * Background color of the tooltip.
      * @default 'rgba(0, 0, 0, 0.8)'
@@ -3105,16 +3084,19 @@ export interface TooltipOptions<TType extends ChartType = ChartType> extends Cor
      * true for rendering the legends from right to left.
      */
     rtl: Scriptable<boolean, ScriptableTooltipContext<TType>>;
-
     /**
      * This will force the text direction 'rtl' or 'ltr on the canvas for rendering the tooltips, regardless of the css specified on the canvas
      * @default canvas's default
      */
     textDirection: Scriptable<string, ScriptableTooltipContext<TType>>;
-
     animation: AnimationSpec<TType> | false;
     animations: AnimationsSpec<TType> | false;
     callbacks: TooltipCallbacks<TType>;
+
+    /**
+     *   See external tooltip section.
+     */
+    external(this: TooltipModel<TType>, args: { chart: Chart; tooltip: TooltipModel<TType> }): void;
 }
 
 export interface TooltipItem<TType extends ChartType> {

@@ -5,6 +5,12 @@ export default class RadarController extends DatasetController {
      */
     static overrides: any;
 
+    parseObjectData(meta: any, data: any, start: any, count: any): {
+        r: unknown;
+    }[];
+
+    update(mode: any): void;
+
     /**
      * @protected
      */
@@ -12,11 +18,5 @@ export default class RadarController extends DatasetController {
         label: any;
         value: string;
     };
-
-    parseObjectData(meta: any, data: any, start: any, count: any): {
-        r: unknown;
-    }[];
-
-    update(mode: any): void;
 }
 import DatasetController from "../core/core.datasetController.js";

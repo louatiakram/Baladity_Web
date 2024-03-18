@@ -6,8 +6,6 @@ export const descriptors: any;
  * Note: class is exported for typedoc
  */
 export class Defaults {
-    constructor(_descriptors: any, _appliers: any);
-
     animation: any;
     backgroundColor: string;
     borderColor: string;
@@ -43,6 +41,8 @@ export class Defaults {
     scales: {};
     showLine: boolean;
     drawActiveElementsOnTop: boolean;
+
+    constructor(_descriptors: any, _appliers: any);
 
     /**
      * @param {string|object} scope

@@ -18,9 +18,6 @@ export class Tooltip extends Element<import("../types/basic.js").AnyObject, impo
             y: any;
         };
     };
-
-    constructor(config: any);
-
     opacity: number;
     _active: any[];
     _eventPosition: any;
@@ -61,18 +58,38 @@ export class Tooltip extends Element<import("../types/basic.js").AnyObject, impo
     labelColors: any[];
     labelPointStyles: any[];
     labelTextColors: any[];
-
-    initialize(options: any): void;
-
+    _ignoreReplayEvents: boolean;
     /**
      * @private
      */
     private _resolveAnimations;
-
     /**
-     * @protected
+     * @private
      */
-    protected getContext(): any;
+    private _createItems;
+    /**
+     * @private
+     */
+    private _drawColorBox;
+    /**
+     * Update x/y animation targets when _active elements are animating too
+     * @private
+     */
+    private _updateAnimationTarget;
+    /**
+     * Helper for determining the active elements for event
+     * @param {ChartEvent} e - The event to handle
+     * @param {InteractionItem[]} lastActive - Previously active elements
+     * @param {boolean} [replay] - This is a replayed event (from update)
+     * @param {boolean} [inChartArea] - The event is inside chartArea
+     * @returns {InteractionItem[]} - Active elements
+     * @private
+     */
+    private _getActiveElements;
+
+    constructor(config: any);
+
+    initialize(options: any): void;
 
     getTitle(context: any, options: any): any;
 
@@ -83,11 +100,6 @@ export class Tooltip extends Element<import("../types/basic.js").AnyObject, impo
     getAfterBody(tooltipItems: any, options: any): any;
 
     getFooter(tooltipItems: any, options: any): any;
-
-    /**
-     * @private
-     */
-    private _createItems;
 
     update(changed: any, replay: any): void;
 
@@ -104,22 +116,11 @@ export class Tooltip extends Element<import("../types/basic.js").AnyObject, impo
 
     drawTitle(pt: any, ctx: any, options: any): void;
 
-    /**
-     * @private
-     */
-    private _drawColorBox;
-
     drawBody(pt: any, ctx: any, options: any): void;
 
     drawFooter(pt: any, ctx: any, options: any): void;
 
     drawBackground(pt: any, ctx: any, tooltipSize: any, options: any): void;
-
-    /**
-     * Update x/y animation targets when _active elements are animating too
-     * @private
-     */
-    private _updateAnimationTarget;
 
     /**
      * Determine if the tooltip will draw anything
@@ -142,8 +143,6 @@ export class Tooltip extends Element<import("../types/basic.js").AnyObject, impo
      */
     setActiveElements(activeElements: any[], eventPosition: object): void;
 
-    _ignoreReplayEvents: boolean;
-
     /**
      * Handle an event
      * @param {ChartEvent} e - The event to handle
@@ -154,17 +153,6 @@ export class Tooltip extends Element<import("../types/basic.js").AnyObject, impo
     handleEvent(e: ChartEvent, replay?: boolean, inChartArea?: boolean): boolean;
 
     /**
-     * Helper for determining the active elements for event
-     * @param {ChartEvent} e - The event to handle
-     * @param {InteractionItem[]} lastActive - Previously active elements
-     * @param {boolean} [replay] - This is a replayed event (from update)
-     * @param {boolean} [inChartArea] - The event is inside chartArea
-     * @returns {InteractionItem[]} - Active elements
-     * @private
-     */
-    private _getActiveElements;
-
-    /**
      * Determine if the active elements + event combination changes the
      * tooltip position
      * @param {array} active - Active elements
@@ -172,6 +160,11 @@ export class Tooltip extends Element<import("../types/basic.js").AnyObject, impo
      * @returns {boolean} True if the position has changed
      */
     _positionChanged(active: any[], e: ChartEvent): boolean;
+
+    /**
+     * @protected
+     */
+    protected getContext(): any;
 }
 
 declare namespace _default {
@@ -282,6 +275,7 @@ export type ActiveElement = import('../types/index.js').ActiveElement;
 export type InteractionItem = import('../core/core.interaction.js').InteractionItem;
 import Element from "../core/core.element.js";
 import Animations from "../core/core.animations.js";
+import {noop} from "../helpers/helpers.core.js";
 
 declare namespace positioners {
     /**
@@ -333,4 +327,3 @@ declare namespace defaultCallbacks {
     export {noop as footer};
     export {noop as afterFooter};
 }
-import {noop} from "../helpers/helpers.core.js";

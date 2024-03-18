@@ -3,22 +3,29 @@ export function getIndexAxis(type: any, options: any): any;
 export function determineAxis(id: any, ...scaleOptions: any[]): any;
 
 export default class Config {
-    constructor(config: any);
-
     _config: any;
     _scopeCache: Map<any, any>;
     _resolverCache: Map<any, any>;
+    /**
+     * @private
+     */
+    private _cachedScopes;
+
+    constructor(config: any);
 
     get platform(): any;
 
-    set type(arg: any);
     get type(): any;
 
-    set data(arg: any);
+    set type(arg: any);
+
     get data(): any;
 
-    set options(arg: any);
+    set data(arg: any);
+
     get options(): any;
+
+    set options(arg: any);
 
     get plugins(): any;
 
@@ -62,11 +69,6 @@ export default class Config {
         id: string;
         additionalOptionScopes?: string[];
     }): string[][];
-
-    /**
-     * @private
-     */
-    private _cachedScopes;
 
     /**
      * Resolves the objects from options and defaults for option value resolution.

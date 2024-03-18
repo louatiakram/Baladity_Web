@@ -11,10 +11,9 @@ export default class LogarithmicScale extends Scale {
     /** @type {number} */
     _startValue: number;
     _valueRange: number;
+    _zero: boolean;
 
     parse(raw: any, index: any): number;
-
-    _zero: boolean;
 
     handleTickRangeOptions(): void;
 

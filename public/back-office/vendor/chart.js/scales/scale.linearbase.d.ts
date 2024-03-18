@@ -15,11 +15,11 @@ export default class LinearScaleBase extends Scale {
 
     getTickLimit(): number;
 
+    getLabelForValue(value: any): string;
+
     /**
      * @protected
      */
     protected computeTickLimit(): number;
-
-    getLabelForValue(value: any): string;
 }
 import Scale from "../core/core.scale.js";

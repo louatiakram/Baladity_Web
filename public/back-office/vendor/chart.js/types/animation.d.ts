@@ -2,6 +2,8 @@ import {Chart} from './index.js';
 import {AnyObject} from './basic.js';
 
 export declare class Animation {
+    readonly _to: unknown;
+
     constructor(cfg: AnyObject, target: AnyObject, prop: string, to?: unknown);
 
     active(): boolean;
@@ -11,8 +13,6 @@ export declare class Animation {
     cancel(): void;
 
     tick(date: number): void;
-
-    readonly _to: unknown;
 }
 
 export interface AnimationEvent {

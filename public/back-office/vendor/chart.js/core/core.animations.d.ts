@@ -1,11 +1,6 @@
 export default class Animations {
-    constructor(chart: any, config: any);
-
     _chart: any;
     _properties: Map<any, any>;
-
-    configure(config: any): void;
-
     /**
      * Utility to handle animation of `options`.
      * @private
@@ -15,6 +10,10 @@ export default class Animations {
      * @private
      */
     private _createAnimations;
+
+    constructor(chart: any, config: any);
+
+    configure(config: any): void;
 
     /**
      * Update `target` properties to new values, using configured animations

@@ -1,12 +1,12 @@
 import type {AnyObject} from '../types/basic.js';
 import type {ChartMeta} from '../types/index.js';
 import type {
-    ResolverObjectKey,
-    ResolverCache,
-    ResolverProxy,
-    DescriptorDefaults,
+    ContextProxy,
     Descriptor,
-    ContextProxy
+    DescriptorDefaults,
+    ResolverCache,
+    ResolverObjectKey,
+    ResolverProxy
 } from './helpers.config.types.js';
 
 export * from './helpers.config.types.js';

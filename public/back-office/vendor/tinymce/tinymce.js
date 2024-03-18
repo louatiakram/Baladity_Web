@@ -209,6 +209,10 @@
             return Optional.singletonNone;
         }
 
+        static from(value) {
+            return isNonNullable(value) ? Optional.some(value) : Optional.none();
+        }
+
         fold(onNone, onSome) {
             if (this.tag) {
                 return onSome(this.value);
@@ -279,10 +283,6 @@
             } else {
                 return this.value;
             }
-        }
-
-        static from(value) {
-            return isNonNullable(value) ? Optional.some(value) : Optional.none();
         }
 
         getOrNull() {
@@ -11062,6 +11062,15 @@
     };
 
     class AstNode {
+        constructor(name, type) {
+            this.name = name;
+            this.type = type;
+            if (type === 1) {
+                this.attributes = [];
+                this.attributes.map = {};
+            }
+        }
+
         static create(name, attrs) {
             const node = new AstNode(name, typeLookup[name] || 1);
             if (attrs) {
@@ -11070,15 +11079,6 @@
                 });
             }
             return node;
-        }
-
-        constructor(name, type) {
-            this.name = name;
-            this.type = type;
-            if (type === 1) {
-                this.attributes = [];
-                this.attributes.map = {};
-            }
         }
 
         replace(node) {
@@ -16802,45 +16802,6 @@
     };
 
     class URI {
-        static parseDataUri(uri) {
-            let type;
-            const uriComponents = decodeURIComponent(uri).split(',');
-            const matches = /data:([^;]+)/.exec(uriComponents[0]);
-            if (matches) {
-                type = matches[1];
-            }
-            return {
-                type,
-                data: uriComponents[1]
-            };
-        }
-
-        static isDomSafe(uri, context, options = {}) {
-            if (options.allow_script_urls) {
-                return true;
-            } else {
-                const decodedUri = Entities.decode(uri).replace(/[\s\u0000-\u001F]+/g, '');
-                return !isInvalidUri(options, decodedUri, context);
-            }
-        }
-
-        static getDocumentBaseUrl(loc) {
-            var _a;
-            let baseUrl;
-            if (loc.protocol.indexOf('http') !== 0 && loc.protocol !== 'file:') {
-                baseUrl = (_a = loc.href) !== null && _a !== void 0 ? _a : '';
-            } else {
-                baseUrl = loc.protocol + '//' + loc.host + loc.pathname;
-            }
-            if (/^[^:]+:\/\/\/?[^\/]+\//.test(baseUrl)) {
-                baseUrl = baseUrl.replace(/[\?#].*$/, '').replace(/[\/\\][^\/]+$/, '');
-                if (!/[\/\\]$/.test(baseUrl)) {
-                    baseUrl += '/';
-                }
-            }
-            return baseUrl;
-        }
-
         constructor(url, settings = {}) {
             this.path = '';
             this.directory = '';
@@ -16896,6 +16857,45 @@
             if (isProtocolRelative) {
                 self.protocol = '';
             }
+        }
+
+        static parseDataUri(uri) {
+            let type;
+            const uriComponents = decodeURIComponent(uri).split(',');
+            const matches = /data:([^;]+)/.exec(uriComponents[0]);
+            if (matches) {
+                type = matches[1];
+            }
+            return {
+                type,
+                data: uriComponents[1]
+            };
+        }
+
+        static isDomSafe(uri, context, options = {}) {
+            if (options.allow_script_urls) {
+                return true;
+            } else {
+                const decodedUri = Entities.decode(uri).replace(/[\s\u0000-\u001F]+/g, '');
+                return !isInvalidUri(options, decodedUri, context);
+            }
+        }
+
+        static getDocumentBaseUrl(loc) {
+            var _a;
+            let baseUrl;
+            if (loc.protocol.indexOf('http') !== 0 && loc.protocol !== 'file:') {
+                baseUrl = (_a = loc.href) !== null && _a !== void 0 ? _a : '';
+            } else {
+                baseUrl = loc.protocol + '//' + loc.host + loc.pathname;
+            }
+            if (/^[^:]+:\/\/\/?[^\/]+\//.test(baseUrl)) {
+                baseUrl = baseUrl.replace(/[\?#].*$/, '').replace(/[\/\\][^\/]+$/, '');
+                if (!/[\/\\]$/.test(baseUrl)) {
+                    baseUrl += '/';
+                }
+            }
+            return baseUrl;
         }
 
         setPath(path) {
@@ -30115,15 +30115,15 @@
     const nativeEvents = Tools.makeMap('focus blur focusin focusout click dblclick mousedown mouseup mousemove mouseover beforepaste paste cut copy selectionchange ' + 'mouseout mouseenter mouseleave wheel keydown keypress keyup input beforeinput contextmenu dragstart dragend dragover ' + 'draggesture dragdrop drop drag submit ' + 'compositionstart compositionend compositionupdate touchstart touchmove touchend touchcancel', ' ');
 
     class EventDispatcher {
-        static isNative(name) {
-            return !!nativeEvents[name.toLowerCase()];
-        }
-
         constructor(settings) {
             this.bindings = {};
             this.settings = settings || {};
             this.scope = this.settings.scope || this;
             this.toggleEvent = this.settings.toggleEvent || never;
+        }
+
+        static isNative(name) {
+            return !!nativeEvents[name.toLowerCase()];
         }
 
         fire(name, args) {

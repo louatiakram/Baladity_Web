@@ -8,27 +8,29 @@ export default class LineElement extends Element<import("../types/basic.js").Any
         _scriptable: boolean;
         _indexable: (name: any) => boolean;
     };
-
-    constructor(cfg: any);
-
     animated: boolean;
     options: any;
     _chart: any;
     _loop: any;
     _fullLoop: any;
     _path: any;
-    _points: any;
-    _segments: import("../helpers/helpers.segment.js").Segment[];
     _decimated: boolean;
     _pointsUpdated: boolean;
     _datasetIndex: any;
 
-    updateControlPoints(chartArea: any, indexAxis: any): void;
+    constructor(cfg: any);
 
-    set points(arg: any);
+    _points: any;
+
     get points(): any;
 
+    set points(arg: any);
+
+    _segments: import("../helpers/helpers.segment.js").Segment[];
+
     get segments(): import("../helpers/helpers.segment.js").Segment[];
+
+    updateControlPoints(chartArea: any, indexAxis: any): void;
 
     /**
      * First non-skipped point on this line

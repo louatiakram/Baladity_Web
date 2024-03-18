@@ -1,6 +1,4 @@
 export default class Animation {
-    constructor(cfg: any, target: any, prop: any, to: any);
-
     _active: boolean;
     _fn: any;
     _easing: any;
@@ -13,6 +11,8 @@ export default class Animation {
     _from: unknown;
     _to: any;
     _promises: any[];
+
+    constructor(cfg: any, target: any, prop: any, to: any);
 
     active(): boolean;
 

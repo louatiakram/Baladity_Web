@@ -1,6 +1,4 @@
 export default class Scale extends Element<import("../types/basic.js").AnyObject, import("../types/basic.js").AnyObject> {
-    constructor(cfg: any);
-
     /** @type {string} */
     id: string;
     /** @type {string} */
@@ -76,6 +74,64 @@ export default class Scale extends Element<import("../types/basic.js").AnyObject
     _cache: {};
     _dataLimitsCached: boolean;
     $context: any;
+    _alignToPixels: any;
+    /**
+     * Get the padding needed for the scale
+     * @return {{top: number, left: number, bottom: number, right: number}} the necessary padding
+     * @private
+     */
+    private getPadding;
+    /**
+     * Handle margins and padding interactions
+     * @private
+     */
+    private _handleMargins;
+    /**
+     * @param {Tick[]} ticks
+     * @private
+     */
+    private _convertTicksToLabels;
+    /**
+     * @return {{ first: object, last: object, widest: object, highest: object, widths: Array, heights: array }}
+     * @private
+     */
+    private _getLabelSizes;
+    /**
+     * Returns {width, height, offset} objects for the first, last, widest, highest tick
+     * labels where offset indicates the anchor point offset from the top in pixels.
+     * @return {{ first: object, last: object, widest: object, highest: object, widths: Array, heights: array }}
+     * @private
+     */
+    private _computeLabelSizes;
+    /**
+     * @return {number}
+     * @private
+     */
+    private _tickSize;
+    /**
+     * @return {boolean}
+     * @private
+     */
+    private _isVisible;
+    /**
+     * @private
+     */
+    private _computeGridLineItems;
+    /**
+     * @private
+     */
+    private _computeLabelItems;
+    /**
+     * @private
+     */
+    private _computeLabelArea;
+    /**
+     * @return {object[]}
+     * @private
+     */
+    private _layers;
+
+    constructor(cfg: any);
 
     /**
      * @param {any} options
@@ -90,36 +146,6 @@ export default class Scale extends Element<import("../types/basic.js").AnyObject
      * @since 3.0
      */
     parse(raw: any, index?: number): any;
-
-    /**
-     * @return {{min: number, max: number, minDefined: boolean, maxDefined: boolean}}
-     * @protected
-     * @since 3.0
-     */
-    protected getUserBounds(): {
-        min: number;
-        max: number;
-        minDefined: boolean;
-        maxDefined: boolean;
-    };
-
-    /**
-     * @param {boolean} canStack
-     * @return {{min: number, max: number}}
-     * @protected
-     * @since 3.0
-     */
-    protected getMinMax(canStack: boolean): {
-        min: number;
-        max: number;
-    };
-
-    /**
-     * Get the padding needed for the scale
-     * @return {{top: number, left: number, bottom: number, right: number}} the necessary padding
-     * @private
-     */
-    private getPadding;
 
     /**
      * Returns the scale tick objects
@@ -156,13 +182,6 @@ export default class Scale extends Element<import("../types/basic.js").AnyObject
         bottom: number;
         right: number;
     }): void;
-
-    /**
-     * @protected
-     */
-    protected configure(): void;
-
-    _alignToPixels: any;
 
     afterUpdate(): void;
 
@@ -213,12 +232,6 @@ export default class Scale extends Element<import("../types/basic.js").AnyObject
 
     _calculatePadding(first: any, last: any, sin: any, cos: any): void;
 
-    /**
-     * Handle margins and padding interactions
-     * @private
-     */
-    private _handleMargins;
-
     afterFit(): void;
 
     /**
@@ -230,24 +243,6 @@ export default class Scale extends Element<import("../types/basic.js").AnyObject
      * @return {boolean}
      */
     isFullSize(): boolean;
-
-    /**
-     * @param {Tick[]} ticks
-     * @private
-     */
-    private _convertTicksToLabels;
-    /**
-     * @return {{ first: object, last: object, widest: object, highest: object, widths: Array, heights: array }}
-     * @private
-     */
-    private _getLabelSizes;
-    /**
-     * Returns {width, height, offset} objects for the first, last, widest, highest tick
-     * labels where offset indicates the anchor point offset from the top in pixels.
-     * @return {{ first: object, last: object, widest: object, highest: object, widths: Array, heights: array }}
-     * @private
-     */
-    private _computeLabelSizes;
 
     /**
      * Used to get the label to display in the tooltip for the given value
@@ -307,30 +302,6 @@ export default class Scale extends Element<import("../types/basic.js").AnyObject
      */
     getBaseValue(): number;
 
-    /**
-     * @protected
-     */
-    protected getContext(index: any): any;
-
-    /**
-     * @return {number}
-     * @private
-     */
-    private _tickSize;
-    /**
-     * @return {boolean}
-     * @private
-     */
-    private _isVisible;
-    /**
-     * @private
-     */
-    private _computeGridLineItems;
-    /**
-     * @private
-     */
-    private _computeLabelItems;
-
     _getXAxisLabelAlignment(): string;
 
     _getYAxisLabelAlignment(tl: any): {
@@ -338,17 +309,54 @@ export default class Scale extends Element<import("../types/basic.js").AnyObject
         x: any;
     };
 
+    getLineWidthForValue(value: any): any;
+
+    draw(chartArea: any): void;
+
     /**
-     * @private
+     * Returns visible dataset metas that are attached to this scale
+     * @param {string} [type] - if specified, also filter by dataset type
+     * @return {object[]}
      */
-    private _computeLabelArea;
+    getMatchingVisibleMetas(type?: string): object[];
+
+    /**
+     * @return {{min: number, max: number, minDefined: boolean, maxDefined: boolean}}
+     * @protected
+     * @since 3.0
+     */
+    protected getUserBounds(): {
+        min: number;
+        max: number;
+        minDefined: boolean;
+        maxDefined: boolean;
+    };
+
+    /**
+     * @param {boolean} canStack
+     * @return {{min: number, max: number}}
+     * @protected
+     * @since 3.0
+     */
+    protected getMinMax(canStack: boolean): {
+        min: number;
+        max: number;
+    };
+
+    /**
+     * @protected
+     */
+    protected configure(): void;
+
+    /**
+     * @protected
+     */
+    protected getContext(index: any): any;
 
     /**
      * @protected
      */
     protected drawBackground(): void;
-
-    getLineWidthForValue(value: any): any;
 
     /**
      * @protected
@@ -369,21 +377,6 @@ export default class Scale extends Element<import("../types/basic.js").AnyObject
      * @protected
      */
     protected drawTitle(): void;
-
-    draw(chartArea: any): void;
-
-    /**
-     * @return {object[]}
-     * @private
-     */
-    private _layers;
-
-    /**
-     * Returns visible dataset metas that are attached to this scale
-     * @param {string} [type] - if specified, also filter by dataset type
-     * @return {object[]}
-     */
-    getMatchingVisibleMetas(type?: string): object[];
 
     /**
      * @param {number} index

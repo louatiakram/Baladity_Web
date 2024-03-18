@@ -76,6 +76,10 @@ export interface DateAdapter<T extends AnyObject = AnyObject> {
  * @private
  */
 declare class DateAdapterBase implements DateAdapter {
+    readonly options: AnyObject;
+
+    constructor(options: AnyObject);
+
     /**
      * Override default date adapter methods.
      * Accepts type parameter to define options type.
@@ -87,10 +91,6 @@ declare class DateAdapterBase implements DateAdapter {
      * })
      */
     static override<T extends AnyObject = AnyObject>(members: Partial<Omit<DateAdapter<T>, 'options'>>): void;
-
-    readonly options: AnyObject;
-
-    constructor(options: AnyObject);
 
     init(): void;
 

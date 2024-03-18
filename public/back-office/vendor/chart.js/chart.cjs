@@ -2759,6 +2759,12 @@ var controllers = /*#__PURE__*/Object.freeze({
  * @private
  */
 class DateAdapterBase {
+    options;
+
+    constructor(options) {
+        this.options = options || {};
+    }
+
     /**
      * Override default date adapter methods.
      * Accepts type parameter to define options type.
@@ -2770,12 +2776,6 @@ class DateAdapterBase {
      * })
      */ static override(members) {
         Object.assign(DateAdapterBase.prototype, members);
-    }
-
-    options;
-
-    constructor(options) {
-        this.options = options || {};
     }
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -6040,16 +6040,6 @@ class Chart {
     static version = version;
     static getChart = getChart;
 
-    static register(...items) {
-        registry.add(...items);
-        invalidatePlugins();
-    }
-
-    static unregister(...items) {
-        registry.remove(...items);
-        invalidatePlugins();
-    }
-
     constructor(item, userConfig) {
         const config = this.config = new Config(userConfig);
         const initialCanvas = getCanvas(item);
@@ -6133,6 +6123,16 @@ class Chart {
 
     get registry() {
         return registry;
+    }
+
+    static register(...items) {
+        registry.add(...items);
+        invalidatePlugins();
+    }
+
+    static unregister(...items) {
+        registry.remove(...items);
+        invalidatePlugins();
     }
 
     _initialize() {
@@ -7454,13 +7454,8 @@ class LineElement extends Element {
         }
     }
 
-    updateControlPoints(chartArea, indexAxis) {
-        const options = this.options;
-        if ((options.tension || options.cubicInterpolationMode === 'monotone') && !options.stepped && !this._pointsUpdated) {
-            const loop = options.spanGaps ? this._loop : this._fullLoop;
-            helpers_segment._updateBezierControlPoints(this._points, options, chartArea, loop, indexAxis);
-            this._pointsUpdated = true;
-        }
+    get points() {
+        return this._points;
     }
 
     set points(points) {
@@ -7470,12 +7465,17 @@ class LineElement extends Element {
         this._pointsUpdated = false;
     }
 
-    get points() {
-        return this._points;
-    }
-
     get segments() {
         return this._segments || (this._segments = helpers_segment._computeSegments(this, this.options.segment));
+    }
+
+    updateControlPoints(chartArea, indexAxis) {
+        const options = this.options;
+        if ((options.tension || options.cubicInterpolationMode === 'monotone') && !options.stepped && !this._pointsUpdated) {
+            const loop = options.spanGaps ? this._loop : this._fullLoop;
+            helpers_segment._updateBezierControlPoints(this._points, options, chartArea, loop, indexAxis);
+            this._pointsUpdated = true;
+        }
     }
 
     first() {
@@ -7567,9 +7567,6 @@ function inRange$1(el, pos, axis, useFinalPosition) {
 
 class PointElement extends Element {
     static id = 'point';
-    parsed;
-    skip;
-    stop;
     /**
      * @type {any}
      */ static defaults = {
@@ -7587,6 +7584,9 @@ class PointElement extends Element {
         backgroundColor: 'backgroundColor',
         borderColor: 'borderColor'
     };
+    parsed;
+    skip;
+    stop;
 
     constructor(cfg) {
         super();

@@ -1,9 +1,9 @@
 export class simpleArc {
-    constructor(opts: any);
-
     x: any;
     y: any;
     radius: any;
+
+    constructor(opts: any);
 
     pathSegment(ctx: any, bounds: any, opts: any): boolean;
 

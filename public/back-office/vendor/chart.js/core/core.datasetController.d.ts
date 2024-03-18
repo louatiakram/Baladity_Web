@@ -11,13 +11,6 @@ export default class DatasetController {
      * Element type used to generate a meta data (e.g. Chart.element.PointElement).
      */
     static dataElementType: any;
-
-    /**
-     * @param {Chart} chart
-     * @param {number} datasetIndex
-     */
-    constructor(chart: Chart, datasetIndex: number);
-
     chart: import("./core.controller.js").default;
     _ctx: any;
     index: number;
@@ -38,6 +31,69 @@ export default class DatasetController {
     _syncList: any[];
     datasetElementType: any;
     dataElementType: any;
+    /**
+     * @private
+     */
+    private _getOtherScale;
+    /**
+     * @private
+     */
+    private _destroy;
+    /**
+     * @private
+     */
+    private _dataCheck;
+    /**
+     * Merges user-supplied and default dataset-level options
+     * @private
+     */
+    private configure;
+    /**
+     * @private
+     */
+    private _update;
+    /**
+     * @private
+     */
+    private _resolveElementOptions;
+    /**
+     * @private
+     */
+    private _resolveAnimations;
+    /**
+     * @private
+     */
+    private _setStyle;
+    /**
+     * @private
+     */
+    private _removeDatasetHoverStyle;
+    /**
+     * @private
+     */
+    private _setDatasetHoverStyle;
+    /**
+     * @private
+     */
+    private _resyncElements;
+    /**
+     * @private
+     */
+    private _insertElements;
+    /**
+     * @private
+     */
+    private _removeElements;
+    /**
+     * @private
+     */
+    private _sync;
+
+    /**
+     * @param {Chart} chart
+     * @param {number} datasetIndex
+     */
+    constructor(chart: Chart, datasetIndex: number);
 
     initialize(): void;
 
@@ -55,37 +111,59 @@ export default class DatasetController {
      */
     getScaleForId(scaleID: string): Scale;
 
-    /**
-     * @private
-     */
-    private _getOtherScale;
-
     reset(): void;
-
-    /**
-     * @private
-     */
-    private _destroy;
-    /**
-     * @private
-     */
-    private _dataCheck;
 
     addElements(): void;
 
     buildOrUpdateElements(resetNewElements: any): void;
 
     /**
-     * Merges user-supplied and default dataset-level options
-     * @private
-     */
-    private configure;
-
-    /**
      * @param {number} start
      * @param {number} count
      */
     parse(start: number, count: number): void;
+
+    getAllParsedValues(scale: any): number[];
+
+    /**
+     * @param {string} mode
+     */
+    update(mode: string): void;
+
+    draw(): void;
+
+    /**
+     * Returns a set of predefined style properties that should be used to represent the dataset
+     * or the data if the index is specified
+     * @param {number} index - data index
+     * @param {boolean} [active] - true if hover
+     * @return {object} style object
+     */
+    getStyle(index: number, active?: boolean): object;
+
+    /**
+     * @todo v4, rename to getSharedOptions and remove excess functions
+     */
+    _getSharedOptions(start: any, mode: any): {
+        sharedOptions: any;
+        includeOptions: boolean;
+    };
+
+    removeHoverStyle(element: any, datasetIndex: any, index: any): void;
+
+    setHoverStyle(element: any, datasetIndex: any, index: any): void;
+
+    updateElements(element: any, start: any, count: any, mode: any): void;
+
+    _onDataPush(...args: any[]): void;
+
+    _onDataPop(): void;
+
+    _onDataShift(): void;
+
+    _onDataSplice(start: any, count: any, ...args: any[]): void;
+
+    _onDataUnshift(...args: any[]): void;
 
     /**
      * Parse array of primitive values
@@ -154,8 +232,6 @@ export default class DatasetController {
         max: number;
     };
 
-    getAllParsedValues(scale: any): number[];
-
     /**
      * @return {number|boolean}
      * @protected
@@ -169,27 +245,6 @@ export default class DatasetController {
         label: string;
         value: string;
     };
-
-    /**
-     * @private
-     */
-    private _update;
-
-    /**
-     * @param {string} mode
-     */
-    update(mode: string): void;
-
-    draw(): void;
-
-    /**
-     * Returns a set of predefined style properties that should be used to represent the dataset
-     * or the data if the index is specified
-     * @param {number} index - data index
-     * @param {boolean} [active] - true if hover
-     * @return {object} style object
-     */
-    getStyle(index: number, active?: boolean): object;
 
     /**
      * @protected
@@ -210,15 +265,6 @@ export default class DatasetController {
     protected resolveDataElementOptions(index: number, mode?: string): any;
 
     /**
-     * @private
-     */
-    private _resolveElementOptions;
-    /**
-     * @private
-     */
-    private _resolveAnimations;
-
-    /**
      * Utility for getting the options object shared between elements
      * @protected
      */
@@ -231,14 +277,6 @@ export default class DatasetController {
     protected includeOptions(mode: any, sharedOptions: any): boolean;
 
     /**
-     * @todo v4, rename to getSharedOptions and remove excess functions
-     */
-    _getSharedOptions(start: any, mode: any): {
-        sharedOptions: any;
-        includeOptions: boolean;
-    };
-
-    /**
      * Utility for updating an element with new properties, using animations when appropriate.
      * @protected
      */
@@ -249,53 +287,6 @@ export default class DatasetController {
      * @protected
      */
     protected updateSharedOptions(sharedOptions: any, mode: any, newOptions: any): void;
-
-    /**
-     * @private
-     */
-    private _setStyle;
-
-    removeHoverStyle(element: any, datasetIndex: any, index: any): void;
-
-    setHoverStyle(element: any, datasetIndex: any, index: any): void;
-
-    /**
-     * @private
-     */
-    private _removeDatasetHoverStyle;
-    /**
-     * @private
-     */
-    private _setDatasetHoverStyle;
-    /**
-     * @private
-     */
-    private _resyncElements;
-    /**
-     * @private
-     */
-    private _insertElements;
-
-    updateElements(element: any, start: any, count: any, mode: any): void;
-
-    /**
-     * @private
-     */
-    private _removeElements;
-    /**
-     * @private
-     */
-    private _sync;
-
-    _onDataPush(...args: any[]): void;
-
-    _onDataPop(): void;
-
-    _onDataShift(): void;
-
-    _onDataSplice(start: any, count: any, ...args: any[]): void;
-
-    _onDataUnshift(...args: any[]): void;
 }
 export type Chart = import('./core.controller.js').default;
 export type Scale = import('./core.scale.js').default;

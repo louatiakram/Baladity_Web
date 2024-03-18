@@ -7,6 +7,12 @@ declare class TimeSeriesScale extends TimeScale {
     _minPos: number;
     /** @type {number} */
     _tableRange: number;
+    /**
+     * Returns all timestamps
+     * @return {number[]}
+     * @private
+     */
+    private _getTimestampsForTable;
 
     /**
      * @protected
@@ -33,13 +39,6 @@ declare class TimeSeriesScale extends TimeScale {
      * @protected
      */
     protected _generate(): any;
-
-    /**
-     * Returns all timestamps
-     * @return {number[]}
-     * @private
-     */
-    private _getTimestampsForTable;
 }
 
 import TimeScale from "./scale.time.js";

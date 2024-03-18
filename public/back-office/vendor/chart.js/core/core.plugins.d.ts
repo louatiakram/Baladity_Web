@@ -13,6 +13,28 @@
  */
 export default class PluginService {
     _init: any[];
+    _oldCache: {
+        plugin: any;
+        options: any;
+    }[];
+    _cache: {
+        plugin: any;
+        options: any;
+    }[];
+    /**
+     * @private
+     */
+    private _notify;
+    /**
+     * @param {Chart} chart
+     * @private
+     */
+    private _descriptors;
+    /**
+     * @param {Chart} chart
+     * @private
+     */
+    private _notifyStateChanges;
 
     /**
      * Calls enabled plugins for `chart` on the specified hook and with the given args.
@@ -26,37 +48,12 @@ export default class PluginService {
      */
     notify(chart: Chart, hook: string, args?: object, filter?: filterCallback): boolean;
 
-    /**
-     * @private
-     */
-    private _notify;
-
     invalidate(): void;
-
-    _oldCache: {
-        plugin: any;
-        options: any;
-    }[];
-    _cache: {
-        plugin: any;
-        options: any;
-    }[];
-    /**
-     * @param {Chart} chart
-     * @private
-     */
-    private _descriptors;
 
     _createDescriptors(chart: any, all: any): {
         plugin: any;
         options: any;
     }[];
-
-    /**
-     * @param {Chart} chart
-     * @private
-     */
-    private _notifyStateChanges;
 }
 export type Chart = import('./core.controller.js').default;
 export type ChartEvent = import('../types/index.js').ChartEvent;

@@ -1,19 +1,6 @@
 export class Legend extends Element<import("../types/basic.js").AnyObject, import("../types/basic.js").AnyObject> {
-    /**
-     * @param {{ ctx: any; options: any; chart: any; }} config
-     */
-    constructor(config: {
-        ctx: any;
-        options: any;
-        chart: any;
-    });
-
     _added: boolean;
     legendHitBoxes: any[];
-    /**
-     * @private
-     */
-    private _hoveredItem;
     doughnutMode: boolean;
     chart: any;
     options: any;
@@ -33,38 +20,18 @@ export class Legend extends Element<import("../types/basic.js").AnyObject, impor
     position: any;
     weight: any;
     fullSize: any;
-
-    update(maxWidth: any, maxHeight: any, margins: any): void;
-
-    setDimensions(): void;
-
-    buildLabels(): void;
-
-    fit(): void;
-
+    /**
+     * @private
+     */
+    private _hoveredItem;
     /**
      * @private
      */
     private _fitRows;
-
-    _fitCols(titleHeight: any, labelFont: any, boxWidth: any, _itemHeight: any): any;
-
-    adjustHitBoxes(): void;
-
-    isHorizontal(): boolean;
-
-    draw(): void;
-
     /**
      * @private
      */
     private _draw;
-
-    /**
-     * @protected
-     */
-    protected drawTitle(): void;
-
     /**
      * @private
      */
@@ -75,10 +42,40 @@ export class Legend extends Element<import("../types/basic.js").AnyObject, impor
     private _getLegendItemAt;
 
     /**
+     * @param {{ ctx: any; options: any; chart: any; }} config
+     */
+    constructor(config: {
+        ctx: any;
+        options: any;
+        chart: any;
+    });
+
+    update(maxWidth: any, maxHeight: any, margins: any): void;
+
+    setDimensions(): void;
+
+    buildLabels(): void;
+
+    fit(): void;
+
+    _fitCols(titleHeight: any, labelFont: any, boxWidth: any, _itemHeight: any): any;
+
+    adjustHitBoxes(): void;
+
+    isHorizontal(): boolean;
+
+    draw(): void;
+
+    /**
      * Handle an event
      * @param {ChartEvent} e - The event to handle
      */
     handleEvent(e: ChartEvent): void;
+
+    /**
+     * @protected
+     */
+    protected drawTitle(): void;
 }
 
 declare namespace _default {

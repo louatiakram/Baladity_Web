@@ -1,13 +1,4 @@
 export class Title extends Element<import("../types/basic.js").AnyObject, import("../types/basic.js").AnyObject> {
-    /**
-     * @param {{ ctx: any; options: any; chart: any; }} config
-     */
-    constructor(config: {
-        ctx: any;
-        options: any;
-        chart: any;
-    });
-
     chart: any;
     options: any;
     ctx: any;
@@ -21,6 +12,15 @@ export class Title extends Element<import("../types/basic.js").AnyObject, import
     position: any;
     weight: any;
     fullSize: any;
+
+    /**
+     * @param {{ ctx: any; options: any; chart: any; }} config
+     */
+    constructor(config: {
+        ctx: any;
+        options: any;
+        chart: any;
+    });
 
     update(maxWidth: any, maxHeight: any): void;
 

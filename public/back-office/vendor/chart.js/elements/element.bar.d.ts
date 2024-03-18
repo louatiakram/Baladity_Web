@@ -4,15 +4,14 @@ export default class BarElement extends Element<import("../types/basic.js").AnyO
      * @type {any}
      */
     static defaults: any;
-
-    constructor(cfg: any);
-
     options: any;
     horizontal: any;
     base: any;
     width: any;
     height: any;
     inflateAmount: any;
+
+    constructor(cfg: any);
 
     draw(ctx: any): void;
 

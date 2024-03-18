@@ -5,60 +5,10 @@
  * Released under the MIT License
  */
 import {
-    r as requestAnimFrame,
-    a as resolve,
-    e as effects,
-    c as color,
-    i as isObject,
-    d as defaults,
-    b as isArray,
-    v as valueOrDefault,
-    u as unlistenArrayEvents,
-    l as listenArrayEvents,
-    f as resolveObjectKey,
-    g as isNumberFinite,
-    h as defined,
-    s as sign,
-    j as createContext,
-    k as isNullOrUndef,
-    _ as _arrayUnique,
-    t as toRadians,
-    m as toPercentage,
-    n as toDimension,
-    T as TAU,
-    o as formatNumber,
-    p as _angleBetween,
-    H as HALF_PI,
-    P as PI,
-    q as _getStartAndCountOfVisiblePoints,
-    w as _scaleRangesChanged,
-    x as isNumber,
-    y as _parseObjectDataRadialScale,
-    z as getRelativePosition,
-    A as _rlookupByKey,
-    B as _lookupByKey,
-    C as _isPointInArea,
-    D as getAngleFromPoint,
-    E as toPadding,
-    F as each,
-    G as getMaximumSize,
-    I as _getParentNode,
-    J as readUsedSize,
-    K as supportsEventListenerOptions,
-    L as throttled,
-    M as _isDomSupported,
-    N as _factorize,
-    O as finiteOrDefault,
-    Q as callback,
-    R as _addGrace,
-    S as _limitValue,
-    U as toDegrees,
-    V as _measureText,
-    W as _int16Range,
-    X as _alignPixel,
-    Y as clipArea,
-    Z as renderText,
     $ as unclipArea,
+    _ as _arrayUnique,
+    a as resolve,
+    A as _rlookupByKey,
     a0 as toFont,
     a1 as _toLeftRightCenter,
     a2 as _alignStartEnd,
@@ -70,21 +20,37 @@ import {
     a8 as _attachContext,
     a9 as _createResolver,
     aa as _descriptors,
+    aA as overrideTextDirection,
     ab as mergeIf,
+    aB as _textX,
     ac as uid,
+    aC as restoreTextDirection,
     ad as debounce,
+    aD as drawPointLegend,
     ae as retinaScale,
+    aE as distanceBetweenPoints,
     af as clearCanvas,
+    aF as noop,
     ag as setsEqual,
+    aG as _setMinAndMaxByKey,
     ah as _elementsEqual,
+    aH as niceNum,
     ai as _isClickEvent,
+    aI as almostWhole,
     aj as _isBetween,
+    aJ as almostEquals,
     ak as _readValueToProps,
+    aK as _decimalPlaces,
     al as _updateBezierControlPoints,
+    aL as Ticks,
     am as _computeSegments,
+    aM as log10,
     an as _boundSegments,
+    aN as _longestText,
     ao as _steppedInterpolation,
+    aO as _filterBetween,
     ap as _bezierInterpolation,
+    aP as _lookup,
     aq as _pointInLine,
     ar as _steppedLineTo,
     as as _bezierCurveTo,
@@ -95,22 +61,56 @@ import {
     ax as _boundSegment,
     ay as _normalizeAngle,
     az as getRtlAdapter,
-    aA as overrideTextDirection,
-    aB as _textX,
-    aC as restoreTextDirection,
-    aD as drawPointLegend,
-    aE as distanceBetweenPoints,
-    aF as noop,
-    aG as _setMinAndMaxByKey,
-    aH as niceNum,
-    aI as almostWhole,
-    aJ as almostEquals,
-    aK as _decimalPlaces,
-    aL as Ticks,
-    aM as log10,
-    aN as _longestText,
-    aO as _filterBetween,
-    aP as _lookup
+    b as isArray,
+    B as _lookupByKey,
+    c as color,
+    C as _isPointInArea,
+    d as defaults,
+    D as getAngleFromPoint,
+    e as effects,
+    E as toPadding,
+    f as resolveObjectKey,
+    F as each,
+    g as isNumberFinite,
+    G as getMaximumSize,
+    h as defined,
+    H as HALF_PI,
+    i as isObject,
+    I as _getParentNode,
+    j as createContext,
+    J as readUsedSize,
+    k as isNullOrUndef,
+    K as supportsEventListenerOptions,
+    l as listenArrayEvents,
+    L as throttled,
+    m as toPercentage,
+    M as _isDomSupported,
+    n as toDimension,
+    N as _factorize,
+    o as formatNumber,
+    O as finiteOrDefault,
+    p as _angleBetween,
+    P as PI,
+    q as _getStartAndCountOfVisiblePoints,
+    Q as callback,
+    r as requestAnimFrame,
+    R as _addGrace,
+    s as sign,
+    S as _limitValue,
+    t as toRadians,
+    T as TAU,
+    u as unlistenArrayEvents,
+    U as toDegrees,
+    v as valueOrDefault,
+    V as _measureText,
+    w as _scaleRangesChanged,
+    W as _int16Range,
+    x as isNumber,
+    X as _alignPixel,
+    y as _parseObjectDataRadialScale,
+    Y as clipArea,
+    z as getRelativePosition,
+    Z as renderText
 } from './chunks/helpers.segment.js';
 import '@kurkle/color';
 
@@ -2864,6 +2864,12 @@ var controllers = /*#__PURE__*/Object.freeze({
  * @private
  */
 class DateAdapterBase {
+    options;
+
+    constructor(options) {
+        this.options = options || {};
+    }
+
     /**
      * Override default date adapter methods.
      * Accepts type parameter to define options type.
@@ -2875,12 +2881,6 @@ class DateAdapterBase {
      * })
      */ static override(members) {
         Object.assign(DateAdapterBase.prototype, members);
-    }
-
-    options;
-
-    constructor(options) {
-        this.options = options || {};
     }
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -6145,16 +6145,6 @@ class Chart {
     static version = version;
     static getChart = getChart;
 
-    static register(...items) {
-        registry.add(...items);
-        invalidatePlugins();
-    }
-
-    static unregister(...items) {
-        registry.remove(...items);
-        invalidatePlugins();
-    }
-
     constructor(item, userConfig) {
         const config = this.config = new Config(userConfig);
         const initialCanvas = getCanvas(item);
@@ -6238,6 +6228,16 @@ class Chart {
 
     get registry() {
         return registry;
+    }
+
+    static register(...items) {
+        registry.add(...items);
+        invalidatePlugins();
+    }
+
+    static unregister(...items) {
+        registry.remove(...items);
+        invalidatePlugins();
     }
 
     _initialize() {
@@ -7559,13 +7559,8 @@ class LineElement extends Element {
         }
     }
 
-    updateControlPoints(chartArea, indexAxis) {
-        const options = this.options;
-        if ((options.tension || options.cubicInterpolationMode === 'monotone') && !options.stepped && !this._pointsUpdated) {
-            const loop = options.spanGaps ? this._loop : this._fullLoop;
-            _updateBezierControlPoints(this._points, options, chartArea, loop, indexAxis);
-            this._pointsUpdated = true;
-        }
+    get points() {
+        return this._points;
     }
 
     set points(points) {
@@ -7575,12 +7570,17 @@ class LineElement extends Element {
         this._pointsUpdated = false;
     }
 
-    get points() {
-        return this._points;
-    }
-
     get segments() {
         return this._segments || (this._segments = _computeSegments(this, this.options.segment));
+    }
+
+    updateControlPoints(chartArea, indexAxis) {
+        const options = this.options;
+        if ((options.tension || options.cubicInterpolationMode === 'monotone') && !options.stepped && !this._pointsUpdated) {
+            const loop = options.spanGaps ? this._loop : this._fullLoop;
+            _updateBezierControlPoints(this._points, options, chartArea, loop, indexAxis);
+            this._pointsUpdated = true;
+        }
     }
 
     first() {
@@ -7672,9 +7672,6 @@ function inRange$1(el, pos, axis, useFinalPosition) {
 
 class PointElement extends Element {
     static id = 'point';
-    parsed;
-    skip;
-    stop;
     /**
      * @type {any}
      */ static defaults = {
@@ -7692,6 +7689,9 @@ class PointElement extends Element {
         backgroundColor: 'backgroundColor',
         borderColor: 'borderColor'
     };
+    parsed;
+    skip;
+    stop;
 
     constructor(cfg) {
         super();

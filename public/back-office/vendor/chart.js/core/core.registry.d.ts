@@ -8,6 +8,22 @@ export class Registry {
     plugins: TypedRegistry;
     scales: TypedRegistry;
     _typedRegistries: TypedRegistry[];
+    /**
+     * @private
+     */
+    private _each;
+    /**
+     * @private
+     */
+    private _exec;
+    /**
+     * @private
+     */
+    private _getRegistryForType;
+    /**
+     * @private
+     */
+    private _get;
 
     /**
      * @param  {...any} args
@@ -79,23 +95,6 @@ export class Registry {
      * @param  {...typeof Scale} args
      */
     removeScales(...args: (typeof Scale)[]): void;
-
-    /**
-     * @private
-     */
-    private _each;
-    /**
-     * @private
-     */
-    private _exec;
-    /**
-     * @private
-     */
-    private _getRegistryForType;
-    /**
-     * @private
-     */
-    private _get;
 }
 
 declare const _default: Registry;

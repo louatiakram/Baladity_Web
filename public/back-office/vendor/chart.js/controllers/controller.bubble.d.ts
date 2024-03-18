@@ -5,6 +5,8 @@ export default class BubbleController extends DatasetController {
      */
     static overrides: any;
 
+    update(mode: any): void;
+
     /**
      * Parse array of primitive values
      * @protected
@@ -35,7 +37,5 @@ export default class BubbleController extends DatasetController {
         label: any;
         value: string;
     };
-
-    update(mode: any): void;
 }
 import DatasetController from "../core/core.datasetController.js";

@@ -4,9 +4,6 @@ import type {CartesianParsedData, ChartArea, Point, PointHoverOptions, PointOpti
 export type PointProps = Point;
 export default class PointElement extends Element<PointProps, PointOptions & PointHoverOptions> {
     static id: string;
-    parsed: CartesianParsedData;
-    skip?: boolean;
-    stop?: boolean;
     /**
      * @type {any}
      */
@@ -26,6 +23,9 @@ export default class PointElement extends Element<PointProps, PointOptions & Poi
         backgroundColor: string;
         borderColor: string;
     };
+    parsed: CartesianParsedData;
+    skip?: boolean;
+    stop?: boolean;
 
     constructor(cfg: any);
 

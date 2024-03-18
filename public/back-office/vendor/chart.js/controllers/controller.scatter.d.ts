@@ -5,6 +5,8 @@ export default class ScatterController extends DatasetController {
      */
     static overrides: any;
 
+    update(mode: any): void;
+
     /**
      * @protected
      */
@@ -12,8 +14,6 @@ export default class ScatterController extends DatasetController {
         label: any;
         value: string;
     };
-
-    update(mode: any): void;
 
     /**
      * @protected
