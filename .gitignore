@@ -14,5 +14,7 @@
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
+*.xml
+
 .idea/workspace.xml
 .idea/workspace.xml
