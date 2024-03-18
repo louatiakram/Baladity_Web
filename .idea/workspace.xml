@@ -5,57 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d21bcfc9-d61a-4ca8-b6b1-083941da76b2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/bin/console" beforeDir="false" afterPath="$PROJECT_DIR$/bin/console" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/bootstrap/js/bootstrap.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/bootstrap/js/bootstrap.bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/bootstrap/js/bootstrap.esm.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/bootstrap/js/bootstrap.esm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/chart.cjs" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/chart.cjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/chart.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/chart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/controllers/controller.bar.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/controllers/controller.bar.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/controllers/controller.bubble.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/controllers/controller.bubble.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/controllers/controller.doughnut.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/controllers/controller.doughnut.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/controllers/controller.polarArea.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/controllers/controller.polarArea.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/controllers/controller.radar.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/controllers/controller.radar.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.animation.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.animation.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.animations.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.animations.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.config.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.config.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.datasetController.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.datasetController.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.defaults.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.defaults.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.plugins.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.plugins.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.registry.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.registry.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.typedRegistry.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/core/core.typedRegistry.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/elements/element.line.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/elements/element.line.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/elements/element.point.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/elements/element.point.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/helpers/helpers.canvas.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/helpers/helpers.canvas.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/helpers/helpers.config.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/helpers/helpers.config.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/plugins/plugin.filler/simpleArc.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/plugins/plugin.filler/simpleArc.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/plugins/plugin.legend.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/plugins/plugin.legend.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/plugins/plugin.title.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/plugins/plugin.title.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/plugins/plugin.tooltip.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/plugins/plugin.tooltip.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/scales/scale.linearbase.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/scales/scale.linearbase.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/scales/scale.logarithmic.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/scales/scale.logarithmic.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/scales/scale.time.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/scales/scale.time.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/scales/scale.timeseries.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/scales/scale.timeseries.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/types/animation.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/types/animation.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/chart.js/types/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/chart.js/types/index.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/accordion/plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/accordion/plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/advlist/plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/advlist/plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/codesample/plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/codesample/plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/directionality/plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/directionality/plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/emoticons/plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/emoticons/plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/fullscreen/plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/fullscreen/plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/help/plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/help/plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/image/plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/image/plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/link/plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/link/plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/quickbars/plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/quickbars/plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/searchreplace/plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/searchreplace/plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/table/plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/table/plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/template/plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/template/plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/visualchars/plugin.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/plugins/visualchars/plugin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/vendor/tinymce/tinymce.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/vendor/tinymce/tinymce.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/front-office/img/hero-img.svg" beforeDir="false" afterPath="$PROJECT_DIR$/public/front-office/img/hero-img.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/front-office/vendor/bootstrap/js/bootstrap.esm.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/front-office/vendor/bootstrap/js/bootstrap.esm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/front-office/vendor/bootstrap/js/bootstrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/front-office/vendor/bootstrap/js/bootstrap.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Kernel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/main/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/main/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -259,7 +209,7 @@
       <workItem from="1710760761220" duration="983000" />
       <workItem from="1710761776472" duration="48000" />
       <workItem from="1710769883651" duration="881000" />
-      <workItem from="1710771230045" duration="268000" />
+      <workItem from="1710771230045" duration="568000" />
     </task>
     <servers />
   </component>
