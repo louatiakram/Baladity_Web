@@ -3038,7 +3038,7 @@
             this._roots = [];
             this._displayList = [];
             this._displayListLen = 0;
-            return;
+
         };
         Storage.prototype.getRoots = function () {
             return this._roots;
@@ -4025,7 +4025,7 @@
             }
         }
         setRgba(rgbaArr, 0, 0, 0, 1);
-        return;
+
     }
 
     function hsla2rgba(hsla, rgba) {
@@ -19975,7 +19975,7 @@
             for (var i = 0, len = data.length; i < len; i++) {
                 var item = data[i];
                 if (item == null) {
-                    continue;
+
                 } else if (isArray(item) || isTypedArray(item)) {
                     sourceFormat = SOURCE_FORMAT_ARRAY_ROWS;
                     break;
@@ -20225,7 +20225,7 @@
             return 0;
         };
         DefaultDataProvider.prototype.getItem = function (idx, out) {
-            return;
+
         };
         DefaultDataProvider.prototype.appendData = function (newData) {
         };
@@ -20576,7 +20576,7 @@
          */
         DataFormatMixin.prototype.formatTooltip = function (dataIndex, multipleSeries, dataType) {
             // Empty function
-            return;
+
         };
         return DataFormatMixin;
     }();
@@ -21143,13 +21143,13 @@
             throw new Error('not supported');
         };
         ExternalSource.prototype.cloneRawData = function () {
-            return;
+
         };
         /**
          * @return If dimension not found, return null/undefined.
          */
         ExternalSource.prototype.getDimensionInfo = function (dim) {
-            return;
+
         };
         /**
          * dimensions defined if and only if either:
@@ -21161,10 +21161,10 @@
          * @return Always return an array (even empty array).
          */
         ExternalSource.prototype.cloneAllDimensionInfo = function () {
-            return;
+
         };
         ExternalSource.prototype.count = function () {
-            return;
+
         };
         /**
          * Only support by dimension index.
@@ -21172,10 +21172,10 @@
          * because transform function is not case-specific, no need to use name literally.
          */
         ExternalSource.prototype.retrieveValue = function (dataIndex, dimIndex) {
-            return;
+
         };
         ExternalSource.prototype.retrieveValueFromItem = function (dataItem, dimIndex) {
-            return;
+
         };
         ExternalSource.prototype.convertValue = function (rawVal, dimInfo) {
             return parseDataValue(rawVal, dimInfo);
@@ -23351,7 +23351,7 @@
          * Must be overridden.
          */
         SeriesModel.prototype.getInitialData = function (option, ecModel) {
-            return;
+
         };
         /**
          * Append data to list
@@ -31764,7 +31764,7 @@
         };
         OrdinalScale.prototype.getMinorTicks = function (splitNumber) {
             // Not support.
-            return;
+
         };
         /**
          * @see `Ordinal['_ordinalNumbersByTick']`
@@ -33684,7 +33684,7 @@
          * @return coordinate system model
          */
         AxisModelCommonMixin.prototype.getCoordSysModel = function () {
-            return;
+
         };
         return AxisModelCommonMixin;
     }();
@@ -34601,7 +34601,7 @@
          */
         Axis.prototype.pointToData = function (point, clamp) {
             // Should be implemented in derived class if necessary.
-            return;
+
         };
         /**
          * Different from `zrUtil.map(axis.getTicks(), axis.dataToCoord, axis)`,
@@ -85265,7 +85265,7 @@
             var ariaLabel;
             if (seriesCnt < 1) {
                 // No series, no aria label
-                return;
+
             } else {
                 var title = getTitle();
                 if (title) {
