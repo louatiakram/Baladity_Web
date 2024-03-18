@@ -4,12 +4,6 @@ export default class TimeScale extends Scale {
      * @type {any}
      */
     static defaults: any;
-
-    /**
-     * @param {object} props
-     */
-    constructor(props: object);
-
     /** @type {{data: number[], labels: number[], all: number[]}} */
     _cache: {
         data: number[];
@@ -27,10 +21,40 @@ export default class TimeScale extends Scale {
         round: any;
         isoWeekday: any;
     };
+    _adapter: DateAdapter;
+    /**
+     * @private
+     */
+    private _getLabelBounds;
+    /**
+     * Function to format an individual tick mark
+     * @param {number} time
+     * @param {number} index
+     * @param {object[]} ticks
+     * @param {string|undefined} [format]
+     * @return {string}
+     * @private
+     */
+    private _tickFormatFunction;
+    /**
+     * @param {string} label
+     * @return {{w:number, h:number}}
+     * @private
+     */
+    private _getLabelSize;
+    /**
+     * @param {number} exampleTime
+     * @return {number}
+     * @private
+     */
+    private _getLabelCapacity;
+
+    /**
+     * @param {object} props
+     */
+    constructor(props: object);
 
     init(scaleOpts: any, opts?: {}): void;
-
-    _adapter: DateAdapter;
 
     /**
      * @param {*} raw
@@ -38,30 +62,6 @@ export default class TimeScale extends Scale {
      * @return {number}
      */
     parse(raw: any, index?: number | null): number;
-
-    /**
-     * @private
-     */
-    private _getLabelBounds;
-
-    /**
-     * Returns the start and end offsets from edges in the form of {start, end}
-     * where each value is a relative width to the scale and ranges between 0 and 1.
-     * They add extra margins on the both sides by scaling down the original scale.
-     * Offsets are added when the `offset` option is true.
-     * @param {number[]} timestamps
-     * @protected
-     */
-    protected initOffsets(timestamps?: number[]): void;
-
-    /**
-     * Generates a maximum of `capacity` timestamps between min and max, rounded to the
-     * `minor` unit using the given scale time `options`.
-     * Important: this method can return ticks outside the min and max range, it's the
-     * responsibility of the calling code to clamp values if needed.
-     * @protected
-     */
-    protected _generate(): number[];
 
     /**
      * @param {number} value
@@ -75,17 +75,6 @@ export default class TimeScale extends Scale {
      * @return {string}
      */
     format(value: number, format: string | undefined): string;
-
-    /**
-     * Function to format an individual tick mark
-     * @param {number} time
-     * @param {number} index
-     * @param {object[]} ticks
-     * @param {string|undefined} [format]
-     * @return {string}
-     * @private
-     */
-    private _tickFormatFunction;
 
     /**
      * @param {object[]} ticks
@@ -111,17 +100,23 @@ export default class TimeScale extends Scale {
     getValueForPixel(pixel: number): number;
 
     /**
-     * @param {string} label
-     * @return {{w:number, h:number}}
-     * @private
+     * Returns the start and end offsets from edges in the form of {start, end}
+     * where each value is a relative width to the scale and ranges between 0 and 1.
+     * They add extra margins on the both sides by scaling down the original scale.
+     * Offsets are added when the `offset` option is true.
+     * @param {number[]} timestamps
+     * @protected
      */
-    private _getLabelSize;
+    protected initOffsets(timestamps?: number[]): void;
+
     /**
-     * @param {number} exampleTime
-     * @return {number}
-     * @private
+     * Generates a maximum of `capacity` timestamps between min and max, rounded to the
+     * `minor` unit using the given scale time `options`.
+     * Important: this method can return ticks outside the min and max range, it's the
+     * responsibility of the calling code to clamp values if needed.
+     * @protected
      */
-    private _getLabelCapacity;
+    protected _generate(): number[];
 
     /**
      * @protected

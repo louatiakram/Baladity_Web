@@ -4,30 +4,6 @@ export default class BarController extends DatasetController {
      * @type {any}
      */
     static overrides: any;
-
-    /**
-     * Overriding primitive data parsing since we support mixed primitive/array
-     * data for float bars
-     * @protected
-     */
-    protected parsePrimitiveData(meta: any, data: any, start: any, count: any): any[];
-
-    /**
-     * Overriding array data parsing since we support mixed primitive/array
-     * data for float bars
-     * @protected
-     */
-    protected parseArrayData(meta: any, data: any, start: any, count: any): any[];
-
-    /**
-     * Overriding object data parsing since we support mixed primitive/array
-     * value-scale data for float bars
-     * @protected
-     */
-    protected parseObjectData(meta: any, data: any, start: any, count: any): any[];
-
-    update(mode: any): void;
-
     /**
      * Returns the stacks based on groups and bar visibility.
      * @param {number} [last] - The dataset index
@@ -63,5 +39,28 @@ export default class BarController extends DatasetController {
      * @private
      */
     private _calculateBarIndexPixels;
+
+    update(mode: any): void;
+
+    /**
+     * Overriding primitive data parsing since we support mixed primitive/array
+     * data for float bars
+     * @protected
+     */
+    protected parsePrimitiveData(meta: any, data: any, start: any, count: any): any[];
+
+    /**
+     * Overriding array data parsing since we support mixed primitive/array
+     * data for float bars
+     * @protected
+     */
+    protected parseArrayData(meta: any, data: any, start: any, count: any): any[];
+
+    /**
+     * Overriding object data parsing since we support mixed primitive/array
+     * value-scale data for float bars
+     * @protected
+     */
+    protected parseObjectData(meta: any, data: any, start: any, count: any): any[];
 }
 import DatasetController from "../core/core.datasetController.js";

@@ -36,6 +36,10 @@
             return Optional.singletonNone;
         }
 
+        static from(value) {
+            return isNonNullable(value) ? Optional.some(value) : Optional.none();
+        }
+
         fold(onNone, onSome) {
             if (this.tag) {
                 return onSome(this.value);
@@ -106,10 +110,6 @@
             } else {
                 return this.value;
             }
-        }
-
-        static from(value) {
-            return isNonNullable(value) ? Optional.some(value) : Optional.none();
         }
 
         getOrNull() {
