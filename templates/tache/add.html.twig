@@ -1,6 +1,9 @@
 {% extends 'base-back.html.twig' %}
 
+{% block title %}Ajouter Tâche{% endblock %}
+
 {% block body %}
+
     {{ form_start(f) }}
     <div class="form-group">
         {{ form_label(f.nom_Cat, 'Nom Catégorie') }}

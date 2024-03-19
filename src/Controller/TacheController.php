@@ -16,9 +16,10 @@ use Doctrine\Persistence\ManagerRegistry;
 class TacheController extends AbstractController
 {
     #[Route('/tache', name: 'app_tache')]
-    public function index(): Response
+    public function index(TacheRepository $r): Response
     {
-        return $this->render('tache/list.html.twig');
+        $xs = $r->findAll();
+        return $this->render('tache/list.html.twig', ['l' => $xs,]);
     }
 
     #[Route('/tache/list', name: 'tache_list')]
@@ -44,6 +45,11 @@ class TacheController extends AbstractController
         $form = $this->createForm(TacheType::class, $x);
         $form->handleRequest($req);
         if ($form->isSubmitted()) {
+            // Get the selected etat_T value from the form
+            $selectedEtatT = $form->get('etat_T')->getData();
+
+            // Set the etat_T property of the tache entity
+            $x->setEtatT($selectedEtatT);
             $em = $doctrine->getManager();
             $em->persist($x);
             $em->flush();
@@ -59,6 +65,12 @@ class TacheController extends AbstractController
         $form->handleRequest($req);
 
         if ($form->isSubmitted()) {
+            // Get the selected etat_T value from the form
+            $selectedEtatT = $form->get('etat_T')->getData();
+
+            // Set the etat_T property of the tache entity
+            $x->setEtatT($selectedEtatT);
+
             $em = $doctrine->getManager();
             $em->flush();
             return $this->redirectToRoute('tache_list');

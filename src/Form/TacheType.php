@@ -32,7 +32,6 @@ class TacheType extends AbstractType
             ])
             ->add('pieceJointe_T', TextType::class, [
                 'label' => 'Pièce Jointe',
-                'required' => false, // if the field is not required
             ])
             ->add('date_DT', DateType::class, [
                 'widget' => 'single_text',
