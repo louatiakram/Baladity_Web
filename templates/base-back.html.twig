@@ -312,15 +312,20 @@
                             class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="GestionTache-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
                     <li>
+                        {% block AjouterTacheNav %}
                         <a href="{{ path('tache_add') }}">
                             <i class="bi bi-circle"></i><span>Ajouter Tache</span>
                         </a>
+                        {% endblock %}
                     </li>
                     <li>
+                        {% block ListeTacheNav %}
                         <a href="{{ path('tache_list') }}">
                             <i class="bi bi-circle"></i><span>Liste Tache</span>
                         </a>
+                        {% endblock %}
                     </li>
                 </ul>
             </li>

@@ -2,6 +2,12 @@
 
 {% block title %}Ajouter Tâche{% endblock %}
 
+{% block AjouterTacheNav %}
+    <a href="{{ path('tache_add') }}" class="active">
+        <i class="bi bi-circle"></i><span>Ajouter Tache</span>
+    </a>
+{% endblock %}
+
 {% block body %}
     <form class="row g-3" {{ form_start(f) }}
         <div class="col-md-4">
