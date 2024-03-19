@@ -20,9 +20,9 @@
                 <td>{{ tache.getDateFT()|date('d-m-Y') }}</td>
                 <td>{{ tache.getEtatT() }}</td>
                 <td>
-                    <form action="{{ path('tache_detail', {'i': tache.getIdT()}) }}"><button class="btn btn-primary">Detail</button></form>
-                    <form action="{{ path('tache_update', {'i': tache.getIdT()}) }}"><button class="btn btn-primary">Modifier</button></form>
-                    <form action="{{ path('tache_delete', {'i': tache.getIdT()}) }}"><button class="btn btn-danger">Supprimer</button></form>
+                    <button onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" class="btn btn-primary">Detail</button>
+                    <button onclick="location.href='{{ path('tache_update', {'i': tache.getIdT()}) }}'" class="btn btn-primary">Modifier</button>
+                    <button onclick="location.href='{{ path('tache_delete', {'i': tache.getIdT()}) }}'" class="btn btn-danger">Supprimer</button>
                 </td>
             </tr>
         {% endfor %}

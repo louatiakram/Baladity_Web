@@ -25,10 +25,12 @@ class TacheType extends AbstractType
                     'Employé' => 'Employé',
                     'Responsable employé' => 'Responsable employé',
                 ],
-                'placeholder' => 'Sélectionner une catégorie',
+                'placeholder' => 'Categorie',
             ])
             ->add('titre_T', TextType::class, [
-
+                'attr' => [
+                    'placeholder' => 'Titre Tache' // Replace 'Enter your title here' with your desired placeholder text
+                ]
             ])
             ->add('pieceJointe_T', FileType::class, [
                 'mapped' => false,
@@ -42,6 +44,9 @@ class TacheType extends AbstractType
 
             ])
             ->add('desc_T', TextareaType::class, [
+                'attr' => [
+                    'placeholder' => 'Description Tache' // Replace 'Enter your title here' with your desired placeholder text
+                ]
 
             ])
             ->add('etat_T', ChoiceType::class, [

@@ -58,9 +58,6 @@
                 <div class="card shadow-sm">
                     {% if tache.getPieceJointeT() %}
                         <img src="{{ asset('uploads/' ~ tache.getPieceJointeT()) }}" class="card-img-top" alt="Piece jointe">
-                        <div class="card-body">
-                            <h5 class="card-title text-primary mt-3">Pièce jointe</h5>
-                        </div>
                     {% else %}
                         <div class="card-body">
                             <p class="card-text text-muted mt-3">Aucune pièce jointe pour cette tâche.</p>

@@ -12,25 +12,23 @@
 
             {{ form_widget(f.titre_T, { 'attr': {'class': 'form-control'} }) }}
         </div>
-        {#  <div class="col-md-4">
+         <div class="col-md-4">
             {{ form_widget(f.pieceJointe_T, { 'attr': {'class': 'form-control'}, 'type': 'file', 'id': 'pieceJointe_T', 'name': 'pieceJointe_T'}) }}
-        </div> #}
-
-        <div class="col-md-4">
-            {{ form_row(f.pieceJointe_T) }}
         </div>
-        <div class="col-md-4">
+
+
+        <div class="col-md-5">
             {{ form_widget(f.date_DT, { 'attr': {'class': 'form-control'} }) }}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
 
             {{ form_widget(f.date_FT, { 'attr': {'class': 'form-control'} }) }}
         </div>
-        <div class="col-4">
+        <div class="col-5">
 
             {{ form_widget(f.desc_T, { 'attr': {'class': 'form-control'} }) }}
         </div>
-        <div class="col-4">
+        <div class="col-5">
             {% for choice in f.etat_T %}
                 <div class="form-check">
                     {{ form_widget(choice, { 'attr': {'class': 'form-check-input'} }) }}
@@ -39,11 +37,14 @@
             {% endfor %}
         </div>
         <div class="text-center">
-            <div class="col-md-4">
+            <div class="col-md-2">
                 {{ form_widget(f.Save, { 'attr': {'class': 'btn btn-primary'} }) }}
                 {{ form_widget(f.Reset, { 'attr': {'class': 'btn btn-secondary'} }) }}
-                <button onclick="location.href='{{ path('tache_list') }}'" class="btn btn-outline-primary">Liste des Tâches</button>
             </div>
         </div>
     {{ form_end(f) }}
+    <div class="col-md-4" style="margin-top: 10px;"> <!-- Adjust margin-top as needed -->
+        <button onclick="location.href='{{ path('tache_list') }}'" class="btn btn-outline-primary">Liste des Tâches</button>
+    </div>
+
 {% endblock %}
