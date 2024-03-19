@@ -36,15 +36,15 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="text-center">
-            <div class="col-md-2">
-                {{ form_widget(f.Save, { 'attr': {'class': 'btn btn-primary'} }) }}
-                {{ form_widget(f.Reset, { 'attr': {'class': 'btn btn-secondary'} }) }}
-            </div>
+    <div class="text-center">
+        <div class="col-md-2">
+            {{ form_widget(f.Save, { 'attr': {'class': 'btn btn-primary'} }) }}
+            {{ form_widget(f.Reset, { 'attr': {'class': 'btn btn-secondary'} }) }}
         </div>
+    </div>
     {{ form_end(f) }}
     <div class="col-md-4" style="margin-top: 10px;"> <!-- Adjust margin-top as needed -->
-        <button onclick="location.href='{{ path('tache_list') }}'" class="btn btn-outline-primary">Liste des Tâches</button>
+        <button onclick="location.href='{{ path('tache_list') }}'" class="btn btn-outline-primary"><i class="bi bi-list"></i> Liste des Tâches</button>
     </div>
 
 {% endblock %}

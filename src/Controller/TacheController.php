@@ -93,6 +93,21 @@ class TacheController extends AbstractController
         $form->handleRequest($req);
 
         if ($form->isSubmitted()) {
+            // Handle file upload
+            /** @var UploadedFile|null $pieceJointe */
+            $pieceJointe = $form->get('pieceJointe_T')->getData();
+            if ($pieceJointe) {
+                $originalFilename = pathinfo($pieceJointe->getClientOriginalName(), PATHINFO_FILENAME);
+                // Move the file to the uploads directory
+                try {
+                    $uploadedFile = $pieceJointe->move(
+                        $this->getParameter('uploadsDirectory'), // Use the parameter defined in services.yaml
+                        $originalFilename.'.'.$pieceJointe->guessExtension()
+                    );
+                    $x->setPieceJointeT($uploadedFile->getFilename());
+                } catch (FileException $e) {
+                }
+            }
             // Get the selected etat_T value from the form
             $selectedEtatT = $form->get('etat_T')->getData();
 
