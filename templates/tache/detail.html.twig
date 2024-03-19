@@ -57,7 +57,17 @@
             <div class="col-md-6">
                 <div class="card shadow-sm">
                     {% if tache.getPieceJointeT() %}
-                        <img src="{{ asset('uploads/' ~ tache.getPieceJointeT()) }}" class="card-img-top" alt="Piece jointe">
+                        {% set fileExtension = tache.getPieceJointeT()|split('.')|last %}
+                        {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
+                            <img src="{{ asset('uploads/' ~ tache.getPieceJointeT()) }}" class="card-img-top" alt="Piece jointe">
+                        {% elseif fileExtension == 'pdf' %}
+                            {% set pdfPreviewPath = asset('uploads/' ~ tache.getPieceJointeT()) %}
+                            <embed src="{{ pdfPreviewPath }}" type="application/pdf" width="100%" height="500px" />
+                        {% else %}
+                            <div class="card-body">
+                                <p class="card-text text-muted mt-3">Télécharger la pièce jointe : <a href="{{ asset('uploads/' ~ tache.getPieceJointeT()) }}">{{ tache.getPieceJointeT() }}</a></p>
+                            </div>
+                        {% endif %}
                     {% else %}
                         <div class="card-body">
                             <p class="card-text text-muted mt-3">Aucune pièce jointe pour cette tâche.</p>
@@ -65,6 +75,9 @@
                     {% endif %}
                 </div>
             </div>
+
+
+
         </div>
     </div>
 {% endblock %}

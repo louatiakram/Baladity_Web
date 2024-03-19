@@ -34,6 +34,7 @@ class TacheType extends AbstractType
             ])
             ->add('pieceJointe_T', FileType::class, [
                 'mapped' => false,
+                'required' => false,
             ])
             ->add('date_DT', DateType::class, [
                 'widget' => 'single_text',
@@ -45,8 +46,9 @@ class TacheType extends AbstractType
             ])
             ->add('desc_T', TextareaType::class, [
                 'attr' => [
-                    'placeholder' => 'Description Tache' // Replace 'Enter your title here' with your desired placeholder text
-                ]
+                    'placeholder' => 'Description Tache'
+                ],
+                'required' => false,
 
             ])
             ->add('etat_T', ChoiceType::class, [
