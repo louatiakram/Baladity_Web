@@ -7,6 +7,7 @@ use App\Enum\EtatTache;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -29,8 +30,8 @@ class TacheType extends AbstractType
             ->add('titre_T', TextType::class, [
 
             ])
-            ->add('pieceJointe_T', TextType::class, [
-
+            ->add('pieceJointe_T', FileType::class, [
+                'mapped' => false,
             ])
             ->add('date_DT', DateType::class, [
                 'widget' => 'single_text',
