@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -24,33 +25,32 @@ class TacheType extends AbstractType
                     'Employé' => 'Employé',
                     'Responsable employé' => 'Responsable employé',
                 ],
-                'label' => 'Nom Catégorie',
                 'placeholder' => 'Sélectionner une catégorie',
             ])
             ->add('titre_T', TextType::class, [
-                'label' => 'Titre',
+
             ])
             ->add('pieceJointe_T', TextType::class, [
-                'label' => 'Pièce Jointe',
+
             ])
             ->add('date_DT', DateType::class, [
                 'widget' => 'single_text',
-                'label' => 'Date Début',
+
             ])
             ->add('date_FT', DateType::class, [
                 'widget' => 'single_text',
-                'label' => 'Date Fin',
+
             ])
             ->add('desc_T', TextareaType::class, [
-                'label' => 'Description',
+
             ])
             ->add('etat_T', ChoiceType::class, [
                 'choices' => EtatTache::toArray(),
                 'expanded' => true,
                 'multiple' => false,
-                'label' => 'Etat',
             ])
-            ->add('Save', SubmitType::class);
+            ->add('Save', SubmitType::class)
+            ->add('Reset', ResetType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

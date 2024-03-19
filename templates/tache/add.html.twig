@@ -3,43 +3,44 @@
 {% block title %}Ajouter Tâche{% endblock %}
 
 {% block body %}
+    <form class="row g-3" {{ form_start(f) }}
+        <div class="col-md-4">
 
-    {{ form_start(f) }}
-    <div class="form-group">
-        {{ form_label(f.nom_Cat, 'Nom Catégorie') }}
-        {{ form_widget(f.nom_Cat, { 'attr': {'class': 'form-control'} }) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(f.titre_T, 'Titre') }}
-        {{ form_widget(f.titre_T, { 'attr': {'class': 'form-control'} }) }}
-    </div>
+            {{ form_widget(f.nom_Cat, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-md-4">
 
-    <div class="form-group">
-        {{ form_label(f.pieceJointe_T, 'Pièce Jointe') }}
-        {{ form_widget(f.pieceJointe_T, { 'attr': {'class': 'form-control'}, 'type': 'file', 'id': 'piecejointe', 'name': 'piecejointe'}) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(f.date_DT, 'Date Début') }}
-        {{ form_widget(f.date_DT, { 'attr': {'class': 'form-control'} }) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(f.date_FT, 'Date Fin') }}
-        {{ form_widget(f.date_FT, { 'attr': {'class': 'form-control'} }) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(f.desc_T, 'Description') }}
-        {{ form_widget(f.desc_T, { 'attr': {'class': 'form-control'} }) }}
-    </div>
-    <div class="form-group">
-        {% for choice in f.etat_T %}
-            <div class="form-check">
-                {{ form_widget(choice, { 'attr': {'class': 'form-check-input'} }) }}
-                {{ form_label(choice, null, { 'label_attr': {'class': 'form-check-label'} }) }}
+            {{ form_widget(f.titre_T, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-md-4">
+
+            {{ form_widget(f.pieceJointe_T, { 'attr': {'class': 'form-control'}, 'type': 'file', 'id': 'piecejointe', 'name': 'piecejointe'}) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_widget(f.date_DT, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-md-4">
+
+            {{ form_widget(f.date_FT, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-4">
+
+            {{ form_widget(f.desc_T, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        <div class="col-4">
+            {% for choice in f.etat_T %}
+                <div class="form-check">
+                    {{ form_widget(choice, { 'attr': {'class': 'form-check-input'} }) }}
+                    {{ form_label(choice, null, { 'label_attr': {'class': 'form-check-label'} }) }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center">
+            <div class="col-md-4">
+                {{ form_widget(f.Save, { 'attr': {'class': 'btn btn-primary'} }) }}
+                {{ form_widget(f.Reset, { 'attr': {'class': 'btn btn-secondary'} }) }}
+                <button onclick="location.href='{{ path('tache_list') }}'" class="btn btn-outline-primary">Liste des Tâches</button>
             </div>
-        {% endfor %}
-    </div>
-    <div class="form-group">
-        {{ form_widget(f.Save, { 'attr': {'class': 'btn btn-primary'} }) }}
-    </div>
-    {{ form_end(f) }}
+        </div>
+    </form>
 {% endblock %}

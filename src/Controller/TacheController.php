@@ -50,6 +50,7 @@ class TacheController extends AbstractController
 
             // Set the etat_T property of the tache entity
             $x->setEtatT($selectedEtatT);
+
             $em = $doctrine->getManager();
             $em->persist($x);
             $em->flush();

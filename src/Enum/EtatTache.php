@@ -11,9 +11,9 @@ class EtatTache
     public static function toArray(): array
     {
             return [
-                self::TO_DO => 'To Do',
-                self::DOING => 'Doing',
-                self::DONE => 'Done',
+                self::TO_DO => 'TO_DO',
+                self::DOING => 'DOING',
+                self::DONE => 'DONE',
             ];
         }
 }
