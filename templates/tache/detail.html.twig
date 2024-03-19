@@ -37,7 +37,11 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title text-primary">Description</h5>
-                        <p class="card-text">{{ tache.getDescT() }}</p>
+                        <div class="row mb-3">
+                            <div class="col-sm-10">
+                                <textarea class="form-control" style="height: 100px" readonly>{{ tache.getDescT() }}</textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
