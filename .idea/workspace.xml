@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base-back.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base-back.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/tache/add.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tache/add.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tache/detail.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tache/detail.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/tache/list.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tache/list.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -224,6 +225,7 @@
       <workItem from="1710769883651" duration="881000" />
       <workItem from="1710771230045" duration="1212000" />
       <workItem from="1710806694796" duration="3541000" />
+      <workItem from="1710863809276" duration="900000" />
     </task>
     <servers />
   </component>
