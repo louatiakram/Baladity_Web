@@ -47,6 +47,9 @@ class TacheRepository extends ServiceEntityRepository
         }
     }
 
+
+    // Define findByQuery method to search for tasks based on a query
+
     // /**
     //  * @return tache[] Returns an array of tache objects
     //  */
@@ -75,4 +78,13 @@ class TacheRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findByTitre(string $query): array
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.titre_T LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->orderBy('t.id_T', 'ASC') // Assuming 'idT' is the primary key field
+            ->getQuery()
+            ->getResult();
+    }
 }

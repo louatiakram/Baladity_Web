@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 class TacheController extends AbstractController
 {
@@ -24,10 +26,22 @@ class TacheController extends AbstractController
     }
 
     #[Route('/tache/list', name: 'tache_list')]
-    public function list(TacheRepository $r): Response
+    public function list(Request $request, TacheRepository $repository): Response
     {
-        $xs = $r->findAll();
-        return $this->render('tache/list.html.twig', ['l' => $xs,]);
+        $query = $request->query->get('query');
+
+        // If a search query is provided, filter tasks based on the title
+        if ($query) {
+            $tasks = $repository->findByTitre($query); // Replace with appropriate method
+        } else {
+            // If no search query is provided, fetch all tasks
+            $tasks = $repository->findAll();
+        }
+
+        return $this->render('tache/list.html.twig', [
+            'l' => $tasks,
+            'query' => $query, // Pass the query to the template for displaying in the search bar
+        ]);
     }
 
     #[Route('/tache/add', name: 'tache_add')]
