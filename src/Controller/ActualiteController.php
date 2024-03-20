@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormError;
-
+use DateTime;
 class ActualiteController extends AbstractController
 {
     #[Route('/actualite', name: 'app_actualite')]
@@ -29,56 +29,51 @@ class ActualiteController extends AbstractController
     #[Route('/actualite/ajouterA', name: 'ajouterA')]     
     public function ajouterA(ManagerRegistry $doctrine, Request $req): Response
     {
-        $actualites = new Actualite();
-        
-        // Create the form based on the ActualiteType form class
-        $form = $this->createForm(ActualiteType::class, $actualites);
+        $actualite = new Actualite();
+        $userId = 48; // Assuming the user ID is 1
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
     
-        // Handle form submission
+        if (!$user) {
+            throw $this->createNotFoundException('User not found');
+        }
+    
+        $actualite->setIdUser($user);
+        
+        // Set the current date to the date_a property
+        $actualite->setDateA(new DateTime());
+    
+        $form = $this->createForm(ActualiteType::class, $actualite);
         $form->handleRequest($req);
     
-        // Check if the form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
-            // Handle file upload
-            $imageFile = $form->get('image_a')->getData();
-            if ($imageFile) {
-                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                // Move the file to the uploads directory
+            // Set the image_a field
+            $image = $form->get('image_a')->getData();
+            if ($image) {
+                // Handle image upload and persist its filename to the database
+                $fileName = uniqid().'.'.$image->guessExtension();
                 try {
-                    $uploadedFile = $imageFile->move(
-                        $this->getParameter('images_directory'), // Use the parameter defined in services.yaml
-                        $originalFilename.'.'.$imageFile->guessExtension()
-                    );
-                    $x->setImageA($uploadedFile->getFilename());
+                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    $actualite->setImageA($fileName);
                 } catch (FileException $e) {
-                    // Handle the exception if necessary
+                    // Handle the exception if file upload fails
+                    // For example, log the error or display a flash message
                 }
             }
-            
-            
+    
             // Get the entity manager
-            $em = $doctrine->getManager();  
-            
-            // Persist the actualites object to the database
-            $em->persist($actualites);
+            $em = $doctrine->getManager();
+    
+            // Persist the actualite object to the database
+            $em->persist($actualite);
             $em->flush();
-            
-            // Create a new instance of the form to reset it
-            $actualites = new Actualite();
-            $form = $this->createForm(ActualiteType::class, $actualites);
     
-            // Add a success message if needed
-            // $this->addFlash('success', 'Actualite added successfully.');
-    
-            // Render the template with the new form instance
-            return $this->render('actualite/ajouterA.html.twig', [
-                'form' => $form->createView() // Pass the form view to the template
-            ]);
+            // Redirect to a success page or display a success message
+            // For example:
+            return $this->redirectToRoute('app_main');
         }
-        
-        // Render the template with the form
+    
         return $this->render('actualite/ajouterA.html.twig', [
-            'form' => $form->createView() // Pass the form view to the template
+            'form' => $form->createView()
         ]);
     }
     

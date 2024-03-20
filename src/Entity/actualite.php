@@ -94,10 +94,10 @@ class actualite
         return $this->id_user;
     }
 
-    public function setIdUser(int $id_user): self
+ 
+    public function setIdUser(?enduser $id_user): self
     {
         $this->id_user = $id_user;
-
         return $this;
     }
 }
