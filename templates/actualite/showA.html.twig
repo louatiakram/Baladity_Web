@@ -412,45 +412,57 @@
 
     </aside><!-- End Sidebar-->
 {% endblock %}
-
 <main id="main" class="main">
+    <div class="col-8">
+        <div class="card">
+            <!-- Filter dropdown -->
+            <div class="filter">
+                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                        <h6>Filter</h6>
+                    </li>
+                </ul>
+            </div>
+            <!-- Card body with title -->
+            <div class="card-body">
+                <!-- Line Chart or other content -->
 
-    {% block ListeTalacheNav %}<a href="{{ path('actualite_show') }}" class="active"><i class="bi bi-circle"></i><span>Liste des Actualite</span></a>{% endblock %}
+                <div class="report-list">
+                    {% for actualite in l %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        {% if actualite.getImageA() %}
+                                            {% set fileExtension = actualite.getImageA()|split('.')|last %}
+                                            {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
+                                                <img src="{{ asset('uploads/' ~ actualite.getImageA()) }}" class="img-thumbnail" alt="Piece jointe" style="max-width: 200px;">
+                                            {% elseif fileExtension == 'pdf' %}
+                                                <a href="{{ asset('uploads/' ~ actualite.getImageA()) }}">View PDF</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h4 class="card-title" style="font-size: 1.5rem;">{{ actualite.getTitreA() }}</h4>
+                                        <p class="card-text">{{ actualite.getDescriptionA() }}</p>
+                                        <p class="card-text">Date: {{ actualite.getDateA()|date('Y-m-d') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 
-    {% block body %}
-
-    <table class="table table-hover">
-    <thead>
-        <tr class="table-primary">
-            <th scope="col">Titre</th>
-            <th scope="col">Description</th>
-            <th scope="col">Date</th>
-            <th scope="col">Image</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for tache in l %}
-            <tr>
-                <td>{{ tache.getTitreA() }}</td>
-                <td>{{ tache.getDescriptionA() }}</td>
-                <td>{{ tache.getDateA()|date('Y-m-d') }}</td>
-                <td>
-                    {% if tache.getImageA() %}
-                        {% set fileExtension = tache.getImageA()|split('.')|last %}
-                        {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
-                            <img src="{{ asset('uploads/' ~ tache.getImageA()) }}" class="img-thumbnail" alt="Piece jointe">
-                        {% elseif fileExtension == 'pdf' %}
-                            <a href="{{ asset('uploads/' ~ tache.getImageA()) }}">View PDF</a>
-                        {% endif %}
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-
-
+    {% block ListeTalacheNav %}
+        <a href="{{ path('actualite_show') }}" class="active"><i class="bi bi-circle"></i><span>Liste des Actualite</span></a>
     {% endblock %}
-   
 </main>
+
+
 
 
 
