@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Actualite;
+use App\Entity\actualite;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;

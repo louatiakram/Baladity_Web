@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormError;
 use DateTime;
+use App\Repository\ActualiteRepository;
+
 class ActualiteController extends AbstractController
 {
     #[Route('/actualite', name: 'app_actualite')]
@@ -76,6 +78,40 @@ class ActualiteController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+    #[Route('/actualite/deleteA/{i}', name: 'actualite_delete')]
+    public function deleteA($i, ActualiteRepository $rep, ManagerRegistry $doctrine): Response
+    {
+        $actualite = $rep->find($i);
     
+        if (!$actualite) {
+            throw $this->createNotFoundException('Actualite not found');
+        }
+    
+        $em = $doctrine->getManager();
+        $em->remove($actualite);
+        $em->flush();
+    
+        // Redirect to a success page or return a response as needed
+        // For example:
+        return $this->redirectToRoute('app_main');
+    }
+    #[Route('/actualite/showA', name: 'actualite_show')]
+    public function showA(Request $request, ActualiteRepository $repository): Response
+    {
+        $query = $request->query->get('query');
 
+        // If a search query is provided, filter tasks based on the title
+        if ($query) {
+            $tasks = $repository->findByTitre($query); // Replace with appropriate method
+        } else {
+            // If no search query is provided, fetch all tasks
+            $tasks = $repository->findAll();
+        }
+
+        return $this->render('actualite/showA.html.twig', [
+            'l' => $tasks,
+            'query' => $query,
+        ]);
+        
+    }
     } 
