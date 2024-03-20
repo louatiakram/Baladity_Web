@@ -38,6 +38,13 @@ class tache
     #[ORM\JoinColumn(name: 'id_user', referencedColumnName: 'id_user')]
     private $id_user;
 
+    #[ORM\OneToOne(targetEntity: commentairetache::class, mappedBy: 'id_T')]
+    private $commentaireTache;
+
+    public function getCommentaireTache(): ?commentairetache
+    {
+        return $this->commentaireTache;
+    }
     public function getIdT(): ?int
     {
         return $this->id_T;

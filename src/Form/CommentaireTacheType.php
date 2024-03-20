@@ -16,9 +16,10 @@ class CommentaireTacheType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('date_C',DateType::class, [
+            ->add('date_C', DateType::class, [
                 'widget' => 'single_text',
-                ])
+                'disabled' => true, // Set the field as read-only
+            ])
 
             ->add('texte_C', TextareaType::class, [
                 'attr' => [

@@ -7,6 +7,8 @@ use App\Entity\enduser;
 use App\Entity\tache;
 use App\Form\CommentaireTacheType;
 use App\Repository\CommentaireTacheRepository;
+use App\Repository\TacheRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,34 +42,38 @@ class CommentaireTacheController extends AbstractController
             'query' => $query, // Pass the query to the template for displaying in the search bar
         ]);
     }
-    #[Route('/commentairetache/add', name: 'commentairetache_add')]
-    public function add(Request $req, ManagerRegistry $doctrine): Response
+    #[Route('/commentairetache/add/{id}', name: 'commentairetache_add')]
+    public function add($id, Request $req, ManagerRegistry $doctrine): Response
     {
         $userId = 50; // Assuming the user ID is 50
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
-        $tacheId = 221; // Assuming the user ID is 50
-        $tache = $this->getDoctrine()->getRepository(tache::class)->find($tacheId);
 
         if (!$user) {
             throw $this->createNotFoundException('User Id not found');
         }
-        if (!$tache) {
-            throw $this->createNotFoundException('Tache Id not found');
+
+        $tacheId = $this->getDoctrine()->getRepository(tache::class)->find($id);
+
+        if (!$tacheId) {
+            throw $this->createNotFoundException('Tache not found');
         }
 
-        $x= new commentairetache();
+        $x = new commentairetache();
         $x->setIdUser($user);
-        $x->setIdT($tache);
+        $x->setIdT($tacheId);
+        $x->setDateC(new \DateTime()); // Set current date
 
         $form = $this->createForm(CommentaireTacheType::class, $x);
         $form->handleRequest($req);
-        if ($form->isSubmitted()) {
 
+        if ($form->isSubmitted()) {
             $em = $doctrine->getManager();
             $em->persist($x);
             $em->flush();
-            return $this->redirectToRoute('commentairetache_list');
+
+            return $this->redirectToRoute('tache_list');
         }
+
         return $this->renderForm('commentairetache/add.html.twig', ['f' => $form,]);
     }
 
@@ -75,13 +81,14 @@ class CommentaireTacheController extends AbstractController
     public function update($i, CommentaireTacheRepository $rep, Request $req, ManagerRegistry $doctrine): Response
     {
         $x = $rep->find($i);
+        $x->setDateC(new \DateTime()); // Set current date
         $form = $this->createForm(CommentaireTacheType::class, $x);
         $form->handleRequest($req);
 
         if ($form->isSubmitted()) {
             $em = $doctrine->getManager();
             $em->flush();
-            return $this->redirectToRoute('commentairetache_list');
+            return $this->redirectToRoute('tache_list');
         }
         return $this->renderForm('commentairetache/add.html.twig', ['f' => $form,]);
     }
@@ -92,6 +99,6 @@ class CommentaireTacheController extends AbstractController
         $em = $doctrine->getManager();
         $em->remove($xs);
         $em->flush();
-        return $this->redirectToRoute('commentairetache_list');
+        return $this->redirectToRoute('tache_list');
     }
 }
