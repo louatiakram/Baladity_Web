@@ -31,7 +31,7 @@ class tache
     #[ORM\Column(name: 'desc_T', type: 'string', length: 255)]
     private $desc_T;
 
-    #[ORM\Column(name: 'etat_T', type: 'string', columnDefinition: "ENUM('TO_DO', 'DOING', 'DONE')")]
+    #[ORM\Column(name: 'etat_T', type: 'string', columnDefinition: "ENUM('TODO', 'DOING', 'DONE')")]
     private $etat_T;
 
     #[ORM\ManyToOne(targetEntity: enduser::class)]

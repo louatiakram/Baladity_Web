@@ -144,4 +144,38 @@ class TacheController extends AbstractController
         return $this->redirectToRoute('tache_list');
     }
 
+    #[Route('/tache/listfront', name: 'tache_listfront')]
+    public function listfront(): Response
+    {
+        $taches = $this->getDoctrine()->getRepository(Tache::class)->findAll();
+
+        return $this->render('tache/listfront.html.twig', [
+            'taches' => $taches,
+        ]);
+    }
+
+    #[Route('/update-tache-state/{tacheId}/{newState}', name: 'update_tache_state')]
+    public function updateTacheState(Request $request, int $tacheId, string $newState): JsonResponse
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $tache = $entityManager->getRepository(Tache::class)->find($tacheId);
+
+        if (!$tache) {
+            return new JsonResponse(['error' => 'Tache not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Update etat_T attribute of the tache entity
+        $tache->setEtatT($newState);
+
+        try {
+            $entityManager->flush(); // Save changes to the database
+            return new JsonResponse(['message' => 'Tache state updated successfully'], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Failed to update tache state'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
+
 }
