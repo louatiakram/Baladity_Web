@@ -10,12 +10,12 @@
         .tache {
             position: relative;
             margin: 0px 0px 25px 0px;
-
         }
         .card-header{
             margin: 0px 0px 25px 0px;
+            position: relative;
         }
-        .tache button {
+        .task-counter {
             position: absolute;
             top: 0;
             right: 0;
@@ -25,7 +25,7 @@
         <div class="flex-fill mr-3">
             <div class="card">
                 <div class="card-header">
-                    <h2>TODO</h2>
+                    <h2>TODO<span class="task-counter">{{ taches|filter(t => t.etatT == 'TODO')|length }}</span></h2>
                 </div>
                 <div class="card-body">
                     <div id="TODO" class="grid">
@@ -45,7 +45,7 @@
         <div class="flex-fill mx-3">
             <div class="card">
                 <div class="card-header">
-                    <h2>DOING</h2>
+                    <h2>DOING<span class="task-counter">{{ taches|filter(t => t.etatT == 'DOING')|length }}</span></h2>
                 </div>
                 <div class="card-body">
                     <div id="DOING" class="grid">
@@ -65,7 +65,7 @@
         <div class="flex-fill ml-3">
             <div class="card">
                 <div class="card-header">
-                    <h2>DONE</h2>
+                    <h2>DONE<span class="task-counter">{{ taches|filter(t => t.etatT == 'DONE')|length }}</span></h2>
                 </div>
                 <div class="card-body">
                     <div id="DONE" class="grid">

@@ -385,6 +385,7 @@
                 .then(data => {
                     // Handle response data if needed
                     console.log('Tache state updated successfully:', data);
+
                 })
                 .catch(error => {
                     console.error('Error updating tache state:', error);
