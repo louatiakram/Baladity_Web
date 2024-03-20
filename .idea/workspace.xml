@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d21bcfc9-d61a-4ca8-b6b1-083941da76b2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/templates/commentairetache/add.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/commentairetache/add.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/commentairetache/list.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/commentairetache/list.html.twig" afterDir="false" />
-    </list>
+    <list default="true" id="d21bcfc9-d61a-4ca8-b6b1-083941da76b2" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -224,7 +221,7 @@
       <workItem from="1710771230045" duration="1212000" />
       <workItem from="1710806694796" duration="3541000" />
       <workItem from="1710863809276" duration="7947000" />
-      <workItem from="1710898933571" duration="5175000" />
+      <workItem from="1710898933571" duration="5351000" />
     </task>
     <servers />
   </component>
