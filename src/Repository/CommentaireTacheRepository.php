@@ -75,4 +75,13 @@ class CommentaireTacheRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findByCommentaire(string $query): array
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.texte_C LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->orderBy('t.id_C', 'ASC') // Assuming 'idT' is the primary key field
+            ->getQuery()
+            ->getResult();
+    }
 }
