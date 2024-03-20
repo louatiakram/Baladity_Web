@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d21bcfc9-d61a-4ca8-b6b1-083941da76b2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/back-office/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/back-office/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tache/listfront.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tache/listfront.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,7 +225,7 @@
       <workItem from="1710863809276" duration="7947000" />
       <workItem from="1710898933571" duration="5351000" />
       <workItem from="1710930764245" duration="11105000" />
-      <workItem from="1710954606857" duration="12495000" />
+      <workItem from="1710954606857" duration="14133000" />
     </task>
     <servers />
   </component>
