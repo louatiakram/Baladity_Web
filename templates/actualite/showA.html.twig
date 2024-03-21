@@ -413,7 +413,7 @@
     </aside><!-- End Sidebar-->
 {% endblock %}
 <main id="main" class="main">
-    <div class="col-8">
+    <div class="col-8 mx-auto"> <!-- Added mx-auto class to center content -->
         <div class="card">
             <!-- Filter dropdown -->
             <div class="filter">
@@ -437,16 +437,21 @@
                                         {% if actualite.getImageA() %}
                                             {% set fileExtension = actualite.getImageA()|split('.')|last %}
                                             {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
-                                                <img src="{{ asset('uploads/' ~ actualite.getImageA()) }}" class="img-thumbnail" alt="Piece jointe" style="max-width: 200px;">
+                                                <img src="{{ asset('uploads/' ~ actualite.getImageA()) }}" class="img-thumbnail" alt="Piece jointe" style="width: 100%; max-width: 300px;">
                                             {% elseif fileExtension == 'pdf' %}
                                                 <a href="{{ asset('uploads/' ~ actualite.getImageA()) }}">View PDF</a>
                                             {% endif %}
                                         {% endif %}
                                     </div>
                                     <div class="col-md-8">
-                                        <h4 class="card-title" style="font-size: 1.5rem;">{{ actualite.getTitreA() }}</h4>
-                                        <p class="card-text">{{ actualite.getDescriptionA() }}</p>
+                                        <h4 class="card-title" style="font-size: 1.5rem; margin-bottom: 10px;">{{ actualite.getTitreA() }}</h4>
+                                        <p class="card-text" style="margin-top: 5px;">{{ actualite.getDescriptionA() }}</p>
                                         <p class="card-text">Date: {{ actualite.getDateA()|date('Y-m-d') }}</p>
+                                        <!-- Delete button -->
+                                      <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteActualite('{{ actualite.getIdA() }}')">
+    <i class="bi bi-trash"></i> Supprimer
+</button>
+
                                     </div>
                                 </div>
                             </div>
@@ -461,6 +466,32 @@
         <a href="{{ path('actualite_show') }}" class="active"><i class="bi bi-circle"></i><span>Liste des Actualite</span></a>
     {% endblock %}
 </main>
+
+<script>
+    function deleteActualite(actualiteId) {
+        // Confirm deletion with the user
+        if (confirm("Are you sure you want to delete this actualite?")) {
+            // Make AJAX request to delete actualite
+            fetch(`/actualite/deleteA/${actualiteId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // You might need to add CSRF token here if your Symfony application uses CSRF protection
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // Redirect to actualite_show route after successful deletion
+                window.location.href = '{{ path('actualite_show') }}';
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+    }
+</script>
 
 
 

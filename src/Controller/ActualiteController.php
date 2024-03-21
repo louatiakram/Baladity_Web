@@ -32,7 +32,7 @@ class ActualiteController extends AbstractController
     public function ajouterA(ManagerRegistry $doctrine, Request $req): Response
     {
         $actualite = new Actualite();
-        $userId = 48; // Assuming the user ID is 1
+        $userId = 48; 
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
     
         if (!$user) {
@@ -71,7 +71,8 @@ class ActualiteController extends AbstractController
     
             // Redirect to a success page or display a success message
             // For example:
-            return $this->redirectToRoute('app_main');
+            return $this->redirectToRoute('actualite_show');
+
         }
     
         return $this->render('actualite/ajouterA.html.twig', [
@@ -93,7 +94,7 @@ class ActualiteController extends AbstractController
     
         // Redirect to a success page or return a response as needed
         // For example:
-        return $this->redirectToRoute('app_main');
+        return $this->redirectToRoute('actualite_show');
     }
     #[Route('/actualite/showA', name: 'actualite_show')]
     public function showA(Request $request, ActualiteRepository $repository): Response
