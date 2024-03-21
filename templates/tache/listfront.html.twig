@@ -49,7 +49,7 @@
                             {% if tache.etatT == 'TODO' %}
                                 <div class="tache" draggable="true" id="{{ tache.idT }}">
                                     {{ tache.titreT }}
-                                    <button onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+                                    <button id="detail-front" onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
                                 </div>
                             {% endif %}
                         {% endfor %}
@@ -89,7 +89,7 @@
                             {% if tache.etatT == 'DONE' %}
                                 <div class="tache" draggable="true" id="{{ tache.idT }}">
                                     {{ tache.titreT }}
-                                    <button onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+                                    <button id="detail-front" onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
                                 </div>
                             {% endif %}
                         {% endfor %}

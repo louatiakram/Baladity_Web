@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block body %}
-    <form class="row g-3"> {{ form_start(f) }}
+{{ form_start(f, {'attr': {'class': 'row g-3'}}) }}
         <div class="col-md-4">
 
             {{ form_widget(f.nom_Cat, { 'attr': {'class': 'form-control'} }) }}
@@ -55,7 +55,7 @@
             {{ form_widget(f.Reset, { 'attr': {'class': 'btn btn-secondary'} }) }}
         </div>
     </div>
-
+    
     {{ form_end(f) }}
     <div class="col-md-4" style="margin-top: 10px;"> <!-- Adjust margin-top as needed -->
         <button onclick="goBack()" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Go Back</button>
