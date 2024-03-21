@@ -1,12 +1,10 @@
-{# templates/tache/piechart.html.twig #}
-
 {% extends 'base-back.html.twig' %}
 
 {% block title %}Pie Chart{% endblock %}
 
 {% block body %}
 <!-- Pie Chart -->
-<div id="pieChart" style="min-height: 400px;" class="echart"></div>
+<div id="pieChart" style="min-height: 600px;" class="echart"></div>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
@@ -54,5 +52,12 @@
   });
 </script>
 <!-- End Pie Chart -->
-
+<div class="col-md-4" style="margin-top: 10px;"> <!-- Adjust margin-top as needed -->
+  <button onclick="goBack()" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Go Back</button>
+  <script>
+      function goBack() {
+          window.history.back();
+      }
+  </script>
+</div>
 {% endblock %}

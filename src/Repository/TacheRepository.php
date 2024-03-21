@@ -85,7 +85,7 @@ class TacheRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t')
             ->andWhere('t.titre_T LIKE :query')
             ->setParameter('query', '%' . $query . '%')
-            ->orderBy('t.id_T', 'ASC') // Assuming 'idT' is the primary key field
+            ->orderBy('t.id_T', 'ASC')
             ->getQuery()
             ->getResult();
     }
