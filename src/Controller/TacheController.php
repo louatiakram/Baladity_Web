@@ -177,5 +177,22 @@ class TacheController extends AbstractController
 
 
 
+    #[Route('/tache/piechart', name: 'tache_piechart')]
+    public function pieChart(TacheRepository $tacheRepository): Response
+    {
+        // Get the count of tasks done by each user
+        $usersTasksCount = $tacheRepository->getUsersTasksCount();
 
+        // Extract user names and task counts from the result
+        $data = [];
+        foreach ($usersTasksCount as $result) {
+            $userName = $result['user_name'];
+            $taskCount = $result['task_count'];
+            $data[] = ['user_name' => $userName, 'task_count' => $taskCount];
+        }
+
+        return $this->render('tache/piechart.html.twig', [
+            'data' => $data // Pass data to twig template
+        ]);
+    }
 }

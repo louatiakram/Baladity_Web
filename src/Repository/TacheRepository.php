@@ -79,6 +79,7 @@ class TacheRepository extends ServiceEntityRepository
         ;
     }
     */
+    
     public function findByTitre(string $query): array
     {
         return $this->createQueryBuilder('t')
@@ -88,4 +89,22 @@ class TacheRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+
+    public function getUsersTasksCount(): array
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->select('COUNT(t.id_T) as task_count', 'u.nom_user as user_name')
+            ->leftJoin('t.id_user', 'u')
+            ->where('t.etat_T = :etat')
+            ->setParameter('etat', 'DONE') // Filter tasks with etat_T = 'DONE'
+            ->groupBy('t.id_user')
+            ->orderBy('task_count', 'DESC')
+            ->setMaxResults(10) // Limit to top 10 users
+            ->getQuery();
+    
+        return $qb->getResult();
+    }
+
+
 }

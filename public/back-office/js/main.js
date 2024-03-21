@@ -343,18 +343,20 @@
             const todoCounter = document.getElementById('todo-counter');
             const doingCounter = document.getElementById('doing-counter');
             const doneCounter = document.getElementById('done-counter');
-        
+
             const todoTasks = document.querySelectorAll('#TODO .tache');
             const doingTasks = document.querySelectorAll('#DOING .tache');
             const doneTasks = document.querySelectorAll('#DONE .tache');
-        
+
             todoCounter.textContent = todoTasks.length;
             doingCounter.textContent = doingTasks.length;
             doneCounter.textContent = doneTasks.length;
         }
 
         function dragStart() {
-            this.classList.add('dragging');
+            if (!this.closest('#DONE')) {
+                this.classList.add('dragging');
+            }
         }
 
         function dragEnd() {
@@ -378,6 +380,18 @@
             const tache = document.querySelector('.dragging');
             const gridId = this.id;
             const taskId = tache.id;
+
+            if (gridId === 'DONE') {
+                // Show confirm dialog for irreversible action
+                const confirmResult = confirm("This action cannot be undone. Are you sure you want to move this task to 'DONE'?");
+
+                if (!confirmResult) {
+                    // If the user cancels, exit the function
+                    tache.classList.remove('dragging');
+                    this.classList.remove('hovered');
+                    return;
+                }
+            }
 
             // Here, you can update the etat_T of the tache based on the grid's id
             // Assuming grid id format is "{etat}_grid", e.g., "todo_grid", "doing_grid", "done_grid"
