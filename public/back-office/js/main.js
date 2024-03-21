@@ -143,29 +143,29 @@
                     [{
                         color: []
                     },
-                        {
-                            background: []
-                        }
+                    {
+                        background: []
+                    }
                     ],
                     [{
                         script: "super"
                     },
-                        {
-                            script: "sub"
-                        }
+                    {
+                        script: "sub"
+                    }
                     ],
                     [{
                         list: "ordered"
                     },
-                        {
-                            list: "bullet"
-                        },
-                        {
-                            indent: "-1"
-                        },
-                        {
-                            indent: "+1"
-                        }
+                    {
+                        list: "bullet"
+                    },
+                    {
+                        indent: "-1"
+                    },
+                    {
+                        indent: "+1"
+                    }
                     ],
                     ["direction", {
                         align: []
@@ -202,28 +202,28 @@
             title: 'My page 1',
             value: 'https://www.tiny.cloud'
         },
-            {
-                title: 'My page 2',
-                value: 'http://www.moxiecode.com'
-            }
+        {
+            title: 'My page 2',
+            value: 'http://www.moxiecode.com'
+        }
         ],
         image_list: [{
             title: 'My page 1',
             value: 'https://www.tiny.cloud'
         },
-            {
-                title: 'My page 2',
-                value: 'http://www.moxiecode.com'
-            }
+        {
+            title: 'My page 2',
+            value: 'http://www.moxiecode.com'
+        }
         ],
         image_class_list: [{
             title: 'None',
             value: ''
         },
-            {
-                title: 'Some class',
-                value: 'class-name'
-            }
+        {
+            title: 'Some class',
+            value: 'class-name'
+        }
         ],
         importcss_append: true,
         file_picker_callback: (callback, value, meta) => {
@@ -254,16 +254,16 @@
             description: 'creates a new table',
             content: '<div class="mceTmpl"><table width="98%%"  border="0" cellspacing="0" cellpadding="0"><tr><th scope="col"> </th><th scope="col"> </th></tr><tr><td> </td><td> </td></tr></table></div>'
         },
-            {
-                title: 'Starting my story',
-                description: 'A cure for writers block',
-                content: 'Once upon a time...'
-            },
-            {
-                title: 'New list with dates',
-                description: 'New List with dates',
-                content: '<div class="mceTmpl"><span class="cdate">cdate</span><br><span class="mdate">mdate</span><h2>My List</h2><ul><li></li><li></li></ul></div>'
-            }
+        {
+            title: 'Starting my story',
+            description: 'A cure for writers block',
+            content: 'Once upon a time...'
+        },
+        {
+            title: 'New list with dates',
+            description: 'New List with dates',
+            content: '<div class="mceTmpl"><span class="cdate">cdate</span><br><span class="mdate">mdate</span><h2>My List</h2><ul><li></li><li></li></ul></div>'
+        }
         ],
         template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
         template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
@@ -306,15 +306,15 @@
                 select: 2,
                 sortSequence: ["desc", "asc"]
             },
-                {
-                    select: 3,
-                    sortSequence: ["desc"]
-                },
-                {
-                    select: 4,
-                    cellClass: "green",
-                    headerClass: "red"
-                }
+            {
+                select: 3,
+                sortSequence: ["desc"]
+            },
+            {
+                select: 4,
+                cellClass: "green",
+                headerClass: "red"
+            }
             ]
         });
     })
@@ -322,9 +322,10 @@
     /**
      * Drag Drop
      */
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const grids = document.querySelectorAll('.grid');
         const taches = document.querySelectorAll('.tache');
+
 
         taches.forEach(tache => {
             tache.addEventListener('dragstart', dragStart);
@@ -337,6 +338,20 @@
             grid.addEventListener('dragleave', dragLeave);
             grid.addEventListener('drop', dragDrop);
         });
+
+        function updateCounters() {
+            const todoCounter = document.getElementById('todo-counter');
+            const doingCounter = document.getElementById('doing-counter');
+            const doneCounter = document.getElementById('done-counter');
+        
+            const todoTasks = document.querySelectorAll('#TODO .tache');
+            const doingTasks = document.querySelectorAll('#DOING .tache');
+            const doneTasks = document.querySelectorAll('#DONE .tache');
+        
+            todoCounter.textContent = todoTasks.length;
+            doingCounter.textContent = doingTasks.length;
+            doneCounter.textContent = doneTasks.length;
+        }
 
         function dragStart() {
             this.classList.add('dragging');
@@ -374,7 +389,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({taskId, newState})
+                body: JSON.stringify({ taskId, newState })
             })
                 .then(response => {
                     if (!response.ok) {
@@ -385,6 +400,8 @@
                 .then(data => {
                     // Handle response data if needed
                     console.log('Tache state updated successfully:', data);
+                    // Update counters after successful update
+                    updateCounters();
 
                 })
                 .catch(error => {
@@ -394,6 +411,7 @@
             this.appendChild(tache);
             this.classList.remove('hovered');
         }
+
     });
 
 

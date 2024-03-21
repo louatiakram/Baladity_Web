@@ -24,7 +24,7 @@
         <div class="flex-fill mr-3">
             <div class="card">
                 <div class="card-header">
-                    <h2>TODO<span class="task-counter">{{ taches|filter(t => t.etatT == 'TODO')|length }}</span></h2>
+                    <h2>TODO<span id="todo-counter" class="task-counter">{{ taches|filter(t => t.etatT == 'TODO')|length }}</span></h2>
                 </div>
                 <div class="card-body">
                     <div id="TODO" class="grid">
@@ -44,7 +44,7 @@
         <div class="flex-fill mx-3">
             <div class="card">
                 <div class="card-header">
-                    <h2>DOING<span class="task-counter">{{ taches|filter(t => t.etatT == 'DOING')|length }}</span></h2>
+                    <h2>DOING<span id="doing-counter" class="task-counter">{{ taches|filter(t => t.etatT == 'DOING')|length }}</span></h2>
                 </div>
                 <div class="card-body">
                     <div id="DOING" class="grid">
@@ -64,7 +64,7 @@
         <div class="flex-fill ml-3">
             <div class="card">
                 <div class="card-header">
-                    <h2>DONE<span class="task-counter">{{ taches|filter(t => t.etatT == 'DONE')|length }}</span></h2>
+                    <h2>DONE<span id="done-counter" class="task-counter">{{ taches|filter(t => t.etatT == 'DONE')|length }}</span></h2>
                 </div>
                 <div class="card-body">
                     <div id="DONE" class="grid">
