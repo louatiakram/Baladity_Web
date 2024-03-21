@@ -411,95 +411,75 @@
         </ul>
 
     </aside><!-- End Sidebar-->
-{% endblock %}<main id="main" class="main">
-    <div class="col-8 mx-auto"> <!-- Added mx-auto class to center content -->
-        <div class="card">
-            <!-- Filter dropdown -->
-            <div class="filter">
-                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                        <h6>Filter</h6>
-                    </li>
-                </ul>
-            </div>
-            <!-- Card body with title -->
-            <div class="card-body">
-                <!-- Line Chart or other content -->
-                <div class="report-list">
-                    {% for actualite in l %}
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="d-flex flex-column">
-                                            {% if actualite.getImageA() %}
-                                                {% set fileExtension = actualite.getImageA()|split('.')|last %}
-                                                {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
-                                                    <img src="{{ asset('uploads/' ~ actualite.getImageA()) }}" class="img-thumbnail" alt="Piece jointe" style="width: 100%; max-width: 300px;">
-                                                {% elseif fileExtension == 'pdf' %}
-                                                    <a href="{{ asset('uploads/' ~ actualite.getImageA()) }}">View PDF</a>
-                                                {% endif %}
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <h4 class="card-title" style="font-size: 1.5rem; margin-bottom: 10px;">{{ actualite.getTitreA() }}</h4>
-                                        <p class="card-text" style="margin-top: 5px;">{{ actualite.getDescriptionA() }}</p>
-                                        <p class="card-text">Date: {{ actualite.getDateA()|date('Y-m-d') }}</p>
-                                        <!-- Modify button -->
-                                        <a href="{{ path('modifierA', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-pencil"></i> Modifier
-                                        </a>
-                                        <!-- Delete button -->
-                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteActualite('{{ actualite.getIdA() }}')">
-                                            <i class="bi bi-trash"></i> Supprimer
-                                        </button>
+{% endblock %}
+<main id="main" class="main">
+    {% block body %}
+        <section class="section">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Modifier Actualite</h5>
+<form method="POST" action="{{ path('modifierA', {'id': actualite.idA}) }}" enctype="multipart/form-data">
+
+
+                                {{ form_start(form) }}
+                                <div class="row mb-3">
+                                    <label for="inputText" class="col-sm-2 col-form-label">Titre</label>
+                                    <div class="col-sm-10">
+                                        {{ form_widget(form.titre_a, {'attr': {'class': 'form-control'}}) }}
                                     </div>
                                 </div>
-                            </div>
+                                <div class="row mb-3">
+                                    <label for="inputEmail" class="col-sm-2 col-form-label">Description</label>
+                                    <div class="col-sm-10">
+                                        {{ form_widget(form.description_a, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputFile" class="col-sm-2 col-form-label">Image</label>
+                                    <div class="col-sm-10">
+                                        <div class="text-center"> <!-- Center the image -->
+                                            {{ form_widget(form.image_a, {'attr': {'class': 'form-control', 'onchange': 'afficherApercu(this)'}}) }}
+                                           <img id="imagePreview" src="{{ asset('uploads/' ~ actualite.imageA) }}" alt="Aperçu de l'image" style="max-width: 100%; max-height: 200px;">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Add other form fields similarly -->
+                                <div class="row mb-3">
+                                    <div class="col-sm-12 text-center"> <!-- Center the buttons -->
+                                        <button type="submit" class="btn btn-primary">Modifier</button>
+                                    </div>
+                                </div>
+                                {{ form_end(form) }}
+                            </form>
                         </div>
-                    {% endfor %}
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    {% block ListeTalacheNav %}
-        <a href="{{ path('actualite_show') }}" class="active"><i class="bi bi-circle"></i><span>Liste des Actualite</span></a>
+        </section>
     {% endblock %}
 </main>
 
 
+
 <script>
-    function deleteActualite(actualiteId) {
-        // Confirm deletion with the user
-        if (confirm("Are you sure you want to delete this actualite?")) {
-            // Make AJAX request to delete actualite
-            fetch(`/actualite/deleteA/${actualiteId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // You might need to add CSRF token here if your Symfony application uses CSRF protection
-                },
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                // Redirect to actualite_show route after successful deletion
-                window.location.href = '{{ path('actualite_show') }}';
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-            });
+    // Function to display the selected image preview
+    function afficherApercu(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                // Update the image source with the URL of the selected image
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block'; // Make the image visible
+            }
+
+            reader.readAsDataURL(input.files[0]); // Read the content of the image as a data URL
         }
     }
 </script>
-
-
-
-
 
 
             

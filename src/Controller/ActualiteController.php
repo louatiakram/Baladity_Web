@@ -115,4 +115,51 @@ class ActualiteController extends AbstractController
         ]);
         
     }
+    #[Route('/actualite/modifierA/{id}', name: 'modifierA')]
+
+    public function modifierA($id, ManagerRegistry $doctrine, Request $request): Response
+
+{
+    $entityManager = $doctrine->getManager();
+    $actualite = $entityManager->getRepository(Actualite::class)->find($id);
+
+    if (!$actualite) {
+        throw $this->createNotFoundException('Actualite not found');
+    }
+
+    // Create the form for modifying the actualite
+    $form = $this->createForm(ActualiteType::class, $actualite);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Handle form submission
+
+        // Set the image_a field
+        $image = $form->get('image_a')->getData();
+        if ($image) {
+            // Handle image upload and persist its filename to the database
+            $fileName = uniqid().'.'.$image->guessExtension();
+            try {
+                $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                $actualite->setImageA($fileName);
+            } catch (FileException $e) {
+                // Handle the exception if file upload fails
+                // For example, log the error or display a flash message
+            }
+        }
+
+        // Persist the modified actualite object to the database
+        $entityManager->flush();
+
+        // Redirect to a success page or display a success message
+        // For example:
+        return $this->redirectToRoute('actualite_show');
+    }
+
+    return $this->render('actualite/modifierA.html.twig', [
+        'form' => $form->createView(),
+        'actualite' => $actualite,
+    ]);
+}
+
     } 
