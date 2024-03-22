@@ -98,23 +98,31 @@ class ActualiteController extends AbstractController
     }
     #[Route('/actualite/showA', name: 'actualite_show')]
     public function showA(Request $request, ActualiteRepository $repository): Response
-    {
-        $query = $request->query->get('query');
+{
+    $query = $request->query->get('query');
 
-        // If a search query is provided, filter tasks based on the title
-        if ($query) {
-            $tasks = $repository->findByTitre($query); // Replace with appropriate method
-        } else {
-            // If no search query is provided, fetch all tasks
-            $tasks = $repository->findAll();
-        }
+    // Fetch the current page number from the query parameters
+    $currentPage = $request->query->getInt('page', 1);
 
-        return $this->render('actualite/showA.html.twig', [
-            'l' => $tasks,
-            'query' => $query,
-        ]);
-        
+    // Assuming you have logic to calculate the total number of pages, let's say it's stored in $totalPages
+    $totalPages = 10; // Replace this with your actual calculation
+
+    // If a search query is provided, filter tasks based on the title
+    if ($query) {
+        $tasks = $repository->findByTitre($query); // Replace with appropriate method
+    } else {
+        // If no search query is provided, fetch all tasks
+        $tasks = $repository->findAll();
     }
+
+    return $this->render('actualite/showA.html.twig', [
+        'l' => $tasks,
+        'query' => $query,
+        'currentPage' => $currentPage, // Pass the currentPage variable to the Twig template
+        'totalPages' => $totalPages, // Pass the totalPages variable to the Twig template
+    ]);
+}
+
     #[Route('/actualite/modifierA/{id}', name: 'modifierA')]
 
     public function modifierA($id, ManagerRegistry $doctrine, Request $request): Response
@@ -133,7 +141,7 @@ class ActualiteController extends AbstractController
 
     if ($form->isSubmitted() && $form->isValid()) {
         // Handle form submission
-
+        $actualite->setDateA(new DateTime());
         // Set the image_a field
         $image = $form->get('image_a')->getData();
         if ($image) {

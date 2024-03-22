@@ -412,24 +412,25 @@
 
     </aside><!-- End Sidebar-->
 {% endblock %}<main id="main" class="main">
+    <br>
+    <h1 class="card-title" style="text-align: center; font-size: 2em;">La liste des Actualités</h1>
+    <br>
+
+    <!-- Button to navigate to the "ajouter" form -->
+    <div class="text-center">
+        <a href="{{ path('ajouterA') }}" class="btn btn-primary">Ajouter Actualité</a>
+    </div>
+
+    <br>
+
     <div class="col-8 mx-auto"> <!-- Added mx-auto class to center content -->
         <div class="card">
-            <!-- Filter dropdown -->
-            <div class="filter">
-                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                        <h6>Filter</h6>
-                    </li>
-                </ul>
-            </div>
-            <!-- Card body with title -->
             <div class="card-body">
-                <!-- Line Chart or other content -->
-                <div class="report-list">
-                    {% for actualite in l %}
-                        <div class="card mb-3">
-                            <div class="card-body">
+                <!-- Bootstrap Carousel -->
+                <div id="actualiteCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for key, actualite in l %}
+                            <div class="carousel-item {% if loop.first %}active{% endif %}">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="d-flex flex-column">
@@ -458,17 +459,37 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#actualiteCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#actualiteCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
 
     {% block ListeTalacheNav %}
-        <a href="{{ path('actualite_show') }}" class="active"><i class="bi bi-circle"></i><span>Liste des Actualite</span></a>
+       
     {% endblock %}
 </main>
+
 
 
 <script>
