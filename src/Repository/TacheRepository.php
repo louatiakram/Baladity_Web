@@ -100,7 +100,7 @@ class TacheRepository extends ServiceEntityRepository
             ->setParameter('etat', 'DONE') // Filter tasks with etat_T = 'DONE'
             ->groupBy('t.id_user')
             ->orderBy('task_count', 'DESC')
-            ->setMaxResults(10) // Limit to top 10 users
+            ->setMaxResults(8) // Limit to top 10 users
             ->getQuery();
     
         return $qb->getResult();
