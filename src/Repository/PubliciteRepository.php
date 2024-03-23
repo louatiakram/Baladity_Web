@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Publicite;
+use App\Entity\publicite;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;

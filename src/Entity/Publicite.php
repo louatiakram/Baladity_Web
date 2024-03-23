@@ -6,7 +6,7 @@ use App\Repository\PubliciteRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PubliciteRepository::class)]
-class Publicite
+class publicite
 {
    
     
@@ -27,8 +27,11 @@ class Publicite
     #[ORM\Column(type: 'string', length: 255)]
     private $localisation_pub;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\ManyToOne(targetEntity: actualite::class)]
+    #[ORM\JoinColumn(name: 'id_a', referencedColumnName: 'id_a')]
     private $id_a;
+   
+ 
 
     #[ORM\ManyToOne(targetEntity: enduser::class)]
     #[ORM\JoinColumn(name: 'id_user', referencedColumnName: 'id_user')]
@@ -110,7 +113,7 @@ class Publicite
         return $this->id_a;
     }
 
-    public function setIdA(int $id_a): self
+    public function setIdA(?actualite $id_a): self
     {
         $this->id_a = $id_a;
 

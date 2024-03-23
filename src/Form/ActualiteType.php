@@ -17,8 +17,16 @@ class ActualiteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('titre_a', TextType::class)
-            ->add('description_a', TextareaType::class)
+            ->add('titre_a', TextType::class, [
+                'attr' => [
+                    'placeholder' => 'Votre titre ici',
+                ],
+            ])
+            ->add('description_a', TextareaType::class, [
+                'attr' => [
+                    'placeholder' => 'Votre description ici',
+                ],
+            ])
             ->add('image_a', FileType::class, [ // Add FileType for image upload
                 'label' => 'Image',
                 'mapped' => false, // This means it won't be mapped to an entity property directly

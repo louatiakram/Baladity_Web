@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -411,72 +412,61 @@
         </ul>
 
     </aside><!-- End Sidebar-->
-{% endblock %}
-<main id="main" class="main">
-    <br>
-    <h1 class="card-title" style="text-align: center; font-size: 2em;">La liste des Actualités</h1>
-    <br>
+{% endblock %}<main id="main" class="main">
+<br>
 
-    <!-- Button to navigate to the "ajouter" form -->
-    <div class="text-center">
-        <a href="{{ path('ajouterA') }}" class="btn btn-primary">Ajouter Actualité</a>
-    </div>
+<h1 class="card-title" style="text-align: center; font-size: 2em;">La liste des Publicités</h1>
+<br>
 
-    <br>
-
-    <div class="col-10 mx-auto"> <!-- Adjusted column width -->
+    <div class="col-8 mx-auto"> <!-- Added mx-auto class to center content -->
         <div class="card">
+            <!-- Filter dropdown -->
+            <div class="filter">
+                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                        <h6>Filter</h6>
+                    </li>
+                </ul>
+            </div>
+            <!-- Card body with title -->
             <div class="card-body">
-                <!-- Bootstrap Carousel -->
-                <div id="actualiteCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        {% for key, actualite in l %}
-                            <div class="carousel-item {% if loop.first %}active{% endif %}">
-                                <div class="row">
-                                    <div class="col-md-5"> <!-- Adjusted column width -->
-                                        <div class="d-flex flex-column">
-                                            {% if actualite.getImageA() %}
-                                                {% set fileExtension = actualite.getImageA()|split('.')|last %}
-                                                {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
-                                                    <img src="{{ asset('uploads/' ~ actualite.getImageA()) }}" class="img-thumbnail" alt="Piece jointe" style="width: 100%; max-width: 400px;"> <!-- Adjusted max-width -->
-                                                {% elseif fileExtension == 'pdf' %}
-                                                    <a href="{{ asset('uploads/' ~ actualite.getImageA()) }}">View PDF</a>
-                                                {% endif %}
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-7"> <!-- Adjusted column width -->
-                                        <h4 class="card-title" style="font-size: 1.5rem; margin-bottom: 10px;">{{ actualite.getTitreA() }}</h4>
-                                        <p class="card-text" style="margin-top: 5px;">{{ actualite.getDescriptionA() }}</p>
-                                        <p class="card-text">Date: {{ actualite.getDateA()|date('Y-m-d') }}</p>
-                                        <!-- Details button -->
-                                        <a href="{{ path('publicite_show', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-outline-info">
-                                            <i class="bi bi-info-circle"></i> Détails
-                                        </a>
-
-                                        <!-- Modify button -->
-                                        <a href="{{ path('modifierA', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-pencil"></i> Modifier
-                                        </a>
-                                        <!-- Delete button -->
-                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteActualite('{{ actualite.getIdA() }}')">
-                                            <i class="bi bi-trash"></i> Supprimer
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
+                <!-- Line Chart or other content -->
+                <div class="report-list">
+                   {% for publicite in publicites %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="d-flex flex-column">
+                        {% if publicite.getImagePub() %}
+                            {% set fileExtension = publicite.getImagePub()|split('.')|last %}
+                            {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
+                                <img src="{{ asset('uploads/' ~ publicite.getImagePub()) }}" class="img-thumbnail" alt="Piece jointe" style="width: 100%; max-width: 300px;">
+                            {% elseif fileExtension == 'pdf' %}
+                                <a href="{{ asset('uploads/' ~ publicite.getImagePub()) }}">View PDF</a>
+                            {% endif %}
+                        {% endif %}
                     </div>
+                </div>
+                <div class="col-md-8">
+                    <h4 class="card-title" style="font-size: 1.5rem; margin-bottom: 10px;">{{ publicite.getTitrePub() }}</h4>
+                    <p class="card-text" style="margin-top: 5px;">{{ publicite.getDescriptionPub() }}</p>
+                    <p class="card-text" style="margin-top: 5px;">{{ publicite.getContactPub() }}</p>
+                    <p class="card-text" style="margin-top: 5px;">{{ publicite.getLocalisationPub() }}</p>
+                    <p class="card-text" style="margin-top: 5px;">{{ publicite.getOffrePub() }}</p>
+              <button type="button" class="btn btn-sm btn-outline-danger" onclick="deletePublicite('{{ publicite.getIdPub() }}')">
+    <i class="bi bi-trash"></i> Supprimer
+</button>
 
-                    <!-- Carousel control buttons with custom styles -->
-                    <button class="carousel-control-prev" type="button" data-bs-target="#actualiteCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#actualiteCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+                 
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endfor %}
+
                 </div>
             </div>
         </div>
@@ -486,40 +476,12 @@
        
     {% endblock %}
 </main>
-
-
-<style>
-    /* Custom styles for carousel item content */
-    .carousel-item-content {
-        margin-left: 20px; /* Adjust the left margin for content alignment */
-    }
-
-    /* Additional styles for better visibility */
-    .carousel-control-prev, .carousel-control-next {
-        opacity: 0.7; /* Adjust the opacity for better visibility */
-    }
-
-    /* Hover effect */
-    .carousel-control-prev:hover, .carousel-control-next:hover {
-        opacity: 1; /* Make the buttons fully visible on hover */
-    }
-    
-    /* Adjusting title and description */
-    .card-title {
-        margin-top: 10px;
-        font-size: 1.5rem;
-    }
-
-    .card-text {
-        margin-top: 5px;
-    }
-</style>
 <script>
-    function deleteActualite(actualiteId) {
+    function deletePublicite(publiciteId) {
         // Confirm deletion with the user
-        if (confirm("Are you sure you want to delete this actualite?")) {
-            // Make AJAX request to delete actualite
-            fetch(`/actualite/deleteA/${actualiteId}`, {
+        if (confirm("Are you sure you want to delete this publicite?")) {
+            // Make AJAX request to delete publicite
+            fetch(`/publicite/deletePub/${publiciteId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -530,8 +492,8 @@
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                // Redirect to actualite_show route after successful deletion
-                window.location.href = '{{ path('actualite_show') }}';
+                // Redirect to publicite_show route after successful deletion
+                window.location.href = '{{ path('publicite_show') }}';
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
@@ -539,8 +501,6 @@
         }
     }
 </script>
-
-
 
 
 
@@ -579,3 +539,4 @@
 </body>
 
 </html>
+

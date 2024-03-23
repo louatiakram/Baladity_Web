@@ -119,7 +119,9 @@ class ActualiteController extends AbstractController
         'l' => $tasks,
         'query' => $query,
         'currentPage' => $currentPage, // Pass the currentPage variable to the Twig template
-        'totalPages' => $totalPages, // Pass the totalPages variable to the Twig template
+        'totalPages' => $totalPages, 
+        
+        // Pass the totalPages variable to the Twig template
     ]);
 }
 
