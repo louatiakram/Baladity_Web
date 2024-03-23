@@ -1,0 +1,101 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Détails de la Tâche{% endblock %}
+
+{% block TacheNavState %}
+<a class="nav-link" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#" aria-expanded="true">
+	{% endblock %}
+
+	{% block TacheContentState %}
+	<ul id="GestionTache-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+		{% endblock %}
+
+		{% block ListeTacheNav %}<a href="{{ path('tache_list') }}" class="active"><i class="bi bi-circle"></i><span>Detail utilisateurs</span></a>{% endblock %}
+
+
+		{% block body %}
+		<div class="container mt-4">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="card mb-3">
+						<div class="card-body">
+							<h5 class="card-title text-primary">Nom</h5>
+							<p class="card-text">
+								{{ user.getNomUser() }}
+							</p>
+						</div>
+					</div>
+
+					<div class="card mb-3">
+						<div class="card-body">
+							<h5 class="card-title text-primary">Email</h5>
+							<p class="card-text">
+								{{ user.getEmailUser() }}
+							</p>
+						</div>
+					</div>
+
+					<div class="card mb-3">
+						<div class="card-body">
+							<h5 class="card-title text-primary">Type</h5>
+							<p class="card-text">
+								{{ user.getTypeUser()}}
+							</p>
+						</div>
+					</div>
+
+					<div class="card mb-3">
+						<div class="card-body">
+							<h5 class="card-title text-primary">Municipalité</h5>
+							<p class="card-text">
+								{{ user.getIdMuni()}}
+							</p>
+						</div>
+					</div>
+
+					<div class="card mb-3">
+						<div class="card-body">
+							<h5 class="card-title text-primary">Numéro de télèphone</h5>
+							<p class="card-text">
+								{{ user.getPhoneNumberUser()}}
+							</p>
+						</div>
+					</div>
+
+					
+					<div class="card mb-3">
+						<div class="card-body">
+							<h5 class="card-title text-primary">Etat</h5>
+							<p class="card-text">
+								{{ user.getLocationUser() }}
+							</p>
+						</div>
+					</div>
+
+					<div class="card mb-3">
+						<div class="card-body">
+							<h5 class="card-title text-primary">Localisation</h5>
+							<div class="row mb-3">
+								<div class="col-sm-10">
+									<textarea class="form-control" style="height: 100px" readonly>{{ user.getLocationUser() }}</textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+        </div>
+    </div>
+</div>
+<div class="col-md-4" style="margin-top: 10px;"> <!-- Adjust margin-top as needed -->
+	<button onclick="goBack()" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Go Back</button>
+	<script>
+		function goBack() {
+			window.history.back();
+		}
+	</script>
+</div>
+			</div>
+
+
+		</div>
+	</div>
+	{% endblock %}

@@ -73,4 +73,9 @@ class muni
         $this->imagee_user = $imagee_user;
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return (string) $this->getIdMuni();
+    }
 }

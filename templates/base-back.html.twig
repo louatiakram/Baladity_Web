@@ -293,18 +293,38 @@
                 </a>
                 <ul id="GestionUser-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="#">
+                        <a href="{{ path('afficher_user') }}">
                             <i class="bi bi-circle"></i><span>Ajouter User</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{ path('afficher_user') }}">
                             <i class="bi bi-circle"></i><span>Liste User</span>
                         </a>
                     </li>
                 </ul>
             </li>
             <!-- Gestion User -->
+            <!-- Gestion Muni -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#GestionMuni-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-layout-text-window-reverse"></i><span>Gestion Municipalité</span><i
+                            class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="GestionMuni-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ path('afficher_muni') }}">
+                            <i class="bi bi-circle"></i><span>Ajouter Municipalité</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('afficher_muni') }}">
+                            <i class="bi bi-circle"></i><span>Liste Municipalité</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!-- Gestion Muni -->
             <!-- Gestion Tache -->
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#">
@@ -313,12 +333,12 @@
                 </a>
                 <ul id="GestionTache-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="#">
+                        <a href="{{ path('afficher_user') }}">
                             <i class="bi bi-circle"></i><span>Ajouter Tache</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{ path('afficher_user') }}">
                             <i class="bi bi-circle"></i><span>Liste Tache</span>
                         </a>
                     </li>

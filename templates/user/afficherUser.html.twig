@@ -1,0 +1,49 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block searchbar %}
+    <div class="search-bar">
+        <form id="search-form" class="search-form d-flex align-items-center" action="{{ path('tache_list') }}" method="GET">
+            <input id="search-input" type="text" placeholder="Search..." name="query" value="{{ query ?? '' }}">
+            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block TacheNavState %}<a class="nav-link" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#" aria-expanded="true">{% endblock %}
+    {% block TacheContentState %}<ul id="GestionTache-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">{% endblock %}
+
+{% block ListeTacheNav %}<a href="#" class="active"><i class="bi bi-circle"></i><span>Liste Tache</span></a>{% endblock %}
+
+{% block body %}
+
+    <table class=" table table-hover ">
+        <thead>
+        <tr class="table-primary">
+            <th scope="col">Nom</th>
+            <th scope="col">Email</th>
+            <th scope="col">Role</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.getNomUser() }}</td>
+                <td>{{ user.getEmailUser() }}</td>
+                <td>{{ user.getTypeUser() }}</td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="Actions">
+                        <button onclick="location.href='{{ path('user_detail', {'i': user.getIdUser()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+                        <button onclick="location.href='#'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button onclick="location.href='{{ path('user_delete', {'i': user.getIdUser()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <button onclick="location.href='#'" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Ajouter Tâche</button>
+{% endblock %}
