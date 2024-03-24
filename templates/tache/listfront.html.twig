@@ -3,108 +3,108 @@
 {% block title %}Liste des Tâches{% endblock %}
 
 {% block body %}
-    <style>
-        .grid {
-            min-height: 400px;
-        }
-        .tache {
-            position: relative;
-            margin: 0px 0px 25px 0px;
-            padding: 10px;
-            border-radius: 5px;
-            border: solid;
-            font-size: 14px;
-            border-color: red #012545;
-        }
+<style>
+	.grid {
+		min-height: 400px;
+	}
+	.tache {
+		position: relative;
+		margin: 0px 0px 25px 0px;
+		padding: 10px;
+		border-radius: 5px;
+		border: solid;
+		font-size: 14px;
+		border-color: red #012545;
+	}
 
-        #detail-front{
-            margin: 0px 0px 0px 10px;
-            
-        }
+	#detail-front {
+		margin: 0px 0px 0px 10px;
 
-        .card-header{
-            color: #012545;
-            margin: 0px 0px 25px 0px;
-            position: relative;
-            border-radius: 4px;
-            border: dashed  #012545;
-            
-        }
-        .task-counter {
-            position: absolute;
-            margin: 0px 0px 0px 25px;
-            border-radius: 30px;
-            border: solid red;
-            font-size: x-small;
-            padding: 10px;
-        }
-    </style>
-    <div class="d-flex justify-content-between">
-        <div class="flex-fill mr-3">
-            <div class="card">
-                <div class="card-header">
-                    <h2>TODO<span id="todo-counter" class="task-counter">{{ taches|filter(t => t.etatT == 'TODO')|length }}</span></h2>
-                </div>
-                <div class="card-body">
-                    <div id="TODO" class="grid">
-                        {% for tache in taches %}
-                            {% if tache.etatT == 'TODO' %}
-                                <div class="tache" draggable="true" id="{{ tache.idT }}">
-                                    <h6>
-                                        {{ tache.titreT }}
-                                        <button id="detail-front" onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
-                                    </h6>
-                                    </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
+	}
 
-        <div class="flex-fill mx-3">
-            <div class="card">
-                <div class="card-header">
-                    <h2>DOING<span id="doing-counter" class="task-counter">{{ taches|filter(t => t.etatT == 'DOING')|length }}</span></h2>
-                </div>
-                <div class="card-body">
-                    <div id="DOING" class="grid">
-                        {% for tache in taches %}
-                            {% if tache.etatT == 'DOING' %}
-                                <div class="tache" draggable="true" id="{{ tache.idT }}">
-                                <h6>
-                                    {{ tache.titreT }}
-                                    <button id="detail-front" onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
-                                </h6>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
+	.card-header {
+		color: #012545;
+		margin: 0px 0px 25px 0px;
+		position: relative;
+		border-radius: 4px;
+		border: dashed #012545;
 
-        <div class="flex-fill ml-3">
-            <div class="card">
-                <div class="card-header">
-                    <h2>DONE<span id="done-counter" class="task-counter">{{ taches|filter(t => t.etatT == 'DONE')|length }}</span></h2>
-                </div>
-                <div class="card-body">
-                    <div id="DONE" class="grid">
-                        {% for tache in taches %}
-                            {% if tache.etatT == 'DONE' %}
-                                <div class="tache" draggable="true" id="{{ tache.idT }}">
-                                    <h6>
-                                        {{ tache.titreT }}
-                                        <button id="detail-front" onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
-                                    </h6>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
+	}
+	.task-counter {
+		position: absolute;
+		margin: 0px 0px 0px 25px;
+		border-radius: 30px;
+		border: solid red;
+		font-size: x-small;
+		padding: 10px;
+	}
+</style>
+<div class="d-flex justify-content-between">
+	<div class="flex-fill mr-3">
+		<div class="card">
+			<div class="card-header">
+				<h2>TODO<span id="todo-counter" class="task-counter">{{ taches|filter(t => t.etatT == 'TODO')|length }}</span></h2>
+			</div>
+			<div class="card-body">
+				<div id="TODO" class="grid">
+					{% for tache in taches %}
+					{% if tache.etatT == 'TODO' %}
+					<div class="tache" draggable="true" id="{{ tache.idT }}">
+						<h6>
+							{{ tache.titreT }}
+							<button id="detail-front" onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+						</h6>
+					</div>
+					{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="flex-fill mx-3">
+		<div class="card">
+			<div class="card-header">
+				<h2>DOING<span id="doing-counter" class="task-counter">{{ taches|filter(t => t.etatT == 'DOING')|length }}</span></h2>
+			</div>
+			<div class="card-body">
+				<div id="DOING" class="grid">
+					{% for tache in taches %}
+					{% if tache.etatT == 'DOING' %}
+					<div class="tache" draggable="true" id="{{ tache.idT }}">
+						<h6>
+							{{ tache.titreT }}
+							<button id="detail-front" onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+						</h6>
+					</div>
+					{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="flex-fill ml-3">
+		<div class="card">
+			<div class="card-header">
+				<h2>DONE<span id="done-counter" class="task-counter">{{ taches|filter(t => t.etatT == 'DONE')|length }}</span></h2>
+			</div>
+			<div class="card-body">
+				<div id="DONE" class="grid">
+					{% for tache in taches %}
+					{% if tache.etatT == 'DONE' %}
+					<div class="tache" draggable="true" id="{{ tache.idT }}">
+						<h6>
+							{{ tache.titreT }}
+							<button id="detail-front" onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+						</h6>
+					</div>
+					{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 {% endblock %}

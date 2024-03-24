@@ -75,36 +75,39 @@
 
 
 					<!-- Comment Section -->
-<div class="card mb-3">
-    <div class="card-body">
-        <div class="comment-section">
-            <h5 class="card-title text-primary">Commentaire</h5>
-            {% if tache.getCommentaireTache() is not null %}
-    <div class="comment">
-        <h6><textarea class="form-control" style="height: 150px" readonly>{{ tache.getCommentaireTache().getTexteC() }}</textarea></h6>
-        <p><h6>Date: {{ tache.getCommentaireTache().getDateC()|date('d-m-Y') }}</h6></p>
-        <!-- Add Edit and Remove Options for the Comment -->
-        <div class="comment-options">
-            <button onclick="location.href='{{ path('commentairetache_update', {'i': tache.getCommentaireTache().getIdC()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i> Modifier</button>
-            <button onclick="location.href='{{ path('commentairetache_delete', {'i': tache.getCommentaireTache().getIdC()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i> Supprimer</button>
-        </div>
-    </div>
-{% else %}
-    <!-- Add button to add comment if there is no comment -->
+					<div class="card mb-3">
+						<div class="card-body">
+							<div class="comment-section">
+								<h5 class="card-title text-primary">Commentaire</h5>
+								{% if tache.getCommentaireTache() is not null %}
+								<div class="comment">
+									<h6><textarea class="form-control" style="height: 150px" readonly>{{ tache.getCommentaireTache().getTexteC() }}</textarea></h6>
+									<p>
+										<h6>Date: {{ tache.getCommentaireTache().getDateC()|date('d-m-Y') }}</h6>
+									</p>
+									<!-- Add Edit and Remove Options for the Comment -->
+									<div class="comment-options">
+										<button onclick="location.href='{{ path('commentairetache_update', {'i': tache.getCommentaireTache().getIdC()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i> Modifier</button>
+										<button onclick="location.href='{{ path('commentairetache_delete', {'i': tache.getCommentaireTache().getIdC()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i> Supprimer</button>
+									</div>
+								</div>
+								{% else %}
+								<!-- Add button to add comment if there is no comment -->
 
-    <a href="{{ path('commentairetache_add', {'id': tache.getIdT()}) }}" class="btn btn-primary"><i class="bi bi-plus"></i> Ajouter un commentaire</a>
-{% endif %}
-        </div>
-    </div>
-</div>
-<div class="col-md-4" style="margin-top: 10px;"> <!-- Adjust margin-top as needed -->
-	<button onclick="goBack()" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Go Back</button>
-	<script>
-		function goBack() {
-			window.history.back();
-		}
-	</script>
-</div>
+								<a href="{{ path('commentairetache_add', {'id': tache.getIdT()}) }}" class="btn btn-primary"><i class="bi bi-plus"></i> Ajouter un commentaire</a>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4" style="margin-top: 10px;">
+						<!-- Adjust margin-top as needed -->
+						<button onclick="goBack()" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Go Back</button>
+						<script>
+							function goBack() {
+								window.history.back();
+							}
+						</script>
+					</div>
 
 				</div>
 
@@ -122,22 +125,22 @@
 						{% elseif fileExtension == 'pdf' %}
 						{% set pdfPreviewPath = asset('uploads/' ~ tache.getPieceJointeT()) %}
 						<embed src="{{ pdfPreviewPath }}" type="application/pdf" width="100%" height="500px" />
-						<div class="card-body">
-							<p class="card-text text-muted mt-3">
-								Télécharger la pièce jointe : <a href="{{ asset('uploads/' ~ tache.getPieceJointeT()) }}">{{ tache.getPieceJointeT() }}</a>
-							</p>
-						</div>
-						{% elseif fileExtension == 'txt' %}
-						<div class="card-body">
-							<h5 class="card-title text-primary">{{ tache.getPieceJointeT() }} :</h5>
-						</div>
-            			{% set textFilePath = asset('uploads/' ~ tache.getPieceJointeT()) %}
-            			<iframe src="{{ textFilePath }}" class="card-text" style="width: 100%; min-height: 300px;"></iframe>
-						<div class="card-body">
-							<p class="card-text text-muted mt-3">
-								Télécharger la pièce jointe : <a href="{{ asset('uploads/' ~ tache.getPieceJointeT()) }}">{{ tache.getPieceJointeT() }}</a>
-							</p>
-						</div>
+					<div class="card-body">
+						<p class="card-text text-muted mt-3">
+							Télécharger la pièce jointe : <a href="{{ asset('uploads/' ~ tache.getPieceJointeT()) }}">{{ tache.getPieceJointeT() }}</a>
+						</p>
+					</div>
+					{% elseif fileExtension == 'txt' %}
+					<div class="card-body">
+						<h5 class="card-title text-primary">{{ tache.getPieceJointeT() }} :</h5>
+					</div>
+					{% set textFilePath = asset('uploads/' ~ tache.getPieceJointeT()) %}
+					<iframe src="{{ textFilePath }}" class="card-text" style="width: 100%; min-height: 300px;"></iframe>
+					<div class="card-body">
+						<p class="card-text text-muted mt-3">
+							Télécharger la pièce jointe : <a href="{{ asset('uploads/' ~ tache.getPieceJointeT()) }}">{{ tache.getPieceJointeT() }}</a>
+						</p>
+					</div>
 					{% else %}
 					<div class="card-body">
 						<p class="card-text text-muted mt-3">
