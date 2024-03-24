@@ -27,14 +27,10 @@ class TacheType extends AbstractType
                 ],
                 'placeholder' => 'Categorie',
             ])
-            ->add('titre_T', TextType::class, [
-                'attr' => [
-                    'placeholder' => 'Titre Tache' // Replace 'Enter your title here' with your desired placeholder text
-                ]
-            ])
+            ->add('titre_T', TextType::class)
             ->add('pieceJointe_T', FileType::class, [
                 'mapped' => false,
-                'required' => false,
+                
             ])
             ->add('date_DT', DateType::class, [
                 'widget' => 'single_text',
@@ -44,13 +40,8 @@ class TacheType extends AbstractType
                 'widget' => 'single_text',
 
             ])
-            ->add('desc_T', TextareaType::class, [
-                'attr' => [
-                    'placeholder' => 'Description Tache'
-                ],
-                'required' => false,
-
-            ])
+            ->add('desc_T', TextareaType::class)
+             
             ->add('etat_T', ChoiceType::class, [
                 'choices' => EtatTache::toArray(),
                 'expanded' => true,

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CommentaireTacheRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CommentaireTacheRepository::class)]
 class commentairetache
@@ -25,6 +26,17 @@ class commentairetache
     private $date_C;
 
     #[ORM\Column(name: 'texte_C', type: 'string', length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez fournir un commentaire.')]
+    #[Assert\Length(
+        min: 10,
+        max: 255,
+        minMessage: 'Le commentaire doit comporter au moins {{ limit }} caractères.',
+        maxMessage: 'Le commentaire ne peut pas dépasser {{ limit }} caractères.'
+    )]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z0-9\s]+$/',
+        message: 'Le commentaire ne peut contenir que des lettres, des chiffres et des espaces.'
+    )]
     private $texte_C;
 
     public function getIdC(): ?int
@@ -37,7 +49,7 @@ class commentairetache
         return $this->date_C;
     }
 
-    public function setDateC(\DateTimeInterface $dateC): self
+    public function setDateC(?\DateTimeInterface $dateC): self
     {
         $this->date_C = $dateC;
         return $this;
@@ -48,7 +60,7 @@ class commentairetache
         return $this->texte_C;
     }
 
-    public function setTexteC(string $texteC): self
+    public function setTexteC(?string $texteC): self
     {
         $this->texte_C = $texteC;
         return $this;

@@ -35,7 +35,7 @@ class muni
         return $this->nom_muni;
     }
 
-    public function setNomMuni(string $nomMuni): self
+    public function setNomMuni(?string $nomMuni): self
     {
         $this->nom_muni = $nomMuni;
         return $this;
@@ -46,7 +46,7 @@ class muni
         return $this->email_muni;
     }
 
-    public function setEmailMuni(string $emailMuni): self
+    public function setEmailMuni(?string $emailMuni): self
     {
         $this->email_muni = $emailMuni;
         return $this;
@@ -57,7 +57,7 @@ class muni
         return $this->password_muni;
     }
 
-    public function setPasswordMuni(string $passwordMuni): self
+    public function setPasswordMuni(?string $passwordMuni): self
     {
         $this->password_muni = $passwordMuni;
         return $this;
@@ -68,7 +68,7 @@ class muni
         return $this->imagee_user;
     }
 
-    public function setImageeuser(string $imagee_user): self
+    public function setImageeuser(?string $imagee_user): self
     {
         $this->imagee_user = $imagee_user;
         return $this;

@@ -42,6 +42,7 @@ class CommentaireTacheController extends AbstractController
             'query' => $query, // Pass the query to the template for displaying in the search bar
         ]);
     }
+    
     #[Route('/commentairetache/add/{id}', name: 'commentairetache_add')]
     public function add($id, Request $req, ManagerRegistry $doctrine): Response
     {
@@ -49,13 +50,13 @@ class CommentaireTacheController extends AbstractController
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
 
         if (!$user) {
-            throw $this->createNotFoundException('User Id not found');
+            throw $this->createNotFoundException('User Existe Pas');
         }
 
         $tacheId = $this->getDoctrine()->getRepository(tache::class)->find($id);
 
         if (!$tacheId) {
-            throw $this->createNotFoundException('Tache not found');
+            throw $this->createNotFoundException('Tache Existe Pas');
         }
 
         $x = new commentairetache();
@@ -66,7 +67,7 @@ class CommentaireTacheController extends AbstractController
         $form = $this->createForm(CommentaireTacheType::class, $x);
         $form->handleRequest($req);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $doctrine->getManager();
             $em->persist($x);
             $em->flush();
@@ -85,7 +86,7 @@ class CommentaireTacheController extends AbstractController
         $form = $this->createForm(CommentaireTacheType::class, $x);
         $form->handleRequest($req);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $doctrine->getManager();
             $em->flush();
             return $this->redirectToRoute('tache_list');

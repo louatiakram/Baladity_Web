@@ -17,14 +17,19 @@
 {% endblock %}
 
 {% block body %}
-{{ form_start(f, {'attr': {'class': 'row g-3'}}) }}
-        <div class="col-md-4">
-
-            {{ form_widget(f.texte_C, { 'attr': {'class': 'form-control'} }) }}
+{{ form_start(f, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate'}}) }}
+<div class="col-md-4">
+    {{ form_widget(f.texte_C, { 'attr': {'class': 'form-control', 'style': 'height: 150px'} }) }}
+    {% if f.texte_C.vars.errors|length > 0 %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-octagon me-1"></i>
+            {% for error in f.texte_C.vars.errors %}
+                {{ error.message }}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <div class="col-md-5">
-            {{ form_widget(f.date_C, { 'attr': {'class': 'form-control'} }) }}
-        </div>
+    {% endif %}
+</div>
 
     <div class="text-center">
             {{ form_widget(f.Save, { 'attr': {'class': 'btn btn-outline-primary'} }) }}

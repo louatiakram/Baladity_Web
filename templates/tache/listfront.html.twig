@@ -23,10 +23,12 @@
         }
 
         .card-header{
+            color: #012545;
             margin: 0px 0px 25px 0px;
             position: relative;
             border-radius: 4px;
             border: dashed  #012545;
+            
         }
         .task-counter {
             position: absolute;
@@ -48,9 +50,11 @@
                         {% for tache in taches %}
                             {% if tache.etatT == 'TODO' %}
                                 <div class="tache" draggable="true" id="{{ tache.idT }}">
-                                    {{ tache.titreT }}
-                                    <button id="detail-front" onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
-                                </div>
+                                    <h6>
+                                        {{ tache.titreT }}
+                                        <button id="detail-front" onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+                                    </h6>
+                                    </div>
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -68,8 +72,10 @@
                         {% for tache in taches %}
                             {% if tache.etatT == 'DOING' %}
                                 <div class="tache" draggable="true" id="{{ tache.idT }}">
+                                <h6>
                                     {{ tache.titreT }}
                                     <button id="detail-front" onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+                                </h6>
                                 </div>
                             {% endif %}
                         {% endfor %}
@@ -88,8 +94,10 @@
                         {% for tache in taches %}
                             {% if tache.etatT == 'DONE' %}
                                 <div class="tache" draggable="true" id="{{ tache.idT }}">
-                                    {{ tache.titreT }}
-                                    <button id="detail-front" onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+                                    <h6>
+                                        {{ tache.titreT }}
+                                        <button id="detail-front" onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+                                    </h6>
                                 </div>
                             {% endif %}
                         {% endfor %}

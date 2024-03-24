@@ -45,7 +45,7 @@ class enduser
     {
         return $this->id_user;
     }
-    public function setIdUser(int $id_user): self
+    public function setIdUser(?int $id_user): self
     {
         $this->id_user = $id_user;
         return $this;
@@ -56,7 +56,7 @@ class enduser
         return $this->nom_user;
     }
 
-    public function setNomUser(string $nom_user): self
+    public function setNomUser(?string $nom_user): self
     {
         $this->nom_user = $nom_user;
         return $this;
@@ -67,7 +67,7 @@ class enduser
         return $this->email_user;
     }
 
-    public function setEmailUser(string $email_user): self
+    public function setEmailUser(?string $email_user): self
     {
         $this->email_user = $email_user;
         return $this;
@@ -78,7 +78,7 @@ class enduser
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
         return $this;
@@ -89,7 +89,7 @@ class enduser
         return $this->type_user;
     }
 
-    public function setTypeUser(string $type_user): self
+    public function setTypeUser(?string $type_user): self
     {
         $this->type_user = $type_user;
         return $this;
@@ -100,7 +100,7 @@ class enduser
         return $this->phoneNumber_user;
     }
 
-    public function setPhoneNumberUser(string $phoneNumber_user): self
+    public function setPhoneNumberUser(?string $phoneNumber_user): self
     {
         $this->phoneNumber_user = $phoneNumber_user;
         return $this;
@@ -122,7 +122,7 @@ class enduser
         return $this->location_user;
     }
 
-    public function setLocationUser(string $location_user): self
+    public function setLocationUser(?string $location_user): self
     {
         $this->location_user = $location_user;
         return $this;

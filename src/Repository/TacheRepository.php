@@ -80,17 +80,6 @@ class TacheRepository extends ServiceEntityRepository
     }
     */
     
-    public function findByTitre(string $query): array
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.titre_T LIKE :query')
-            ->setParameter('query', '%' . $query . '%')
-            ->orderBy('t.id_T', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
-
     public function getUsersTasksCount(): array
     {
         $qb = $this->createQueryBuilder('t')
@@ -105,6 +94,5 @@ class TacheRepository extends ServiceEntityRepository
     
         return $qb->getResult();
     }
-
 
 }

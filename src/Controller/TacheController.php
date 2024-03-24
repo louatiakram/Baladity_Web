@@ -14,35 +14,38 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Form\FormError;   
+
 
 
 class TacheController extends AbstractController
 {
-    #[Route('/tache', name: 'app_tache')]
-    public function index(TacheRepository $r): Response
-    {
-        $xs = $r->findAll();
-        return $this->render('tache/list.html.twig', ['l' => $xs,]);
-    }
-
-    #[Route('/tache/list', name: 'tache_list')]
+    #[Route('/tache', name: 'tache_list')]
     public function list(Request $request, TacheRepository $repository): Response
     {
-        $query = $request->query->get('query');
+        
+        // Get the current page number from the request query parameters, default to 1
+        $page = $request->query->getInt('page', 1);
 
-        // If a search query is provided, filter tasks based on the title
-        if ($query) {
-            $tasks = $repository->findByTitre($query); // Replace with appropriate method
-        } else {
-            // If no search query is provided, fetch all tasks
-            $tasks = $repository->findAll();
-        }
+         // Calculate the offset based on the current page number and limit per page
+        $limit = 4;
+        $offset = ($page - 1) * $limit;
 
-        return $this->render('tache/list.html.twig', [
-            'l' => $tasks,
-            'query' => $query, // Pass the query to the template for displaying in the search bar
-        ]);
-    }
+        // If no search query is provided, fetch all tasks with pagination
+        $tasks = $repository->findBy([], ['date_FT' => 'ASC'], $limit, $offset);
+
+// Count total number of tasks for pagination
+$totalTasks = $repository->count([]);
+
+// Calculate total number of pages
+$totalPages = ceil($totalTasks / $limit);
+
+return $this->render('tache/list.html.twig', [
+    'l' => $tasks,
+    'currentPage' => $page, // Pass the current page number
+    'totalPages' => $totalPages, // Pass the total number of pages for pagination
+    ]);
+}
 
     #[Route('/tache/add', name: 'tache_add')]
     public function add(Request $req, ManagerRegistry $doctrine): Response
@@ -51,7 +54,7 @@ class TacheController extends AbstractController
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
 
         if (!$user) {
-            throw $this->createNotFoundException('User not found');
+            throw $this->createNotFoundException('User Existe Pas');
         }
 
         $x= new tache();
@@ -59,7 +62,19 @@ class TacheController extends AbstractController
 
         $form = $this->createForm(TacheType::class, $x);
         $form->handleRequest($req);
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+        $em = $doctrine->getManager();
+        // Check if a task with the same titre_T and nom_Cat already exists
+        $existingTask = $em->getRepository(tache::class)->findOneBy([
+            'titre_T' => $x->getTitreT(),
+            'nom_Cat' => $x->getNomCat(),
+        ]);
+
+        if ($existingTask) {
+            $form->addError(new FormError('Une tâche avec le même titre et la même catégorie existe déjà !'));
+        } else {
+            
             // Handle file upload
             /** @var UploadedFile|null $pieceJointe */
             $pieceJointe = $form->get('pieceJointe_T')->getData();
@@ -87,18 +102,22 @@ class TacheController extends AbstractController
             $em->flush();
             return $this->redirectToRoute('tache_list');
         }
+
+    }
         return $this->renderForm('tache/add.html.twig', ['f' => $form,]);
     }
+    
     #[Route('/tache/detail/{i}', name: 'tache_detail')]
     public function detail($i, TacheRepository $rep): Response
     {
         $tache = $rep->find($i);
         if (!$tache) {
-            throw $this->createNotFoundException('Task not found');
+            throw $this->createNotFoundException('Tache Existe Pas');
         }
 
         return $this->render('tache/detail.html.twig', ['tache' => $tache]);
     }
+    
     #[Route('/tache/update/{i}', name: 'tache_update')]
     public function update($i, TacheRepository $rep, Request $req, ManagerRegistry $doctrine): Response
     {
@@ -106,7 +125,8 @@ class TacheController extends AbstractController
         $form = $this->createForm(TacheType::class, $x);
         $form->handleRequest($req);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            
             // Handle file upload
             /** @var UploadedFile|null $pieceJointe */
             $pieceJointe = $form->get('pieceJointe_T')->getData();
@@ -132,8 +152,10 @@ class TacheController extends AbstractController
             $em->flush();
             return $this->redirectToRoute('tache_list');
         }
+
         return $this->renderForm('tache/add.html.twig', ['f' => $form,]);
     }
+    
     #[Route('/tache/delete/{i}', name: 'tache_delete')]
     public function delete($i, TacheRepository $rep, ManagerRegistry $doctrine): Response
     {
@@ -145,9 +167,11 @@ class TacheController extends AbstractController
     }
 
     #[Route('/tache/listfront', name: 'tache_listfront')]
-    public function listfront(): Response
+    public function listfront(Request $request, TacheRepository $repository): Response
     {
-        $taches = $this->getDoctrine()->getRepository(Tache::class)->findAll();
+         // If no search query is provided, fetch all tasks with pagination
+         $taches = $repository->findBy([], ['date_FT' => 'ASC']);
+        //$taches = $this->getDoctrine()->getRepository(Tache::class)->findAll();
 
         return $this->render('tache/listfront.html.twig', [
             'taches' => $taches,
@@ -161,7 +185,7 @@ class TacheController extends AbstractController
         $tache = $entityManager->getRepository(Tache::class)->find($tacheId);
 
         if (!$tache) {
-            return new JsonResponse(['error' => 'Tache not found'], Response::HTTP_NOT_FOUND);
+            return new JsonResponse(['error' => 'Tache Existe Pas'], Response::HTTP_NOT_FOUND);
         }
 
         // Update etat_T attribute of the tache entity
@@ -174,8 +198,6 @@ class TacheController extends AbstractController
             return new JsonResponse(['error' => 'Failed to update tache state'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
 
     #[Route('/tache/piechart', name: 'tache_piechart')]
     public function pieChart(TacheRepository $tacheRepository): Response

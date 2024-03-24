@@ -17,15 +17,41 @@
 {% endblock %}
 
 {% block body %}
-{{ form_start(f, {'attr': {'class': 'row g-3'}}) }}
-        <div class="col-md-4">
 
-            {{ form_widget(f.nom_Cat, { 'attr': {'class': 'form-control'} }) }}
-        </div>
-        <div class="col-md-4">
+{{ form_start(f, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate'}}) }}
 
-            {{ form_widget(f.titre_T, { 'attr': {'class': 'form-control'} }) }}
+{% if form_errors(f)|length > 0 %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-octagon me-1"></i>
+{{ form_errors(f) }}
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
+<div class="col-md-4">
+    {{ form_widget(f.nom_Cat, { 'attr': {'class': 'form-control'} }) }}
+    {% if f.nom_Cat.vars.errors|length > 0 %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-octagon me-1"></i>
+            {% for error in f.nom_Cat.vars.errors %}
+                {{ error.message }}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+    {% endif %}
+</div>
+<div class="col-md-4">
+    {{ form_widget(f.titre_T, { 'attr': {'class': 'form-control', 'placeholder': 'Titre Tache'} }) }}
+    {% if f.titre_T.vars.errors|length > 0 %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-octagon me-1"></i>
+            {% for error in f.titre_T.vars.errors %}
+                {{ error.message }}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+</div>
          <div class="col-md-4">
             {{ form_widget(f.pieceJointe_T, { 'attr': {'class': 'form-control'}, 'type': 'file', 'id': 'pieceJointe_T', 'name': 'pieceJointe_T'}) }}
         </div>
@@ -33,14 +59,40 @@
 
         <div class="col-md-5">
             {{ form_widget(f.date_DT, { 'attr': {'class': 'form-control'} }) }}
+            {% if f.date_DT.vars.errors|length > 0 %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-octagon me-1"></i>
+                    {% for error in f.date_DT.vars.errors %}
+                        {{ error.message }}
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
         </div>
+    
         <div class="col-md-5">
-
             {{ form_widget(f.date_FT, { 'attr': {'class': 'form-control'} }) }}
+            {% if f.date_FT.vars.errors|length > 0 %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-octagon me-1"></i>
+                    {% for error in f.date_FT.vars.errors %}
+                        {{ error.message }}
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
         </div>
         <div class="col-5">
-
-            {{ form_widget(f.desc_T, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_widget(f.desc_T, { 'attr': {'class': 'form-control', 'placeholder': 'Description Tache'} }) }}
+            {% if f.desc_T.vars.errors|length > 0 %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-octagon me-1"></i>
+                    {% for error in f.desc_T.vars.errors %}
+                        {{ error.message }}
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
         </div>
         <div class="col-5">
             {% for choice in f.etat_T %}
@@ -49,6 +101,15 @@
                     {{ form_label(choice, null, { 'label_attr': {'class': 'form-check-label'} }) }}
                 </div>
             {% endfor %}
+            {% if f.etat_T.vars.errors|length > 0 %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-octagon me-1"></i>
+                    {% for error in f.etat_T.vars.errors %}
+                        {{ error.message }}
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
         </div>
     <div class="text-center">
             {{ form_widget(f.Save, { 'attr': {'class': 'btn btn-outline-primary'} }) }}
@@ -57,6 +118,7 @@
     </div>
     
     {{ form_end(f) }}
+    
     <div class="col-md-4" style="margin-top: 10px;"> <!-- Adjust margin-top as needed -->
         <button onclick="goBack()" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Go Back</button>
         <script>
@@ -67,3 +129,4 @@
     </div>
 
 {% endblock %}
+

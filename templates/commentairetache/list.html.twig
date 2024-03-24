@@ -30,7 +30,7 @@
         {% for commentairetache in l %}
             <tr>
                 <td>{{ commentairetache.getDateC()|date('d-m-Y') }}</td>
-                <td>{{ commentairetache.getTexteC() }}</td>
+                <td><textarea class="form-control" style="height: 100px" readonly>{{ commentairetache.getTexteC() }}</textarea></td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Actions">
                         <button onclick="location.href='{{ path('commentairetache_update', {'i': commentairetache.getIdC()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></button>
