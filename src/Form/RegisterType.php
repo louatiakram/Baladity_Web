@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 class RegisterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -40,9 +40,11 @@ class RegisterType extends AbstractType
             ])
             // Assuming 'id_muni' is a ManyToOne relationship, consider using EntityType instead of TextType
             // ->add('id_muni') 
-            ->add('id_muni', TextType::class, [
-                'label' => 'id Muni', // Customize the label
-                // Add more options if needed (e.g., required, constraints)
+            ->add('id_muni', EntityType::class, [
+                'class' => 'App\Entity\muni',
+                'choice_label' => 'nom_muni', // Assuming you want to display the municipality name
+                'label' => 'Municipality', // Customize the label
+                // Add more options if needed
             ])
 
             ->add('location_user', TextType::class, [

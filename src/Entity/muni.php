@@ -76,6 +76,6 @@ class muni
 
     public function __toString(): string
     {
-        return (string) $this->getIdMuni();
+        return (string) $this->getNomMuni();
     }
 }
