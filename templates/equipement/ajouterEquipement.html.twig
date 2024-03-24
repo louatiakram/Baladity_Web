@@ -1,0 +1,20 @@
+{# templates/equipement/ajouterEquipement.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Add New Equipment{% endblock %}
+
+{% block body %}
+    <h1>Add New Equipment</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.reference_eq) }}
+    {{ form_row(form.nom_eq) }}
+    {{ form_row(form.categorie_eq) }}
+    {{ form_row(form.quantite_eq) }}
+    {{ form_row(form.date_ajouteq) }}
+    {{ form_row(form.description_eq) }}
+    {{ form_row(form.image_eq) }}
+    <button type="submit" class="btn btn-primary">Save</button>
+    {{ form_end(form) }}
+{% endblock %}
