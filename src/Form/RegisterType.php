@@ -59,10 +59,7 @@ class RegisterType extends AbstractType
                 'label' => 'Banned Status', // Customize the label
                 // Add more options if needed (e.g., required, constraints)
             ])
-            ->add('save', SubmitType::class, [
-                'label' => 'Register', // Customize the label
-                // Add more options if needed (e.g., button class)
-            ]);
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
