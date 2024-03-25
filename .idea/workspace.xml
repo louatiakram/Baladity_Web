@@ -6,6 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="d21bcfc9-d61a-4ca8-b6b1-083941da76b2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/CommentaireTacheController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/CommentaireTacheController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TacheController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TacheController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/commentairetache.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/commentairetache.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/enduser.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/enduser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/tache.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/tache.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Enum/EtatTache.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enum/EtatTache.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Form/CommentaireTacheType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/CommentaireTacheType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Form/TacheType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/TacheType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/CommentaireTacheRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CommentaireTacheRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/EndUserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/EndUserRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/MunicipalityRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/MunicipalityRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/TacheRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/TacheRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tache/list.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tache/list.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tache/listfront.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tache/listfront.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tache/piechart.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tache/piechart.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -226,6 +241,7 @@
       <workItem from="1710898933571" duration="5351000" />
       <workItem from="1710930764245" duration="11105000" />
       <workItem from="1710954606857" duration="14133000" />
+      <workItem from="1711370910096" duration="786000" />
     </task>
     <servers />
   </component>

@@ -45,6 +45,7 @@ class enduser
     {
         return $this->id_user;
     }
+
     public function setIdUser(?int $id_user): self
     {
         $this->id_user = $id_user;
