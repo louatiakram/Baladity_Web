@@ -11,19 +11,19 @@ class muni
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'id_muni', type: 'integer')]
-    private $id_muni;
+    private ?int $id_muni;
 
     #[ORM\Column(name: 'nom_muni', type: 'string', length: 255)]
-    private $nom_muni;
+    private ?string $nom_muni;
 
     #[ORM\Column(name: 'email_muni', type: 'string', length: 255)]
-    private $email_muni;
+    private ?string $email_muni;
 
     #[ORM\Column(name: 'password_muni', type: 'string', length: 255)]
-    private $password_muni;
+    private ?string $password_muni;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $imagee_user;
+    private ?string $imagee_user;
 
     public function getIdMuni(): ?int
     {

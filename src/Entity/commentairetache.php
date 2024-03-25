@@ -3,11 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\CommentaireTacheRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
-// Import the Tache entity if not already imported
-
 
 #[ORM\Entity(repositoryClass: CommentaireTacheRepository::class)]
 class commentairetache
@@ -15,18 +13,18 @@ class commentairetache
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'id_C', type: 'integer')]
-    private $id_C;
+    private ?int $id_C;
 
     #[ORM\ManyToOne(targetEntity: enduser::class)]
     #[ORM\JoinColumn(name: 'id_user', referencedColumnName: 'id_user')]
-    private $id_user;
+    private ?enduser $id_user;
 
     #[ORM\ManyToOne(targetEntity: tache::class)]
     #[ORM\JoinColumn(name: 'id_T', referencedColumnName: 'id_T', onDelete: 'CASCADE')]
-    private $id_T;
+    private ?tache $id_T;
 
     #[ORM\Column(name: 'date_C', type: 'date')]
-    private $date_C;
+    private ?DateTimeInterface $date_C;
 
     #[ORM\Column(name: 'texte_C', type: 'string', length: 255)]
     #[Assert\NotBlank(message: 'Veuillez fournir un commentaire.')]
@@ -40,19 +38,19 @@ class commentairetache
         pattern: '/^[a-zA-Z0-9\s]+$/',
         message: 'Le commentaire ne peut contenir que des lettres, des chiffres et des espaces.'
     )]
-    private $texte_C;
+    private ?string $texte_C;
 
     public function getIdC(): ?int
     {
         return $this->id_C;
     }
 
-    public function getDateC(): ?\DateTimeInterface
+    public function getDateC(): ?DateTimeInterface
     {
         return $this->date_C;
     }
 
-    public function setDateC(?\DateTimeInterface $dateC): self
+    public function setDateC(?DateTimeInterface $dateC): self
     {
         $this->date_C = $dateC;
         return $this;

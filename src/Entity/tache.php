@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TacheRepository;
+use DateInterval;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -13,11 +14,11 @@ class tache
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'id_T', type: 'integer')]
-    private $id_T;
+    private ?int $id_T;
 
     #[ORM\Column(name: 'nom_Cat', type: 'string', length: 255)]
     #[Assert\NotBlank(message: 'Veuillez fournir categorie.')]
-    private $nom_Cat;
+    private ?string $nom_Cat;
 
 
     #[ORM\Column(name: 'titre_T', type: 'string', length: 255)]
@@ -32,14 +33,14 @@ class tache
         minMessage: 'Le titre doit comporter au moins {{ limit }} caractères.',
         maxMessage: 'Le titre ne peut pas dépasser {{ limit }} caractères.'
     )]
-    private $titre_T;
+    private ?string $titre_T;
 
     #[ORM\Column(name: 'pieceJointe_T', type: 'string', length: 255)]
-    private $pieceJointe_T;
+    private ?string $pieceJointe_T;
 
     #[ORM\Column(name: 'date_DT', type: 'date')]
     #[Assert\NotBlank(message: 'Veuillez fournir une date Debut.')]
-    private $date_DT;
+    private ?DateTimeInterface $date_DT;
 
     #[ORM\Column(name: 'date_FT', type: 'date')]
     #[Assert\NotBlank(message: 'Veuillez fournir une date Fin.')]
@@ -47,7 +48,7 @@ class tache
         propertyPath: "date_DT",
         message: "La date de fin doit être postérieure ou égale à la date de début."
     )]
-    private $date_FT;
+    private ?DateTimeInterface $date_FT;
 
     #[ORM\Column(name: 'desc_T', type: 'string', length: 255)]
     #[Assert\Length(
@@ -60,18 +61,18 @@ class tache
         pattern: '/^[a-zA-Z0-9\s]+$/',
         message: 'La description ne peut contenir que des lettres, des chiffres et des espaces.'
     )]
-    private $desc_T;
+    private ?string $desc_T;
 
     #[ORM\Column(name: 'etat_T', type: 'string', columnDefinition: "ENUM('TODO', 'DOING', 'DONE')")]
     #[Assert\NotBlank(message: 'Veuillez fournir un Etat.')]
-    private $etat_T;
+    private ?string $etat_T;
 
     #[ORM\ManyToOne(targetEntity: enduser::class)]
     #[ORM\JoinColumn(name: 'id_user', referencedColumnName: 'id_user')]
-    private $id_user;
+    private ?enduser $id_user;
 
     #[ORM\OneToOne(targetEntity: commentairetache::class, mappedBy: 'id_T')]
-    private $commentaireTache;
+    private ?commentairetache $commentaireTache;
 
     private ?DateTimeInterface $echeance = null;
 
@@ -118,30 +119,30 @@ class tache
         return $this;
     }
 
-    public function getDateDT(): ?\DateTimeInterface
+    public function getDateDT(): ?DateTimeInterface
     {
         return $this->date_DT;
     }
 
-    public function setDateDT(?\DateTimeInterface $dateDT): self
+    public function setDateDT(?DateTimeInterface $dateDT): self
     {
         $this->date_DT = $dateDT;
         return $this;
     }
 
 
-    public function getEcheance(): ?\DateInterval
+    public function getEcheance(): ?DateInterval
     {
         return $this->date_FT->diff($this->date_DT);
     }
 
 
-    public function getDateFT(): ?\DateTimeInterface
+    public function getDateFT(): ?DateTimeInterface
     {
         return $this->date_FT;
     }
 
-    public function setDateFT(?\DateTimeInterface $dateFT): self
+    public function setDateFT(?DateTimeInterface $dateFT): self
     {
         $this->date_FT = $dateFT;
         return $this;
