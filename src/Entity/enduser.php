@@ -11,35 +11,35 @@ class enduser
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'id_user', type: 'integer')]
-    private $id_user;
+    private ?int $id_user;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $nom_user;
+    private ?string $nom_user;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $email_user;
+    private ?string $email_user;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $password;
+    private ?string $password;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $type_user;
+    private ?string $type_user;
 
     #[ORM\Column(name: 'phoneNumber_user', type: 'string', length: 255)]
-    private $phoneNumber_user;
+    private ?string $phoneNumber_user;
 
     #[ORM\ManyToOne(targetEntity: muni::class)]
     #[ORM\JoinColumn(name: 'id_muni', referencedColumnName: 'id_muni')]
-    private $id_muni;
+    private ?muni $id_muni;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $location_user;
+    private ?string $location_user;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $image_user;
+    private ?string $image_user;
 
     #[ORM\Column(name: 'isBanned', type: 'boolean', nullable: true)]
-    private $isBanned;
+    private ?bool $isBanned;
 
     public function getIdUser(): ?int
     {

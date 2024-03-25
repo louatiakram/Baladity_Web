@@ -7,8 +7,9 @@
     <list default="true" id="d21bcfc9-d61a-4ca8-b6b1-083941da76b2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/commentairetache.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/commentairetache.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/muni.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/muni.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/enduser.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/enduser.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/tache.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/tache.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tache/list.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tache/list.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

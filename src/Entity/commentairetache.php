@@ -19,9 +19,9 @@ class commentairetache
     #[ORM\JoinColumn(name: 'id_user', referencedColumnName: 'id_user')]
     private ?enduser $id_user;
 
-    #[ORM\ManyToOne(targetEntity: tache::class)]
+    #[ORM\ManyToOne(targetEntity: tache::class, inversedBy: 'commentaireTache')]
     #[ORM\JoinColumn(name: 'id_T', referencedColumnName: 'id_T', onDelete: 'CASCADE')]
-    private ?tache $id_T;
+    private ?tache $tache;
 
     #[ORM\Column(name: 'date_C', type: 'date')]
     private ?DateTimeInterface $date_C;
@@ -80,12 +80,12 @@ class commentairetache
 
     public function getIdT(): ?tache
     {
-        return $this->id_T;
+        return $this->tache;
     }
 
-    public function setIdT(?tache $id_T): self
+    public function setIdT(?tache $tache): self
     {
-        $this->id_T = $id_T;
+        $this->tache = $tache;
         return $this;
     }
 }

@@ -67,11 +67,11 @@ class tache
     #[Assert\NotBlank(message: 'Veuillez fournir un Etat.')]
     private ?string $etat_T;
 
-    #[ORM\ManyToOne(targetEntity: enduser::class)]
+    #[ORM\ManyToOne(targetEntity: enduser::class, inversedBy: 'taches')]
     #[ORM\JoinColumn(name: 'id_user', referencedColumnName: 'id_user')]
     private ?enduser $id_user;
 
-    #[ORM\OneToOne(targetEntity: commentairetache::class, mappedBy: 'id_T')]
+    #[ORM\OneToOne(targetEntity: commentairetache::class, mappedBy: 'tache')]
     private ?commentairetache $commentaireTache;
 
     private ?DateTimeInterface $echeance = null;
