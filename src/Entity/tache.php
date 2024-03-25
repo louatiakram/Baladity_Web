@@ -3,13 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\TacheRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
-// Import the CommentaireTache entity if not already imported
-
-// Import the Enduser entity if not already imported
-
 
 #[ORM\Entity(repositoryClass: TacheRepository::class)]
 class tache
