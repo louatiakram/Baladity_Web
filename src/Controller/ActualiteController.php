@@ -171,5 +171,15 @@ class ActualiteController extends AbstractController
         'actualite' => $actualite,
     ]);
 }
+#[Route('/actualiteCitoyen', name: 'app_actualite')]
+public function index1(ActualiteRepository $repository): Response
+{
+    $actualites = $repository->findAll(); // Fetch all actualités from the repository
+
+    return $this->render('actualite/showACitoyen.html.twig', [
+        'actualites' => $actualites,
+        
+    ]);
+}
 
     } 

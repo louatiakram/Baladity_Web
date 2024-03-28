@@ -12,7 +12,9 @@ use Symfony\Component\Form\FormError;
 use DateTime;
 use App\Repository\PubliciteRepository;
 use Symfony\Component\HttpFoundation\Request;
-use App\Repository\ActualiteRepository;
+use App\Entity\publicite;
+use App\Entity\enduser;
+use App\Form\PubliciteType;
 class PubliciteController extends AbstractController
 {
     #[Route('/publicite', name: 'app_publicite')]
@@ -22,6 +24,7 @@ class PubliciteController extends AbstractController
             'controller_name' => 'PubliciteController',
         ]);
     }
+    
     #[Route('/publicite/showPub', name: 'publicite_show')]
     public function showPub(Request $request, PubliciteRepository $repository): Response
     {
@@ -66,4 +69,65 @@ class PubliciteController extends AbstractController
         // For example:
         return $this->redirectToRoute('publicite_show');
     }
+    #[Route('/publicite/ajouterPub', name: 'ajouterPub')]     
+    public function ajouterPub(ManagerRegistry $doctrine, Request $req): Response
+    {
+        $publicite = new publicite();
+        $userId = 48; 
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+    
+        if (!$user) {
+            throw $this->createNotFoundException('User not found');
+        }
+    
+        $publicite->setIdUser($user);
+        
+        // Set the current date to the date_a property
+       
+    
+        $form = $this->createForm(PubliciteType::class, $publicite);
+        $form->handleRequest($req);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Set the image_a field
+            $image = $form->get('image_pub')->getData();
+            if ($image) {
+                // Handle image upload and persist its filename to the database
+                $fileName = uniqid().'.'.$image->guessExtension();
+                try {
+                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    $publicite->setImagePub($fileName);
+                } catch (FileException $e) {
+                    // Handle the exception if file upload fails
+                    // For example, log the error or display a flash message
+                }
+            }
+    
+            // Get the entity manager
+            $em = $doctrine->getManager();
+    
+       
+            $em->persist($publicite);
+            $em->flush();
+    
+            // Redirect to a success page or display a success message
+            // For example:
+            return $this->redirectToRoute('publicite_show');
+
+        }
+    
+        return $this->render('publicite/ajouterPub.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+    #[Route('/showPubCitoyen', name: 'app_publicite')]
+public function index1(PubliciteRepository $repository): Response
+{
+    $publicites = $repository->findAll(); // Fetch all actualités from the repository
+
+    return $this->render('publicite/showPubCitoyen.html.twig', [
+        'publicites' => $publicites,
+        
+    ]);
+}
 }
