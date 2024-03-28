@@ -147,32 +147,34 @@
         </div>
     </div>
 </section><!-- End Hero Section -->
-   <main id="main" class="main">
+<main id="main" class="main">
     <br>
     <h1 class="card-title" style="text-align: center; font-size: 2em;">La liste des Publicités</h1>
     <br>
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                <div id="advertisement-container" class="card-container justify-content-center align-items-center">
-                    {% for publicite in publicites %}
-                    <div class="card {% if publicite.getOffrePub() == '9 mois :130dt' %}animate__animated animate__fadeInUpBig{% else %}animate__animated animate__fadeIn{% endif %}" style="display: none;">
-                        <img src="{{ asset('uploads/' ~ publicite.getImagePub()) }}" class="card-img-top" alt="Publicité Image">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ publicite.getTitrePub() }}</h5>
-                            <p class="card-text">{{ publicite.getDescriptionPub() }}</p>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Contact: {{ publicite.getContactPub() }}</li>
-                                <li class="list-group-item">Localisation: {{ publicite.getLocalisationPub() }}</li>
-                                <li class="list-group-item">Offre: {{ publicite.getOffrePub() }}</li>
-                            </ul>
-                            <button type="button" class="btn btn-danger mt-3" onclick="deletePublicite('{{ publicite.getIdPub() }}')">
-                                <i class="bi bi-trash"></i> Supprimer
-                            </button>
+            <div class="col-lg-5 col-md-5 col-sm-8 mb-6 mx-auto">
+                <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+                    <div id="advertisement-container" class="card-container">
+                        {% for publicite in publicites %}
+                        <div class="card {% if publicite.getOffrePub() == '9 mois :130dt' %}animate__animated animate__fadeInUpBig{% else %}animate__animated animate__fadeIn{% endif %}" style="display: none;">
+                            <img src="{{ asset('uploads/' ~ publicite.getImagePub()) }}" class="card-img-top" alt="Publicité Image">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ publicite.getTitrePub() }}</h5>
+                                <p class="card-text">{{ publicite.getDescriptionPub() }}</p>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">Contact: {{ publicite.getContactPub() }}</li>
+                                    <li class="list-group-item">Localisation: {{ publicite.getLocalisationPub() }}</li>
+                                    <li class="list-group-item">Offre: {{ publicite.getOffrePub() }}</li>
+                                </ul>
+                                <button type="button" class="btn btn-danger mt-3" onclick="deletePublicite('{{ publicite.getIdPub() }}')">
+                                    <i class="bi bi-trash"></i> Supprimer
+                                </button>
+                            </div>
                         </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -187,6 +189,7 @@
     
     {% endblock %}
 </main>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -217,7 +220,7 @@
 </script>
 
 
-
+    
 
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
