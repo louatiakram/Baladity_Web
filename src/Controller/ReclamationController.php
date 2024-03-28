@@ -6,12 +6,16 @@ use DateTime;
 use App\Entity\enduser;
 use App\Entity\reclamation;
 use App\Form\ReclamationType;
+use App\Repository\ReclamationRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Knp\Component\Pager\PaginatorInterface;
+
 
 class ReclamationController extends AbstractController
 {
@@ -30,7 +34,7 @@ class ReclamationController extends AbstractController
     }
 
     #[Route('/reclamation/ajouterReclamation/{cas}', name: 'ajouterReclamation')]
-    public function ajouterReclamation(Request $request, $cas): Response
+    public function ajouterReclamation(Request $request, $cas,SessionInterface $session): Response
     {
         // Créer une nouvelle instance de l'entité Reclamation
         $reclamation = new Reclamation();
@@ -96,10 +100,63 @@ class ReclamationController extends AbstractController
             // Persist the reclamation object to the database
             $em->persist($reclamation);
             $em->flush();
+           // Ajout du message flash
+           $this->addFlash('success', 'La réclamation a été ajoutée avec succès.');
+           // Redirection vers la page d'affichage des réclamations
+           return $this->redirectToRoute('afficherReclamation');
         }
         return $this->render('reclamation/ajouterReclamation.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/reclamation/afficherReclamation', name: 'afficherReclamation')]
+public function afficherReclamation(Request $request, ReclamationRepository $repository, PaginatorInterface $paginator): Response
+{
+    $query = $request->query->get('query');
+
+    // Fetch the current page number from the query parameters
+    $currentPage = $request->query->getInt('page', 1);
+
+    // If a search query is provided, filter tasks based on the title
+    if ($query) {
+        $queryBuilder = $repository->createQueryBuilder('r')
+            ->where('r.sujetReclamation LIKE :query')
+            ->setParameter('query', "%$query%");
+    } else {
+        // If no search query is provided, fetch all tasks
+        $queryBuilder = $repository->createQueryBuilder('r');
+    }
+
+    // Paginate the results using the paginator service
+    $reclamations = $paginator->paginate(
+        $queryBuilder->getQuery(), // Doctrine Query object
+        $currentPage, // Current page number
+        5 // Number of items per page
+    );
+
+    return $this->render('reclamation/afficherReclamation.html.twig', [
+        'reclamations' => $reclamations,
+        'query' => $query,
+    ]);
+}
+
+ #[Route('/reclamation/supprimerReclamation/{i}', name: 'supprimerReclamation')]
+    public function deleteA($i, ReclamationRepository $rep, ManagerRegistry $doctrine): Response
+    {
+        $reclamation = $rep->find($i);
+    
+        if (!$reclamation) {
+            throw $this->createNotFoundException('Réclamation not found');
+        }
+    
+        $em = $doctrine->getManager();
+        $em->remove($reclamation);
+        $em->flush();
+    
+        // Redirect to a success page or return a response as needed
+        // For example:
+        return $this->redirectToRoute('afficherReclamation');
     }
 }
 
