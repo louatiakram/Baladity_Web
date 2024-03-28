@@ -165,7 +165,7 @@
                             <p class="card-text">{{ actualite.getDescriptionA() }}</p>
                             <p class="card-text"><small class="text-muted">Date: {{ actualite.getDateA()|date('Y-m-d') }}</small></p>
                         <div class="mt-auto text-center"> <!-- Added text-center class for center alignment -->
-    <a href="{{ path('publicite_show', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-info"> <!-- Removed btn-outline-info to make it prominent -->
+    <a href="{{ path('app_publicite', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-info"> <!-- Removed btn-outline-info to make it prominent -->
         <i class="bi bi-info-circle"></i> Voir Publicités <!-- Changed text to French "Voir Publicités" -->
     </a>                         
 </div>
