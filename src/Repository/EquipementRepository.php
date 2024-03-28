@@ -75,4 +75,22 @@ class EquipementRepository extends ServiceEntityRepository
         ;
     }
     */
+    // Méthode pour récupérer tous les équipements paginés
+    public function findAllPaginated(int $limit, int $offset): array
+    {
+        return $this->createQueryBuilder('e')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult();
+    }
+
+    // Méthode pour compter tous les équipements
+    public function countAll(): int
+    {
+        return $this->createQueryBuilder('e')
+            ->select('COUNT(e)') // Utiliser COUNT(e) au lieu de COUNT(e.id)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

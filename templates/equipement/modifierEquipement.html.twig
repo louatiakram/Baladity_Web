@@ -1,0 +1,62 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Modifier Equipement{% endblock %}
+
+{% block body %}
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Modifier Equipement</h5>
+                        <form method="POST" action="{{ path('modifierEquipement', {'id': equipement.idEquipement}) }}" enctype="multipart/form-data">
+                            {{ form_start(form, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate'}}) }}
+
+                            <div class="mb-3">
+                                <label for="inputReference" class="form-label">Référence</label>
+                                {{ form_widget(form.reference_eq, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputNom" class="form-label">Nom</label>
+                                {{ form_widget(form.nom_eq, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputCategorie" class="form-label">Catégorie</label>
+                                {{ form_widget(form.categorie_eq, {'attr': {'class': 'form-select'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputQuantite" class="form-label">Quantité</label>
+                                {{ form_widget(form.quantite_eq, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputDateAjout" class="form-label">Date d'ajout</label>
+                                {{ form_widget(form.date_ajouteq, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputDescription" class="form-label">Description</label>
+                                {{ form_widget(form.description_eq, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputImage" class="form-label">Image</label>
+                                {{ form_widget(form.image_eq, {'attr': {'class': 'form-control', 'onchange': 'previewImage(this)'}}) }}
+                                <img id="imagePreview" src="{{ asset('uploads/' ~ equipement.imageEq) }}" alt="Aperçu de l'image" style="max-width: 100%; max-height: 200px;">
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Modifier</button>
+                                <a href="{{ path('equipement_show') }}" class="btn btn-secondary">Annuler</a> <!-- Bouton d'annulation -->
+                            </div>
+                            {{ form_end(form) }}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -96,10 +96,8 @@ class EquipementController extends AbstractController
         return $this->redirectToRoute('equipement_show');
     }
     #[Route('/equipement/modifierEquipement/{id}', name: 'modifierEquipement')]
-
-    public function modifierEquipement($id, ManagerRegistry $doctrine, Request $request): Response
-
-   {
+public function modifierEquipement($id, ManagerRegistry $doctrine, Request $request): Response
+{
     $entityManager = $doctrine->getManager();
     $equipement = $entityManager->getRepository(Equipement::class)->find($id);
 
@@ -108,20 +106,20 @@ class EquipementController extends AbstractController
     }
 
     // Create the form for modifying the equipement
-    $form = $this->createForm(Equipement::class, $equipement);
+    $form = $this->createForm(EquipementType::class, $equipement);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
         // Handle form submission
         $equipement->setDateAjouteq(new DateTime());
-        // Set the image_a field
+        // Set the image_eq field
         $image = $form->get('image_eq')->getData();
         if ($image) {
             // Handle image upload and persist its filename to the database
             $fileName = uniqid().'.'.$image->guessExtension();
             try {
                 $image->move($this->getParameter('uploadsDirectory'), $fileName);
-                $equipement->setImageA($fileName);
+                $equipement->setImageEq($fileName);
             } catch (FileException $e) {
                 // Handle the exception if file upload fails
                 // For example, log the error or display a flash message
@@ -144,27 +142,42 @@ class EquipementController extends AbstractController
 #[Route('/equipement/showEquipement', name: 'equipement_show')]
 public function showEquipement(Request $request, EquipementRepository $repository): Response
 {
-$query = $request->query->get('query');
+    $query = $request->query->get('query');
+    $currentPage = $request->query->getInt('page', 1);
+    $limit = 10; // Nombre d'équipements par page
 
-// Fetch the current page number from the query parameters
-$currentPage = $request->query->getInt('page', 1);
+    // Récupérer les équipements en fonction de la recherche et de la pagination
+    if ($query) {
+        $equipements = $repository->findByTitre($query, $limit, ($currentPage - 1) * $limit);
+        $totalEquipements = count($equipements); // Mise à jour du nombre total d'équipements
+    } else {
+        $equipements = $repository->findAllPaginated($limit, ($currentPage - 1) * $limit);
+        $totalEquipements = $repository->countAll(); // Mise à jour du nombre total d'équipements
+    }
 
-// Assuming you have logic to calculate the total number of pages, let's say it's stored in $totalPages
-$totalPages = 5; // Replace this with your actual calculation
+    // Calculer le nombre total de pages
+    $totalPages = ceil($totalEquipements / $limit);
 
-// If a search query is provided, filter tasks based on the title
-if ($query) {
-    $tasks = $repository->findByTitre($query); // Replace with appropriate method
-} else {
-    // If no search query is provided, fetch all tasks
-    $tasks = $repository->findAll();
+    return $this->render('equipement/showEquipement.html.twig', [
+        'equipements' => $equipements,
+        'query' => $query,
+        'currentPage' => $currentPage,
+        'totalPages' => $totalPages,
+    ]);
 }
+#[Route('/equipement/detail/{id}', name: 'equipement_detail')]
+public function detailEquipement($id, EquipementRepository $equipementRepository): Response
+{
+    // Récupérer l'équipement par son ID
+    $equipement = $equipementRepository->find($id);
 
-return $this->render('equipement/showEquipement.html.twig', [
-    'l' => $tasks,
-    'query' => $query,
-    'currentPage' => $currentPage, // Pass the currentPage variable to the Twig template
-    'totalPages' => $totalPages, // Pass the totalPages variable to the Twig template
-]);
+    if (!$equipement) {
+        throw $this->createNotFoundException('Equipement not found');
+    }
+
+    // Passer l'équipement à la vue Twig pour affichage
+    return $this->render('equipement/detailEquipement.html.twig', [
+        'equipement' => $equipement,
+    ]);
 }
  } 

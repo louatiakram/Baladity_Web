@@ -37,8 +37,6 @@ class EquipementType extends AbstractType
                 'mapped' => false, // This means it won't be mapped to an entity property directly
                 'required' => false, // It's not required
             ])
-            ->add('Save', SubmitType::class)
-            ->add('Reset', ResetType::class)
         ;
     }
 

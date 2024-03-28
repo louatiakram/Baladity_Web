@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EquipementRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use App\Entity\Avis;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EquipementRepository::class)]
@@ -44,7 +45,7 @@ class Equipement
     #[ORM\JoinColumn(name: 'id_muni', referencedColumnName: 'id_muni')]
     private $id_muni;
 
-    #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'id_equipement')]
+    #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'id_equipement', cascade: ['remove'])]
     private $avis_eq;
 
     public function __construct()
