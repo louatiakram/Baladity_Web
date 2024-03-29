@@ -1,10 +1,10 @@
 {% extends 'base-back.html.twig' %}
 
-{% block title %}Ajout réclamation{% endblock %}
+{% block title %}Modifier réclamation{% endblock %}
 
 {% block body %}
 <div class="pagetitle">
-    <h1>Ajouter une réclamation</h1>
+    <h1>Modifier une réclamation</h1>
 </div>
 
 <div class="card">
@@ -62,11 +62,13 @@
                 </div>
             </div>
 
-            <div class="row mb-3">
-                <div class="form-group col-sm-12">
-                    <img id="imagePreview" src="#" alt="Image réclamation" style="max-width: 50%; max-height: 50%;">
+            {% if reclamation.getImageReclamation() %}
+                <div class="row mb-3">
+                    <div class="form-group col-sm-12">
+                        <img id="imagePreview" src="{{ asset('uploads/' ~ reclamation.getImageReclamation()) }}" alt="Image réclamation" style="max-width: 50%; max-height: 50%;">
+                    </div>
                 </div>
-            </div>
+            {% endif %}
 
             <div class="row mb-3">
                 <div class="form-group col-sm-12">
@@ -81,15 +83,14 @@
             </div>
 
             <div class="form-group">
-                <a href="{{ path('typeReclamation') }}" class="btn btn-dark">Retour</a>
-                {{ form_widget(form.envoyer, {'attr': {'class': 'btn btn-primary'}}) }}
+                <a href="{{ path('afficherReclamation') }}" class="btn btn-dark">Retour</a>
+                {{ form_widget(form.modifier, {'attr': {'class': 'btn btn-primary'}}) }}
             </div>
 
             {{ form_end(form) }}
         </div>
     </div>
 </div>
-
 <script>
     function previewImage(input) {
         if (input.files && input.files[0]) {
@@ -103,5 +104,4 @@
         }
     }
 </script>
-
 {% endblock %}

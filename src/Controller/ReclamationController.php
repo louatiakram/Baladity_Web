@@ -6,15 +6,17 @@ use DateTime;
 use App\Entity\enduser;
 use App\Entity\reclamation;
 use App\Form\ReclamationType;
+use App\Form\ReclamationModifierType;
 use App\Repository\ReclamationRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Knp\Component\Pager\PaginatorInterface;
 
 
 class ReclamationController extends AbstractController
@@ -83,14 +85,14 @@ class ReclamationController extends AbstractController
             // Set the image_a field
             $image = $form->get('image_reclamation')->getData();
             if ($image) {
-                // Handle image upload and persist its filename to the database
+                // Gérer le téléchargement de l'image et enregistrer son nom de fichier dans la base de données
                 $fileName = uniqid().'.'.$image->guessExtension();
                 try {
-                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    $image->move($this->getParameter('uploads_directory'), $fileName);
                     $reclamation->setImageReclamation($fileName);
                 } catch (FileException $e) {
-                    // Handle the exception if file upload fails
-                    // For example, log the error or display a flash message
+                    // Gérer l'exception si le téléchargement du fichier échoue
+                    // Par exemple, journaliser l'erreur ou afficher un message flash
                 }
             }
         
@@ -157,6 +159,58 @@ public function afficherReclamation(Request $request, ReclamationRepository $rep
         // Redirect to a success page or return a response as needed
         // For example:
         return $this->redirectToRoute('afficherReclamation');
+    }
+
+    #[Route('/reclamation/modifierReclamation/{id}', name: 'modifierReclamation')]
+    public function modifierReclamation($id, ManagerRegistry $doctrine, Request $request): Response
+    {
+        // Récupérer l'entity manager
+        $entityManager = $doctrine->getManager();
+        
+        // Trouver la réclamation à modifier
+        $reclamation = $entityManager->getRepository(Reclamation::class)->find($id);
+
+        // Vérifier si la réclamation existe
+        if (!$reclamation) {
+            throw $this->createNotFoundException('Reclamation not found');
+        }
+
+        // Créer le formulaire pour modifier la réclamation
+        $form = $this->createForm(ReclamationModifierType::class, $reclamation);
+        $form->handleRequest($request);
+
+        // Vérifier si le formulaire a été soumis et est valide
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Traiter la soumission du formulaire
+            $reclamation->setDateReclamation(new DateTime());
+            
+            // Récupérer le fichier de l'image de réclamation
+            $image = $form->get('image_reclamation')->getData();
+            if ($image) {
+                // Gérer le téléchargement de l'image et enregistrer son nom de fichier dans la base de données
+                $fileName = uniqid().'.'.$image->guessExtension();
+                try {
+                    $image->move($this->getParameter('uploads_directory'), $fileName);
+                    $reclamation->setImageReclamation($fileName);
+                } catch (FileException $e) {
+                    // Gérer l'exception si le téléchargement du fichier échoue
+                    // Par exemple, journaliser l'erreur ou afficher un message flash
+                }
+            }
+
+            // Enregistrer l'objet de réclamation modifié dans la base de données
+            $entityManager->flush();
+
+            // Rediriger vers une page de succès ou afficher un message de succès
+            // Par exemple :
+            return $this->redirectToRoute('afficherReclamation');
+        }
+
+        // Rendre le formulaire et la réclamation à modifier dans le modèle Twig
+        return $this->render('reclamation/modifierReclamation.html.twig', [
+            'form' => $form->createView(),
+            'reclamation' => $reclamation,
+        ]);
     }
 }
 

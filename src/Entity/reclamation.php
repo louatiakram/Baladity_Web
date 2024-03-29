@@ -44,10 +44,6 @@ class reclamation
     private $status_reclamation;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\File(
-        mimeTypes: ['image/png', 'image/jpeg'],
-        mimeTypesMessage: "Veuillez télécharger une image au format valide."
-    )]
     private $image_reclamation;
 
     #[ORM\Column(type: 'string', length: 255)]
