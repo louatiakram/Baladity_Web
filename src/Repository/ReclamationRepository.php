@@ -75,4 +75,13 @@ class ReclamationRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function countByStatus(): array
+    {
+        return $this->createQueryBuilder('r')
+            ->select('r.status_reclamation as status, COUNT(r.id_reclamation) as count')
+            ->groupBy('r.status_reclamation')
+            ->getQuery()
+            ->getResult();
+    }
+    
 }

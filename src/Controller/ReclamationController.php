@@ -222,5 +222,15 @@ public function afficherReclamation(Request $request, ReclamationRepository $rep
         ]);
 
     }
+
+    #[Route('/reclamation/statsReclamation', name: 'statsReclamation')]
+    public function statsReclamation(ReclamationRepository $reclamationRepository): Response
+    {
+        $reclamationStats = $reclamationRepository->countByStatus();
+
+        return $this->render('reclamation/statsReclamation.html.twig', [
+            'reclamationStats' => $reclamationStats,
+        ]);
+    }
 }
 

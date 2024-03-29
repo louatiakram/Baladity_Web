@@ -1,0 +1,53 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Statistiques des Réclamations{% endblock %}
+
+{% block body %}
+<div class="col-lg-6">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Pie Chart - Statistiques des Réclamations</h5>
+
+            <!-- Pie Chart -->
+            <div id="pieChart" style="min-height: 400px;"></div>
+            <!-- End Pie Chart -->
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Récupérer les données de statistiques de réclamation transmises depuis le contrôleur
+        const stats = {{ reclamationStats | json_encode | raw }};
+        // Initialiser le graphique à secteurs (pie chart) avec les données récupérées
+        const pieChart = echarts.init(document.querySelector("#pieChart"));
+        pieChart.setOption({
+            title: {
+                text: 'Statistiques des Réclamations',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            series: [{
+                name: 'Statistiques des Réclamations',
+                type: 'pie',
+                radius: '50%',
+                data: stats.map(entry => ({
+                    value: entry.count,
+                    name: entry.status
+                })),
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        });
+    });
+</script>
+{% endblock %}
