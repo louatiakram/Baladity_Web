@@ -227,9 +227,11 @@ public function afficherReclamation(Request $request, ReclamationRepository $rep
     public function statsReclamation(ReclamationRepository $reclamationRepository): Response
     {
         $reclamationStats = $reclamationRepository->countByStatus();
+        $reclamationStatsDate = $reclamationRepository->countByDate();
 
         return $this->render('reclamation/statsReclamation.html.twig', [
             'reclamationStats' => $reclamationStats,
+            'reclamationStatsDate' => $reclamationStatsDate,
         ]);
     }
 }

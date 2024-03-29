@@ -7,6 +7,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\EntityManagerInterface;
+
 
 /**
  * @extends ServiceEntityRepository<Reclamation>
@@ -18,9 +21,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ReclamationRepository extends ServiceEntityRepository
 {
+    private $entityManager;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Reclamation::class);
+        $this->entityManager = $this->getEntityManager();
+
     }
 
     /**
@@ -83,5 +89,17 @@ class ReclamationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    
+
+    public function countByDate(): array
+{
+    $connection = $this->getEntityManager()->getConnection();
+    $sql = '
+        SELECT DATE(date_reclamation) as date, COUNT(id_reclamation) as count
+        FROM reclamation
+        GROUP BY DATE(date_reclamation)
+    ';
+    $statement = $connection->executeQuery($sql);
+
+    return $statement->fetchAllAssociative();
+}
 }
