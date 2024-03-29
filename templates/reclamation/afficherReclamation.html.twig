@@ -28,6 +28,9 @@
                         <td>{{ reclamation.dateReclamation|date('Y-m-d') }}</td>
                         <td>{{ reclamation.statusReclamation }}</td>
                         <td>
+                            <a href="{{ path('detailReclamation', { id: reclamation.getIdReclamation() }) }}">
+                                <img src="{{ asset('images/detail.png') }}" width="25" height="25">
+                            </a>
                             <a href="{{ path('modifierReclamation', { id: reclamation.getIdReclamation() }) }}">
                                 <img src="{{ asset('images/edit.png') }}" width="25" height="25">
                             </a>

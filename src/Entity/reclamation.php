@@ -66,7 +66,7 @@ class reclamation
         return $this;
     }
 
-    public function getIdUser(): ?int
+    public function getIdUser(): ?enduser
     {
         return $this->id_user;
     }

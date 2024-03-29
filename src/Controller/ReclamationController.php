@@ -212,5 +212,15 @@ public function afficherReclamation(Request $request, ReclamationRepository $rep
             'reclamation' => $reclamation,
         ]);
     }
+
+    #[Route('/reclamation/detailReclamation/{id}', name: 'detailReclamation')]
+    public function detailReclamation($id, ReclamationRepository $rep): Response
+    {
+        $reclamation=$rep->find($id);
+        return $this->render('reclamation/detailReclamation.html.twig', [
+            'reclamation' => $reclamation,
+        ]);
+
+    }
 }
 
