@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Messagerie;
+use App\Entity\messagerie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -20,14 +20,14 @@ class MessagerieRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Messagerie::class);
+        parent::__construct($registry, messagerie::class);
     }
 
     /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(Messagerie $entity, bool $flush = true): void
+    public function add(messagerie $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
         if ($flush) {
@@ -39,7 +39,7 @@ class MessagerieRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(Messagerie $entity, bool $flush = true): void
+    public function remove(messagerie $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
         if ($flush) {
