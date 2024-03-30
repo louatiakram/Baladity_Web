@@ -78,10 +78,10 @@ class EquipementController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-    #[Route('/equipement/deleteEquipement/{i}', name: 'equipement_delete')]
-    public function deleteEquipement($i, EquipementRepository $rep, ManagerRegistry $doctrine): Response
+    #[Route('/equipement/deleteEquipement/{id}', name: 'equipement_delete')]
+public function deleteEquipement($id, EquipementRepository $rep, ManagerRegistry $doctrine): Response
     {
-        $equipement = $rep->find($i);
+        $equipement = $rep->find($id);
     
         if (!$equipement) {
             throw $this->createNotFoundException('Equipement not found');

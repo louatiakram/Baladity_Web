@@ -60,9 +60,7 @@
                                             <i class="bi bi-chat-square-text"></i> Avis
                                         </a>
                                         <!-- Delete button -->
-                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteEquipement('{{ equipement.getIdEquipement()}}')">
-                                            <i class="bi bi-trash"></i> Supprimer
-                                        </button>
+                                        <button onclick="location.href='{{ path('equipement_delete', {'id': equipement.getIdEquipement()})}}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i>Supprimer</button>
                                     {% endblock %}
                                 </div>
                             </div>
@@ -76,14 +74,14 @@
         {% block ListeTalacheNav %}
             <!-- Additional navigation elements if needed -->
         {% endblock %}
-    </main>
+        </main>
 {% endblock %}
 {% block javascript %}
 <script>
     function deleteEquipement(id) {
         if (confirm("Êtes-vous sûr de vouloir supprimer cet équipement?")) {
             // Envoyez une requête AJAX pour supprimer l'équipement
-            fetch(`/equipement/supprimer/${id}`, {
+            fetch(`/equipement/deleteEquipement/${id}`, {
                 method: 'DELETE',
             })
             .then(response => {

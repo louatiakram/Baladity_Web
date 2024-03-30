@@ -30,7 +30,7 @@ class Avis
     #[ORM\JoinColumn(name: 'id_muni', referencedColumnName: 'id_muni')]
     private $id_muni;
 
-    #[ORM\ManyToOne(targetEntity: equipement::class, inversedBy: 'avis_eq', cascade: ['remove'])]
+    #[ORM\ManyToOne(targetEntity: equipement::class, inversedBy: 'avis_eq')]
     #[ORM\JoinColumn(name: 'id_equipement', referencedColumnName: 'id_equipement')]
     private $equipement;
 

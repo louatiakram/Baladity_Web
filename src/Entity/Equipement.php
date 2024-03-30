@@ -45,8 +45,8 @@ class Equipement
     #[ORM\JoinColumn(name: 'id_muni', referencedColumnName: 'id_muni')]
     private $id_muni;
 
-    #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'id_equipement', cascade: ['remove'])]
-    private $avis_eq;
+    //#[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'id_equipement', cascade: ['remove'])]
+    //private $avis_eq;
 
     public function __construct()
     {
