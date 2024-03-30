@@ -63,21 +63,21 @@
 
 
     <!-- ======= Get a Quote Section ======= -->
- {% block body %}
+{% block body %}
 <section class="section">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-5">
                 <img src="{{ asset('front-office/img/Baladia.png') }}" class="img-fluid" alt="">
             </div>
-            <div class="col-lg-7"> <!-- Réduisez la largeur de la colonne pour donner plus de place au formulaire -->
+            <div class="col-lg-7">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Ajouter Publicité</h5>
-                        <form id="advertisementForm" method="POST" action="{{ path('ajouterPub') }}" enctype="multipart/form-data">
+                        <h5 class="card-title">Modifier Publicité</h5>
+<form method="POST" action="{{ path('modifierPub', {'id': publicite.getIdPub()}) }}" enctype="multipart/form-data">
                             {{ form_start(form) }}
                             <div class="mb-3 row">
-                                <label for="inputTitle" class="col-sm-4 col-form-label">Title</label>
+                                <label for="inputTitle" class="col-sm-4 col-form-label">Titre</label>
                                 <div class="col-sm-8">
                                     {{ form_widget(form.titre_pub, {'attr': {'class': 'form-control'}}) }}
                                 </div>
@@ -109,7 +109,6 @@
                                     {{ form_widget(form.localisation_pub, {'attr': {'class': 'form-control'}}) }}
                                 </div>
                             </div>
-            
                             <div class="mb-3 row">
                                 <label for="inputOffer" class="col-sm-4 col-form-label">Offre</label>
                                 <div class="col-sm-8">
@@ -117,14 +116,13 @@
                                 </div>
                             </div>
                             <div class="row justify-content-center">
-    <div class="col-md-6"> <!-- Adjust the column size as needed -->
-        <div class="text-center mt-3">
-            <button type="submit" class="btn btn-primary mr-2">Ajouter</button>
-            <a href="{{ path('app_actualite') }}" class="btn btn-primary">Voir la liste des publicités</a>
-        </div>
-    </div>
-</div>
-             </div>
+                                <div class="col-md-6">
+                                    <div class="text-center mt-3">
+                                        <button type="submit" class="btn btn-primary mr-2">Modifier</button>
+                                        <a href="{{ path('app_actualite') }}" class="btn btn-primary">Retour</a>
+                                    </div>
+                                </div>
+                            </div>
                             {{ form_end(form) }}
                         </form>
                     </div>
@@ -147,6 +145,7 @@
 </script>
 
 {% endblock %}
+
 
 
 

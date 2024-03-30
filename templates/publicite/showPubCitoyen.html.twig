@@ -168,9 +168,17 @@
                                     <li class="list-group-item">Localisation: {{ publicite.getLocalisationPub() }}</li>
                                     <li class="list-group-item">Offre: {{ publicite.getOffrePub() }}</li>
                                 </ul>
-                                <button type="button" class="btn btn-danger mt-3" onclick="deletePublicite('{{ publicite.getIdPub() }}')">
-                                    <i class="bi bi-trash"></i> Supprimer
-                                </button>
+                             <button type="button" class="btn btn-primary mt-3" onclick="window.location.href='{{ path('modifierPub', {'id': publicite.getIdPub() }) }}'">
+    <i class="bi bi-pencil"></i> Modifier
+</button>
+
+<button type="button" class="btn btn-danger mt-3" onclick="deletePublicite('{{ publicite.getIdPub() }}')">
+    <i class="bi bi-trash"></i> Supprimer
+</button>
+
+
+
+
                             </div>
                         </div>
                         {% endfor %}
@@ -183,15 +191,30 @@
     <!-- Add the button here -->
     <div class="text-center mt-3">
         <a href="{{ path('ajouterPub') }}" class="btn btn-primary">Ajouter Publicité</a>
+        <a href="{{ path('app_actualite') }}" class="btn btn-primary">Retour</a>
     </div>
 
     {% block ListeTalacheNav %}
     
     {% endblock %}
 </main>
-
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function deletePublicite(id) {
+        $.ajax({
+            url: '/publicite/deletePub/' + id,
+            type: 'DELETE',
+            success: function(response) {
+                // Refresh the page or update the advertisement list as needed
+                location.reload(); // This will refresh the page
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+                // Handle errors if needed
+            }
+        });
+    }
+</script>
 <script>
     $(document).ready(function () {
         var index = 0;

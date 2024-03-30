@@ -109,17 +109,60 @@ class PubliciteController extends AbstractController
        
             $em->persist($publicite);
             $em->flush();
-    
-            // Redirect to a success page or display a success message
-            // For example:
-            return $this->redirectToRoute('publicite_show');
 
+            return $this->redirectToRoute('app_actualite');
+           
+        
         }
     
         return $this->render('publicite/ajouterPub.html.twig', [
             'form' => $form->createView()
         ]);
     }
+    #[Route('/publicite/modifierPub/{id}', name: 'modifierPub')]
+
+    public function modifierPub($id, ManagerRegistry $doctrine, Request $request): Response
+
+{
+    $entityManager = $doctrine->getManager();
+    $publicite = $entityManager->getRepository(Publicite::class)->find($id);
+
+    if (!$publicite) {
+        throw $this->createNotFoundException('Publicité not found');
+    }
+
+    // Create the form for modifying the actualite
+    $form = $this->createForm(PubliciteType::class, $publicite);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+    
+        $image = $form->get('image_pub')->getData();
+        if ($image) {
+            // Handle image upload and persist its filename to the database
+            $fileName = uniqid().'.'.$image->guessExtension();
+            try {
+                $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                $actualite->getImagePub($fileName);
+            } catch (FileException $e) {
+                // Handle the exception if file upload fails
+                // For example, log the error or display a flash message
+            }
+        }
+
+        // Persist the modified actualite object to the database
+        $entityManager->flush();
+
+        // Redirect to a success page or display a success message
+        // For example:
+        return $this->redirectToRoute('app_publicite');
+    }
+
+    return $this->render('publicite/modifierPub.html.twig', [
+        'form' => $form->createView(),
+        'publicite' => $publicite,
+    ]);
+}
     #[Route('/showPubCitoyen', name: 'app_publicite')]
 public function index1(PubliciteRepository $repository): Response
 {
