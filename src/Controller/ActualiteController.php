@@ -181,5 +181,27 @@ public function index1(ActualiteRepository $repository): Response
         
     ]);
 }
+#[Route('/actualiteResponsable', name: 'app_actualiteResponsable')]
+public function index2(ActualiteRepository $repository, FormFactoryInterface $formFactory): Response
+{
+    $actualites = $repository->findAll(); // Fetch all actualités from the repository
+
+    // Create an empty form object for rendering in the template
+    $form = $formFactory->create(ActualiteType::class);
+   // return $this->redirectToRoute('actualite_show');
+    return $this->render('actualite/AjouterAResponsable.html.twig', [
+        'form' => $form->createView(),
+        'actualites' => $actualites,
+    ]);
+}
+#[Route('/actualite/responsable', name: 'app_actualiteResponsableshow')]
+public function showResponsable(ActualiteRepository $repository): Response
+{
+    $actualites = $repository->findAll(); // Fetch all actualités from the repository
+
+    return $this->render('actualite/showAResponsable.html.twig', [
+        'actualites' => $actualites,
+    ]);
+}
 
     } 

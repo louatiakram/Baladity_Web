@@ -173,4 +173,14 @@ public function index1(PubliciteRepository $repository): Response
         
     ]);
 }
+#[Route('/showPubResponsable', name: 'app_publiciteResponsable')]
+public function index2(PubliciteRepository $repository): Response
+{
+    $publicites = $repository->findAll(); // Fetch all actualités from the repository
+
+    return $this->render('publicite/showPubResponsable.html.twig', [
+        'publicites' => $publicites,
+        
+    ]);
+}
 }
