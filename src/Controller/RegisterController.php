@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\enduser;
-use App\Entity\muni;
 use App\Form\RegisterType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

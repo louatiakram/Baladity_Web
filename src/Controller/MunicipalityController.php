@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\muni;
+use App\Form\AjoutMuniFormType;
 use App\Repository\MunicipalityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,8 +21,30 @@ class MunicipalityController extends AbstractController
         ]);
     }
 
+    #[Route('/ajoutMunicipality', name: 'ajouter_municipality')]
+    public function ajout(ManagerRegistry $doctrine, Request $request): Response
+    {
+        $muni = new muni();
+
+        $form = $this->createForm(AjoutMuniFormType::class, $muni);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($muni);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('afficher_muni');
+        }
+
+        return $this->render('municipality/ajouterMuni.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+
     #[Route('/afficherMuni', name: 'afficher_muni')]
-    public function add(MunicipalityRepository $Rep): Response
+    public function afficherMuni(MunicipalityRepository $Rep): Response
     {
         $muni = $Rep->findAll();
         return $this->render('municipality/afficherMunicipality.html.twig', [

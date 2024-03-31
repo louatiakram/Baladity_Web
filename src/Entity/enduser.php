@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\EndUserRepository;
+use App\Repository\enduserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: EndUserRepository::class)]
+#[ORM\Entity(repositoryClass: enduserRepository::class)]
 class enduser
 {
     #[ORM\Id]

@@ -225,7 +225,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                            <a class="dropdown-item d-flex align-items-center" href="{{ path('profile_user') }}">
                                 <i class="bi bi-person"></i>
                                 <span>My Profile</span>
                             </a>
@@ -294,11 +294,6 @@
                 <ul id="GestionUser-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="{{ path('afficher_user') }}">
-                            <i class="bi bi-circle"></i><span>Ajouter User</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ path('afficher_user') }}">
                             <i class="bi bi-circle"></i><span>Liste User</span>
                         </a>
                     </li>
@@ -313,7 +308,7 @@
                 </a>
                 <ul id="GestionMuni-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="{{ path('afficher_muni') }}">
+                        <a href="{{ path('ajouter_municipality') }}">
                             <i class="bi bi-circle"></i><span>Ajouter Municipalité</span>
                         </a>
                     </li>
