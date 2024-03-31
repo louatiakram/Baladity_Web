@@ -24,7 +24,7 @@ class MessagerieModificationType extends AbstractType
                 'html5' => false, // Désactiver le support HTML5 pour une compatibilité maximale
                 'format' => 'yyyy-MM-dd HH:mm:ss' // Format de la date et de l'heure
             ])
-            ->add('envoyer', SubmitType::class);
+            ->add('modifier', SubmitType::class);
         
         ;
         

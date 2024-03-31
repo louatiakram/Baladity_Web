@@ -1,0 +1,65 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Ajouter un message{% endblock %}
+
+{% block body %}
+<div class="pagetitle">
+    <h1>Ajouter un message</h1>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Les éléments du message</h5>
+
+        <div class="container">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    {{ form_label(form.senderId_message, "Expéditeur", {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.senderId_message, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    {{ form_label(form.receiverId_message, "Destinataire", {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.receiverId_message, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    {{ form_label(form.contenu_message, "Contenu", {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.contenu_message, {'attr': {'class': 'form-control'}}) }}
+                    {% if form_errors(form.contenu_message) is not empty %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form.contenu_message) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    {{ form_label(form.type_message, "Type de message", {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.type_message, {'attr': {'class': 'form-control'}}) }}
+                    {% if form_errors(form.type_message) is not empty %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form.type_message) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <a href="{{ path('afficherReclamation') }}" class="btn btn-dark">Retour</a>
+                {{ form_widget(form.envoyer, {'attr': {'class': 'btn btn-primary'}}) }}
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

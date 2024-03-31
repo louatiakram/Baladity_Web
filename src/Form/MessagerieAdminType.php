@@ -24,12 +24,6 @@ class MessagerieAdminType extends AbstractType
         'choice_label'=>'nom_user'])
         ->add('contenu_message')
         ->add('type_message')
-        ->add('date_message', DateTimeType::class, [ // Utilisez DateTimeType au lieu de DateType
-            'label' => 'Date du message',
-            'widget' => 'single_text', // Utiliser un widget simple pour la sélection de date
-            'html5' => false, // Désactiver le support HTML5 pour une compatibilité maximale
-            'format' => 'yyyy-MM-dd HH:mm:ss' // Format de la date et de l'heure
-        ])
         ->add('envoyer', SubmitType::class)
 
         ;

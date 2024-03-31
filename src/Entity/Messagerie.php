@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\MessagerieRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: MessagerieRepository::class)]
 class messagerie
@@ -17,6 +19,7 @@ class messagerie
     private $date_message;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Le contenu du message ne peut pas être vide.")]
     private $contenu_message;
 
     #[ORM\ManyToOne(targetEntity: enduser::class)]
@@ -28,6 +31,7 @@ class messagerie
     private $senderId_message;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Le type de message ne peut pas être vide.")]
     private $type_message;
 
     public function getIdMessage(): ?int
@@ -71,7 +75,7 @@ class messagerie
         return $this->receiverId_message;
     }
 
-    public function setReceiverIdMessage(int $receiverId_message): self
+    public function setReceiverIdMessage(EndUser $receiverId_message): self
     {
         $this->receiverId_message = $receiverId_message;
 
@@ -83,10 +87,10 @@ class messagerie
         return $this->senderId_message;
     }
 
-    public function setSenderIdMessage(int $senderId_message): self
+    public function setSenderIdMessage(?Enduser $senderIdMessage): self
     {
-        $this->senderId_message = $senderId_message;
-
+        $this->senderId_message = $senderIdMessage;
+    
         return $this;
     }
 

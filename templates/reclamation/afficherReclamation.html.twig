@@ -8,7 +8,13 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">Tableau des réclamations</h5>
-
+        <div class="container-fluid mb-3 d-flex justify-content-end">
+            <a href="{{path('ajouterMessage')}}" class="btn btn-primary">
+                Ajouter un message
+                <img src="{{ asset('images/comment.png') }}" width="25" height="25" class="ml-1">
+            </a>
+        </div>
+    
         <!-- Table with hoverable rows -->
         <table class="table table-hover">
             <thead>

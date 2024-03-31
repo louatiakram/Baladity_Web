@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\messagerie;
+use App\Form\MessagerieAdminType;
 use App\Form\MessagerieModificationType;
 use App\Repository\MessagerieRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -91,5 +93,38 @@ public function supprimerMessagerie(int $id, MessagerieRepository $messagerieRep
 
     // Rediriger vers la page d'affichage des messages ou une autre page appropriée
     return $this->redirectToRoute('afficherReclamation');
+}
+#[Route('/messagerie/ajouterMessage', name: 'ajouterMessage')]
+public function ajouterMessage(Request $request): Response
+{
+    $messagerie = new messagerie();
+
+    // Récupérer l'utilisateur actuellement connecté
+    $currentUser = $this->getUser();
+
+    // Définir l'utilisateur actuel comme expéditeur du message
+    $messagerie->setSenderIdMessage($currentUser);
+
+    // Récupérez la date et l'heure actuelles
+    $dateHeureActuelles = new DateTime();
+
+    // Définissez la date et l'heure dans l'entité Messagerie
+    $messagerie->setDateMessage($dateHeureActuelles);
+
+    $form = $this->createForm(MessagerieAdminType::class, $messagerie);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($messagerie);
+        $entityManager->flush();
+
+        // Redirection vers la page d'affichage des messages
+        return $this->redirectToRoute('afficherReclamation');
+    }
+
+    return $this->render('messagerie/ajouterMessagerie.html.twig', [
+        'form' => $form->createView(),
+    ]);
 }
 }
