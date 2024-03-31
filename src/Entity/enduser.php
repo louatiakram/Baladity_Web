@@ -149,4 +149,5 @@ class enduser
         $this->isBanned = $isBanned;
         return $this;
     }
+    
 }

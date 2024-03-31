@@ -1,0 +1,46 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Modifier un message{% endblock %}
+
+{% block body %}
+    <div class="pagetitle">
+        <h1>Modifier un message</h1>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Les éléments du message</h5>
+
+            <div class="container">
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                <div class="row mb-3">
+                    <div class="form-group col-sm-12">
+                        {{ form_label(form.contenu_message, "Contenu du message", {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.contenu_message, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="form-group col-sm-12">
+                        {{ form_label(form.type_message, "Type de message", {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.type_message, {'attr': {'class': 'form-select'}}) }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="form-group col-sm-12">
+                        {{ form_label(form.date_message, "Date du message", {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.date_message, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form_widget(form.envoyer, {'attr': {'class': 'btn btn-primary'}}) }}
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

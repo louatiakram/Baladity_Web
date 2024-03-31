@@ -27,6 +27,12 @@
                         <td>{{ message.getReceiverIdMessage().getNomUser() }}</td>
                         <td>{{ message.getDateMessage()|date('Y-m-d H:i:s') }}</td>
                         <td>{{ message.getContenuMessage() }}</td>
+                        <td><a href="{{ path('modifierMessagerie', { id: message.getIdMessage() }) }}">
+                            <img src="{{ asset('images/edit.png') }}" width="25" height="25">
+                        </a>
+                        <a href="{{ path('supprimerMessagerie', { id: message.getIdMessage() }) }}">
+                            <img src="{{ asset('images/delete.png') }}" width="25" height="25">
+                        </a></td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -11,17 +11,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
-class MessagerieType extends AbstractType
+class MessagerieAdminType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
         ->add('senderId_message', EntityType::class,[
             'class'=>enduser::class,
-        'choice_label'=>'username'])
+        'choice_label'=>'nom_user'])
         ->add('receiverId_message', EntityType::class,[
             'class'=>enduser::class,
-        'choice_label'=>'username'])
+        'choice_label'=>'nom_user'])
         ->add('contenu_message')
         ->add('type_message')
         ->add('date_message', DateTimeType::class, [ // Utilisez DateTimeType au lieu de DateType
