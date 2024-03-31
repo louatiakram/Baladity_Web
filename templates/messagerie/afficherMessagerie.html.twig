@@ -1,0 +1,37 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Messagerie{% endblock %}
+
+{% block body %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Messages entre utilisateurs</h5>
+
+        <!-- Table with hoverable rows -->
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Expéditeur</th>
+                    <th scope="col">Destinataire</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Contenu</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for message in messages %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ message.getSenderIdMessage().getNomUser() }}</td>
+                        <td>{{ message.getReceiverIdMessage().getNomUser() }}</td>
+                        <td>{{ message.getDateMessage()|date('Y-m-d H:i:s') }}</td>
+                        <td>{{ message.getContenuMessage() }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- End Table with hoverable rows -->
+    </div>
+</div>
+{% endblock %}

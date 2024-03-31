@@ -75,6 +75,12 @@ class EndUserRepository extends ServiceEntityRepository
         ;
     }
     */
-
-
+    public function findDirectors(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.type_user = :type')
+            ->setParameter('type', 'directeur')
+            ->getQuery()
+            ->getResult();
+    }
 }

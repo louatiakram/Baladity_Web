@@ -6,14 +6,14 @@ use App\Repository\MessagerieRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MessagerieRepository::class)]
-class Messagerie
+class messagerie
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id_message;
 
-    #[ORM\Column(type: 'date')]
+    #[ORM\Column(type: 'datetime')]
     private $date_message;
 
     #[ORM\Column(type: 'string', length: 255)]

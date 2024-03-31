@@ -13,6 +13,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,7 +43,7 @@ class ReclamationController extends AbstractController
         $reclamation = new Reclamation();
 
         // Récupérer l'identifiant de l'utilisateur (à remplacer par votre logique d'identification)
-        $userId = 48; 
+        $userId = 50; 
         $user = $this->getDoctrine()->getRepository(EndUser::class)->find($userId);
     
         if (!$user) {
@@ -234,5 +235,11 @@ public function afficherReclamation(Request $request, ReclamationRepository $rep
             'reclamationStatsDate' => $reclamationStatsDate,
         ]);
     }
+    #[Route('/reclamation/redirectMessagerie/{id}', name: 'redirectMessagerie')]
+public function redirectMessagerie(int $id): RedirectResponse
+{
+    // Rediriger vers la route afficherMessagerie du contrôleur MessagerieController
+    return $this->redirectToRoute('afficherMessagerie', ['id' => $id]);
+}
 }
 
