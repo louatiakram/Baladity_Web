@@ -20,7 +20,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 
-
 class ReclamationController extends AbstractController
 {
     #[Route('/reclamation', name: 'app_reclamation')]
