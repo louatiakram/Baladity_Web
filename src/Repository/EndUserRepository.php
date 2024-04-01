@@ -7,16 +7,19 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
- * @extends ServiceEntityRepository<enduser>
+ * @extends ServiceEntityRepository<Enduser>
  *
- * @method enduser|null find($id, $lockMode = null, $lockVersion = null)
- * @method enduser|null findOneBy(array $criteria, array $orderBy = null)
- * @method enduser[]    findAll()
- * @method enduser[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Enduser|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Enduser|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Enduser[]    findAll()
+ * @method Enduser[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class enduserRepository extends ServiceEntityRepository
+class enduserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -47,8 +50,22 @@ class enduserRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * Used to upgrade (rehash) the user's password automatically over time.
+     */
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    {
+        if (!$user instanceof enduser) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
+        }
+
+        $user->setPassword($newHashedPassword);
+        $this->_em->persist($user);
+        $this->_em->flush();
+    }
+
     // /**
-    //  * @return enduser[] Returns an array of enduser objects
+    //  * @return Enduser[] Returns an array of Enduser objects
     //  */
     /*
     public function findByExampleField($value)
@@ -65,7 +82,7 @@ class enduserRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?enduser
+    public function findOneBySomeField($value): ?Enduser
     {
         return $this->createQueryBuilder('e')
             ->andWhere('e.exampleField = :val')
@@ -75,6 +92,4 @@ class enduserRepository extends ServiceEntityRepository
         ;
     }
     */
-
-
 }

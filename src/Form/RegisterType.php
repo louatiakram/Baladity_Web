@@ -31,15 +31,15 @@ class RegisterType extends AbstractType
                 'label' => 'Password', // Customize the label
                 // Add more options if needed (e.g., required, constraints)
             ])
-            ->add('type_user', ChoiceType::class, [
-                'label' => 'User Type',
-                'choices' => [
-                    'Citoyen' => 'Citoyen',
-                    'Directeur' => 'Directeur',
-                    'Employé' => 'Employé',
-                    'Responsable employé' => 'Responsable employé',
-                ],
-            ])
+            //->add('type_user', ChoiceType::class, [
+            //    'label' => 'User Type',
+            //    'choices' => [
+            //        'Citoyen' => 'Citoyen',
+            //        'Directeur' => 'Directeur',
+            //        'Employé' => 'Employé',
+            //        'Responsable employé' => 'Responsable employé',
+            //    ],
+            //])
             ->add('phoneNumber_user', TextType::class, [    
                 'label' => 'Phone Number', // Customize the label
                 // Add more options if needed (e.g., required, constraints)

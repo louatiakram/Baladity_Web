@@ -29,7 +29,7 @@ class LoginController extends AbstractController
     {
 
         // Create an instance of the Enduser entity
-        $user = new Enduser();
+        $user = new enduser();
 
         // Get any authentication error message
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -46,7 +46,7 @@ class LoginController extends AbstractController
             
 
             // Retrieve the user from the database based on the provided email
-            $userRepository = $doctrine->getRepository(Enduser::class);
+            $userRepository = $doctrine->getRepository(enduser::class);
             $user = $userRepository->findOneBy(['email_user' => $emailSaisie]);
 
             // Check if a user with the provided email exists
@@ -54,6 +54,8 @@ class LoginController extends AbstractController
                 // Verify if the password from the form matches the hashed password stored in the database
                 $hashedPassword = $user->getPassword();
                 if ($passwordSaisie == $hashedPassword) {
+                    // Password is correct, store user ID in session
+                    $request->getSession()->set('user_id', $user->getIdUser());
                     // Password is correct, redirect the user to the app_main route
                     return $this->redirectToRoute('app_main');
                 } else {
