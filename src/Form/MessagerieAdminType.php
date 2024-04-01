@@ -8,6 +8,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
@@ -23,7 +26,17 @@ class MessagerieAdminType extends AbstractType
             'class'=>enduser::class,
         'choice_label'=>'nom_user'])
         ->add('contenu_message')
-        ->add('type_message')
+        ->add('type_message', ChoiceType::class, [
+                'label' => 'Type de message',
+                'placeholder' => 'Type de message',
+                'choices' => [
+                    'vocal' => 'vocal',
+                    'text' => 'text',
+                ]
+        ])
+        ->add('date_message', HiddenType::class, [
+            'mapped' => false, // Assurez-vous que le champ ne soit pas mappé à une propriété de l'entité
+        ])
         ->add('envoyer', SubmitType::class)
 
         ;

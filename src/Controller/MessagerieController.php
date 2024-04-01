@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
+
 
 class MessagerieController extends AbstractController
 {
@@ -23,16 +25,25 @@ class MessagerieController extends AbstractController
     }
 
     #[Route('/messagerie/afficherMessagerie/{id}', name: 'afficherMessagerie')]
-    public function afficherMessagerie(int $id,MessagerieRepository $messagerieRepository): Response
-    {
-        $userId2 = 49;
-        // Récupérer les messages entre les deux utilisateurs
-        $messages = $messagerieRepository->findByUsers($id, $userId2);
+public function afficherMessagerie(int $id, MessagerieRepository $messagerieRepository, PaginatorInterface $paginator, Request $request): Response
+{
+    $userId2 = 49;
 
-        return $this->render('messagerie/afficherMessagerie.html.twig', [
-            'messages' => $messages,
-        ]);
-    }
+    // Récupérer les messages entre les deux utilisateurs
+    $messagesQuery = $messagerieRepository->findByUsers($id, $userId2);
+
+    // Paginer les résultats
+    $messages = $paginator->paginate(
+        $messagesQuery, // Doctrine Query object
+        $request->query->getInt('page', 1), // Numéro de page actuel
+        10 // Nombre d'éléments par page
+    );
+
+    return $this->render('messagerie/afficherMessagerie.html.twig', [
+        'messages' => $messages,
+        'id' => $id, // Passer l'identifiant de l'utilisateur à la vue
+    ]);
+}
     #[Route('/messagerie/modifierMessagerie/{id}', name: 'modifierMessagerie')]
     public function modifierMessagerie(int $id, Request $request): Response
 {
@@ -105,22 +116,32 @@ public function ajouterMessage(Request $request): Response
     // Définir l'utilisateur actuel comme expéditeur du message
     $messagerie->setSenderIdMessage($currentUser);
 
-    // Récupérez la date et l'heure actuelles
-    $dateHeureActuelles = new DateTime();
-
-    // Définissez la date et l'heure dans l'entité Messagerie
-    $messagerie->setDateMessage($dateHeureActuelles);
-
     $form = $this->createForm(MessagerieAdminType::class, $messagerie);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($messagerie);
-        $entityManager->flush();
-
-        // Redirection vers la page d'affichage des messages
-        return $this->redirectToRoute('afficherReclamation');
+        $datePickerValue = $request->request->get('datePicker');
+        $timePickerValue = $request->request->get('timePicker');
+        
+        // Créer une chaîne de date et d'heure au format complet (YYYY-MM-DD HH:MM:SS)
+        $dateTimeString = $datePickerValue . ' ' . $timePickerValue;
+        
+        // Convertir la chaîne en objet DateTime
+        $dateMessage = \DateTime::createFromFormat('Y-m-d H:i', $dateTimeString);
+        
+        // Vérifier si la conversion a réussi
+        if ($dateMessage instanceof \DateTime) {
+            // Définir la valeur de date_message dans l'entité messagerie
+            $messagerie->setDateMessage($dateMessage);
+        
+            // Persister l'entité messagerie
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($messagerie);
+            $entityManager->flush();
+        
+            // Redirection vers la page d'affichage des messages
+            return $this->redirectToRoute('afficherReclamation');
+        }
     }
 
     return $this->render('messagerie/ajouterMessagerie.html.twig', [

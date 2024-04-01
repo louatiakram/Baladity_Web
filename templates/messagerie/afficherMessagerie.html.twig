@@ -22,22 +22,47 @@
             <tbody>
                 {% for message in messages %}
                     <tr>
-                        <th scope="row">{{ loop.index }}</th>
+                        <th scope="row">{{ (messages.currentPageNumber - 1) * messages.getItemNumberPerPage() + loop.index }}</th>
                         <td>{{ message.getSenderIdMessage().getNomUser() }}</td>
                         <td>{{ message.getReceiverIdMessage().getNomUser() }}</td>
                         <td>{{ message.getDateMessage()|date('Y-m-d H:i:s') }}</td>
                         <td>{{ message.getContenuMessage() }}</td>
-                        <td><a href="{{ path('modifierMessagerie', { id: message.getIdMessage() }) }}">
-                            <img src="{{ asset('images/edit.png') }}" width="25" height="25">
-                        </a>
-                        <a href="{{ path('supprimerMessagerie', { id: message.getIdMessage() }) }}">
-                            <img src="{{ asset('images/delete.png') }}" width="25" height="25">
-                        </a></td>
+                        <td>
+                            <a href="{{ path('modifierMessagerie', { id: message.getIdMessage() }) }}">
+                                <img src="{{ asset('images/edit.png') }}" width="25" height="25">
+                            </a>
+                            <a href="{{ path('supprimerMessagerie', { id: message.getIdMessage() }) }}">
+                                <img src="{{ asset('images/delete.png') }}" width="25" height="25">
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
         <!-- End Table with hoverable rows -->
+
+     <!-- Pagination -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item {% if messages.currentPageNumber == 1 %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('afficherMessagerie', {'id': id, 'page': 1}) }}" aria-label="Previous">
+                <span aria-hidden="true">«</span>
+            </a>
+        </li>
+        {% for page in 1..messages.pageCount %}
+            <li class="page-item {% if page == messages.currentPageNumber %}active{% endif %}">
+                <a class="page-link" href="{{ path('afficherMessagerie', {'id': id, 'page': page}) }}">{{ page }}</a>
+            </li>
+        {% endfor %}
+        <li class="page-item {% if messages.currentPageNumber == messages.pageCount %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('afficherMessagerie', {'id': id, 'page': messages.pageCount}) }}" aria-label="Next">
+                <span aria-hidden="true">»</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+<!-- End Pagination -->
+
     </div>
 </div>
 {% endblock %}
