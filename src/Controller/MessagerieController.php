@@ -5,13 +5,14 @@ namespace App\Controller;
 use DateTime;
 use App\Entity\messagerie;
 use App\Form\MessagerieAdminType;
+use Symfony\Component\Form\FormError;
 use App\Form\MessagerieModificationType;
 use App\Repository\MessagerieRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Knp\Component\Pager\PaginatorInterface;
 
 
 class MessagerieController extends AbstractController
@@ -44,13 +45,14 @@ public function afficherMessagerie(int $id, MessagerieRepository $messagerieRepo
         'id' => $id, // Passer l'identifiant de l'utilisateur à la vue
     ]);
 }
-    #[Route('/messagerie/modifierMessagerie/{id}', name: 'modifierMessagerie')]
-    public function modifierMessagerie(int $id, Request $request): Response
+
+#[Route('/messagerie/modifierMessagerie/{id}', name: 'modifierMessagerie')]
+public function modifierMessagerie(int $id, Request $request): Response
 {
     $entityManager = $this->getDoctrine()->getManager();
 
     // Trouver la messagerie à modifier
-    $messagerie = $entityManager->getRepository(messagerie::class)->find($id);
+    $messagerie = $entityManager->getRepository(Messagerie::class)->find($id);
 
     // Vérifier si la messagerie existe
     if (!$messagerie) {
@@ -63,20 +65,30 @@ public function afficherMessagerie(int $id, MessagerieRepository $messagerieRepo
 
     // Vérifier si le formulaire a été soumis et est valide
     if ($form->isSubmitted() && $form->isValid()) {
-        // Traiter la soumission du formulaire
-        $data = $form->getData();
-
-        // Mettre à jour les champs nécessaires de l'objet de messagerie
-        $messagerie->setContenuMessage($data->getContenuMessage());
-        $messagerie->setTypeMessage($data->getTypeMessage());
-        $messagerie->setDateMessage($data->getDateMessage());
-
-        // Enregistrer l'objet de messagerie modifié dans la base de données
-        $entityManager->flush();
-
-        // Rediriger vers une page de succès ou afficher un message de succès
-        // Par exemple :
-        return $this->redirectToRoute('afficherReclamation');
+        // Récupérer les valeurs de date et d'heure du formulaire
+        $datePickerValue = $request->request->get('datePicker');
+        $timePickerValue = $request->request->get('timePicker');
+        
+        // Concaténer la date et l'heure pour former une datetime complète
+        $dateTimeString = $datePickerValue . ' ' . $timePickerValue;
+        
+        // Convertir la chaîne en objet DateTime
+        $dateMessage = \DateTime::createFromFormat('Y-m-d H:i', $dateTimeString);
+        
+        // Vérifier si la conversion a réussi
+        if ($dateMessage instanceof \DateTime) {
+            // Définir la valeur de date_message dans l'entité messagerie
+            $messagerie->setDateMessage($dateMessage);
+        
+            // Mettre à jour la messagerie dans la base de données
+            $entityManager->flush();
+        
+            // Redirection vers la page d'affichage des messages
+            return $this->redirectToRoute('afficherReclamation');
+        } else {
+            // Si la conversion a échoué, ajouter une erreur au formulaire
+            $form->addError(new FormError('Invalid date or time format'));
+        }
     }
 
     // Rendre le formulaire et la messagerie à modifier dans le modèle Twig
@@ -85,6 +97,7 @@ public function afficherMessagerie(int $id, MessagerieRepository $messagerieRepo
         'messagerie' => $messagerie,
     ]);
 }
+
 
 #[Route('/messagerie/supprimerMessagerie/{id}', name: 'supprimerMessagerie')]
 public function supprimerMessagerie(int $id, MessagerieRepository $messagerieRepository): Response

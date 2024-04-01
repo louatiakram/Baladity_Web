@@ -29,11 +29,20 @@
                 </div>
 
                 <div class="row mb-3">
-                    <div class="form-group col-sm-12">
-                        {{ form_label(form.date_message, "Date du message", {'label_attr': {'class': 'form-label'}}) }}
-                        {{ form_widget(form.date_message, {'attr': {'class': 'form-control'}}) }}
+                    <div class="col-sm-10">
+                        <label for="datePicker" class="form-label">Date:</label>
+                        <input type="date" id="datePicker" name="datePicker" class="form-control">
                     </div>
                 </div>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-10">
+                        <label for="timePicker" class="form-label">Heure:</label>
+                        <input type="time" id="timePicker" name="timePicker" class="form-control">
+                    </div>
+                </div>
+                
+                {{ form_widget(form.date_message, {'attr': {'class': 'form-control', 'id': 'form_date_message', 'type': 'hidden'}}) }}
 
                 <div class="form-group">
                     {{ form_widget(form.modifier, {'attr': {'class': 'btn btn-primary'}}) }}
@@ -43,4 +52,17 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            $('form').submit(function(e) {
+                var dateValue = $('#datePicker').val();
+                var timeValue = $('#timePicker').val();
+                var dateTimeValue = dateValue + ' ' + timeValue;
+                $('#form_date_message').val(dateTimeValue);
+            });
+        });
+    </script>
 {% endblock %}
