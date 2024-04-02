@@ -31,7 +31,7 @@
                             <a href="{{ path('modifierMessagerie', { id: message.getIdMessage() }) }}">
                                 <img src="{{ asset('images/edit.png') }}" width="25" height="25">
                             </a>
-                            <a href="{{ path('supprimerMessagerie', { id: message.getIdMessage() }) }}">
+                            <a href="#" onclick="return confirmDelete('{{ path('supprimerMessagerie', { id: message.getIdMessage() }) }}');">
                                 <img src="{{ asset('images/delete.png') }}" width="25" height="25">
                             </a>
                         </td>
@@ -65,4 +65,17 @@
 
     </div>
 </div>
+
+<script>
+    function confirmDelete(url) {
+        // Afficher une boîte de dialogue de confirmation
+        if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
+            // Rediriger vers l'URL de suppression si l'utilisateur clique sur "OK"
+            window.location.href = url;
+            return true;
+        }
+        // Annuler l'action de suppression si l'utilisateur clique sur "Annuler"
+        return false;
+    }
+</script>
 {% endblock %}

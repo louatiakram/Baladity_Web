@@ -21,10 +21,16 @@ class MessagerieAdminType extends AbstractType
         $builder
         ->add('senderId_message', EntityType::class,[
             'class'=>enduser::class,
-        'choice_label'=>'nom_user'])
+            'choice_label' => function ($enduser) {
+                // Si c'est un directeur, affiche "Directeur", sinon, affiche le nom de l'utilisateur
+                return $enduser->getTypeUser() === 'directeur' ? 'Directeur' : $enduser->getNomUser();
+            }])
         ->add('receiverId_message', EntityType::class,[
             'class'=>enduser::class,
-        'choice_label'=>'nom_user'])
+      'choice_label' => function ($enduser) {
+                    // Si c'est un directeur, affiche "Directeur", sinon, affiche le nom de l'utilisateur
+                    return $enduser->getTypeUser() === 'directeur' ? 'Directeur' : $enduser->getNomUser();
+                }])
         ->add('contenu_message')
         ->add('type_message', ChoiceType::class, [
                 'label' => 'Type de message',

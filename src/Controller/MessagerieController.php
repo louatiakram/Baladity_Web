@@ -84,7 +84,7 @@ public function modifierMessagerie(int $id, Request $request): Response
             $entityManager->flush();
         
             // Redirection vers la page d'affichage des messages
-            return $this->redirectToRoute('afficherReclamation');
+            return $this->redirectToRoute('afficherMessagerie', ['id' => $messagerie->getSenderIdMessage()->getIdUser()]);
         } else {
             // Si la conversion a échoué, ajouter une erreur au formulaire
             $form->addError(new FormError('Invalid date or time format'));
@@ -116,7 +116,7 @@ public function supprimerMessagerie(int $id, MessagerieRepository $messagerieRep
     $entityManager->flush();
 
     // Rediriger vers la page d'affichage des messages ou une autre page appropriée
-    return $this->redirectToRoute('afficherReclamation');
+    return $this->redirectToRoute('afficherMessagerie', ['id' => $message->getSenderIdMessage()->getIdUser()]);
 }
 #[Route('/messagerie/ajouterMessage', name: 'ajouterMessage')]
 public function ajouterMessage(Request $request): Response
