@@ -4,9 +4,39 @@
 
 {% block body %}
     <h1>Modifier Événement</h1>
+
     {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button type="submit" class="btn btn-primary">Enregistrer</button>
-    <a href="{{ path('evenement_list') }}" class="btn btn-secondary">Annuler</a>
+    <div class="mb-3">
+        {{ form_label(form.nom_E, 'Nom de l\'Événement') }}
+        {{ form_widget(form.nom_E, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.nom_E) }}  {# Affiche les erreurs pour le champ nom_E #}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.date_DHE, 'Date de début de l\'Événement') }}
+        {{ form_widget(form.date_DHE, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.date_DHE) }}  {# Affiche les erreurs pour le champ date_DHE #}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.date_DHF, 'Date de fin de l\'Événement') }}
+        {{ form_widget(form.date_DHF, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.date_DHF) }}  {# Affiche les erreurs pour le champ date_DHF #}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.capacite_E, 'Capacité de l\'Événement') }}
+        {{ form_widget(form.capacite_E, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.capacite_E) }}  {# Affiche les erreurs pour le champ capacite_E #}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.categorie_E, 'Catégorie de l\'Événement') }}
+        {{ form_widget(form.categorie_E, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.categorie_E) }}  {# Affiche les erreurs pour le champ categorie_E #}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.imageEvent, 'Image de l\'Événement') }}
+        {{ form_widget(form.imageEvent, {'attr': {'class': 'form-control', 'accept': 'image/*'}}) }}
+        {{ form_errors(form.imageEvent) }}  {# Affiche les erreurs pour le champ imageEvent #}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Modifier</button>
     {{ form_end(form) }}
 {% endblock %}
