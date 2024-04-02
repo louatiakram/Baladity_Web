@@ -60,19 +60,20 @@
                     <strong>Image de la réclamation:</strong>
                 </div>
                 <div class="col-sm-8">
-                    <img src="{{ asset('uploads/' ~ reclamation.imageReclamation) }}" alt="Image réclamation" style="max-width: 50%;">
+                    <img src="{{ asset('uploads/' ~ reclamation.imageReclamation) }}" style="max-width: 50%;">
                 </div>
             </div>
 
+            
             <div class="row mb-3">
                 <div class="col-sm-4">
                     <strong>Adresse de la réclamation:</strong>
                 </div>
                 <div class="col-sm-8">
                     {{ reclamation.adresseReclamation }}
+                    <a href="{{ path('TomTomAPI', {'adresse': reclamation.adresseReclamation}) }}" class="btn btn-primary">Voir l'adresse</a>
                 </div>
             </div>
-           
             {# Ajoutez d'autres informations sur la réclamation si nécessaire #}
 
             <div class="form-group">
