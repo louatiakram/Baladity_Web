@@ -27,7 +27,8 @@
                 <th scope="col">Date de fin</th>
                 <th scope="col">Capacité</th>
                 <th scope="col">Catégorie</th>
-                <th scope="col">Image</th> <!-- Nouvelle colonne pour l'image -->
+                <th scope="col">Image</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -45,11 +46,14 @@
                             Aucune image
                         {% endif %}
                     </td>
-                    
+                    <td>
+                        <a href="{{ path('modifier_evenement', {id: evenement.getId()}) }}" class="btn btn-primary">Modifier</a>
+                        <a href="{{ path('supprimer_evenement', {id: evenement.getId()}) }}" class="btn btn-danger">Supprimer</a>
+                    </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="6">Aucun événement trouvé.</td>
+                    <td colspan="7">Aucun événement trouvé.</td>
                 </tr>
             {% endfor %}
         </tbody>

@@ -86,4 +86,50 @@ public function ajouter(Request $request, EntityManagerInterface $entityManager)
         'form' => $form->createView(),
     ]);
 }
+#[Route('/evenement/supprimer/{id}', name: 'supprimer_evenement')]
+public function supprimerEvenement($id, EntityManagerInterface $entityManager): Response
+{
+    $evenement = $entityManager->getRepository(Evenement::class)->find($id);
+
+    if (!$evenement) {
+        throw $this->createNotFoundException('Événement non trouvé avec l\'id : '.$id);
+    }
+
+    $entityManager->remove($evenement);
+    $entityManager->flush();
+
+    // Ajoutez un message flash pour confirmer la suppression
+    $this->addFlash('success', 'L\'événement a été supprimé avec succès.');
+
+    return $this->redirectToRoute('evenement_list');
+}
+
+#[Route('/evenement/modifier/{id}', name: 'modifier_evenement')]
+public function modifierEvenement($id, Request $request, EntityManagerInterface $entityManager): Response
+{
+    $evenement = $entityManager->getRepository(Evenement::class)->find($id);
+
+    if (!$evenement) {
+        throw $this->createNotFoundException('Événement non trouvé avec l\'id : '.$id);
+    }
+
+    // Créer un formulaire pour modifier l'événement
+    $form = $this->createForm(EvenementType::class, $evenement);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Persist the updated evenement object to the database
+        $entityManager->flush();
+
+        // Ajouter un message flash pour confirmer la modification
+        $this->addFlash('success', 'L\'événement a été modifié avec succès.');
+
+        return $this->redirectToRoute('evenement_list');
+    }
+
+    return $this->render('evenement/modifier.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+
 }
