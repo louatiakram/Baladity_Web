@@ -226,15 +226,17 @@ public function afficherReclamation(Request $request, ReclamationRepository $rep
 
     #[Route('/reclamation/statsReclamation', name: 'statsReclamation')]
     public function statsReclamation(ReclamationRepository $reclamationRepository): Response
-    {
-        $reclamationStats = $reclamationRepository->countByStatus();
-        $reclamationStatsDate = $reclamationRepository->countByDate();
+{
+    $reclamationStats = $reclamationRepository->countByStatus();
+    $reclamationStatsDate = $reclamationRepository->countByDate();
+    $reclamationStatsMonth = $reclamationRepository->countByMonth();
 
-        return $this->render('reclamation/statsReclamation.html.twig', [
-            'reclamationStats' => $reclamationStats,
-            'reclamationStatsDate' => $reclamationStatsDate,
-        ]);
-    }
+    return $this->render('reclamation/statsReclamation.html.twig', [
+        'reclamationStats' => $reclamationStats,
+        'reclamationStatsDate' => $reclamationStatsDate,
+        'reclamationStatsMonth' => $reclamationStatsMonth,
+    ]);
+}
     #[Route('/reclamation/redirectMessagerie/{id}', name: 'redirectMessagerie')]
 public function redirectMessagerie(int $id): RedirectResponse
 {

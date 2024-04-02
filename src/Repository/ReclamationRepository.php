@@ -91,7 +91,7 @@ class ReclamationRepository extends ServiceEntityRepository
     }
 
     public function countByDate(): array
-{
+    {
     $connection = $this->getEntityManager()->getConnection();
     $sql = '
         SELECT DATE(date_reclamation) as date, COUNT(id_reclamation) as count
@@ -101,5 +101,17 @@ class ReclamationRepository extends ServiceEntityRepository
     $statement = $connection->executeQuery($sql);
 
     return $statement->fetchAllAssociative();
-}
+    }
+public function countByMonth(): array
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $sql = '
+            SELECT MONTH(date_reclamation) as month, COUNT(id_reclamation) as count
+            FROM reclamation
+            GROUP BY MONTH(date_reclamation)
+        ';
+        $statement = $connection->executeQuery($sql);
+
+        return $statement->fetchAllAssociative();
+    }
 }
