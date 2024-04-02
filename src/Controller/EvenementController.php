@@ -139,5 +139,20 @@ public function supprimerEvenement($id, EntityManagerInterface $entityManager): 
             'form' => $form->createView(),
         ]);
     }
+    
+    #[Route('/evenement/details/{id}', name: 'details_evenement')]
+public function detailsEvenement($id, EntityManagerInterface $entityManager): Response
+{
+    $evenement = $entityManager->getRepository(Evenement::class)->find($id);
+
+    if (!$evenement) {
+        throw $this->createNotFoundException('Événement non trouvé avec l\'id : '.$id);
+    }
+
+    return $this->render('evenement/details.html.twig', [
+        'evenement' => $evenement,
+    ]);
+}
+
 
 }

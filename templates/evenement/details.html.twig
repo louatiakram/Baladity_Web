@@ -1,0 +1,21 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Détails de l'Événement{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>{{ evenement.getNomE() }}</h1>
+        <p>Date de début : {{ evenement.getDateDHE()|date('d/m/Y') }}</p>
+        <p>Date de fin : {{ evenement.getDateDHF()|date('d/m/Y') }}</p>
+        <p>Capacité : {{ evenement.getCapaciteE() }}</p>
+        <p>Catégorie : {{ evenement.getCategorieE() }}</p>
+        {% block evenement_image %}
+            {% if evenement.getImageEvent() %}
+                <img src="{{ asset('uploads/' ~ evenement.getImageEvent()) }}" alt="Image de l'événement" style="max-width: 400px;">
+            {% else %}
+                Aucune image disponible
+            {% endif %}
+        {% endblock %}
+        <!-- Ajoutez d'autres détails de l'événement ici -->
+    </div>
+{% endblock %}

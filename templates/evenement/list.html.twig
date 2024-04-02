@@ -2,60 +2,63 @@
 
 {% block title %}Liste des Événements{% endblock %}
 
-{% block searchbar %}
-    <!-- Votre code pour la barre de recherche -->
-{% endblock %}
-
-{% block TacheNavState %}
-    <!-- Votre code pour la navigation de tâche -->
-{% endblock %}
-
-{% block TacheContentState %}
-    <!-- Votre code pour le contenu de la tâche -->
-{% endblock %}
-
-{% block ListeTacheNav %}
-    <!-- Votre code pour la liste des tâches -->
-{% endblock %}
-
 {% block body %}
-    <table class="table table-hover">
-        <thead>
-            <tr class="table-primary">
-                <th scope="col">Nom</th>
-                <th scope="col">Date de début</th>
-                <th scope="col">Date de fin</th>
-                <th scope="col">Capacité</th>
-                <th scope="col">Catégorie</th>
-                <th scope="col">Image</th>
-                <th scope="col">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for evenement in evenements %}
-                <tr>
-                    <td>{{ evenement.getNomE() }}</td>
-                    <td>{{ evenement.getDateDHE()|date('d/m/Y') }}</td>
-                    <td>{{ evenement.getDateDHF()|date('d/m/Y') }}</td>
-                    <td>{{ evenement.getCapaciteE() }}</td>
-                    <td>{{ evenement.getCategorieE() }}</td>
-                    <td>
-                        {% if evenement.getImageEvent() %}
-                            <img src="{{ asset('uploads/' ~ evenement.getImageEvent()) }}" alt="Image de l'événement" style="max-width: 200px; max-height: 200px;">
-                        {% else %}
-                            Aucune image
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{{ path('modifier_evenement', {id: evenement.getId()}) }}" class="btn btn-primary">Modifier</a>
-                        <a href="{{ path('supprimer_evenement', {id: evenement.getId()}) }}" class="btn btn-danger">Supprimer</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="7">Aucun événement trouvé.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <main id="main" class="main">
+        <br>
+        <h1 class="card-title" style="text-align: center; font-size: 2em;">La liste des événements</h1>
+        <br>
+
+        <!-- Button to navigate to the "ajouter" form -->
+        <div class="text-center">
+            <a href="{{ path('ajouter_evenement') }}" class="btn btn-primary">Ajouter événement</a>
+        </div>
+
+        <br>
+
+        <div class="col-10 mx-auto"> <!-- Adjusted column width -->
+            <div class="card">
+                <div class="card-body">
+                    {% block evenement_list %}
+                        {% for evenement in evenements %}
+                            <div class="row">
+                                <div class="col-md-5"> <!-- Adjusted column width -->
+                                    <div class="d-flex flex-column">
+                                        {% block evenement_image %}
+                                            {% if evenement.getImageEvent() %}
+                                                <img src="{{ asset('uploads/' ~ evenement.getImageEvent()) }}" class="img-thumbnail" alt="Image de l'événement" style="width: 100%; max-width: 400px;">
+                                            {% else %}
+                                                Aucune image disponible
+                                            {% endif %}
+                                        {% endblock %}
+                                    </div>
+                                </div>
+                                <div class="col-md-7"> <!-- Adjusted column width -->
+                                    <h4 class="card-title" style="font-size: 1.5rem; margin-bottom: 10px;">{{ evenement.getNomE() }}</h4>
+                                    {% block evenement_actions %}
+                                    <!-- Modify button -->
+                                    <a href="{{ path('modifier_evenement', {'id': evenement.getId()}) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil"></i> Modifier
+                                    </a>
+                                    <!-- Details button -->
+                                    <a href="{{ path('details_evenement', {'id': evenement.getId()}) }}" class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-info-circle"></i> Détails
+                                    </a>
+                                    <!-- Delete button -->
+                                    <a href="#" onclick="deleteEvenement('{{ evenement.getId() }}')" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i> Supprimer
+                                    </a>
+                                    {% endblock %}
+                                </div>
+                            </div>
+                            <hr> <!-- Horizontal line between event items -->
+                        {% endfor %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
+        {% block ListeTacheNav %}
+            <!-- Additional navigation elements if needed -->
+        {% endblock %}
+    </main>
 {% endblock %}
