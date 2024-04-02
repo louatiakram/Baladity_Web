@@ -1,0 +1,57 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Liste des Événements{% endblock %}
+
+{% block searchbar %}
+    <!-- Votre code pour la barre de recherche -->
+{% endblock %}
+
+{% block TacheNavState %}
+    <!-- Votre code pour la navigation de tâche -->
+{% endblock %}
+
+{% block TacheContentState %}
+    <!-- Votre code pour le contenu de la tâche -->
+{% endblock %}
+
+{% block ListeTacheNav %}
+    <!-- Votre code pour la liste des tâches -->
+{% endblock %}
+
+{% block body %}
+    <table class="table table-hover">
+        <thead>
+            <tr class="table-primary">
+                <th scope="col">Nom</th>
+                <th scope="col">Date de début</th>
+                <th scope="col">Date de fin</th>
+                <th scope="col">Capacité</th>
+                <th scope="col">Catégorie</th>
+                <th scope="col">Image</th> <!-- Nouvelle colonne pour l'image -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for evenement in evenements %}
+                <tr>
+                    <td>{{ evenement.getNomE() }}</td>
+                    <td>{{ evenement.getDateDHE()|date('d/m/Y') }}</td>
+                    <td>{{ evenement.getDateDHF()|date('d/m/Y') }}</td>
+                    <td>{{ evenement.getCapaciteE() }}</td>
+                    <td>{{ evenement.getCategorieE() }}</td>
+                    <td>
+                        {% if evenement.getImageEvent() %}
+                            <img src="{{ asset('uploads/' ~ evenement.getImageEvent()) }}" alt="Image de l'événement" style="max-width: 200px; max-height: 200px;">
+                        {% else %}
+                            Aucune image
+                        {% endif %}
+                    </td>
+                    
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">Aucun événement trouvé.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

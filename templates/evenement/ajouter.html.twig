@@ -1,0 +1,37 @@
+{# templates/evenement/ajouter.html.twig #}
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Ajouter un Événement{% endblock %}
+
+{% block body %}
+    <h1>Ajouter un Événement</h1>
+
+    {{ form_start(form) }}
+    <div class="mb-3">
+        {{ form_label(form.nom_E, 'Nom de l\'Événement') }}
+        {{ form_widget(form.nom_E, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.date_DHE, 'Date de début de l\'Événement') }}
+        {{ form_widget(form.date_DHE, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.date_DHF, 'Date de fin de l\'Événement') }}
+        {{ form_widget(form.date_DHF, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.capacite_E, 'Capacité de l\'Événement') }}
+        {{ form_widget(form.capacite_E, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.categorie_E, 'Catégorie de l\'Événement') }}
+        {{ form_widget(form.categorie_E, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.imageEvent, 'Image de l\'Événement') }}
+        {{ form_widget(form.imageEvent, {'attr': {'class': 'form-control', 'accept': 'image/*'}}) }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Ajouter</button>
+    {{ form_end(form) }}
+{% endblock %}
