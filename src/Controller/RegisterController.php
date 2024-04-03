@@ -7,6 +7,7 @@ use App\Form\RegisterType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,6 +25,7 @@ class RegisterController extends AbstractController
          $user->setTypeUser('Citoyen');
          
         $form = $this->createForm(RegisterType::class, $user);
+        $form->remove('type_user'); // Remove the 'type_user' field from the form
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -40,6 +42,21 @@ class RegisterController extends AbstractController
                 return $this->render('register/register.html.twig', [
                     'form' => $form->createView()
                 ]);
+            }
+
+            
+            $image = $form->get('image_user')->getData();
+            if ($image) {
+                // Handle image upload and persist its filename to the database
+                $fileName = uniqid().'.'.$image->guessExtension();
+                try {
+                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    // Set the image filename to the user entity
+                    $user->setImageUser($fileName);
+                } catch (FileException $e) {
+                    // Handle the exception if file upload fails
+                    // For example, log the error or display a flash message
+                }
             }
 
                 $entityManager = $doctrine->getManager();

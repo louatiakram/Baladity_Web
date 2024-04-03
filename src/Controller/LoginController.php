@@ -56,8 +56,15 @@ class LoginController extends AbstractController
                 if ($passwordSaisie == $hashedPassword) {
                     // Password is correct, store user ID in session
                     $request->getSession()->set('user_id', $user->getIdUser());
-                    // Password is correct, redirect the user to the app_main route
-                    return $this->redirectToRoute('app_main');
+
+                    // Password is correct
+                    if($user->getTypeUser() == "Admin"){
+                        //redirect the user to the app_main route
+                        return $this->redirectToRoute('app_main');
+                    }else{
+                        //redirect the user to the app_main route
+                        return $this->redirectToRoute('app_main');
+                    }
                 } else {
                     // Add a form error for incorrect password
                     $form->addError(new FormError('Invalid email or password.'));

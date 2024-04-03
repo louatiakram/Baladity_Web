@@ -7,6 +7,7 @@ use App\Form\AjoutMuniFormType;
 use App\Repository\MunicipalityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,6 +31,21 @@ class MunicipalityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $image = $form->get('imagee_user')->getData();
+            if ($image) {
+                // Handle image upload and persist its filename to the database
+                $fileName = uniqid().'.'.$image->guessExtension();
+                try {
+                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    // Set the image filename to the user entity
+                    $muni->setImageeuser($fileName);
+                } catch (FileException $e) {
+                    // Handle the exception if file upload fails
+                    // For example, log the error or display a flash message
+                }
+            }
+
             $entityManager = $doctrine->getManager();
             $entityManager->persist($muni);
             $entityManager->flush();
@@ -43,13 +59,48 @@ class MunicipalityController extends AbstractController
     }
 
 
-    #[Route('/afficherMuni', name: 'afficher_muni')]
+    #[Route('/listMuni', name: 'afficher_muni')]
     public function afficherMuni(MunicipalityRepository $Rep): Response
     {
         $muni = $Rep->findAll();
         return $this->render('municipality/afficherMunicipality.html.twig', [
             'controller_name' => 'AuthorController',
             'munis' => $muni
+        ]);
+    }
+
+    #[Route('/listMunicipalité/detail/{i}', name: 'muni_detail')]
+    public function detail($i, MunicipalityRepository $rep): Response
+    {
+        $muni = $rep->find($i);
+        if (!$muni) {
+            throw $this->createNotFoundException('Task not found');
+        }
+
+        return $this->render('municipality/detail.html.twig', ['muni' => $muni]);
+    }
+
+    #[Route('/update/{i}', name: 'update_muni')]
+    public function editAuthor(MunicipalityRepository $Rep,$i,ManagerRegistry $doc,Request $req): Response
+    {
+        $municipality = $doc->getRepository(muni::class)->find($i);
+
+        // Create a form based on the AuthorType and populate it with the existing author data
+        //créer $form en se basant sur la classe généré et $ author
+        $form = $this->createForm(AjoutMuniFormType::class, $municipality);
+        $form->handleRequest($req);
+        
+       
+        if($form->isSubmitted() && $form->isValid()){
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+
+            return $this->redirectToRoute('app_affiche');
+        }
+        return $this->renderForm('municipality/edit.html.twig', [
+            'form' => $form,
         ]);
     }
 

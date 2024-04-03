@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class RegisterType extends AbstractType
 {
@@ -31,15 +32,15 @@ class RegisterType extends AbstractType
                 'label' => 'Password', // Customize the label
                 // Add more options if needed (e.g., required, constraints)
             ])
-            //->add('type_user', ChoiceType::class, [
-            //    'label' => 'User Type',
-            //    'choices' => [
-            //        'Citoyen' => 'Citoyen',
-            //        'Directeur' => 'Directeur',
-            //        'Employé' => 'Employé',
-            //        'Responsable employé' => 'Responsable employé',
-            //    ],
-            //])
+            ->add('type_user', ChoiceType::class, [
+                'label' => 'User Type',
+                'choices' => [
+                    'Citoyen' => 'Citoyen',
+                    'Directeur' => 'Directeur',
+                    'Employé' => 'Employé',
+                    'Responsable employé' => 'Responsable employé',
+                ],
+            ])
             ->add('phoneNumber_user', TextType::class, [    
                 'label' => 'Phone Number', // Customize the label
                 // Add more options if needed (e.g., required, constraints)
@@ -57,9 +58,10 @@ class RegisterType extends AbstractType
                 'label' => 'Location', // Customize the label
                 // Add more options if needed (e.g., required, constraints)
             ])
-            ->add('image_user', TextType::class, [
-                'label' => 'Image URL', // Customize the label
-                // Add more options if needed (e.g., required, constraints)
+            ->add('image_user', FileType::class, [ // Add FileType for image upload
+                'label' => 'Image URL',
+                'mapped' => false, // This means it won't be mapped to an entity property directly
+                'required' => false, // It's not required
             ]);
     }
 
