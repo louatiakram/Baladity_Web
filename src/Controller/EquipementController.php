@@ -17,6 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormError;
+use Doctrine\ORM\EntityManagerInterface;
 
 class EquipementController extends AbstractController
 {
@@ -180,4 +181,84 @@ public function detailEquipement($id, EquipementRepository $equipementRepository
         'equipement' => $equipement,
     ]);
 }
- } 
+#[Route('/equipement/use/{id}', name: 'equipement_use')]
+public function useEquipement($id, EquipementRepository $rep, EntityManagerInterface $entityManager): JsonResponse
+{
+    $equipement = $rep->find($id);
+
+    if (!$equipement) {
+        return new JsonResponse(['error' => 'Equipement not found'], Response::HTTP_NOT_FOUND);
+    }
+
+    // Vérifier si la quantité de l'équipement est supérieure à zéro
+    if ($equipement->getQuantiteEq() <= 0) {
+        return new JsonResponse(['error' => 'Cannot use equipment, quantity is zero'], Response::HTTP_BAD_REQUEST);
+    }
+
+    // Mettez en œuvre votre logique pour marquer l'équipement comme utilisé ici
+    // Par exemple, décrémentez la quantité de l'équipement
+    $equipement->setQuantiteEq($equipement->getQuantiteEq() - 1);
+
+    // Persistez les modifications dans la base de données
+    $entityManager->flush();
+
+    return new JsonResponse(['message' => 'Equipement marked as used successfully']);
+}
+#[Route('/equipement/return/{id}', name: 'equipement_return')]
+public function returnEquipement($id, EquipementRepository $rep, EntityManagerInterface $entityManager): JsonResponse
+{
+    $this->logger->info('Reached the returnEquipement function.'); 
+    $equipement = $rep->find($id);
+
+    if (!$equipement) {
+        return new JsonResponse(['error' => 'Equipement not found'], Response::HTTP_NOT_FOUND);
+    }
+    
+    // Définir la quantité initiale
+    $quantiteInitiale = 0; // Vous pouvez initialiser cette valeur à ce que vous voulez
+
+    // Récupérer la quantité initiale de l'équipement si la méthode getQuantiteEq() existe
+    if (method_exists($equipement, 'getQuantiteEq')) {
+        $quantiteInitiale = $equipement->getQuantiteEq();
+    } 
+
+    // Mettez en œuvre votre logique pour rendre l'équipement ici
+    $equipement->setQuantiteEq($quantiteInitiale);
+
+    // Persistez les modifications dans la base de données
+    $entityManager->flush();
+
+    return new JsonResponse(['message' => 'Equipement marked as returned successfully', 'quantiteInitiale' => $quantiteInitiale]);
+}
+#[Route('/equipement/showEquipementFront', name: 'equipement_show_front')]
+public function showEquipementFront(Request $request, EquipementRepository $repository): Response
+{
+    $query = $request->query->get('query');
+    $currentPage = $request->query->getInt('page', 1);
+    $limit = 10; // Nombre d'équipements par page
+
+    // Récupérer les équipements en fonction de la recherche et de la pagination
+    if ($query) {
+        $equipements = $repository->findByTitre($query, $limit, ($currentPage - 1) * $limit);
+        $totalEquipements = count($equipements); // Mise à jour du nombre total d'équipements
+    } else {
+        $equipements = $repository->findAllPaginated($limit, ($currentPage - 1) * $limit);
+        $totalEquipements = $repository->countAll(); // Mise à jour du nombre total d'équipements
+    }
+    
+    // Calculer et transmettre la quantité initiale pour chaque équipement
+    foreach ($equipements as $equipement) {
+        $equipement->quantiteInitiale = $equipement->getQuantiteEq();
+    }
+
+    // Calculer le nombre total de pages
+    $totalPages = ceil($totalEquipements / $limit);
+
+    return $this->render('equipement/showEquipementFront.html.twig', [
+        'equipements' => $equipements,
+        'query' => $query,
+        'currentPage' => $currentPage,
+        'totalPages' => $totalPages,
+    ]);
+}
+} 

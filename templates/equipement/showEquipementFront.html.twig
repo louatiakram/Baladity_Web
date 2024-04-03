@@ -1,0 +1,141 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Liste des équipements{% endblock %}
+
+{% block body %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <br>
+    <h1 class="card-title" style="text-align: center; font-size: 2em;">La liste des équipements</h1>
+    <br>
+
+    <div class="col-10 mx-auto"> <!-- Adjusted column width -->
+        <div class="card">
+            <div class="card-body">
+                {% block equipement_list %}
+                    {% for equipement in equipements %}
+                        <div class="row">
+                            <div class="col-md-10"> <!-- Adjusted column width -->
+                                <div class="d-flex flex-column">
+                                    {% block equipement_image %}
+                                        {% if equipement.getImageEq() %}
+                                            {% set fileExtension = equipement.getImageEq()|split('.')|last %}
+                                            {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
+                                                <img src="{{ asset('uploads/' ~ equipement.getImageEq()) }}" class="img-thumbnail" alt="Image" style="width: 100%; max-width: 400px;"> <!-- Adjusted max-width -->
+                                            {% elseif fileExtension == 'pdf' %}
+                                                <a href="{{ asset('uploads/' ~ equipement.getImageEq()) }}">View PDF</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endblock %}
+                                </div>
+                            </div>
+                            <div class="col-md-15"> <!-- Adjusted column width -->
+                                <h4 class="card-title" style="font-size: 1.5rem; margin-bottom: 10px;">{{ equipement.getNomEq() }}</h4>
+                                <p class="card-text" style="margin-top: 5px;">
+                                    Référence: {{ equipement.getReferenceEq() }}<br>
+                                    Catégorie: {{ equipement.getCategorieEq() }}<br>
+                                    Quantité: {{ equipement.getQuantiteEq() }}<br>
+                                    <!-- Ajoutez d'autres attributs disponibles ici -->
+                                </p>
+
+                                {% block equipement_actions %}
+                                    <!-- Detail button -->
+                                    <a href="{{ path('equipement_detail', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-info-circle"></i> Détails
+                                    </a>
+                                    <!-- Use button -->
+                                     <button {% if equipement.quantiteInitiale == 0 %}disabled{% endif %}
+                                        onclick="equipement_use({{ equipement.getIdEquipement() }})"
+                                        data-quantite-initiale="{{ equipement.quantiteInitiale }}"
+                                        class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-briefcase"></i> Utiliser
+                                    </button>
+                                    <!-- Render button -->
+                                     <button {% if equipement.getQuantiteEq() == equipement.quantiteInitiale %}disabled{% endif %}
+                                        onclick="equipement_return({{ equipement.getIdEquipement() }})"
+                                        data-quantite-initiale="{{ equipement.quantiteInitiale }}"
+                                        class="btn btn-sm btn-outline-warning">
+                                        <i class="bi bi-arrow-repeat"></i> Rendre
+                                    </button>
+                                    <!-- Avis button -->
+                                    <a href="{{ path('avis_show_front', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-chat-square-text"></i> Avis
+                                    </a>
+                                {% endblock %}
+                            </div>
+                        </div>
+                        <hr> <!-- Horizontal line between equipment items -->
+                    {% endfor %}
+                {% endblock %}
+                <!-- Pagination -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item {% if currentPage == 1 %}disabled{% endif %}">
+                            <a class="page-link" href="{{ path('equipement_show', {'page': 1}) }}" aria-label="Previous">
+                                <span aria-hidden="true">«</span>
+                            </a>
+                        </li>
+                        {% for page in 1..totalPages %}
+                            <li class="page-item {% if page == currentPage %}active{% endif %}">
+                                <a class="page-link" href="{{ path('equipement_show', {'page': page}) }}">{{ page }}</a>
+                            </li>
+                        {% endfor %}
+                        <li class="page-item {% if currentPage == totalPages %}disabled{% endif %}">
+                            <a class="page-link" href="{{ path('equipement_show', {'page': totalPages}) }}" aria-label="Next">
+                                <span aria-hidden="true">»</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- End Pagination -->
+            </div>
+        </div>
+    </div>
+
+    {% block ListeTalacheNav %}
+        <!-- Additional navigation elements if needed -->
+    {% endblock %} 
+
+    <script>
+       function equipement_use(idEquipement) {
+    var quantiteInitiale = $(`#equipement-${idEquipement}`).data('quantite-initiale');
+
+    // Effectuez une requête AJAX pour utiliser l'équipement avec l'ID donné
+    // Par exemple, vous pouvez utiliser jQuery pour effectuer une requête AJAX
+    $.ajax({
+        url: "/equipement/use/" + idEquipement,
+        method: "GET",
+        success: function(response) {
+            // Traitez la réponse si nécessaire
+            alert(response.message); // Affichez un message de succès
+            location.reload(); // Rechargez la page après avoir utilisé l'équipement
+        },
+        error: function(xhr, status, error) {
+            // Gérez les erreurs
+            console.error(xhr.responseText); // Affichez l'erreur dans la console
+            alert("Une erreur s'est produite lors de l'utilisation de l'équipement.");
+        }
+    });
+}
+
+function equipement_return(idEquipement) {
+    var quantiteInitiale = $(`#equipement-${idEquipement}`).data('quantite-initiale');
+
+    // Effectuez une requête AJAX pour rendre l'équipement avec l'ID donné
+    // Par exemple, vous pouvez utiliser jQuery pour effectuer une requête AJAX
+    $.ajax({
+        url: "/equipement/return/" + idEquipement,
+        method: "GET",
+        success: function(response) {
+            // Traitez la réponse si nécessaire
+            alert(response.message); // Affichez un message de succès
+            location.reload(); // Rechargez la page après avoir rendu l'équipement
+        },
+        error: function(xhr, status, error) {
+            // Gérez les erreurs
+            console.error(xhr.responseText); // Affichez l'erreur dans la console
+            alert("Une erreur s'est produite lors du retour de l'équipement.");
+        }
+    });
+}
+    </script>
+{% endblock %}

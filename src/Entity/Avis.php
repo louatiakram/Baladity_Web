@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AvisRepository;
+use App\Entity\Equipement;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AvisRepository::class)]
