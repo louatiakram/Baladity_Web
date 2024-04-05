@@ -79,6 +79,17 @@ class TacheController extends AbstractController
         return $this->render('tache/detail.html.twig', ['tache' => $tache]);
     }
 
+    #[Route('/tache/detailfront/{i}', name: 'tache_detail_front')]
+    public function detailfront($i, TacheRepository $rep): Response
+    {
+        $tache = $rep->find($i);
+        if (!$tache) {
+            throw $this->createNotFoundException('Tache Existe Pas');
+        }
+
+        return $this->render('tache/detailfront.html.twig', ['tache' => $tache]);
+    }
+
     #[Route('/tache/add', name: 'tache_add')]
     public function add(Request $req, ManagerRegistry $doctrine): Response
     {
