@@ -79,6 +79,7 @@ class ActualiteController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+    
     #[Route('/actualite/deleteA/{i}', name: 'actualite_delete')]
     public function deleteA($i, ActualiteRepository $rep, ManagerRegistry $doctrine): Response
     {
@@ -188,20 +189,60 @@ public function index2(ActualiteRepository $repository, FormFactoryInterface $fo
 
     // Create an empty form object for rendering in the template
     $form = $formFactory->create(ActualiteType::class);
+    
    // return $this->redirectToRoute('actualite_show');
     return $this->render('actualite/AjouterAResponsable.html.twig', [
         'form' => $form->createView(),
         'actualites' => $actualites,
     ]);
 }
-#[Route('/actualite/responsable', name: 'app_actualiteResponsableshow')]
-public function showResponsable(ActualiteRepository $repository): Response
+#[Route('/showAResponsable', name: 'app_actualiteshowResponsable')]
+public function index3(ActualiteRepository $repository): Response
 {
     $actualites = $repository->findAll(); // Fetch all actualités from the repository
 
-    return $this->render('actualite/showAResponsable.html.twig', [
+    return $this->render('actualite/ShowAResponsable.html.twig', [
         'actualites' => $actualites,
+        
+    ]);
+}
+#[Route('/actualite/search', name: 'search_actualites')]
+public function search(Request $request, ActualiteRepository $repository): Response
+{
+    $query = $request->query->get('query');
+
+    // Fetch the current page number from the query parameters
+    $currentPage = $request->query->getInt('page', 1);
+
+    // Assuming you have logic to calculate the total number of pages, let's say it's stored in $totalPages
+    $totalPages = 10; 
+    if ($query) {
+        $actualites = $repository->findByTitre($query); // Replace with appropriate method
+    } else {
+        // If no search query is provided, fetch all actualites
+        $actualites = $repository->findAll();
+    }
+
+    return $this->render('actualite/search.html.twig', [
+        'actualites' => $actualites,
+        'query' => $query,
+        'currentPage' => $currentPage, // Pass the currentPage variable to the Twig template
+        'totalPages' => $totalPages, // Pass the totalPages variable to the Twig template
+    ]);
+}
+#[Route('/ModifierResponsable', name: 'ModifierResponsable')]
+// Controller action
+public function index4(ActualiteRepository $repository, FormFactoryInterface $formFactory): Response {
+    $actualites = $repository->findAll(); // Fetch all actualités from the repository
+    
+    // Assuming $form is created using the form factory
+    $form = $formFactory->create(ActualiteType::class);
+
+    return $this->render('actualite/modifierAResponsable.html.twig', [
+        'actualites' => $actualites,
+        'form' => $form->createView(), // Pass the form variable to the template
     ]);
 }
 
-    } 
+
+ }

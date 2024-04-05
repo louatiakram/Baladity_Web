@@ -155,46 +155,49 @@
                 <h2>Dernières Actualités</h2>
             </div>
 
+            <!-- Search Form -->
+            <form action="{{ path('search_actualites') }}" method="GET" class="mb-4">
+                <div class="input-group">
+                    <input type="text" name="query" class="form-control" placeholder="Rechercher...">
+                    <button type="submit" class="btn btn-primary">Rechercher</button>
+                </div>
+            </form>
+
             <div class="row">
                 {% for actualite in actualites %}
-                <div class="col-lg-4 col-md-6">
-                    <div class="card mb-4 h-100">
-                        <img src="{{ asset('uploads/' ~ actualite.getImageA()) }}" class="card-img-top" alt="...">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ actualite.getTitreA() }}</h5>
-                            <p class="card-text">{{ actualite.getDescriptionA() }}</p>
-                            <p class="card-text"><small class="text-muted">Date: {{ actualite.getDateA()|date('Y-m-d') }}</small></p>
-   <div class="mt-auto text-center d-flex justify-content-between">
-    <!-- Button to view the publicite -->
-    <a href="{{ path('app_publiciteResponsable1', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-info">
-        <i class="bi bi-info-circle"></i> Voir Publicités
-    </a>   
-
-    <!-- Button to modify the actualite -->
-    <a href="{{ path('modifierA', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-outline-primary">
-        <i class="bi bi-pencil"></i> Modifier
-    </a>
-
-    <!-- Button to delete the actualite item -->
-    <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteActualite('{{ actualite.getIdA() }}')">
-        <i class="bi bi-trash"></i> Supprimer
-    </button>
-</div>
-
-</div>
-                
-</div>
-
-
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card mb-4 h-100">
+                            <img src="{{ asset('uploads/' ~ actualite.getImageA()) }}" class="card-img-top" alt="...">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ actualite.getTitreA() }}</h5>
+                                <p class="card-text">{{ actualite.getDescriptionA() }}</p>
+                                <p class="card-text"><small class="text-muted">Date: {{ actualite.getDateA()|date('Y-m-d') }}</small></p>
+                                <div class="mt-auto text-center"> <!-- Alignement des boutons au centre -->
+                                    <a href="{{ path('app_publiciteResponsable', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-info"> <!-- Bouton pour voir les publicités -->
+                                        <i class="bi bi-info-circle"></i> Voir Publicités
+                                    </a>
+                                    <a href="{{ path('ModifierResponsable', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-outline-primary"> <!-- Bouton pour modifier -->
+                                        <i class="bi bi-pencil"></i> Modifier
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteActualite('{{ actualite.getIdA() }}')"> <!-- Bouton pour supprimer -->
+                                        <i class="bi bi-trash"></i> Supprimer
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
                 {% endfor %}
             </div>
         </div>
     </section><!-- End Actualites Section -->
-    
 </main>
+
+
+
+
+
+
+
 <script>
     function deleteActualite(actualiteId) {
         // Perform an AJAX request to delete the actualite

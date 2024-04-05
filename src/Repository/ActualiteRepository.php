@@ -75,4 +75,23 @@ class ActualiteRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findByTitreA($titreA)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.titre_a LIKE :titreA')
+            ->setParameter('titreA', '%' . $titreA . '%')
+            ->orderBy('a.date_a', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    // Define a custom method to fetch actualités based on the titre_a field
+    public function findByTitre($titre)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.titre_a = :titre')
+            ->setParameter('titre', $titre)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ActualiteRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ActualiteRepository::class)]
 class actualite
 {
@@ -14,15 +14,28 @@ class actualite
     private $id_a;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Vous devez ajouter une description.")]
+    #[Assert\Regex(
+        pattern: '/\d/',
+        match: false,
+        message: "La description de l'actualité ne peut pas contenir de chiffres."
+    )]
     private $description_a;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $image_a;
 
     #[ORM\Column(type: 'date')]
+    
     private $date_a;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Vous devez ajouter un titre.")]
+    #[Assert\Regex(
+        pattern: '/\d/',
+        match: false,
+        message: "Le titre de l'actualité ne peut pas contenir de chiffres."
+    )]
     private $titre_a;
 
     #[ORM\ManyToOne(targetEntity: enduser::class)]

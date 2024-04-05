@@ -387,7 +387,7 @@
                 </ul>
             </li>
             <!-- Gestion Equipement -->
-            <!-- GestionActualite -->
+              <!-- GestionActualite -->
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#GestionActualite-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-layout-text-window-reverse"></i><span>Gestion Actualite</span><i
@@ -395,12 +395,13 @@
                 </a>
                 <ul id="GestionActualite-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="#">
-                            <i class="bi bi-circle"></i><span>Ajouter Actualite</span>
-                        </a>
+                        <a href="{{ path('ajouterA') }}">
+    <i class="bi bi-circle"></i><span>Ajouter Actualite</span>
+</a>
+
                     </li>
                     <li>
-                        <a href="#">
+                     <a href="{{ path('actualite_show') }}">
                             <i class="bi bi-circle"></i><span>Liste Actualite</span>
                         </a>
                     </li>

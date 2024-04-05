@@ -54,7 +54,7 @@
         <div class="container position-relative">
           <div class="row d-flex justify-content-center">
             <div class="col-lg-6 text-center">
-              <h2>Ajouter une Publicité</h2>
+              <h2>Paiement </h2>
             </div>
           </div>
         </div>
@@ -64,69 +64,47 @@
 
     <!-- ======= Get a Quote Section ======= -->
  {% block body %}
-<section class="section">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6 text-center">
-                <img src="{{ asset('front-office/img/Baladia.png') }}" class="img-fluid mb-4" alt="">
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title text-center mb-4">Ajouter Actualite</h5>
-                        <form method="POST" action="{{ path('ajouterA') }}" enctype="multipart/form-data">
-                            {{ form_start(form) }}
-                            <div class="mb-3 row">
-                                <label for="inputText" class="col-sm-4 col-form-label">Titre</label>
-                                <div class="col-sm-8">
-                                    {{ form_widget(form.titre_a, {'attr': {'class': 'form-control'}}) }}
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="inputEmail" class="col-sm-4 col-form-label">Description</label>
-                                <div class="col-sm-8">
-                                    {{ form_widget(form.description_a, {'attr': {'class': 'form-control'}}) }}
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="inputFile" class="col-sm-4 col-form-label">Image</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        {{ form_widget(form.image_a, {'attr': {'class': 'form-control', 'onchange': 'previewImage(this)'}}) }}
-                                    </div>
-                                    <img id="imagePreview" src="#" alt="Aperçu de l'image" class="img-fluid mt-2" style="max-width: 100%; max-height: 200px; display: none;">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                               <div class="col-sm-12 text-center">
-  <button type="submit" class="btn btn-primary">Ajouter</button>
+<button id="checkout-button">Pay Now</button>
+
+    <script>
+        var stripe = Stripe('{{ stripe_public_key }}');
+        var checkoutButton = document.getElementById('checkout-button');
+
+        checkoutButton.addEventListener('click', function () {
+            fetch('{{ path('create_payment_intent') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    // Add any data needed to create the payment intent
+                }),
+            })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                return stripe.confirmCardPayment(data.client_secret, {
+                    payment_method: {
+                        card: card,
+                        // Add any additional payment method data here
+                    }
+                });
+            })
+            .then(function (result) {
+                if (result.error) {
+                    console.error(result.error.message);
+                } else {
+                    console.log('Payment successful');
+                    // Redirect or show success message to your customer
+                }
+            });
+        });
+    </script>
+</form>
 
 
 
-                                </div>
-                            </div>
-                            {{ form_end(form) }}
-                        </form>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<script>
-    function previewImage(input) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var imgPreview = input.parentNode.parentNode.querySelector('#imagePreview');
-            imgPreview.src = e.target.result;
-            imgPreview.style.display = 'block';
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-</script>
-    
 {% endblock %}
 
 

@@ -46,7 +46,55 @@
   </header><!-- End Header -->
   <!-- End Header -->
 
-  <main id="main">
+  <main id="main" class="main">
+    <section class="section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Modifier Actualite</h5>
+                            {% for actualite in actualites %}
+                            <form method="POST" action="{{ path('modifierA', {'id': actualite.idA}) }}" enctype="multipart/form-data">
+                                {{ form_start(form) }}
+                                <div class="row mb-3">
+                                    <label for="inputText" class="col-sm-2 col-form-label">Titre</label>
+                                    <div class="col-sm-10">
+                                        {{ form_widget(form.titre_a, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputEmail" class="col-sm-2 col-form-label">Description</label>
+                                    <div class="col-sm-10">
+                                        {{ form_widget(form.description_a, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputFile" class="col-sm-2 col-form-label">Image</label>
+                                    <div class="col-sm-10">
+                                        <div class="text-center">
+                                            {{ form_widget(form.image_a, {'attr': {'class': 'form-control', 'onchange': 'afficherApercu(this)'}}) }}
+                                            <img id="imagePreview" src="{{ asset('uploads/' ~ actualite.imageA) }}" alt="Aperçu de l'image" style="max-width: 100%; max-height: 200px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Add other form fields similarly -->
+                                <div class="row mb-3">
+                                    <div class="col-sm-12 text-center"> <!-- Center the buttons -->
+                                        <button type="submit" class="btn btn-primary">Modifier</button>
+                                    </div>
+                                </div>
+                                {{ form_end(form) }}
+                            </form>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
 
     <!-- ======= Breadcrumbs ======= -->
     <div class="breadcrumbs">
@@ -63,51 +111,68 @@
 
 
     <!-- ======= Get a Quote Section ======= -->
- {% block body %}
+{% block body %}
 <section class="section">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6 text-center">
-                <img src="{{ asset('front-office/img/Baladia.png') }}" class="img-fluid mb-4" alt="">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <img src="{{ asset('front-office/img/Baladia.png') }}" class="img-fluid" alt="">
             </div>
-            <div class="col-md-6">
+            <div class="col-lg-7">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title text-center mb-4">Ajouter Actualite</h5>
-                        <form method="POST" action="{{ path('ajouterA') }}" enctype="multipart/form-data">
+                        <h5 class="card-title">Modifier Publicité</h5>
+<form method="POST" action="{{ path('modifierPub', {'id': publicite.getIdPub()}) }}" enctype="multipart/form-data">
                             {{ form_start(form) }}
                             <div class="mb-3 row">
-                                <label for="inputText" class="col-sm-4 col-form-label">Titre</label>
+                                <label for="inputTitle" class="col-sm-4 col-form-label">Titre</label>
                                 <div class="col-sm-8">
-                                    {{ form_widget(form.titre_a, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_widget(form.titre_pub, {'attr': {'class': 'form-control'}}) }}
                                 </div>
                             </div>
                             <div class="mb-3 row">
-                                <label for="inputEmail" class="col-sm-4 col-form-label">Description</label>
+                                <label for="inputDescription" class="col-sm-4 col-form-label">Description</label>
                                 <div class="col-sm-8">
-                                    {{ form_widget(form.description_a, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_widget(form.description_pub, {'attr': {'class': 'form-control', 'rows': '3'}}) }}
                                 </div>
                             </div>
                             <div class="mb-3 row">
-                                <label for="inputFile" class="col-sm-4 col-form-label">Image</label>
+                                <label for="inputImage" class="col-sm-4 col-form-label">Image</label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
-                                        {{ form_widget(form.image_a, {'attr': {'class': 'form-control', 'onchange': 'previewImage(this)'}}) }}
+                                        {{ form_widget(form.image_pub, {'attr': {'class': 'form-control', 'onchange': 'previewImage(event)'}}) }}
                                     </div>
-                                    <img id="imagePreview" src="#" alt="Aperçu de l'image" class="img-fluid mt-2" style="max-width: 100%; max-height: 200px; display: none;">
+                                    <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 100%; max-height: 200px; display: none;">
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                               <div class="col-sm-12 text-center">
-  <button type="submit" class="btn btn-primary">Ajouter</button>
-
-
-
+                            <div class="mb-3 row">
+                                <label for="inputContact" class="col-sm-4 col-form-label">Contact</label>
+                                <div class="col-sm-8">
+                                    {{ form_widget(form.contact_pub, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="inputLocation" class="col-sm-4 col-form-label">Location</label>
+                                <div class="col-sm-8">
+                                    {{ form_widget(form.localisation_pub, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="inputOffer" class="col-sm-4 col-form-label">Offre</label>
+                                <div class="col-sm-8">
+                                    {{ form_widget(form.offre_pub, {'attr': {'class': 'form-control'}, 'empty_data': ''}) }}
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-md-6">
+                                    <div class="text-center mt-3">
+                                        <button type="submit" class="btn btn-primary mr-2">Modifier</button>
+                                        <a href="{{ path('app_actualite') }}" class="btn btn-primary">Retour</a>
+                                    </div>
                                 </div>
                             </div>
                             {{ form_end(form) }}
                         </form>
-                        
                     </div>
                 </div>
             </div>
@@ -116,18 +181,19 @@
 </section>
 
 <script>
-    function previewImage(input) {
+    function previewImage(event) {
         var reader = new FileReader();
-        reader.onload = function(e) {
-            var imgPreview = input.parentNode.parentNode.querySelector('#imagePreview');
-            imgPreview.src = e.target.result;
-            imgPreview.style.display = 'block';
+        reader.onload = function() {
+            var output = document.getElementById('imagePreview');
+            output.src = reader.result;
+            output.style.display = 'block';
         }
-        reader.readAsDataURL(input.files[0]);
+        reader.readAsDataURL(event.target.files[0]);
     }
 </script>
-    
+
 {% endblock %}
+
 
 
 

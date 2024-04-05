@@ -183,4 +183,27 @@ public function index2(PubliciteRepository $repository): Response
         
     ]);
 }
+#[Route('/Payment', name: 'payment')]
+public function index5(PubliciteRepository $repository): Response
+{
+  // Récupérer le montant du paiement depuis la requête
+  $amount = $request->get('amount'); // Mettez en place la logique pour récupérer le montant correctement
+
+  // Configurez la clé secrète de Stripe
+  Stripe::setApiKey('pk_test_51OpeMeI3VcdValufSxbCUuf9lZ5qOU0YIW5NyR8BTrodMTNvHwqQ3Ljd1ca5VKqcoubbF1yRByI2AX6oQ4qotAKq00fur5NrAz');
+
+  // Créer un nouvel intent de paiement
+  $paymentIntent = PaymentIntent::create([
+      'amount' => $amount,
+      'currency' => 'usd', // Changez selon votre devise
+  ]);
+
+  // Retourner le client_secret de l'intent de paiement
+  return new JsonResponse(['client_secret' => $paymentIntent->client_secret]);
+
+}
+#[Route('/create-payment-intent', name: 'create_payment_intent')]
+public function createPaymentIntent(Request $request): JsonResponse
+{
+}  
 }
