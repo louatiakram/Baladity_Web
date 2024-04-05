@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-	<title>Logis Bootstrap Template - Index</title>
+	<title>{% block title %}Baladity Home{% endblock %}</title>
 	<meta content="" name="description">
 	<meta content="" name="keywords">
 
@@ -39,6 +39,7 @@
 	    ======================================================== -->
 </head>
 
+
 <body>
 
 	<!-- ======= Header ======= -->
@@ -48,7 +49,7 @@
 			<a href="index.html" class="logo d-flex align-items-center">
 				<!-- Uncomment the line below if you also wish to use an image logo -->
 				<!-- <img src="{{ asset('front-office/img/logo.png') }}" alt=""> -->
-				<h1>Logis</h1>
+				<h1>Baladity</h1>
 			</a>
 
 			<i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
@@ -87,12 +88,18 @@
 		</div>
 	</header>
 	<!-- End Header -->
-	<!-- End Header -->
+
 
 	<!-- ======= Hero Section ======= -->
 	<section id="hero" class="hero d-flex align-items-center">
+		
 		<div class="container">
+
+
+			
+
 			<div class="row gy-4 d-flex justify-content-between">
+				{%block body %}
 				<div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
 					<h2 data-aos="fade-up">Your Lightning Fast Delivery Partner</h2>
 					<p data-aos="fade-up" data-aos-delay="100">
@@ -159,12 +166,14 @@
 				<div class="col-lg-5 order-1 order-lg-2 hero-img" data-aos="zoom-out">
 					<img src="{{ asset('front-office/img/hero-img.svg') }}" class="img-fluid mb-3 mb-lg-0" alt="">
 				</div>
-
+				{% endblock %}
 			</div>
+			
 		</div>
+		
 	</section>
 	<!-- End Hero Section -->
-
+	{%block rest%}
 	<main id="main">
 
 		<!-- ======= Featured Services Section ======= -->
@@ -178,7 +187,7 @@
 							<i class="fa-solid fa-cart-flatbed"></i>
 						</div>
 						<div>
-							<h4 class="title">Lorem Ipsum</h4>
+							<h4 class="title">Baladity</h4>
 							<p class="description">
 								Voluptatum deleniti atque corrupti quos dolores et quas molestias
 								excepturi sint occaecati cupiditate non provident
@@ -802,9 +811,9 @@
 			</div>
 		</section>
 		<!-- End Frequently Asked Questions Section -->
-
+		
 	</main><!-- End #main -->
-
+	{% endblock %}
 	<!-- ======= Footer ======= -->
 	<footer id="footer" class="footer">
 
@@ -812,7 +821,7 @@
 			<div class="row gy-4">
 				<div class="col-lg-5 col-md-12 footer-info">
 					<a href="index.html" class="logo d-flex align-items-center">
-						<span>Logis</span>
+						<span>Baladity</span>
 					</a>
 					<p>
 						Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies
@@ -865,14 +874,14 @@
 
 		<div class="container mt-4">
 			<div class="copyright">
-				&copy; Copyright <strong><span>Logis</span></strong>. All Rights Reserved
+				&copy; Copyright <strong><span>Baladity</span></strong>. All Rights Reserved
 			</div>
 			<div class="credits">
 				<!-- All the links in the footer should remain intact. -->
 				<!-- You can delete the links only if you purchased the pro version. -->
 				<!-- Licensing information: https://bootstrapmade.com/license/ -->
 				<!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/ -->
-				Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+				
 			</div>
 		</div>
 

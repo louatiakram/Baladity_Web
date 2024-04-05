@@ -1,4 +1,4 @@
-{% extends 'base-back.html.twig' %}
+{% extends 'base-front.html.twig' %}
 
 {% block title %}Liste des Tâches{% endblock %}
 
@@ -114,6 +114,7 @@
         }
 
         .task-counter {
+            color: #012545;
             position: absolute;
             margin: 0px 0px 0px 25px;
             border-radius: 30px;
@@ -121,6 +122,9 @@
             font-size: x-small;
             padding: 10px;
         }
+
+
     </style>
 
 {% endblock %}
+{%block rest%}{% endblock %}
