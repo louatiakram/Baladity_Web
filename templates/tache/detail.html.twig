@@ -79,26 +79,32 @@
 						<div class="card-body">
 							<div class="comment-section">
 								<h5 class="card-title text-primary">Commentaire</h5>
-								{% if tache.getCommentaireTache() is not null %}
-								<div class="comment">
-									<h6><textarea class="form-control" style="height: 150px" readonly>{{ tache.getCommentaireTache().getTexteC() }}</textarea></h6>
-									<p>
-										<h6>Date: {{ tache.getCommentaireTache().getDateC()|date('d-m-Y') }}</h6>
-									</p>
-									<!-- Add Edit and Remove Options for the Comment -->
-									<div class="comment-options">
-										<button onclick="location.href='{{ path('commentairetache_update', {'i': tache.getCommentaireTache().getIdC()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i> Modifier</button>
-										<button onclick="location.href='{{ path('commentairetache_delete', {'i': tache.getCommentaireTache().getIdC()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i> Supprimer</button>
-									</div>
-								</div>
-								{% else %}
-								<!-- Add button to add comment if there is no comment -->
-
-								<a href="{{ path('commentairetache_add', {'id': tache.getIdT()}) }}" class="btn btn-primary"><i class="bi bi-plus"></i> Ajouter un commentaire</a>
+								{% if tache.getCommentaireTache() is not empty %}
+									{% for commentaire in tache.getCommentaireTache() %}
+										<div class="comment">
+											<h6><textarea class="form-control" style="height: 150px" readonly>{{ commentaire.getTexteC() }}</textarea></h6>
+											<p>
+												<h6>Date: {{ commentaire.getDateC()|date('d-m-Y') }}</h6>
+											</p>
+											<!-- Add Edit and Remove Options for the Comment -->
+											{% if userId == commentaire.getIdUser().getIdUser() %}
+<div class="comment-options">
+    <button onclick="location.href='{{ path('commentairetache_update', {'i': commentaire.getIdC()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i> Modifier</button>
+    <button onclick="location.href='{{ path('commentairetache_delete', {'i': commentaire.getIdC()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i> Supprimer</button>
+</div>
+{% endif %}
+										</div>
+									{% endfor %}
 								{% endif %}
 							</div>
+							
+						</div>
+						<div class="card-body">
+							<a href="{{ path('commentairetache_add', {'id': tache.getIdT()}) }}" class="btn btn-primary"><i class="bi bi-plus"></i> Ajouter un commentaire</a>
+
 						</div>
 					</div>
+					
 					<div class="col-md-4" style="margin-top: 10px;">
 						<!-- Adjust margin-top as needed -->
 						<button onclick="goBack()" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Go Back</button>

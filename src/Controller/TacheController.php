@@ -6,6 +6,8 @@ use App\Entity\enduser;
 use App\Entity\tache;
 use App\Form\TacheType;
 use App\Repository\TacheRepository;
+use App\Entity\CommentaireTache;
+use App\Form\CommentaireTacheType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -71,24 +73,61 @@ class TacheController extends AbstractController
     #[Route('/tache/detail/{i}', name: 'tache_detail')]
     public function detail($i, TacheRepository $rep): Response
     {
+        $userId = 50; // Assuming the user ID is 50
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
         $tache = $rep->find($i);
         if (!$tache) {
             throw $this->createNotFoundException('Tache Existe Pas');
         }
 
-        return $this->render('tache/detail.html.twig', ['tache' => $tache]);
+        return $this->render('tache/detail.html.twig', [
+            'tache' => $tache,
+            'userId' => $userId,
+        ]);
     }
 
     #[Route('/tache/detailfront/{i}', name: 'tache_detail_front')]
-    public function detailfront($i, TacheRepository $rep): Response
-    {
-        $tache = $rep->find($i);
-        if (!$tache) {
-            throw $this->createNotFoundException('Tache Existe Pas');
-        }
-
-        return $this->render('tache/detailfront.html.twig', ['tache' => $tache]);
+public function detailfront($i, Request $request, TacheRepository $rep): Response
+{
+    $userId = 49; // Assuming the user ID is 50
+    $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+    if (!$user) {
+        throw $this->createNotFoundException('User Existe Pas');
     }
+    
+    $tache = $rep->find($i);
+    if (!$tache) {
+        throw $this->createNotFoundException('Tache Existe Pas');
+    }
+
+    // Create a new CommentaireTache entity
+    $comment = new CommentaireTache();
+    $comment->setIdUser($user);
+    $commentForm = $this->createForm(CommentaireTacheType::class, $comment);
+
+    // Handle the comment form submission
+    $commentForm->handleRequest($request);
+    if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+        // Associate the comment with the tache entity
+        $comment->setIdT($tache);
+        $comment->setDateC(new \DateTime()); // Set current date
+        
+        // Persist and flush the comment entity
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($comment);
+        $entityManager->flush();
+
+        // Redirect or return a response
+        return $this->redirectToRoute('tache_detail_front', ['i' => $i]);
+    }
+
+    // Pass the comment form and tache details to the Twig template
+    return $this->render('tache/detailfront.html.twig', [
+        'tache' => $tache,
+        'commentForm' => $commentForm->createView(),
+        'userId' => $userId,
+    ]);
+}
 
     #[Route('/tache/add', name: 'tache_add')]
     public function add(Request $req, ManagerRegistry $doctrine): Response
