@@ -454,6 +454,48 @@
         this.classList.remove('hovered');
       }
     });
+
+//
+    $(document).ready(function () {
+      $('#search-input').on('keyup', function () {
+          var query = $(this).val().trim();
+          var resultsDiv = $('#search-results');
+  
+          if (query === '') {
+              resultsDiv.hide();
+              return;
+          }
+  
+          $.ajax({
+              type: 'GET',
+              url: '/tache/search',
+              data: { q: query },
+              success: function (data) {
+                  resultsDiv.empty();
+                  if (data.length === 0) {
+                      resultsDiv.hide();
+                  } else {
+                      for (var i = 0; i < data.length; i++) {
+                          var result = data[i];
+                          resultsDiv.append('<a href="' + result.url + '">' + result.nom + '</a>');
+                      }
+                      resultsDiv.show();
+                  }
+              },
+              error: function (error) {
+                  console.log(error);
+              }
+          });
+      });
+  
+      // Hide search results when clicking outside the search input
+      $(document).on('click', function (e) {
+          if (!$(e.target).closest('.search-bar').length) {
+              $('#search-results').hide();
+          }
+      });
+  });
+
   
     /**
      * Autoresize echart charts

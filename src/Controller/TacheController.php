@@ -17,34 +17,28 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 
 class TacheController extends AbstractController
 {
     #[Route('/tache', name: 'tache_list')]
-    public function list(Request $request, TacheRepository $repository): Response
+    public function list(Request $request, TacheRepository $repository, PaginatorInterface $paginator): Response
     {
+        // Fetch all tasks from the repository
+        $query = $repository->createQueryBuilder('t')
+            ->orderBy('t.date_FT', 'ASC')
+            ->getQuery();
 
-        // Get the current page number from the request query parameters, default to 1
-        $page = $request->query->getInt('page', 1);
-
-        // Calculate the offset based on the current page number and limit per page
-        $limit = 4;
-        $offset = ($page - 1) * $limit;
-
-        // If no search query is provided, fetch all tasks with pagination
-        $tasks = $repository->findBy([], ['date_FT' => 'ASC'], $limit, $offset);
-
-        // Count total number of tasks for pagination
-        $totalTasks = $repository->count([]);
-
-        // Calculate total number of pages
-        $totalPages = ceil($totalTasks / $limit);
+        // Paginate the query
+        $tasks = $paginator->paginate(
+            $query, // Doctrine Query object
+            $request->query->getInt('page', 1), // Page number
+            2 // Limit per page
+        );
 
         return $this->render('tache/list.html.twig', [
-            'l' => $tasks,
-            'currentPage' => $page, // Pass the current page number
-            'totalPages' => $totalPages, // Pass the total number of pages for pagination
+            'tasks' => $tasks,
         ]);
     }
 
