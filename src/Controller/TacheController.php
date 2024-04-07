@@ -18,10 +18,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Font;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Cell\Hyperlink;
 
 
 class TacheController extends AbstractController
 {
+    
+    
     #[Route('/tache', name: 'tache_list')]
     public function list(Request $request, TacheRepository $repository, PaginatorInterface $paginator): Response
     {
@@ -34,7 +44,7 @@ class TacheController extends AbstractController
         $tasks = $paginator->paginate(
             $query, // Doctrine Query object
             $request->query->getInt('page', 1), // Page number
-            2 // Limit per page
+            6 // Limit per page
         );
 
         return $this->render('tache/list.html.twig', [
@@ -284,4 +294,116 @@ public function detailfront($i, Request $request, TacheRepository $rep): Respons
             'data' => $data // Pass data to twig template
         ]);
     }
+
+    #[Route('/tache/download-csv', name: 'tache_download_csv')]
+public function downloadCsv(TacheRepository $repository): Response
+{
+    // Fetch all tasks from the repository
+    $tasks = $repository->findAll();
+
+    // Create a new Spreadsheet object
+    $spreadsheet = new Spreadsheet();
+
+    // Get the active sheet
+    $sheet = $spreadsheet->getActiveSheet();
+
+    // Set title cell styles
+    $titleStyle = [
+        'font' => [
+            'bold' => true,
+            'color' => ['rgb' => 'FFFFFF'],
+        ],
+        'fill' => [
+            'fillType' => Fill::FILL_SOLID,
+            'color' => ['rgb' => '012545'],
+        ],
+        'borders' => [
+            'allBorders' => [
+                'borderStyle' => Border::BORDER_THIN,
+                'color' => ['rgb' => '000000'],
+            ],
+        ],
+        'alignment' => [
+            'horizontal' => Alignment::HORIZONTAL_CENTER,
+            'vertical' => Alignment::VERTICAL_CENTER,
+        ],
+    ];
+
+    // Set headers
+    $sheet->setCellValue('A1', 'Titre')->getStyle('A1')->applyFromArray($titleStyle);
+    $sheet->setCellValue('B1', 'Pièce Jointe')->getStyle('B1')->applyFromArray($titleStyle);
+    $sheet->setCellValue('C1', 'Date Début')->getStyle('C1')->applyFromArray($titleStyle);
+    $sheet->setCellValue('D1', 'Date Fin')->getStyle('D1')->applyFromArray($titleStyle);
+    $sheet->setCellValue('E1', 'Description')->getStyle('E1')->applyFromArray($titleStyle);
+    $sheet->setCellValue('F1', 'Etat')->getStyle('F1')->applyFromArray($titleStyle); // Add this line for etat_T
+
+    // Populate data
+    $row = 2;
+    foreach ($tasks as $task) {
+        $sheet->setCellValue('A' . $row, $task->getTitreT());
+
+        // Check if the task has a piece jointe
+        if ($task->getPieceJointeT() !== null) {
+            // Create hyperlink for the file name
+            $hyperlinkFormula = '=HYPERLINK("C:/Users/ASUS/Desktop/3A5S2/PIDEV/DevMasters-Baladity/public/uploads/' . $task->getPieceJointeT() . '", "' . $task->getPieceJointeT() . '")';
+            $sheet->getCell('B' . $row)->setValueExplicit($hyperlinkFormula, DataType::TYPE_FORMULA);
+        } else {
+            // Set the cell value to empty if no piece jointe
+            $sheet->setCellValue('B' . $row, '');
+        }
+
+        $sheet->setCellValue('C' . $row, $task->getDateDT()->format('Y-m-d'));
+        $sheet->setCellValue('D' . $row, $task->getDateFT()->format('Y-m-d'));
+        $sheet->setCellValue('E' . $row, $task->getDescT());
+        $sheet->setCellValue('F' . $row, $task->getEtatT()); // Add this line for etat_T
+
+        // Apply cell styles
+        $sheet->getStyle('A' . $row . ':F' . $row)->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['rgb' => '000000'],
+                ],
+            ],
+            'alignment' => [
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+        ]);
+        $row++;
+    }
+
+    // Auto-size columns
+    foreach (range('A', 'F') as $column) {
+        $sheet->getColumnDimension($column)->setAutoSize(true);
+    }
+
+    // Create a writer
+    $writer = new Xlsx($spreadsheet);
+
+    // Save the file to a temporary location
+    $tempFilePath = tempnam(sys_get_temp_dir(), 'tasks');
+    $writer->save($tempFilePath);
+
+    // Create a response object
+$response = new Response(file_get_contents($tempFilePath));
+$response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+// Set the filename with current date and time
+$filename = 'tasks_' . date('Y-m-d_H-i-s') . '.xlsx';
+$response->headers->set('Content-Disposition', 'attachment;filename="' . $filename . '"');
+
+$response->headers->set('Cache-Control', 'max-age=0');
+
+    // Delete the temporary file
+    unlink($tempFilePath);
+
+    return $response;
 }
+
+    
+   
+}
+
+    
+
+    

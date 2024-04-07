@@ -211,4 +211,21 @@ public function setCommentaireTache(?Collection $commentaireTache): self
         $this->id_user = $id_user;
         return $this;
     }
+
+    public function displayPieceJointe(): string
+    {
+        if ($this->pieceJointe_T) {
+            $fileExtension = pathinfo($this->pieceJointe_T, PATHINFO_EXTENSION);
+            $fileTypes = ['jpg', 'jpeg', 'png', 'gif'];
+
+            if (in_array($fileExtension, $fileTypes)) {
+                return '<img src="' . asset('uploads/' . $this->pieceJointe_T) . '" class="card-img-top" alt="Piece jointe">';
+            } else {
+                return '<a href="' . asset('uploads/' . $this->pieceJointe_T) . '">Télécharger la pièce jointe</a>';
+            }
+        }
+
+        return '';
+    }
+    
 }
