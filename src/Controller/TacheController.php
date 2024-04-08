@@ -2,13 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\CommentaireTache;
 use App\Entity\enduser;
 use App\Entity\tache;
+use App\Form\CommentaireTacheType;
 use App\Form\TacheType;
 use App\Repository\TacheRepository;
-use App\Entity\CommentaireTache;
-use App\Form\CommentaireTacheType;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -16,26 +20,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Knp\Component\Pager\PaginatorInterface;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Style\Font;
-use PhpOffice\PhpSpreadsheet\Cell\DataType;
-use PhpOffice\PhpSpreadsheet\Cell\Hyperlink;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-
-
+use Symfony\Component\Routing\Annotation\Route;
 
 class TacheController extends AbstractController
 {
-    
-    
+
     #[Route('/tache', name: 'tache_list')]
-    public function list(Request $request, TacheRepository $repository, PaginatorInterface $paginator,  SessionInterface $session): Response
+    public function list(Request $request, TacheRepository $repository, PaginatorInterface $paginator, SessionInterface $session): Response
     {
         // Fetch all tasks from the repository
         $query = $repository->createQueryBuilder('t')
@@ -46,12 +38,11 @@ class TacheController extends AbstractController
         $tasks = $paginator->paginate(
             $query, // Doctrine Query object
             $request->query->getInt('page', 1), // Page number
-            6 // Limit per page
+            6// Limit per page
         );
 
         $successMessage = $session->getFlashBag()->get('success');
 
-        
         return $this->render('tache/list.html.twig', [
             'tasks' => $tasks,
             'successMessage' => $successMessage ? $successMessage[0] : null, // Pass the success message if it exists
@@ -97,47 +88,47 @@ class TacheController extends AbstractController
     }
 
     #[Route('/tache/detailfront/{i}', name: 'tache_detail_front')]
-public function detailfront($i, Request $request, TacheRepository $rep): Response
-{
-    $userId = 49; // Assuming the user ID is 50
-    $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
-    if (!$user) {
-        throw $this->createNotFoundException('User Existe Pas');
+    public function detailfront($i, Request $request, TacheRepository $rep): Response
+    {
+        $userId = 49; // Assuming the user ID is 50
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+        if (!$user) {
+            throw $this->createNotFoundException('User Existe Pas');
+        }
+
+        $tache = $rep->find($i);
+        if (!$tache) {
+            throw $this->createNotFoundException('Tache Existe Pas');
+        }
+
+        // Create a new CommentaireTache entity
+        $comment = new CommentaireTache();
+        $comment->setIdUser($user);
+        $commentForm = $this->createForm(CommentaireTacheType::class, $comment);
+
+        // Handle the comment form submission
+        $commentForm->handleRequest($request);
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            // Associate the comment with the tache entity
+            $comment->setIdT($tache);
+            $comment->setDateC(new \DateTime()); // Set current date
+
+            // Persist and flush the comment entity
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            // Redirect or return a response
+            return $this->redirectToRoute('tache_detail_front', ['i' => $i]);
+        }
+
+        // Pass the comment form and tache details to the Twig template
+        return $this->render('tache/detailfront.html.twig', [
+            'tache' => $tache,
+            'commentForm' => $commentForm->createView(),
+            'userId' => $userId,
+        ]);
     }
-    
-    $tache = $rep->find($i);
-    if (!$tache) {
-        throw $this->createNotFoundException('Tache Existe Pas');
-    }
-
-    // Create a new CommentaireTache entity
-    $comment = new CommentaireTache();
-    $comment->setIdUser($user);
-    $commentForm = $this->createForm(CommentaireTacheType::class, $comment);
-
-    // Handle the comment form submission
-    $commentForm->handleRequest($request);
-    if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-        // Associate the comment with the tache entity
-        $comment->setIdT($tache);
-        $comment->setDateC(new \DateTime()); // Set current date
-        
-        // Persist and flush the comment entity
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($comment);
-        $entityManager->flush();
-
-        // Redirect or return a response
-        return $this->redirectToRoute('tache_detail_front', ['i' => $i]);
-    }
-
-    // Pass the comment form and tache details to the Twig template
-    return $this->render('tache/detailfront.html.twig', [
-        'tache' => $tache,
-        'commentForm' => $commentForm->createView(),
-        'userId' => $userId,
-    ]);
-}
 
     #[Route('/tache/add', name: 'tache_add')]
     public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
@@ -179,8 +170,7 @@ public function detailfront($i, Request $request, TacheRepository $rep): Respons
                             $originalFilename . '.' . $pieceJointe->guessExtension()
                         );
                         $x->setPieceJointeT($uploadedFile->getFilename());
-                    } catch (FileException $e) {
-                    }
+                    } catch (FileException $e) {}
                 }
 
                 // Get the selected etat_T value from the form
@@ -198,9 +188,8 @@ public function detailfront($i, Request $request, TacheRepository $rep): Respons
             }
 
         }
-        return $this->renderForm('tache/add.html.twig', ['f' => $form,]);
+        return $this->renderForm('tache/add.html.twig', ['f' => $form]);
     }
-
 
     #[Route('/tache/update/{i}', name: 'tache_update')]
     public function update($i, TacheRepository $rep, Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
@@ -223,8 +212,7 @@ public function detailfront($i, Request $request, TacheRepository $rep): Respons
                         $originalFilename . '.' . $pieceJointe->guessExtension()
                     );
                     $x->setPieceJointeT($uploadedFile->getFilename());
-                } catch (FileException $e) {
-                }
+                } catch (FileException $e) {}
             }
             // Get the selected etat_T value from the form
             $selectedEtatT = $form->get('etat_T')->getData();
@@ -238,7 +226,7 @@ public function detailfront($i, Request $request, TacheRepository $rep): Respons
             $session->getFlashBag()->add('success', 'Tâche mise à jour avec succès!');
             return $this->redirectToRoute('tache_list');
         }
-        return $this->renderForm('tache/add.html.twig', ['f' => $form,]);
+        return $this->renderForm('tache/add.html.twig', ['f' => $form]);
     }
 
     #[Route('/tache/delete/{i}', name: 'tache_delete')]
@@ -254,11 +242,31 @@ public function detailfront($i, Request $request, TacheRepository $rep): Respons
     }
 
     #[Route('/tache/listfront', name: 'tache_listfront')]
-    public function listfront(Request $request, TacheRepository $repository): Response
+    public function listfront(Request $request, TacheRepository $repository, SessionInterface $session): Response
     {
-        // If no search query is provided, fetch all tasks with pagination
-        $taches = $repository->findBy([], ['date_FT' => 'ASC']);
-        //$taches = $this->getDoctrine()->getRepository(Tache::class)->findAll();
+        $userId = 58; // You can get the user ID from wherever it's stored
+        $session->set('user_id', $userId); // Store user ID in session
+
+        // Get the user by ID
+        $user = $this->getDoctrine()->getRepository(EndUser::class)->find($userId);
+
+        // Check if the user exists
+        if (!$user) {
+            throw $this->createNotFoundException('Utilisateur non trouvé.');
+        }
+
+        // Get the type of the current user
+        $typeUser = $user->getTypeUser();
+
+        // Store the user type in the session
+        $session->set('user_type', $typeUser);
+
+        // Fetch taches based on the current user's category
+        $taches = [];
+        if ($typeUser === "Responsable employé" || $typeUser === "Employé") {
+            // Assuming "nom_Cat" is the field that corresponds to the category in the tache entity
+            $taches = $repository->findBy(['nom_Cat' => $typeUser], ['date_FT' => 'ASC']);
+        }
 
         return $this->render('tache/listfront.html.twig', [
             'taches' => $taches,
@@ -302,119 +310,125 @@ public function detailfront($i, Request $request, TacheRepository $rep): Respons
         }
 
         return $this->render('tache/piechart.html.twig', [
-            'data' => $data // Pass data to twig template
+            'data' => $data, // Pass data to twig template
         ]);
     }
 
     #[Route('/tache/download-csv', name: 'tache_download_csv')]
-public function downloadCsv(TacheRepository $repository): Response
-{
-    // Fetch all tasks from the repository
-    $tasks = $repository->findAll();
+    public function downloadCsv(TacheRepository $repository, SessionInterface $session): Response
+    {
+        // Retrieve user type from session
+        $typeUser = $session->get('user_type');
 
-    // Create a new Spreadsheet object
-    $spreadsheet = new Spreadsheet();
-
-    // Get the active sheet
-    $sheet = $spreadsheet->getActiveSheet();
-
-    // Set title cell styles
-    $titleStyle = [
-        'font' => [
-            'bold' => true,
-            'color' => ['rgb' => 'FFFFFF'],
-        ],
-        'fill' => [
-            'fillType' => Fill::FILL_SOLID,
-            'color' => ['rgb' => '012545'],
-        ],
-        'borders' => [
-            'allBorders' => [
-                'borderStyle' => Border::BORDER_THIN,
-                'color' => ['rgb' => '000000'],
-            ],
-        ],
-        'alignment' => [
-            'horizontal' => Alignment::HORIZONTAL_CENTER,
-            'vertical' => Alignment::VERTICAL_CENTER,
-        ],
-    ];
-
-    // Set headers
-    $sheet->setCellValue('A1', 'Titre')->getStyle('A1')->applyFromArray($titleStyle);
-    $sheet->setCellValue('B1', 'Pièce Jointe')->getStyle('B1')->applyFromArray($titleStyle);
-    $sheet->setCellValue('C1', 'Date Début')->getStyle('C1')->applyFromArray($titleStyle);
-    $sheet->setCellValue('D1', 'Date Fin')->getStyle('D1')->applyFromArray($titleStyle);
-    $sheet->setCellValue('E1', 'Description')->getStyle('E1')->applyFromArray($titleStyle);
-    $sheet->setCellValue('F1', 'Etat')->getStyle('F1')->applyFromArray($titleStyle); // Add this line for etat_T
-
-    // Populate data
-    $row = 2;
-    foreach ($tasks as $task) {
-        $sheet->setCellValue('A' . $row, $task->getTitreT());
-
-        // Check if the task has a piece jointe
-        if ($task->getPieceJointeT() !== null) {
-            // Create hyperlink for the file name
-            $hyperlinkFormula = '=HYPERLINK("C:/Users/ASUS/Desktop/3A5S2/PIDEV/DevMasters-Baladity/public/uploads/' . $task->getPieceJointeT() . '", "' . $task->getPieceJointeT() . '")';
-            $sheet->getCell('B' . $row)->setValueExplicit($hyperlinkFormula, DataType::TYPE_FORMULA);
-        } else {
-            // Set the cell value to empty if no piece jointe
-            $sheet->setCellValue('B' . $row, '');
+        if (!$typeUser) {
+            // If user type is not found in session, handle the error (redirect or display message)
+            // For example:
+            throw $this->createNotFoundException('User type not found in session.');
         }
 
-        $sheet->setCellValue('C' . $row, $task->getDateDT()->format('Y-m-d'));
-        $sheet->setCellValue('D' . $row, $task->getDateFT()->format('Y-m-d'));
-        $sheet->setCellValue('E' . $row, $task->getDescT());
-        $sheet->setCellValue('F' . $row, $task->getEtatT()); // Add this line for etat_T
+        // Fetch tasks associated with the current user type
+        $tasks = [];
+        if ($typeUser === "Responsable employé" || $typeUser === "Employé") {
+            $tasks = $repository->findBy(['nom_Cat' => $typeUser]);
+        }
 
-        // Apply cell styles
-        $sheet->getStyle('A' . $row . ':F' . $row)->applyFromArray([
+        // Create a new Spreadsheet object
+        $spreadsheet = new Spreadsheet();
+
+        // Get the active sheet
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Set title cell styles
+        $titleStyle = [
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => ['rgb' => '012545'],
+            ],
             'borders' => [
                 'allBorders' => [
-                    'borderStyle' => Border::BORDER_THIN,
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     'color' => ['rgb' => '000000'],
                 ],
             ],
             'alignment' => [
-                'vertical' => Alignment::VERTICAL_CENTER,
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
             ],
-        ]);
-        $row++;
+        ];
+
+        // Set headers
+        $sheet->setCellValue('A1', 'Titre')->getStyle('A1')->applyFromArray($titleStyle);
+        $sheet->setCellValue('B1', 'Pièce Jointe')->getStyle('B1')->applyFromArray($titleStyle);
+        $sheet->setCellValue('C1', 'Date Début')->getStyle('C1')->applyFromArray($titleStyle);
+        $sheet->setCellValue('D1', 'Date Fin')->getStyle('D1')->applyFromArray($titleStyle);
+        $sheet->setCellValue('E1', 'Description')->getStyle('E1')->applyFromArray($titleStyle);
+        $sheet->setCellValue('F1', 'Etat')->getStyle('F1')->applyFromArray($titleStyle); // Add this line for etat_T
+
+        // Populate data
+        $row = 2;
+        foreach ($tasks as $task) {
+            $sheet->setCellValue('A' . $row, $task->getTitreT());
+
+            // Check if the task has a piece jointe
+            if ($task->getPieceJointeT() !== null) {
+                // Create hyperlink for the file name
+                $hyperlinkFormula = '=HYPERLINK("C:/Users/ASUS/Desktop/3A5S2/PIDEV/DevMasters-Baladity/public/uploads/' . $task->getPieceJointeT() . '", "' . $task->getPieceJointeT() . '")';
+                $sheet->getCell('B' . $row)->setValueExplicit($hyperlinkFormula, DataType::TYPE_FORMULA);
+            } else {
+                // Set the cell value to empty if no piece jointe
+                $sheet->setCellValue('B' . $row, '');
+            }
+
+            $sheet->setCellValue('C' . $row, $task->getDateDT()->format('Y-m-d'));
+            $sheet->setCellValue('D' . $row, $task->getDateFT()->format('Y-m-d'));
+            $sheet->setCellValue('E' . $row, $task->getDescT());
+            $sheet->setCellValue('F' . $row, $task->getEtatT()); // Add this line for etat_T
+
+            // Apply cell styles
+            $sheet->getStyle('A' . $row . ':F' . $row)->applyFromArray([
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => ['rgb' => '000000'],
+                    ],
+                ],
+                'alignment' => [
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+            ]);
+            $row++;
+        }
+
+        // Auto-size columns
+        foreach (range('A', 'F') as $column) {
+            $sheet->getColumnDimension($column)->setAutoSize(true);
+        }
+
+        // Create a writer
+        $writer = new Xlsx($spreadsheet);
+
+        // Save the file to a temporary location
+        $tempFilePath = tempnam(sys_get_temp_dir(), 'tasks');
+        $writer->save($tempFilePath);
+
+        // Create a response object
+        $response = new Response(file_get_contents($tempFilePath));
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+        // Set the filename with current date and time
+        $filename = 'tasks_' . date('Y-m-d_H-i-s') . '.xlsx';
+        $response->headers->set('Content-Disposition', 'attachment;filename="' . $filename . '"');
+
+        $response->headers->set('Cache-Control', 'max-age=0');
+
+        // Delete the temporary file
+        unlink($tempFilePath);
+
+        return $response;
     }
 
-    // Auto-size columns
-    foreach (range('A', 'F') as $column) {
-        $sheet->getColumnDimension($column)->setAutoSize(true);
-    }
-
-    // Create a writer
-    $writer = new Xlsx($spreadsheet);
-
-    // Save the file to a temporary location
-    $tempFilePath = tempnam(sys_get_temp_dir(), 'tasks');
-    $writer->save($tempFilePath);
-
-    // Create a response object
-$response = new Response(file_get_contents($tempFilePath));
-$response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-
-// Set the filename with current date and time
-$filename = 'tasks_' . date('Y-m-d_H-i-s') . '.xlsx';
-$response->headers->set('Content-Disposition', 'attachment;filename="' . $filename . '"');
-
-$response->headers->set('Cache-Control', 'max-age=0');
-
-    // Delete the temporary file
-    unlink($tempFilePath);
-
-    return $response;
 }
-
-    
-   
-}
-
-    
-
-    

@@ -80,6 +80,18 @@ class TacheRepository extends ServiceEntityRepository
     }
     */
 
+    public function findByUserType(string $typeUser): array
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->select('t')
+            ->innerJoin('t.id_user', 'u') // Changed leftJoin to innerJoin
+            ->where('u.type_user = :typeUser')
+            ->setParameter('typeUser', $typeUser)
+            ->getQuery();
+    
+        return $qb->getResult();
+    }
+
     public function findByNom($value): QueryBuilder
     {
         $qb = $this->createQueryBuilder('q');

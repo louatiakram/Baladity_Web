@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\TacheRepository;
 use DateInterval;
 use DateTimeInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,7 +20,6 @@ class tache
     #[ORM\Column(name: 'nom_Cat', type: 'string', length: 255)]
     #[Assert\NotBlank(message: 'Veuillez fournir categorie.')]
     private ?string $nom_Cat;
-
 
     #[ORM\Column(name: 'titre_T', type: 'string', length: 255)]
     #[Assert\NotBlank(message: 'Veuillez fournir un titre.')]
@@ -73,39 +71,37 @@ class tache
     #[ORM\JoinColumn(name: 'id_user', referencedColumnName: 'id_user')]
     private ?enduser $id_user;
 
-     // Adjust the id_C property and annotation to match the new foreign key setup
-     #[ORM\Column(name: 'id_C', type: 'integer', nullable: true)]
-     private ?int $id_C;
- 
-     // Update the relationship annotation with commentairetache entity
-     #[ORM\OneToMany(targetEntity: commentairetache::class, mappedBy: 'tache')]
-     private ?Collection $commentaireTache;
+    // Adjust the id_C property and annotation to match the new foreign key setup
+    #[ORM\Column(name: 'id_C', type: 'integer', nullable: true)]
+    private ?int $id_C;
+
+    // Update the relationship annotation with commentairetache entity
+    #[ORM\OneToMany(targetEntity: commentairetache::class, mappedBy: 'tache')]
+    private ?Collection $commentaireTache;
 
     private ?DateTimeInterface $echeance = null;
 
-    
     public function getIdC(): ?int
     {
         return $this->id_C;
     }
-    
+
     public function setIdC(?int $id_C): self
     {
         $this->id_C = $id_C;
         return $this;
     }
-    
+
     public function getCommentaireTache(): ?Collection
-{
-    return $this->commentaireTache;
-}
+    {
+        return $this->commentaireTache;
+    }
 
-public function setCommentaireTache(?Collection $commentaireTache): self
-{
-    $this->commentaireTache = $commentaireTache;
-    return $this;
-}
-
+    public function setCommentaireTache(?Collection $commentaireTache): self
+    {
+        $this->commentaireTache = $commentaireTache;
+        return $this;
+    }
 
     public function getIdT(): ?int
     {
@@ -156,17 +152,14 @@ public function setCommentaireTache(?Collection $commentaireTache): self
         return $this;
     }
 
-
     public function getEcheance(): ?DateInterval
     {
         // Get the current date
         $currentDate = new \DateTime();
-        
+
         // Calculate the difference between $this->date_FT and the current date
         return $this->date_FT->diff($currentDate);
     }
-    
-
 
     public function getDateFT(): ?DateTimeInterface
     {
@@ -227,5 +220,5 @@ public function setCommentaireTache(?Collection $commentaireTache): self
 
         return '';
     }
-    
+
 }
