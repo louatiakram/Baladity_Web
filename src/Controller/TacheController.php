@@ -26,6 +26,8 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Font;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Cell\Hyperlink;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 
 
 class TacheController extends AbstractController
@@ -33,7 +35,7 @@ class TacheController extends AbstractController
     
     
     #[Route('/tache', name: 'tache_list')]
-    public function list(Request $request, TacheRepository $repository, PaginatorInterface $paginator): Response
+    public function list(Request $request, TacheRepository $repository, PaginatorInterface $paginator,  SessionInterface $session): Response
     {
         // Fetch all tasks from the repository
         $query = $repository->createQueryBuilder('t')
@@ -47,8 +49,12 @@ class TacheController extends AbstractController
             6 // Limit per page
         );
 
+        $successMessage = $session->getFlashBag()->get('success');
+
+        
         return $this->render('tache/list.html.twig', [
             'tasks' => $tasks,
+            'successMessage' => $successMessage ? $successMessage[0] : null, // Pass the success message if it exists
         ]);
     }
 
@@ -134,7 +140,7 @@ public function detailfront($i, Request $request, TacheRepository $rep): Respons
 }
 
     #[Route('/tache/add', name: 'tache_add')]
-    public function add(Request $req, ManagerRegistry $doctrine): Response
+    public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
     {
         $userId = 50; // Assuming the user ID is 50
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
@@ -186,6 +192,8 @@ public function detailfront($i, Request $request, TacheRepository $rep): Respons
                 $em = $doctrine->getManager();
                 $em->persist($x);
                 $em->flush();
+
+                $session->getFlashBag()->add('success', 'Tâche ajoutée avec succès!');
                 return $this->redirectToRoute('tache_list');
             }
 
@@ -195,7 +203,7 @@ public function detailfront($i, Request $request, TacheRepository $rep): Respons
 
 
     #[Route('/tache/update/{i}', name: 'tache_update')]
-    public function update($i, TacheRepository $rep, Request $req, ManagerRegistry $doctrine): Response
+    public function update($i, TacheRepository $rep, Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
     {
         $x = $rep->find($i);
         $form = $this->createForm(TacheType::class, $x);
@@ -226,19 +234,22 @@ public function detailfront($i, Request $request, TacheRepository $rep): Respons
 
             $em = $doctrine->getManager();
             $em->flush();
+
+            $session->getFlashBag()->add('success', 'Tâche mise à jour avec succès!');
             return $this->redirectToRoute('tache_list');
         }
-
         return $this->renderForm('tache/add.html.twig', ['f' => $form,]);
     }
 
     #[Route('/tache/delete/{i}', name: 'tache_delete')]
-    public function delete($i, TacheRepository $rep, ManagerRegistry $doctrine): Response
+    public function delete($i, TacheRepository $rep, ManagerRegistry $doctrine, SessionInterface $session): Response
     {
         $xs = $rep->find($i);
         $em = $doctrine->getManager();
         $em->remove($xs);
         $em->flush();
+
+        $session->getFlashBag()->add('success', 'Tâche supprimée avec succès!');
         return $this->redirectToRoute('tache_list');
     }
 
