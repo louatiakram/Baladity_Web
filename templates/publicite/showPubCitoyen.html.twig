@@ -220,27 +220,37 @@
         var index = 0;
         var advertisements = $("#advertisement-container .card");
         var totalAdvertisements = advertisements.length;
-        var displayTime = 9000; // 9 seconds in milliseconds
+        var highestOfferTime = 0;
+
+        // Determine le temps le plus long parmi toutes les offres
+        advertisements.each(function () {
+            var offerText = $(this).find('.list-group-item:nth-child(3)').text().trim();
+            var offer = parseInt(offerText.match(/\d+/)); // Récupère juste les chiffres de l'offre
+            if (offer > highestOfferTime) {
+                highestOfferTime = offer;
+            }
+        });
 
         function displayNextAdvertisement() {
             // Hide the current advertisement
             advertisements.eq(index).fadeOut(1000, function () {
                 // Move to the next advertisement
                 index = (index + 1) % totalAdvertisements;
-                var offer = advertisements.eq(index).find('.list-group-item:nth-child(3)').text().trim();
-                var delayTime = (offer === "9 mois :130dt") ? displayTime : 0;
+                var displayTime = highestOfferTime * 1000; // Convertit en millisecondes
+
                 // Display the next advertisement after the delay
-                advertisements.eq(index).delay(delayTime).fadeIn(1000);
+                advertisements.eq(index).fadeIn(1000).delay(displayTime).fadeOut(1000, displayNextAdvertisement);
             });
         }
 
         // Start displaying the first advertisement
         advertisements.eq(index).fadeIn(1000, function () {
             // Start the interval to switch between advertisements
-            setInterval(displayNextAdvertisement, displayTime);
+            setTimeout(displayNextAdvertisement, 5000); // Attendre 5 secondes avant de commencer
         });
     });
 </script>
+
 
 
     
