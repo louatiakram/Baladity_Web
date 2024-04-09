@@ -243,6 +243,24 @@ public function index4(ActualiteRepository $repository, FormFactoryInterface $fo
         'form' => $form->createView(), // Pass the form variable to the template
     ]);
 }
+#[Route('/actualite/details/{id}', name: 'actualite_details')]
+public function showDetails($id, ActualiteRepository $actualiteRepository, PubliciteRepository $publiciteRepository): Response
+{
+    // Récupérer l'actualité spécifique
+    $actualite = $actualiteRepository->find($id);
+
+    if (!$actualite) {
+        throw $this->createNotFoundException('Actualite not found');
+    }
+
+    // Récupérer les publicités associées à cette actualité
+    $publicites = $publiciteRepository->findBy(['id_a' => $actualite]);
+
+    return $this->render('actualite/details.html.twig', [
+        'actualite' => $actualite,
+        'publicites' => $publicites,
+    ]);
+}
 
 
  }

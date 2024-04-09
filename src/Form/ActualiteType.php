@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType; // Import FileType
 use App\Entity\actualite;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ActualiteType extends AbstractType
 {

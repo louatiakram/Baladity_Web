@@ -101,6 +101,10 @@ class actualite
 
         return $this;
     }
+    public function __toString(): string
+    {
+        return (string) $this->getTitreA();
+    }
 
     public function getIdUser(): ?int
     {

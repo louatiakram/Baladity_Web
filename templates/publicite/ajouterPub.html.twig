@@ -77,6 +77,13 @@
                         <form id="advertisementForm" method="POST" action="{{ path('ajouterPub') }}" enctype="multipart/form-data">
                             {{ form_start(form) }}
                             <div class="mb-3 row">
+    <label for="inputActualite" class="col-sm-4 col-form-label">Actualité</label>
+    <div class="col-sm-8">
+        {{ form_widget(form.actualite, {'attr': {'class': 'form-control'}}) }}
+    </div>
+</div>
+
+                            <div class="mb-3 row">
                                 <label for="inputTitle" class="col-sm-4 col-form-label">Title</label>
                                 <div class="col-sm-8">
                                     {{ form_widget(form.titre_pub, {'attr': {'class': 'form-control'}}) }}

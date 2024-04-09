@@ -13,7 +13,7 @@ use App\Entity\actualite;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 class PubliciteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -38,8 +38,13 @@ class PubliciteType extends AbstractType
                 ],
             ])
          
-        ;
-        
+            ->add('actualite', EntityType::class, [
+                'class' => actualite::class,
+                'choice_label' => 'titre_a',
+                'placeholder' => 'Select an actualite',
+                'required' => true,
+            ]);
+            
     }
 
     public function configureOptions(OptionsResolver $resolver): void

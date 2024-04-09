@@ -154,4 +154,15 @@ class publicite
 
         return $this;
     }
+    public function getActualite(): ?actualite
+{
+    return $this->id_a;
+}
+
+public function setActualite(?actualite $actualite): self
+{
+    $this->id_a = $actualite;
+    return $this;
+}
+
 }

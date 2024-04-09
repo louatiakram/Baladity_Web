@@ -15,6 +15,10 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\publicite;
 use App\Entity\enduser;
 use App\Form\PubliciteType;
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
+use Stripe\PaymentIntent;
+
 class PubliciteController extends AbstractController
 {
     #[Route('/publicite', name: 'app_publicite')]
@@ -183,27 +187,49 @@ public function index2(PubliciteRepository $repository): Response
         
     ]);
 }
+
 #[Route('/Payment', name: 'payment')]
-public function index5(PubliciteRepository $repository): Response
+public function payment(Request $request): Response
 {
-  // Récupérer le montant du paiement depuis la requête
-  $amount = $request->get('amount'); // Mettez en place la logique pour récupérer le montant correctement
+    // Récupérer la durée de l'offre et le montant correspondant depuis la requête ou la base de données
+    $offre = $request->get('offre_pub');
+    $montant = 0; // Initialiser le montant
 
-  // Configurez la clé secrète de Stripe
-  Stripe::setApiKey('pk_test_51OpeMeI3VcdValufSxbCUuf9lZ5qOU0YIW5NyR8BTrodMTNvHwqQ3Ljd1ca5VKqcoubbF1yRByI2AX6oQ4qotAKq00fur5NrAz');
+    // Définir le montant en fonction de la durée de l'offre
+    switch ($offre) {
+        case '3 mois':
+            $montant = 1470; // 50 DT en centimes (par exemple, 50,00 DT)
+            break;
+        case '6 mois':
+            $montant = 2647; // 90 DT en centimes
+            break;
+        case '9 mois':
+            $montant = 3823; // 130 DT en centimes
+            break;
+        // Ajoutez d'autres cas selon vos besoins
+    }
 
-  // Créer un nouvel intent de paiement
-  $paymentIntent = PaymentIntent::create([
-      'amount' => $amount,
-      'currency' => 'usd', // Changez selon votre devise
-  ]);
+    // Configurer Stripe avec votre clé secrète
+    Stripe::setApiKey('sk_test_51OpeMeI3VcdValufdQQI5nr0PLI1jmQ9YCCa6Xu4ozS5Qv9IBoaTSvqMtzZXaZf0edfdRkNVVLixMKfo8CtYx3PW00MLcbGNSd');
 
-  // Retourner le client_secret de l'intent de paiement
-  return new JsonResponse(['client_secret' => $paymentIntent->client_secret]);
+    try {
+        // Créer un PaymentIntent avec les détails du paiement
+        $paymentIntent = PaymentIntent::create([
+            'amount' => $montant,
+            'currency' => 'usd',
+        ]);
 
+        // Si le paiement réussit, afficher un message de succès
+        $paymentStatus = 'Paiement réussi. ID du paiement : ' . $paymentIntent->id;
+    } catch (\Exception $e) {
+        // Si une erreur survient lors du traitement du paiement, afficher le message d'erreur
+        $paymentStatus = 'Le paiement a échoué. Erreur : ' . $e->getMessage();
+    }
+
+    // Rendre le template Twig avec le statut du paiement
+    return $this->render('publicite/Payment.html.twig', [
+        'paymentStatus' => $paymentStatus,
+    ]);
 }
-#[Route('/create-payment-intent', name: 'create_payment_intent')]
-public function createPaymentIntent(Request $request): JsonResponse
-{
-}  
+
 }
