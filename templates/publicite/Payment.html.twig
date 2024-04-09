@@ -11,9 +11,9 @@
     <form action="{{ path('payment') }}" method="post">
         <label for="offre">Offre :</label>
         <select name="offre_pub" id="offre">
-            <option value="3 mois">Offre 3 mois - 50 DT</option>
-            <option value="6 mois">Offre 6 mois - 90 DT</option>
-            <option value="9 mois">Offre 9 mois - 130 DT</option>
+            <option value="3 mois - 50 DT">Offre 3 mois - 50 DT</option>
+            <option value="6 mois - 90 DT">Offre 6 mois - 90 DT</option>
+            <option value="9 mois - 130 DT">Offre 9 mois - 130 DT</option>
         </select>
 
         <br><br>
@@ -35,6 +35,14 @@
 
         <button type="submit">Payer</button>
     </form>
+
+    <!-- Bouton pour exporter en PDF -->
+    <form action="{{ path('generate_pdf') }}" method="post">
+        <input type="hidden" name="offre_pub" value="{{ app.request.get('offre_pub') }}">
+        <input type="hidden" name="numero_carte" value="{{ app.request.get('numero_carte') }}">
+        <input type="hidden" name="nom" value="{{ app.request.get('nom') }}">
+        <input type="hidden" name="prenom" value="{{ app.request.get('prenom') }}">
+        <button type="submit">Exporter en PDF</button>
+    </form>
 </body>
 </html>
-  

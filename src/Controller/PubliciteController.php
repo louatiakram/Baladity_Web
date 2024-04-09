@@ -18,7 +18,12 @@ use App\Form\PubliciteType;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Stripe\PaymentIntent;
-
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use TCPDF;
 class PubliciteController extends AbstractController
 {
     #[Route('/publicite', name: 'app_publicite')]
@@ -231,5 +236,84 @@ public function payment(Request $request): Response
         'paymentStatus' => $paymentStatus,
     ]);
 }
+
+
+#[Route('/generate-pdf', name: 'generate_pdf')]
+public function generatePdf(Request $request): Response
+{
+    // Récupérer les valeurs du formulaire
+    $nom = $request->request->get('nom');
+    $prenom = $request->request->get('prenom');
+    $numeroCarte = $request->request->get('numero_carte');
+    $offre = $request->request->get('offre_pub');
+
+    // Récupérer le fichier de l'image téléversée
+    /** @var UploadedFile $logoFile */
+    $logoFile = $request->files->get('logo');
+
+    // Vérifier si un fichier a été téléversé
+    if ($logoFile) {
+        // Définir le répertoire de destination pour enregistrer l'image téléversée
+        $uploadsDirectory = $this->getParameter('kernel.project_dir') . '/public/uploads';
+        $logoFileName = md5(uniqid()) . '.' . $logoFile->guessExtension();
+
+        // Déplacer le fichier téléversé vers le répertoire de destination
+        try {
+            $logoFile->move($uploadsDirectory, $logoFileName);
+        } catch (FileException $e) {
+            // Gérer l'erreur de déplacement du fichier
+            // ...
+        }
+
+        // Construire le chemin complet de l'image téléversée
+        $logoImagePath = '/uploads/' . $logoFileName;
+    } else {
+        // Utiliser une image par défaut si aucune image n'a été téléversée
+        $logoImagePath = 'templates/publicite/img/default_logo.png';
+    }
+
+    // Créer une nouvelle instance de TCPDF
+    $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+
+    // Définir les informations du document
+    $pdf->SetCreator('Votre Nom');
+    $pdf->SetAuthor('Votre Nom');
+    $pdf->SetTitle('Confirmation de Paiement');
+    $pdf->SetSubject('Confirmation de Paiement');
+
+    // Ajouter une page
+    $pdf->AddPage();
+
+    // Ajouter le logo
+    $pdf->Image($logoImagePath, 10, 10, 50, 0, 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+
+    // Ajouter le titre
+    $pdf->SetFont('helvetica', 'B', 18);
+    $pdf->Cell(0, 10, 'Vérification de Paiement', 0, 1, 'C');
+
+    // Ajouter les détails du paiement
+    $pdf->SetFont('helvetica', '', 12);
+    $pdf->Cell(0, 10, 'Nom: ' . $nom, 0, 1);
+    $pdf->Cell(0, 10, 'Prénom: ' . $prenom, 0, 1);
+    $pdf->Cell(0, 10, 'Numéro de carte: ' . $numeroCarte, 0, 1);
+    $pdf->Cell(0, 10, 'Offre sélectionnée: ' . $offre, 0, 1);
+
+    // Ajouter un message de confirmation
+    $pdf->Ln(10); // Saut de ligne
+    $pdf->Cell(0, 10, "Paiement reçu avec succès.\nLa vérification de paiement est confirmée.", 0, 1);
+
+    // Générer le contenu PDF
+    $pdfContent = $pdf->Output('offre.pdf', 'S');
+
+    // Créer une réponse avec le contenu PDF
+    $response = new Response($pdfContent);
+
+    // Ajouter les en-têtes pour télécharger le fichier
+    $response->headers->set('Content-Type', 'application/pdf');
+    $response->headers->set('Content-Disposition', 'attachment; filename="offre.pdf"');
+
+    return $response;
+}
+
 
 }
