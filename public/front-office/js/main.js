@@ -257,6 +257,10 @@
       }
     });
   
+    document.getElementById('import-csv-btn').addEventListener('click', function() {
+      document.getElementById('csv-file-input').click();
+  });
+
     /**
      * Autoresize echart charts
      */
