@@ -3,8 +3,21 @@
 {% block title %}Liste des Tâches{% endblock %}
 
 {% block body %}
+{# Check if there's a flash message #}
+{% if flash_message is not empty %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ flash_message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
 <div>
     <a href="{{ path('tache_download_csv') }}" class="btn btn-primary">Download CSV</a>
+{# Add a button-like element to trigger file selection #}
+<label for="csv-file-input" class="btn btn-primary">Import CSV</label>
+<form id="csv-upload-form" action="{{ path('tache_import_csv') }}" method="post" enctype="multipart/form-data" style="display: none;">
+    <input type="file" name="csv_file" accept=".csv" id="csv-file-input" onchange="this.form.submit()">
+</form>
 </div>
     <div class="d-flex justify-content-between">
         <div class="flex-fill mr-3">
@@ -89,6 +102,8 @@
     <style>
         .grid {
             min-height: 400px;
+            max-height: 400px; /* Set maximum height */
+            overflow-y: auto;  /* Add vertical scrollbar when content exceeds max-height */
             min-width: 400px
         }
 
@@ -128,6 +143,11 @@
 
 
     </style>
+    <script>
+        document.getElementById('import-csv-btn').addEventListener('click', function() {
+            document.getElementById('csv-file-input').click();
+        });
+    </script>
 
 {% endblock %}
 {%block rest%}{% endblock %}

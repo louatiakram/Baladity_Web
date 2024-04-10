@@ -22,6 +22,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use League\Csv\Reader;
+
 
 class TacheController extends AbstractController
 {
@@ -267,9 +271,12 @@ class TacheController extends AbstractController
             // Assuming "nom_Cat" is the field that corresponds to the category in the tache entity
             $taches = $repository->findBy(['nom_Cat' => $typeUser], ['date_FT' => 'ASC']);
         }
+        // Get flash message from the request
+        $flashMessage = $request->query->get('flash_message');
 
         return $this->render('tache/listfront.html.twig', [
             'taches' => $taches,
+            'flash_message' => $flashMessage,
         ]);
     }
 
@@ -361,12 +368,12 @@ class TacheController extends AbstractController
         ];
 
         // Set headers
-        $sheet->setCellValue('A1', 'Titre')->getStyle('A1')->applyFromArray($titleStyle);
-        $sheet->setCellValue('B1', 'Pièce Jointe')->getStyle('B1')->applyFromArray($titleStyle);
-        $sheet->setCellValue('C1', 'Date Début')->getStyle('C1')->applyFromArray($titleStyle);
-        $sheet->setCellValue('D1', 'Date Fin')->getStyle('D1')->applyFromArray($titleStyle);
-        $sheet->setCellValue('E1', 'Description')->getStyle('E1')->applyFromArray($titleStyle);
-        $sheet->setCellValue('F1', 'Etat')->getStyle('F1')->applyFromArray($titleStyle); // Add this line for etat_T
+        $sheet->setCellValue('A1', 'titre_T')->getStyle('A1')->applyFromArray($titleStyle);
+        $sheet->setCellValue('B1', 'pieceJointe_T')->getStyle('B1')->applyFromArray($titleStyle);
+        $sheet->setCellValue('C1', 'date_DT')->getStyle('C1')->applyFromArray($titleStyle);
+        $sheet->setCellValue('D1', 'date_FT')->getStyle('D1')->applyFromArray($titleStyle);
+        $sheet->setCellValue('E1', 'desc_T')->getStyle('E1')->applyFromArray($titleStyle);
+        $sheet->setCellValue('F1', 'etat_T')->getStyle('F1')->applyFromArray($titleStyle); // Add this line for etat_T
 
         // Populate data
         $row = 2;
@@ -431,4 +438,83 @@ class TacheController extends AbstractController
         return $response;
     }
 
+
+    #[Route('/tache/import-csv', name: 'tache_import_csv')]
+    public function importCsv(Request $request, TacheRepository $repository, SessionInterface $session, ManagerRegistry $doctrine): Response
+    {
+        $userId = 58; // You can get the user ID from wherever it's stored
+        $session->set('user_id', $userId); // Store user ID in session
+    
+        // Get the user by ID
+        $user = $this->getDoctrine()->getRepository(EndUser::class)->find($userId);
+    
+        // Check if the user exists
+        if (!$user) {
+            throw $this->createNotFoundException('Utilisateur non trouvé.');
+        }
+    
+        // Retrieve user type from session
+        $typeUser = $session->get('user_type');
+    
+        if (!$typeUser) {
+            throw $this->createNotFoundException('User type not found in session.');
+        }
+    
+        // Check if the form is submitted and valid
+        if ($request->isMethod('POST')) {
+            // Get the uploaded CSV file
+            $uploadedFile = $request->files->get('csv_file');
+    
+            // Check if a file was uploaded
+            if ($uploadedFile && $uploadedFile->isValid()) {
+                // Create a CSV reader instance
+                $csvReader = Reader::createFromPath($uploadedFile->getPathname());
+                $csvReader->setHeaderOffset(0); // Skip header row
+    
+                // Get CSV records
+                $records = $csvReader->getRecords();
+    
+                // Start importing data into the database
+                $entityManager = $this->getDoctrine()->getManager();
+                foreach ($records as $record) {
+                    // Create a new task entity for each record
+                    $task = new Tache();
+    
+                    // Check if a task with the same titre_T and nom_Cat already exists
+                    $existingTask = $entityManager->getRepository(Tache::class)->findOneBy([
+                        'titre_T' => $record['titre_T'],
+                        'nom_Cat' => $typeUser, // Assuming $typeUser is used for nom_Cat
+                    ]);
+    
+                    if ($existingTask) {
+                        // Handle existing task
+                        // For example, add an error message
+                        return $this->redirectToRoute('tache_listfront', ['flash_message' => 'Une tâche avec le même titre et la même catégorie existe déjà !']);
+                    } else {
+                        // Set properties for the task entity from the current CSV record
+                        $task->setTitreT($record['titre_T']);
+                        $task->setPieceJointeT($record['pieceJointe_T']);
+                        $task->setDateDT(new \DateTime($record['date_DT']));
+                        $task->setDateFT(new \DateTime($record['date_FT']));
+                        $task->setDescT($record['desc_T']);
+                        $task->setEtatT($record['etat_T']);
+                        $task->setNomCat($typeUser); // Set category based on user type
+                        $task->setIdUser($user);
+    
+                        // Persist the task entity
+                        $entityManager->persist($task);
+                    }
+                }
+    
+                // Flush the changes to the database
+                $entityManager->flush();
+    
+                // Redirect to the list page or display a success message
+                return $this->redirectToRoute('tache_listfront');
+            }
+        }
+    
+        // If the form is not submitted or the file upload fails, redirect back to the list page
+        return $this->redirectToRoute('tache_listfront');
+    }
 }
