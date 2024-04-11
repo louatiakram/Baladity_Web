@@ -91,49 +91,6 @@ class TacheController extends AbstractController
         ]);
     }
 
-    #[Route('/tache/detailfront/{i}', name: 'tache_detail_front')]
-    public function detailfront($i, Request $request, TacheRepository $rep): Response
-    {
-        $userId = 49; // Assuming the user ID is 50
-        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
-        if (!$user) {
-            throw $this->createNotFoundException('User Existe Pas');
-        }
-
-        $tache = $rep->find($i);
-        if (!$tache) {
-            throw $this->createNotFoundException('Tache Existe Pas');
-        }
-
-        // Create a new CommentaireTache entity
-        $comment = new CommentaireTache();
-        $comment->setIdUser($user);
-        $commentForm = $this->createForm(CommentaireTacheType::class, $comment);
-
-        // Handle the comment form submission
-        $commentForm->handleRequest($request);
-        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-            // Associate the comment with the tache entity
-            $comment->setIdT($tache);
-            $comment->setDateC(new \DateTime()); // Set current date
-
-            // Persist and flush the comment entity
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($comment);
-            $entityManager->flush();
-
-            // Redirect or return a response
-            return $this->redirectToRoute('tache_detail_front', ['i' => $i]);
-        }
-
-        // Pass the comment form and tache details to the Twig template
-        return $this->render('tache/detailfront.html.twig', [
-            'tache' => $tache,
-            'commentForm' => $commentForm->createView(),
-            'userId' => $userId,
-        ]);
-    }
-
     #[Route('/tache/add', name: 'tache_add')]
     public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
     {
@@ -245,6 +202,26 @@ class TacheController extends AbstractController
         return $this->redirectToRoute('tache_list');
     }
 
+    #[Route('/tache/piechart', name: 'tache_piechart')]
+    public function pieChart(TacheRepository $tacheRepository): Response
+    {
+        // Get the count of tasks done by each user
+        $usersTasksCount = $tacheRepository->getUsersTasksCount();
+
+        // Extract user names and task counts from the result
+        $data = [];
+        foreach ($usersTasksCount as $result) {
+            $userName = $result['user_name'];
+            $taskCount = $result['task_count'];
+            $data[] = ['user_name' => $userName,
+                'task_count' => $taskCount];
+        }
+
+        return $this->render('tache/piechart.html.twig', [
+            'data' => $data, // Pass data to twig template
+        ]);
+    }
+
     #[Route('/tache/listfront', name: 'tache_listfront')]
     public function listfront(Request $request, TacheRepository $repository, SessionInterface $session): Response
     {
@@ -280,9 +257,58 @@ class TacheController extends AbstractController
         ]);
     }
 
-    #[Route('/update-tache-state/{tacheId}/{newState}', name: 'update_tache_state')]
-    public function updateTacheState(Request $request, int $tacheId, string $newState): JsonResponse
+    #[Route('/tache/detailfront/{i}', name: 'tache_detail_front')]
+    public function detailfront($i, Request $request, TacheRepository $rep, SessionInterface $session): Response
     {
+        $userId = $session->get('user_id');
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+        if (!$user) {
+            throw $this->createNotFoundException('User Existe Pas');
+        }
+
+        $tache = $rep->find($i);
+        if (!$tache) {
+            throw $this->createNotFoundException('Tache Existe Pas');
+        }
+
+        // Create a new CommentaireTache entity
+        $comment = new CommentaireTache();
+        $comment->setIdUser($user);
+        $commentForm = $this->createForm(CommentaireTacheType::class, $comment);
+
+        // Handle the comment form submission
+        $commentForm->handleRequest($request);
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            // Associate the comment with the tache entity
+            $comment->setIdT($tache);
+            $comment->setDateC(new \DateTime()); // Set current date
+
+            // Persist and flush the comment entity
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            // Redirect or return a response
+            return $this->redirectToRoute('tache_detail_front', ['i' => $i]);
+        }
+
+        // Pass the comment form and tache details to the Twig template
+        return $this->render('tache/detailfront.html.twig', [
+            'tache' => $tache,
+            'commentForm' => $commentForm->createView(),
+            'userId' => $userId,
+        ]);
+    }
+    
+    #[Route('/update-tache-state/{tacheId}/{newState}', name: 'update_tache_state')]
+    public function updateTacheState(Request $request, int $tacheId, string $newState, SessionInterface $session): JsonResponse
+    {
+            // Get the user ID from the session
+    $userId = $session->get('user_id');
+
+    // Get the user entity from the database based on the user ID
+    $user = $this->getDoctrine()->getRepository(EndUser::class)->find($userId);
+    
         $entityManager = $this->getDoctrine()->getManager();
         $tache = $entityManager->getRepository(Tache::class)->find($tacheId);
 
@@ -292,6 +318,15 @@ class TacheController extends AbstractController
 
         // Update etat_T attribute of the tache entity
         $tache->setEtatT($newState);
+        // Update id_user if the task is moved to the "DONE" state
+    if ($newState === 'DONE') {
+        
+        if ($user) {
+            $tache->setIdUser($user);
+        } else {
+            return new JsonResponse(['error' => 'User Existe Pas'], Response::HTTP_NOT_FOUND);
+        }
+    }
 
         try {
             $entityManager->flush(); // Save changes to the database
@@ -299,26 +334,6 @@ class TacheController extends AbstractController
         } catch (\Exception $e) {
             return new JsonResponse(['error' => 'Failed to update tache state'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-    #[Route('/tache/piechart', name: 'tache_piechart')]
-    public function pieChart(TacheRepository $tacheRepository): Response
-    {
-        // Get the count of tasks done by each user
-        $usersTasksCount = $tacheRepository->getUsersTasksCount();
-
-        // Extract user names and task counts from the result
-        $data = [];
-        foreach ($usersTasksCount as $result) {
-            $userName = $result['user_name'];
-            $taskCount = $result['task_count'];
-            $data[] = ['user_name' => $userName,
-                'task_count' => $taskCount];
-        }
-
-        return $this->render('tache/piechart.html.twig', [
-            'data' => $data, // Pass data to twig template
-        ]);
     }
 
     #[Route('/tache/download-csv', name: 'tache_download_csv')]
@@ -442,8 +457,7 @@ class TacheController extends AbstractController
     #[Route('/tache/import-csv', name: 'tache_import_csv')]
     public function importCsv(Request $request, TacheRepository $repository, SessionInterface $session, ManagerRegistry $doctrine): Response
     {
-        $userId = 58; // You can get the user ID from wherever it's stored
-        $session->set('user_id', $userId); // Store user ID in session
+        $userId = $session->get('user_id');
     
         // Get the user by ID
         $user = $this->getDoctrine()->getRepository(EndUser::class)->find($userId);
