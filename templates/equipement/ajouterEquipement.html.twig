@@ -15,11 +15,13 @@
                             <div class="mb-3">
                                 <label for="inputReference" class="form-label">Référence</label>
                                 {{ form_widget(form.reference_eq, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.reference_eq) }}
                             </div>
 
                             <div class="mb-3">
                                 <label for="inputNom" class="form-label">Nom</label>
                                 {{ form_widget(form.nom_eq, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.nom_eq) }}
                             </div>
 
                             <div class="mb-3">
@@ -30,6 +32,7 @@
                             <div class="mb-3">
                                 <label for="inputQuantite" class="form-label">Quantité</label>
                                 {{ form_widget(form.quantite_eq, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.quantite_eq) }}
                             </div>
 
                             <div class="mb-3">
@@ -40,6 +43,7 @@
                             <div class="mb-3">
                                 <label for="inputDescription" class="form-label">Description</label>
                                 {{ form_widget(form.description_eq, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.description_eq) }}
                             </div>
 
                             <div class="mb-3">
@@ -59,8 +63,6 @@
             </div>
         </div>
     </section>
-{% endblock %}
-{% block javascript %}
     <!-- Ajout du script JavaScript pour afficher l'aperçu de l'image -->
     <script>
         // Function to display the selected image preview

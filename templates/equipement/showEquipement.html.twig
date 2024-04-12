@@ -59,7 +59,7 @@
                                             <i class="bi bi-chat-square-text"></i> Avis
                                         </a>
                                         <!-- Delete button -->
-                                        <button onclick="location.href='{{ path('equipement_delete', {'id': equipement.getIdEquipement()})}}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i>Supprimer</button>
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('{{ equipement.getIdEquipement() }}')"><i class="bi bi-trash"></i>Supprimer</button>
                                     {% endblock %}
                                 </div>
                             </div>
@@ -94,28 +94,11 @@
         {% block ListeTalacheNav %}
             <!-- Additional navigation elements if needed -->
         {% endblock %}     
-{% endblock %}
-{% block javascript %}
 <script>
-    function deleteEquipement(id) {
+    function confirmDelete(equipementId) {
         if (confirm("Êtes-vous sûr de vouloir supprimer cet équipement?")) {
-            // Envoyez une requête AJAX pour supprimer l'équipement
-            fetch(`/equipement/deleteEquipement/${id}`, {
-                method: 'DELETE',
-            })
-            .then(response => {
-                if (response.ok) {
-                    // L'équipement a été supprimé avec succès, faites quelque chose si nécessaire
-                    // Par exemple, actualisez la page ou mettez à jour l'interface utilisateur
-                    location.reload(); // recharge la page
-                } else {
-                    // La suppression a échoué, affichez un message d'erreur ou effectuez une autre action
-                    console.error('La suppression de l\'équipement a échoué.');
-                }
-            })
-            .catch(error => {
-                console.error('Une erreur s\'est produite lors de la suppression de l\'équipement:', error);
-            });
+            // Si l'utilisateur confirme la suppression, redirigez vers l'action de suppression appropriée
+            window.location.href = "{{ path('equipement_delete', {'id': 'EQUIPEMENT_ID'}) }}".replace('EQUIPEMENT_ID', equipementId);
         }
     }
 </script>

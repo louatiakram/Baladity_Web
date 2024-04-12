@@ -30,18 +30,25 @@ class AvisController extends AbstractController
             'controller_name' => 'AvisController',
         ]);
     }
-    #[Route('/avis/ajouterAvisFront', name: 'ajouterAvisFront')]     
-    public function ajouterAvisFront(ManagerRegistry $doctrine, Request $req): Response
+    #[Route('/avis/ajouterAvisFront/{id}', name: 'ajouterAvisFront')]
+    public function ajouterAvisFront($id, ManagerRegistry $doctrine, Request $req): Response
     {
+        // Récupérer l'identifiant de l'utilisateur
+        $userId = 48; 
+    
+        // Récupérer l'équipement depuis la base de données en utilisant son ID
+        $equipement = $this->getDoctrine()->getRepository(Equipement::class)->find($id);
+    
+        // Vérifier si l'équipement existe
+        if (!$equipement) {
+            throw $this->createNotFoundException('Equipement not found');
+        }
+    
         // Créer une nouvelle instance de l'entité Avis
         $avis = new Avis();
     
-        // Récupérer l'identifiant de l'utilisateur
-        $userId = 48; 
-        $idEquipement = $avis->getIdEquipement();
-    
         // Récupérer l'utilisateur à partir de son identifiant
-        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+        $user = $this->getDoctrine()->getRepository(Enduser::class)->find($userId);
     
         // Vérifier si l'utilisateur existe
         if (!$user) {
@@ -51,8 +58,11 @@ class AvisController extends AbstractController
         // Définir l'utilisateur de l'avis
         $avis->setIdUser($user);
         
+        // Définir l'équipement de l'avis
+        $avis->setEquipement($equipement); // Utiliser la méthode setEquipement pour associer l'équipement à l'avis
+    
         // Définir la date actuelle pour la propriété date_avis
-        $avis->setDateAvis(new DateTime());
+        $avis->setDateAvis(new \DateTime());
     
         // Créer un formulaire pour l'avis
         $form = $this->createForm(AvisType::class, $avis);
@@ -69,18 +79,18 @@ class AvisController extends AbstractController
             $em->flush();
     
             // Rediriger vers une page de succès ou afficher un message de succès
-            return $this->redirectToRoute('avis_show_front');
-    
+            return $this->redirectToRoute('avis_show_front', ['id' => $equipement->getIdEquipement()]);
         }
     
         // Dans le cas où le formulaire n'est pas soumis ou n'est pas valide,
         // Rendre le template avec le formulaire et les données associées
         return $this->render('avis/ajouterAvisFront.html.twig', [
             'form' => $form->createView(),
+            'equipement' => $equipement,
             'avis' => $avis, // Passer la variable 'avis' à votre template Twig
-            
         ]);
     }
+    
     #[Route('/avis/deleteAvis/{id}', name: 'avis_delete')]
     public function deleteAvis($id, AvisRepository $rep, ManagerRegistry $doctrine): Response
     {
@@ -119,11 +129,12 @@ class AvisController extends AbstractController
     
             // Redirect to a success page or display a success message
             // For example:
-            return $this->redirectToRoute('avis_show');
+            return $this->redirectToRoute('avis_show_front', ['id' => $avis->getEquipement()->getIdEquipement()]);
         }
         return $this->render('avis/modifierAvis.html.twig', [
             'form' => $form->createView(),
             'avis' => $avis,
+            'equipement' => $avis->getEquipement(),
         ]);
     }
     #[Route('/avis/showAvis/{id}', name: 'avis_show')]
@@ -173,6 +184,7 @@ class AvisController extends AbstractController
         ]);
     }
     #[Route('/avis/showAvisFront/{id}', name: 'avis_show_front')]
+    
 public function showAvisFront($id, Request $request, EquipementRepository $equipementRepository, AvisRepository $avisRepository): Response
 {
     // Récupérer l'équipement par son ID
@@ -213,6 +225,7 @@ public function showAvisFront($id, Request $request, EquipementRepository $equip
     return $this->render('avis/showAvisFront.html.twig', [
         'avis' => $paginator,
         'equipement' => $equipement,
+        'id' => $id,
         'query' => $query,
         'currentPage' => $currentPage,
         'totalPages' => $totalPages,

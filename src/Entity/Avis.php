@@ -100,15 +100,25 @@ class Avis
         return $this;
     }
 
-    public function getIdEquipement(): ?equipement
+    public function getEquipement(): ?Equipement
+    {
+        return $this->equipement;
+    }
+    
+    public function setEquipement(?Equipement $equipement): self
+    {
+        $this->equipement = $equipement;
+    
+        return $this;
+    }
+    public function getIdEquipement(): ?Equipement
     {
         return $this->id_equipement;
     }
-
-    public function setIdEquipement(?equipement $id_equipement): self
+    public function setIdEquipement(?Equipement $id_equipement): self
     {
         $this->id_equipement = $id_equipement;
-
+    
         return $this;
     }
 }

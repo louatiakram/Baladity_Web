@@ -6,6 +6,7 @@ use App\Repository\EquipementRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Avis;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EquipementRepository::class)]
@@ -17,21 +18,34 @@ class Equipement
     private $id_equipement;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
     private $reference_eq;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Vous devez ajouter le nom.")]
+    #[Assert\Regex(
+        pattern: '/\d/',
+        match: false,
+        message: "Le nom de l'équipement ne peut pas contenir de chiffres."
+    )]
     private $nom_eq;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $categorie_eq;
 
     #[ORM\Column(type: 'integer')]
+    #[Assert\Positive(message: "la quantité doit etre positive.")]
     private $quantite_eq;
 
     #[ORM\Column(type: 'datetime')]
     private $date_ajouteq;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Vous devez ajouter une description.")]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z0-9\s]+$/',
+        message: 'La description ne peut contenir que des lettres, des chiffres et des espaces.'
+    )]
     private $description_eq;
 
     #[ORM\Column(type: 'string', length: 255)]

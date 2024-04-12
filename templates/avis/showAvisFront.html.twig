@@ -1,4 +1,4 @@
-{% extends 'base-back.html.twig' %}
+{% extends 'base-front.html.twig' %}
 
 {% block title %}Liste des avis{% endblock %}
 
@@ -10,7 +10,7 @@
 
         <!-- Button to navigate to the "ajouter" form -->
         <div class="text-center">
-            <a href="{{ path('ajouterAvisFront') }}" class="btn btn-primary">Ajouter avis</a>
+           <a href="{{ path('ajouterAvisFront', {'id': id}) }}" class="btn btn-primary">Ajouter avis</a>
         </div>
 
         <br>
@@ -36,11 +36,14 @@
                                         <td>{{ avis_item.getCommentaireAvis() }}</td>
                                         <td>{{ avis_item.getDateAvis()|date('d/m/Y ') }}</td>
                                         <td>
-                                            <form action="{{ path('avis_delete', {'id': avis_item.getIdAvis()}) }}" method="post">
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ avis_item.getIdAvis()) }}">
-                                                <button type="submit" class="btn btn-danger">Supprimer</button>
-                                            </form>
+                                            {% block equipement_actions %}
+                                        <!-- Modify button -->
+                                        <a href="{{ path('modifierAvis', {'id': avis_item.getIdAvis()}) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-pencil"></i> Modifier
+                                        </a>
+                                        <!-- Delete button -->
+                                        <button onclick="location.href='{{ path('avis_delete', {'id': avis_item.getIdAvis()})}}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i>Supprimer</button>
+                                    {% endblock %}
                                         </td>
                                     </tr>
                                 {% endfor %}
