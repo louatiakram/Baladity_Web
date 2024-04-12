@@ -31,27 +31,46 @@ class TacheController extends AbstractController
 {
 
     #[Route('/tache', name: 'tache_list')]
-    public function list(Request $request, TacheRepository $repository, PaginatorInterface $paginator, SessionInterface $session): Response
-    {
-        // Fetch all tasks from the repository
-        $query = $repository->createQueryBuilder('t')
-            ->orderBy('t.date_FT', 'ASC')
-            ->getQuery();
+public function list(Request $request, TacheRepository $repository, PaginatorInterface $paginator, SessionInterface $session): Response
+{
+    // Fetch all tasks from the repository
+    $orderBy = $request->query->get('orderBy', 'date_FT'); // Default ordering by date_FT
 
-        // Paginate the query
-        $tasks = $paginator->paginate(
-            $query, // Doctrine Query object
-            $request->query->getInt('page', 1), // Page number
-            6// Limit per page
-        );
+    // Set default ordering
+    $defaultOrderBy = 'date_FT';
+    $queryBuilder = $repository->createQueryBuilder('t')->orderBy('t.' . $defaultOrderBy, 'ASC');
 
-        $successMessage = $session->getFlashBag()->get('success');
-
-        return $this->render('tache/list.html.twig', [
-            'tasks' => $tasks,
-            'successMessage' => $successMessage ? $successMessage[0] : null, // Pass the success message if it exists
-        ]);
+    // Set order by based on user input
+    switch ($orderBy) {
+        case 'titre':
+            $queryBuilder->orderBy('t.titre_T', 'ASC');
+            break;
+        case 'etat':
+            $queryBuilder->orderBy('t.etat_T', 'ASC');
+            break;
+        case 'date_FT':
+        default:
+            $queryBuilder->orderBy('t.date_FT', 'ASC');
+            break;
     }
+
+    $query = $queryBuilder->getQuery();
+
+    // Paginate the query
+    $tasks = $paginator->paginate(
+        $query, // Doctrine Query object
+        $request->query->getInt('page', 1), // Page number
+        3 // Limit per page
+    );
+
+    $successMessage = $session->getFlashBag()->get('success');
+
+    return $this->render('tache/list.html.twig', [
+        'tasks' => $tasks,
+        'successMessage' => $successMessage ? $successMessage[0] : null, // Pass the success message if it exists
+        'orderBy' => $orderBy // Pass the orderBy parameter to the Twig template
+    ]);
+}
 
     #[Route('/tache/search', name: 'tache_search', methods: ['GET'])]
     public function search(TacheRepository $tacheRepository, Request $request): JsonResponse

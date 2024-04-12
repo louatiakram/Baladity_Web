@@ -455,7 +455,7 @@
       }
     });
 
-//
+//AJAX SEARCH
     $(document).ready(function () {
       $('#search-input').on('keyup', function () {
           var query = $(this).val().trim();
@@ -495,6 +495,13 @@
           }
       });
   });
+
+//TRIER:
+$(document).ready(function() {
+  $('#filterBtn').click(function() {
+      $('#filterOptions').toggle();
+  });
+});
 
   
     /**

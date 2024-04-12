@@ -29,7 +29,7 @@ class tache
     )]
     #[Assert\Length(
         min: 4,
-        max: 30,
+        max: 40,
         minMessage: 'Le titre doit comporter au moins {{ limit }} caractères.',
         maxMessage: 'Le titre ne peut pas dépasser {{ limit }} caractères.'
     )]
