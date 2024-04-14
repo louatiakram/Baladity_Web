@@ -5,6 +5,12 @@
 
 {% block body %}
 
+<label class="switch" id="dark-mode-toggle">
+    <input type="checkbox" id="dark-mode-checkbox">
+    <span class="slider"></span>
+</label>
+
+
 {# Check if there's a flash message #}
 {% if flash_message is not empty %}
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -229,6 +235,188 @@
         }
 
     </style>
+    <style>
+
+        /* The switch - the box around the slider */
+.switch {
+  display: block;
+  --width-of-switch: 3.5em;
+  --height-of-switch: 2em;
+  /* size of sliding icon -- sun and moon */
+  --size-of-icon: 1.4em;
+  /* it is like a inline-padding of switch */
+  --slider-offset: 0.3em;
+  position: relative;
+  width: var(--width-of-switch);
+  height: var(--height-of-switch);
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #f4f4f5;
+  transition: .4s;
+  border-radius: 30px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: var(--size-of-icon,1.4em);
+  width: var(--size-of-icon,1.4em);
+  border-radius: 20px;
+  left: var(--slider-offset,0.3em);
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(40deg,#ff0080,#ff8c00 70%);
+  ;
+ transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #303136;
+}
+
+input:checked + .slider:before {
+  left: calc(100% - (var(--size-of-icon,1.4em) + var(--slider-offset,0.3em)));
+  background: #303136;
+  /* change the value of second inset in box-shadow to change the angle and direction of the moon  */
+  box-shadow: inset -3px -2px 5px -2px #8983f7, inset -10px -4px 0 0 #a3dafb;
+}
+</style>
+<style>
+    /* Dark Mode Styles */
+    .dark-mode {
+        /* Background color */
+        background-color: #121212;
+        color: #ffffff; /* Text color */
+    
+        /* Card background color */
+        .card {
+            background-color: #1e1e1e;
+            color: #ffffff; /* Card text color */
+        }
+    
+        /* Card header background color */
+        .card-header {
+            background-color: #2e2e2e;
+            color: #ffffff; /* Card header text color */
+        }
+    
+        /* Button background color */
+        .btn {
+            background-color: #424242;
+            color: #ffffff; /* Button text color */
+        }
+    
+        /* Button hover background color */
+        .btn:hover {
+            background-color: #555555;
+        }
+    
+        /* Input background color */
+        input {
+            background-color: #333333;
+            color: #ffffff; /* Input text color */
+        }
+    
+        /* Slider background color */
+        .slider {
+            background-color: #555555;
+        }
+    
+        /* Slider before color */
+        .slider:before {
+            background: linear-gradient(40deg, #ff0080, #ff8c00 70%);
+            box-shadow: inset -3px -2px 5px -2px #8983f7, inset -10px -4px 0 0 #a3dafb;
+        }
+    
+        /* Task counter color */
+        .task-counter {
+            color: #ffffff;
+        }
+    
+        /* Chat container background color */
+        #chat-container {
+            background-color: #212121;
+        }
+    
+        /* Chat header background color */
+        #chat-header {
+            background-color: #333333;
+            color: #ffffff; /* Chat header text color */
+        }
+    
+        /* Chat area background color */
+        #chat-area {
+            background-color: #2c2c2c;
+            color: #ffffff; /* Chat area text color */
+        }
+    
+        /* Chat input background color */
+        #user-input {
+            background-color: #333333;
+            color: #ffffff; /* Chat input text color */
+        }
+    
+        /* Chat button background color */
+        .button {
+            background-color: #424242;
+            color: #ffffff; /* Chat button text color */
+        }
+    
+        /* Chat bot button background color */
+        #chatbot-button {
+            background-color: #424242;
+        }
+    
+        /* Chat bot button hover background color */
+        #chatbot-button:hover {
+            background-color: #555555;
+        }
+    
+        /* Chat bot button image filter */
+        #chatbot-button img {
+            filter: invert(1);
+        }
+    
+        /* Alert background color */
+        .alert {
+            background-color: #333333;
+            border-color: #555555;
+            color: #ffffff; /* Alert text color */
+        }
+    
+        /* Alert close button background color */
+        .btn-close {
+            filter: invert(1);
+        }
+    }
+    </style>
+    <script>
+        // Function to toggle dark mode
+        function toggleDarkMode() {
+            var body = document.body;
+            body.classList.toggle('dark-mode');
+        }
+    
+        // Add event listener to the checkbox
+        document.getElementById('dark-mode-checkbox').addEventListener('change', function() {
+            toggleDarkMode();
+        });
+    </script>
  <script>
     document.addEventListener("DOMContentLoaded", function() {
         var userInputField = document.getElementById('user-input');
