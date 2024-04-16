@@ -48,7 +48,7 @@
 
 			<a href="index.html" class="logo d-flex align-items-center">
 				<!-- Uncomment the line below if you also wish to use an image logo -->
-				<!-- <img src="{{ asset('front-office/img/logo.png') }}" alt=""> -->
+				<img src="{{ asset('front-office/img/logo.png') }}" alt="">
 				<h1>Baladity</h1>
 			</a>
 
@@ -56,6 +56,7 @@
 			<i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
 			<nav id="navbar" class="navbar">
 				<ul>
+					{% block barreTitre %}
 					<li><a href="index.html" class="active">Home</a></li>
 					<li><a href="about.html">About</a></li>
 					<li><a href="services.html">Services</a></li>
@@ -81,6 +82,7 @@
 					</li>
 					<li><a href="contact.html">Contact</a></li>
 					<li><a class="get-a-quote" href="get-a-quote.html">Get a Quote</a></li>
+					{% endblock %}
 				</ul>
 			</nav>
 			<!-- .navbar -->
@@ -101,11 +103,13 @@
 			<div class="row gy-4 d-flex justify-content-between">
 				{%block body %}
 				<div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
-					<h2 data-aos="fade-up">Your Lightning Fast Delivery Partner</h2>
+					<h2 data-aos="fade-up">{%block slogon %}Your Lightning Fast Delivery Partner{%endblock %}</h2>
 					<p data-aos="fade-up" data-aos-delay="100">
+						{%block desc %}
 						Facere distinctio molestiae nisi fugit tenetur repellat non
 						praesentium nesciunt optio quis sit odio nemo quisquam. eius quos reiciendis eum vel eum voluptatem
 						eum maiores eaque id optio ullam occaecati odio est possimus vel reprehenderit
+						{%endblock %}
 					</p>
 
 					<form action="#" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up"
@@ -163,9 +167,14 @@
 					</div>
 				</div>
 
+
+				
 				<div class="col-lg-5 order-1 order-lg-2 hero-img" data-aos="zoom-out">
-					<img src="{{ asset('front-office/img/hero-img.svg') }}" class="img-fluid mb-3 mb-lg-0" alt="">
+					{% block imageFrontHome %}<img src="{{ asset('front-office/img/hero-img.svg') }}" class="img-fluid mb-3 mb-lg-0" alt="">{% endblock %}
 				</div>
+				
+
+
 				{% endblock %}
 			</div>
 			
