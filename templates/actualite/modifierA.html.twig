@@ -421,20 +421,20 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Modifier Actualite</h5>
-<form method="POST" action="{{ path('modifierA', {'id': actualite.idA}) }}" enctype="multipart/form-data">
-
-
+                            <form method="POST" action="{{ path('modifierA', {'id': actualite.idA}) }}" enctype="multipart/form-data">
                                 {{ form_start(form) }}
                                 <div class="row mb-3">
                                     <label for="inputText" class="col-sm-2 col-form-label">Titre</label>
                                     <div class="col-sm-10">
                                         {{ form_widget(form.titre_a, {'attr': {'class': 'form-control'}}) }}
+                                        {{ form_errors(form.titre_a) }} <!-- Display validation errors for titre_a -->
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputEmail" class="col-sm-2 col-form-label">Description</label>
                                     <div class="col-sm-10">
                                         {{ form_widget(form.description_a, {'attr': {'class': 'form-control'}}) }}
+                                        {{ form_errors(form.description_a) }} <!-- Display validation errors for description_a -->
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -442,8 +442,8 @@
                                     <div class="col-sm-10">
                                         <div class="text-center"> <!-- Center the image -->
                                             {{ form_widget(form.image_a, {'attr': {'class': 'form-control', 'onchange': 'afficherApercu(this)'}}) }}
-                                           <img id="imagePreview" src="{{ asset('uploads/' ~ actualite.imageA) }}" alt="Aperçu de l'image" style="max-width: 100%; max-height: 200px;">
-
+                                            {{ form_errors(form.image_a) }} <!-- Display validation errors for image_a -->
+                                            <img id="imagePreview" src="{{ asset('uploads/' ~ actualite.imageA) }}" alt="Aperçu de l'image" style="max-width: 100%; max-height: 200px;">
                                         </div>
                                     </div>
                                 </div>
@@ -451,7 +451,7 @@
                                 <div class="row mb-3">
                                     <div class="col-sm-12 text-center"> <!-- Center the buttons -->
                                         <button type="submit" class="btn btn-primary">Modifier</button>
-                                           <a href="{{ path('actualite_show') }}" class="btn btn-primary">retour</a>
+                                        <a href="{{ path('actualite_show') }}" class="btn btn-primary">retour</a>
                                     </div>
                                 </div>
                                 {{ form_end(form) }}
@@ -463,6 +463,7 @@
         </section>
     {% endblock %}
 </main>
+
 <script>
     // Function to display the selected image preview
     function afficherApercu(input) {

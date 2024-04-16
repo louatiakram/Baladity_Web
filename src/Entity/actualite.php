@@ -20,10 +20,15 @@ class actualite
         match: false,
         message: "La description de l'actualité ne peut pas contenir de chiffres."
     )]
+    #[Assert\Length(
+        min: 5,
+        minMessage: "La description de l'actualité doit contenir au moins {{ limit }} caractères."
+    )]
     private $description_a;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $image_a;
+    #[Assert\NotBlank(message: "Vous devez sélectionner une image.")]
+    private $image_a = 'default_image.jpg'; // Définir une valeur par défaut
 
     #[ORM\Column(type: 'date')]
     

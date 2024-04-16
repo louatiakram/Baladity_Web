@@ -28,57 +28,73 @@ class ActualiteController extends AbstractController
             'controller_name' => 'ActualiteController',
         ]);
     }
-    #[Route('/actualite/ajouterA', name: 'ajouterA')]     
-        public function ajouterA(ManagerRegistry $doctrine, Request $req): Response
-        {
-            $actualite = new Actualite();
-            $userId = 48; 
-            $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
-        
-            if (!$user) {
-                throw $this->createNotFoundException('User not found');
-            }
-        
-            $actualite->setIdUser($user);
-            
-            // Set the current date to the date_a property
-            $actualite->setDateA(new DateTime());
-        
-            $form = $this->createForm(ActualiteType::class, $actualite);
-            $form->handleRequest($req);
-        
-            if ($form->isSubmitted() && $form->isValid()) {
-                // Set the image_a field
-                $image = $form->get('image_a')->getData();
-                if ($image) {
-                    // Handle image upload and persist its filename to the database
-                    $fileName = uniqid().'.'.$image->guessExtension();
-                    try {
-                        $image->move($this->getParameter('uploadsDirectory'), $fileName);
-                        $actualite->setImageA($fileName);
-                    } catch (FileException $e) {
-                        // Handle the exception if file upload fails
-                        // For example, log the error or display a flash message
-                    }
-                }
-        
-                // Get the entity manager
-                $em = $doctrine->getManager();
-        
-                // Persist the actualite object to the database
-                $em->persist($actualite);
-                $em->flush();
-        
-                // Redirect to a success page or display a success message
-                // For example:
-                return $this->redirectToRoute('actualite_show');
 
+
+   
+
+    #[Route('/actualite/ajouterA', name: 'ajouterA')]
+    public function ajouterA(ManagerRegistry $doctrine, Request $req): Response
+    {
+        $actualite = new Actualite();
+        $userId = 48;
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+    
+        if (!$user) {
+            throw $this->createNotFoundException('User not found');
+        }
+    
+        $actualite->setIdUser($user);
+    
+        // Set the current date to the date_a property
+        $actualite->setDateA(new DateTime());
+    
+        $form = $this->createForm(ActualiteType::class, $actualite);
+        $form->handleRequest($req);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Set the image_a field
+            $image = $form->get('image_a')->getData();
+            if ($image) {
+                // Handle image upload and persist its filename to the database
+                $fileName = uniqid() . '.' . $image->guessExtension();
+                try {
+                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    $actualite->setImageA($fileName);
+                } catch (FileException $e) {
+                    // Handle the exception if file upload fails
+                    // For example, log the error or display a flash message
+                }
+            } else {
+                // Add an error to the image_a field if no image is selected
+                $form->get('image_a')->addError(new FormError('Vous devez sélectionner une image.'));
             }
-        
-            return $this->render('actualite/ajouterA.html.twig', [
-                'form' => $form->createView()
-            ]);
+    
+            // Check if there are any errors after adding the custom error
+            if ($form->isValid()) {
+                // Make sure image_a is not null before persisting
+                if (!$actualite->getImageA()) {
+                    // Add an error to the form
+                    $form->addError(new FormError('Une image est requise.'));
+                } else {
+                    // Get the entity manager
+                    $em = $doctrine->getManager();
+    
+                    // Persist the actualite object to the database
+                    $em->persist($actualite);
+                    $em->flush();
+    
+                    // Redirect to a success page or display a success message
+                    return $this->redirectToRoute('actualite_show');
+                }
+            }
+        }
+    
+        return $this->render('actualite/ajouterA.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
+    
+    
     
     #[Route('/actualite/deleteA/{i}', name: 'actualite_delete')]
     public function deleteA($i, ActualiteRepository $rep, ManagerRegistry $doctrine): Response
@@ -214,8 +230,11 @@ public function ajouterA2(ManagerRegistry $doctrine, Request $req): Response
                 // Handle the exception if file upload fails
                 // For example, log the error or display a flash message
             }
+        } else {
+            // Add an error to the image_a field if no image is selected
+            $form->get('image_a')->addError(new FormError('Vous devez sélectionner une image.'));
         }
-
+        
         // Get the entity manager
         $em = $doctrine->getManager();
 
@@ -226,7 +245,6 @@ public function ajouterA2(ManagerRegistry $doctrine, Request $req): Response
         // Redirect to a success page or display a success message
         // For example:
         return $this->redirectToRoute('app_actualiteshowResponsable');
-
     }
 
     return $this->render('actualite/ajouterAResponsable.html.twig', [
