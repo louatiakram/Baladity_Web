@@ -46,7 +46,30 @@
   </header><!-- End Header -->
   <!-- End Header -->
 
-  <main id="main" class="main">
+
+
+
+
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+      <div class="page-header d-flex align-items-center" style="background-image: href="{{ asset('front-office/img/logo.png') }}";">
+        <div class="container position-relative">
+          <div class="row d-flex justify-content-center">
+            <div class="col-lg-6 text-center">
+              <h2>Ajouter une Publicité</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav>
+
+
+    <!-- ======= Get a Quote Section ======= -->
+{% block body %}
+
+
+<main id="main" class="main">
     <section class="section">
         <div class="container">
             <div class="row justify-content-center">
@@ -54,8 +77,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Modifier Actualite</h5>
-                            {% for actualite in actualites %}
-                            <form method="POST" action="{{ path('modifierA', {'id': actualite.idA}) }}" enctype="multipart/form-data">
+                            <form method="POST" action="{{ path('modifierA2', {'id': actualite.idA}) }}" enctype="multipart/form-data">
                                 {{ form_start(form) }}
                                 <div class="row mb-3">
                                     <label for="inputText" class="col-sm-2 col-form-label">Titre</label>
@@ -86,7 +108,6 @@
                                 </div>
                                 {{ form_end(form) }}
                             </form>
-                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -94,92 +115,6 @@
         </div>
     </section>
 </main>
-
-
-    <!-- ======= Breadcrumbs ======= -->
-    <div class="breadcrumbs">
-      <div class="page-header d-flex align-items-center" style="background-image: href="{{ asset('front-office/img/logo.png') }}";">
-        <div class="container position-relative">
-          <div class="row d-flex justify-content-center">
-            <div class="col-lg-6 text-center">
-              <h2>Ajouter une Publicité</h2>
-            </div>
-          </div>
-        </div>
-      </div>
-      <nav>
-
-
-    <!-- ======= Get a Quote Section ======= -->
-{% block body %}
-<section class="section">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-5">
-                <img src="{{ asset('front-office/img/Baladia.png') }}" class="img-fluid" alt="">
-            </div>
-            <div class="col-lg-7">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Modifier Publicité</h5>
-<form method="POST" action="{{ path('modifierPub', {'id': publicite.getIdPub()}) }}" enctype="multipart/form-data">
-                            {{ form_start(form) }}
-                            <div class="mb-3 row">
-                                <label for="inputTitle" class="col-sm-4 col-form-label">Titre</label>
-                                <div class="col-sm-8">
-                                    {{ form_widget(form.titre_pub, {'attr': {'class': 'form-control'}}) }}
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="inputDescription" class="col-sm-4 col-form-label">Description</label>
-                                <div class="col-sm-8">
-                                    {{ form_widget(form.description_pub, {'attr': {'class': 'form-control', 'rows': '3'}}) }}
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="inputImage" class="col-sm-4 col-form-label">Image</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        {{ form_widget(form.image_pub, {'attr': {'class': 'form-control', 'onchange': 'previewImage(event)'}}) }}
-                                    </div>
-                                    <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 100%; max-height: 200px; display: none;">
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="inputContact" class="col-sm-4 col-form-label">Contact</label>
-                                <div class="col-sm-8">
-                                    {{ form_widget(form.contact_pub, {'attr': {'class': 'form-control'}}) }}
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="inputLocation" class="col-sm-4 col-form-label">Location</label>
-                                <div class="col-sm-8">
-                                    {{ form_widget(form.localisation_pub, {'attr': {'class': 'form-control'}}) }}
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="inputOffer" class="col-sm-4 col-form-label">Offre</label>
-                                <div class="col-sm-8">
-                                    {{ form_widget(form.offre_pub, {'attr': {'class': 'form-control'}, 'empty_data': ''}) }}
-                                </div>
-                            </div>
-                            <div class="row justify-content-center">
-                                <div class="col-md-6">
-                                    <div class="text-center mt-3">
-                                        <button type="submit" class="btn btn-primary mr-2">Modifier</button>
-                                        <a href="{{ path('app_actualite') }}" class="btn btn-primary">Retour</a>
-                                    </div>
-                                </div>
-                            </div>
-                            {{ form_end(form) }}
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <script>
     function previewImage(event) {
         var reader = new FileReader();
@@ -199,7 +134,7 @@
 
 
 
-  </main><!-- End #main -->
+
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">

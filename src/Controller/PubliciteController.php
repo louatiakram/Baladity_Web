@@ -131,51 +131,54 @@ class PubliciteController extends AbstractController
     #[Route('/publicite/modifierPub/{id}', name: 'modifierPub')]
 
     public function modifierPub($id, ManagerRegistry $doctrine, Request $request): Response
-
-{
-    $entityManager = $doctrine->getManager();
-    $publicite = $entityManager->getRepository(Publicite::class)->find($id);
-
-    if (!$publicite) {
-        throw $this->createNotFoundException('Publicité not found');
-    }
-
-    // Create the form for modifying the actualite
-    $form = $this->createForm(PubliciteType::class, $publicite);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
+    {
+        $entityManager = $doctrine->getManager();
+        $publicite = $entityManager->getRepository(Publicite::class)->find($id);
     
-        $image = $form->get('image_pub')->getData();
-        if ($image) {
-            // Handle image upload and persist its filename to the database
-            $fileName = uniqid().'.'.$image->guessExtension();
-            try {
-                $image->move($this->getParameter('uploadsDirectory'), $fileName);
-                $actualite->getImagePub($fileName);
-            } catch (FileException $e) {
-                // Handle the exception if file upload fails
-                // For example, log the error or display a flash message
-            }
+        if (!$publicite) {
+            throw $this->createNotFoundException('Publicité not found');
         }
-
-        // Persist the modified actualite object to the database
-        $entityManager->flush();
-
-        // Redirect to a success page or display a success message
-        // For example:
-        return $this->redirectToRoute('app_publicite');
+    
+        $form = $this->createForm(PubliciteType::class, $publicite);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $image = $form->get('image_pub')->getData();
+            
+            if ($image) {
+                // Gérer le téléchargement de la nouvelle image
+                $fileName = uniqid().'.'.$image->guessExtension();
+                try {
+                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    
+                    // Supprimer l'ancienne image si elle existe
+                    $oldImage = $publicite->getImagePub();
+                    if ($oldImage) {
+                        unlink($this->getParameter('uploadsDirectory') . '/' . $oldImage);
+                    }
+                    
+                    // Mettre à jour le nom du fichier de l'image dans l'entité
+                    $publicite->setImagePub($fileName);
+                } catch (FileException $e) {
+                    // Gérer l'erreur de téléchargement de fichier
+                }
+            }
+    
+            $entityManager->flush();
+    
+            return $this->redirectToRoute('app_publicite');
+        }
+    
+        return $this->render('publicite/modifierPub.html.twig', [
+            'form' => $form->createView(),
+            'publicite' => $publicite,
+        ]);
     }
-
-    return $this->render('publicite/modifierPub.html.twig', [
-        'form' => $form->createView(),
-        'publicite' => $publicite,
-    ]);
-}
+    
     #[Route('/showPubCitoyen', name: 'app_publicite')]
 public function index1(PubliciteRepository $repository): Response
 {
-    $publicites = $repository->findAll(); // Fetch all actualités from the repository
+    $publicites = $repository->findAll(); 
 
     return $this->render('publicite/showPubCitoyen.html.twig', [
         'publicites' => $publicites,

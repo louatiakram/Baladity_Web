@@ -5,28 +5,27 @@
                 <div class="col-lg-8">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Modifier Actualite</h5>
-                            {% for actualite in actualites %}
-                            <form method="POST" action="{{ path('modifierA', {'id': actualite.idA}) }}" enctype="multipart/form-data">
+                            <h5 class="card-title">Modifier Publicité</h5>
+<form method="POST" action="{{ path('modifierPub', {'id': publicite.getIdPub()}) }}" enctype="multipart/form-data">
                                 {{ form_start(form) }}
                                 <div class="row mb-3">
                                     <label for="inputText" class="col-sm-2 col-form-label">Titre</label>
                                     <div class="col-sm-10">
-                                        {{ form_widget(form.titre_a, {'attr': {'class': 'form-control'}}) }}
+                                        {{ form_widget(form.titre_pub, {'attr': {'class': 'form-control'}}) }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputEmail" class="col-sm-2 col-form-label">Description</label>
                                     <div class="col-sm-10">
-                                        {{ form_widget(form.description_a, {'attr': {'class': 'form-control'}}) }}
+                                        {{ form_widget(form.description_pub, {'attr': {'class': 'form-control'}}) }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputFile" class="col-sm-2 col-form-label">Image</label>
                                     <div class="col-sm-10">
                                         <div class="text-center">
-                                            {{ form_widget(form.image_a, {'attr': {'class': 'form-control', 'onchange': 'afficherApercu(this)'}}) }}
-                                            <img id="imagePreview" src="{{ asset('uploads/' ~ actualite.imageA) }}" alt="Aperçu de l'image" style="max-width: 100%; max-height: 200px;">
+                                            {{ form_widget(form.image_pub, {'attr': {'class': 'form-control', 'onchange': 'previewImage(event)'}}) }}
+<img id="imagePreview" src="{{ asset('uploads/' ~ publicite.getImagePub()) }}" alt="Aperçu de l'image" style="max-width: 100%; max-height: 200px;">
                                         </div>
                                     </div>
                                 </div>
@@ -38,7 +37,6 @@
                                 </div>
                                 {{ form_end(form) }}
                             </form>
-                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -46,3 +44,14 @@
         </div>
     </section>
 </main>
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var output = document.getElementById('imagePreview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>

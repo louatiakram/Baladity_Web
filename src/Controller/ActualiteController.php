@@ -29,55 +29,55 @@ class ActualiteController extends AbstractController
         ]);
     }
     #[Route('/actualite/ajouterA', name: 'ajouterA')]     
-    public function ajouterA(ManagerRegistry $doctrine, Request $req): Response
-    {
-        $actualite = new Actualite();
-        $userId = 48; 
-        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
-    
-        if (!$user) {
-            throw $this->createNotFoundException('User not found');
-        }
-    
-        $actualite->setIdUser($user);
+        public function ajouterA(ManagerRegistry $doctrine, Request $req): Response
+        {
+            $actualite = new Actualite();
+            $userId = 48; 
+            $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
         
-        // Set the current date to the date_a property
-        $actualite->setDateA(new DateTime());
-    
-        $form = $this->createForm(ActualiteType::class, $actualite);
-        $form->handleRequest($req);
-    
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Set the image_a field
-            $image = $form->get('image_a')->getData();
-            if ($image) {
-                // Handle image upload and persist its filename to the database
-                $fileName = uniqid().'.'.$image->guessExtension();
-                try {
-                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
-                    $actualite->setImageA($fileName);
-                } catch (FileException $e) {
-                    // Handle the exception if file upload fails
-                    // For example, log the error or display a flash message
-                }
+            if (!$user) {
+                throw $this->createNotFoundException('User not found');
             }
-    
-            // Get the entity manager
-            $em = $doctrine->getManager();
-    
-            // Persist the actualite object to the database
-            $em->persist($actualite);
-            $em->flush();
-    
-            // Redirect to a success page or display a success message
-            // For example:
-            return $this->redirectToRoute('actualite_show');
+        
+            $actualite->setIdUser($user);
+            
+            // Set the current date to the date_a property
+            $actualite->setDateA(new DateTime());
+        
+            $form = $this->createForm(ActualiteType::class, $actualite);
+            $form->handleRequest($req);
+        
+            if ($form->isSubmitted() && $form->isValid()) {
+                // Set the image_a field
+                $image = $form->get('image_a')->getData();
+                if ($image) {
+                    // Handle image upload and persist its filename to the database
+                    $fileName = uniqid().'.'.$image->guessExtension();
+                    try {
+                        $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                        $actualite->setImageA($fileName);
+                    } catch (FileException $e) {
+                        // Handle the exception if file upload fails
+                        // For example, log the error or display a flash message
+                    }
+                }
+        
+                // Get the entity manager
+                $em = $doctrine->getManager();
+        
+                // Persist the actualite object to the database
+                $em->persist($actualite);
+                $em->flush();
+        
+                // Redirect to a success page or display a success message
+                // For example:
+                return $this->redirectToRoute('actualite_show');
 
-        }
-    
-        return $this->render('actualite/ajouterA.html.twig', [
-            'form' => $form->createView()
-        ]);
+            }
+        
+            return $this->render('actualite/ajouterA.html.twig', [
+                'form' => $form->createView()
+            ]);
     }
     
     #[Route('/actualite/deleteA/{i}', name: 'actualite_delete')]
@@ -182,18 +182,55 @@ public function index1(ActualiteRepository $repository): Response
         
     ]);
 }
-#[Route('/actualiteResponsable', name: 'app_actualiteResponsable')]
-public function index2(ActualiteRepository $repository, FormFactoryInterface $formFactory): Response
+#[Route('/actualiteResponsable', name: 'ajouterA2')]
+public function ajouterA2(ManagerRegistry $doctrine, Request $req): Response
 {
-    $actualites = $repository->findAll(); // Fetch all actualités from the repository
+    $actualite = new Actualite();
+    $userId = 48; 
+    $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
 
-    // Create an empty form object for rendering in the template
-    $form = $formFactory->create(ActualiteType::class);
+    if (!$user) {
+        throw $this->createNotFoundException('User not found');
+    }
+
+    $actualite->setIdUser($user);
     
-   // return $this->redirectToRoute('actualite_show');
-    return $this->render('actualite/AjouterAResponsable.html.twig', [
-        'form' => $form->createView(),
-        'actualites' => $actualites,
+    // Set the current date to the date_a property
+    $actualite->setDateA(new DateTime());
+
+    $form = $this->createForm(ActualiteType::class, $actualite);
+    $form->handleRequest($req);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Set the image_a field
+        $image = $form->get('image_a')->getData();
+        if ($image) {
+            // Handle image upload and persist its filename to the database
+            $fileName = uniqid().'.'.$image->guessExtension();
+            try {
+                $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                $actualite->setImageA($fileName);
+            } catch (FileException $e) {
+                // Handle the exception if file upload fails
+                // For example, log the error or display a flash message
+            }
+        }
+
+        // Get the entity manager
+        $em = $doctrine->getManager();
+
+        // Persist the actualite object to the database
+        $em->persist($actualite);
+        $em->flush();
+
+        // Redirect to a success page or display a success message
+        // For example:
+        return $this->redirectToRoute('app_actualiteshowResponsable');
+
+    }
+
+    return $this->render('actualite/ajouterAResponsable.html.twig', [
+        'form' => $form->createView()
     ]);
 }
 #[Route('/showAResponsable', name: 'app_actualiteshowResponsable')]
@@ -230,17 +267,50 @@ public function search(Request $request, ActualiteRepository $repository): Respo
         'totalPages' => $totalPages, // Pass the totalPages variable to the Twig template
     ]);
 }
-#[Route('/ModifierResponsable', name: 'ModifierResponsable')]
-// Controller action
-public function index4(ActualiteRepository $repository, FormFactoryInterface $formFactory): Response {
-    $actualites = $repository->findAll(); // Fetch all actualités from the repository
-    
-    // Assuming $form is created using the form factory
-    $form = $formFactory->create(ActualiteType::class);
+#[Route('/ModifierResponsable/{id}', name: 'modifierA2')]
+
+public function modifierA2($id, ManagerRegistry $doctrine, Request $request): Response
+
+{
+    $entityManager = $doctrine->getManager();
+    $actualite = $entityManager->getRepository(Actualite::class)->find($id);
+
+    if (!$actualite) {
+        throw $this->createNotFoundException('Actualite not found');
+    }
+
+    // Create the form for modifying the actualite
+    $form = $this->createForm(ActualiteType::class, $actualite);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Handle form submission
+        $actualite->setDateA(new DateTime());
+        // Set the image_a field
+        $image = $form->get('image_a')->getData();
+        if ($image) {
+            // Handle image upload and persist its filename to the database
+            $fileName = uniqid().'.'.$image->guessExtension();
+            try {
+                $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                $actualite->setImageA($fileName);
+            } catch (FileException $e) {
+                // Handle the exception if file upload fails
+                // For example, log the error or display a flash message
+            }
+        }
+
+        // Persist the modified actualite object to the database
+        $entityManager->flush();
+
+        // Redirect to a success page or display a success message
+        // For example:
+        return $this->redirectToRoute('app_actualiteshowResponsable');
+    }
 
     return $this->render('actualite/modifierAResponsable.html.twig', [
-        'actualites' => $actualites,
-        'form' => $form->createView(), // Pass the form variable to the template
+        'form' => $form->createView(),
+        'actualite' => $actualite,
     ]);
 }
 #[Route('/actualite/details/{id}', name: 'actualite_details')]

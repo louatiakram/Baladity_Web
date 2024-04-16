@@ -41,7 +41,7 @@ class PubliciteType extends AbstractType
             ->add('actualite', EntityType::class, [
                 'class' => actualite::class,
                 'choice_label' => 'titre_a',
-                'placeholder' => 'Select an actualite',
+                'placeholder' => 'choisir une actualité',
                 'required' => true,
             ]);
             

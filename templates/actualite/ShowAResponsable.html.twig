@@ -176,9 +176,9 @@
                                     <a href="{{ path('app_publiciteResponsable', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-info"> <!-- Bouton pour voir les publicités -->
                                         <i class="bi bi-info-circle"></i> Voir Publicités
                                     </a>
-                                    <a href="{{ path('ModifierResponsable', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-outline-primary"> <!-- Bouton pour modifier -->
-                                        <i class="bi bi-pencil"></i> Modifier
-                                    </a>
+                                    <a href="{{ path('modifierA2', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-pencil"></i> Modifier
+                                        </a>
                                     <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteActualite('{{ actualite.getIdA() }}')"> <!-- Bouton pour supprimer -->
                                         <i class="bi bi-trash"></i> Supprimer
                                     </button>
