@@ -44,7 +44,7 @@
                                         <i class="bi bi-info-circle"></i> Détails
                                     </a>
                                     <!-- Delete button -->
-                                    <a href="#" onclick="deleteEvenement('{{ evenement.getId() }}')" class="btn btn-sm btn-outline-danger">
+                                    <a href="{{ path('supprimer_evenement', {'id': evenement.getId()}) }}" class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-trash"></i> Supprimer
                                     </a>
                                     {% endblock %}

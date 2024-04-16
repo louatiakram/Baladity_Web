@@ -8,6 +8,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
 class EvenementType extends AbstractType
@@ -16,10 +18,24 @@ class EvenementType extends AbstractType
     {
         $builder
             ->add('nom_E')
-            ->add('date_DHE')
-            ->add('date_DHF')
+            ->add('date_DHE', DateType::class, [
+                'widget' => 'single_text',
+
+            ])
+            ->add('date_DHF', DateType::class, [
+                'widget' => 'single_text',
+
+            ])
             ->add('capacite_E')
-            ->add('categorie_E')
+            ->add('categorie_E', ChoiceType::class, [
+                'choices' => [
+                    'Sprotif' => 'Sportif',
+                    'Culturel' => 'Culturel',
+                    'Social' => 'Social',
+                    'Charity' => 'Charity',
+                ],
+                'placeholder' => 'Categorie',
+            ])
             ->add('imageEvent', FileType::class, [
                 'label' => 'Image de l\'Événement',
                 'mapped' => false, // Not mapped to the entity property

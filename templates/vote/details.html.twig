@@ -1,0 +1,21 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Details of Proposition{% endblock %}
+
+{% block body %}
+    <main id="main" class="main">
+        <br>
+        <h1 class="card-title" style="text-align: center; font-size: 2em;">Details of Proposition</h1>
+        <br>
+
+        <div class="container">
+            <h2>Description:</h2>
+            <p>{{ vote.getDescE }}</p>
+
+            <h2>Date:</h2>
+            <p>{{ vote.getDateSV|date('Y-m-d') }}</p>
+
+            <!-- Add more details here if needed -->
+        </div>
+    </main>
+{% endblock %}

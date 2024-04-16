@@ -12,6 +12,9 @@ use Doctrine\ORM\EntityManagerInterface;  // Import the correct class
 use App\Form\EvenementType;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 
 
@@ -84,61 +87,60 @@ public function ajouter(Request $request, EntityManagerInterface $entityManager)
     ]);
 }
 #[Route('/evenement/supprimer/{id}', name: 'supprimer_evenement')]
-public function supprimerEvenement($id, EntityManagerInterface $entityManager): Response
-{
-    $evenement = $entityManager->getRepository(Evenement::class)->find($id);
-
-    if (!$evenement) {
-        throw $this->createNotFoundException('Événement non trouvé avec l\'id : '.$id);
-    }
-
-    $entityManager->remove($evenement);
-    $entityManager->flush();
-
-    // Ajoutez un message flash pour confirmer la suppression
-    $this->addFlash('success', 'L\'événement a été supprimé avec succès.');
-
-    return $this->redirectToRoute('evenement_list');
-}
-
-#[Route('/evenement/modifier/{id}', name: 'modifier_evenement')]
-    public function modifierEvenement($id, Request $request, ManagerRegistry $doctrine): Response
+    public function supprimerEvenement($id, EvenementRepository $repository, ManagerRegistry $doctrine, SessionInterface $session): Response
     {
-        $entityManager = $doctrine->getManager();
-        $evenement = $entityManager->getRepository(Evenement::class)->find($id);
+        $evenement = $repository->find($id);
 
         if (!$evenement) {
-            throw $this->createNotFoundException('Événement non trouvé avec l\'id : '.$id);
+            throw $this->createNotFoundException('Événement non trouvé avec l\'id : ' . $id);
         }
 
-        $form = $this->createForm(EvenementType::class, $evenement);
-        $form->handleRequest($request);
+        $entityManager = $doctrine->getManager();
+        $entityManager->remove($evenement);
+        $entityManager->flush();
+
+        $session->getFlashBag()->add('success', 'L\'événement a été supprimé avec succès.');
+
+        return $this->redirectToRoute('evenement_list');
+    }
+
+#[Route('/evenement/modifier/{id}', name: 'modifier_evenement')]
+public function update($id, EvenementRepository $rep, Request $req, ManagerRegistry $doctrine): Response
+    {
+        $x = $rep->find($id);
+        $form = $this->createForm(EvenementType::class, $x);
+        $form->handleRequest($req);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Handle image upload
-            $imageFile = $form->get('imageEvent')->getData();
-            if ($imageFile) {
-                $fileName = uniqid().'.'.$imageFile->guessExtension();
+
+            // Handle file upload
+            /** @var UploadedFile|null $pieceJointe */
+            $image = $form->get('imageEvent')->getData();
+            if ($image) {
+                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // Move the file to the uploads directory
                 try {
-                    $imageFile->move($this->getParameter('uploadsDirectory'), $fileName);
-                    $evenement->setImageEvent($fileName);
-                } catch (FileException $e) {
-                    $this->addFlash('error', 'Failed to upload image.');
-                    return $this->redirectToRoute('modifier_evenement', ['id' => $id]);
-                }
+                    $uploadedFile = $image->move(
+                        $this->getParameter('uploadsDirectory'), // Use the parameter defined in services.yaml
+                        $originalFilename . '.' . $image->guessExtension()
+                    );
+                    $x->setImageEvent($uploadedFile->getFilename());
+                } catch (FileException $e) {}
             }
+            // Get the selected etat_T value from the form
+            $selectedCategorieE = $form->get('categorie_E')->getData();
 
-            $entityManager->flush();
+            // Set the etat_T property of the tache entity
+            $x->setCategorieE($selectedCategorieE);
 
-            $this->addFlash('success', 'L\'événement a été modifié avec succès.');
+            $em = $doctrine->getManager();
+            $em->flush();
 
             return $this->redirectToRoute('evenement_list');
         }
-
-        return $this->render('evenement/modifier.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->renderForm('evenement/modifier.html.twig', ['form' => $form]);
     }
+
     
     #[Route('/evenement/details/{id}', name: 'details_evenement')]
 public function detailsEvenement($id, EntityManagerInterface $entityManager): Response

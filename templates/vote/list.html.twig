@@ -1,0 +1,71 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}List of Propositions{% endblock %}
+
+{% block body %}
+    <main id="main" class="main">
+        <br>
+        <h1 class="card-title" style="text-align: center; font-size: 2em;">List of Propositions</h1>
+        <br>
+
+        <!-- Search form -->
+        <form action="{{ path('vote_list') }}" method="get" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="query" class="form-control" placeholder="Search by description" value="{{ query }}">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+
+        <!-- Display search query -->
+        {% if query %}
+            <p class="text-center">Showing results for: <strong>{{ query }}</strong></p>
+        {% endif %}
+
+        <!-- Ajouter Proposition button -->
+        <div class="text-center mb-3">
+            <a href="{{ path('ajouter_vote') }}" class="btn btn-primary">Ajouter Proposition</a>
+        </div>
+
+        <!-- Check if there are votes to display -->
+        {% if votes|length > 0 %}
+            <div class="col-10 mx-auto"> <!-- Adjusted column width -->
+                <div class="card">
+                    <div class="card-body">
+                        {% block vote_list %}
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th>Date</th>
+                                        <th>Action</th> {# Added header for action #}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for vote in votes %}
+                                        <tr>
+                                            <td>{{ vote.getDescE }}</td>
+                                            <td>{{ vote.getDateSV|date('Y-m-d') }}</td>
+                                            <td>
+                                                <a href="{{ path('modifier_vote', {'id': vote.getIdV()}) }}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-pencil"></i> Modifier
+                                                </a>
+                                                <a href="{{ path('details_vote', {'id': vote.getIdV()}) }}" class="btn btn-sm btn-outline-info">
+                                                    <i class="bi bi-info-circle"></i> Details
+                                                </a>
+                                                <a href="{{ path('supprimer_vote', {'id': vote.getIdV()}) }}" class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i> Supprimer
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-center">No Propositions found.</p>
+        {% endif %}
+    </main>
+{% endblock %}
