@@ -4,23 +4,35 @@
 
 
 {% block barreTitre %}
-<li><a href="index.html" class="active">Home</a></li>
-					<li><a href="about.html">tache</a></li>
-					<li><a href="services.html">equipement</a></li>
-					<li><a href="pricing.html">Pricing</a></li>
-					<li><a href="contact.html">Contact</a></li>
-					<li><a class="get-a-quote" href="get-a-quote.html">Get a Quote</a></li>
+    {% if user_type == "Employé" %}
+    <li><a href="{{ path('app_main_front') }}">Home</a></li>
+    <li><a href="{{ path('tache_listfront') }}" class="active">Tache</a></li>
+        <li><a href="equipement.html">Equipement</a></li>
+        <li><a href="reclamation.html">Reclamation</a></li>
+        <li style="margin-left: 20px;"></li>
+        <label class="switch" id="dark-mode-toggle">
+            <input type="checkbox" id="dark-mode-checkbox">
+            <span class="slider"></span>
+        </label>
+    {% elseif user_type == "Responsable employé" %}
+        <li><a href="{{ path('app_main_front') }}">Home</a></li>
+        <li><a href="{{ path('tache_listfront') }}" class="active">Tache</a></li>
+        <li><a href="actualite.html">Actualite</a></li>
+        <li><a href="reclamation.html">Reclamation</a></li>
+        <li><a href="evenement.html">Evenement</a></li>
+        <li><a href="equipement.html">Equipement</a></li>
+        <li style="margin-left: 20px;"></li>
+        <label class="switch" id="dark-mode-toggle">
+            <input type="checkbox" id="dark-mode-checkbox">
+            <span class="slider"></span>
+        </label>
+    {% else %}
+        <li>Error: Page not found</li>
+    {% endif %}
 {% endblock %}
 
 
-
 {% block body %}
-
-<label class="switch" id="dark-mode-toggle">
-    <input type="checkbox" id="dark-mode-checkbox">
-    <span class="slider"></span>
-</label>
-
 
 {# Check if there's a flash message #}
 {% if flash_message is not empty %}
@@ -291,7 +303,9 @@
   left: var(--slider-offset,0.3em);
   top: 50%;
   transform: translateY(-50%);
-  background: linear-gradient(40deg,#ff0080,#ff8c00 70%);
+  background: #c31432; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #c31432, #240b36); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #c31432, #240b36);
   ;
  transition: .4s;
 }

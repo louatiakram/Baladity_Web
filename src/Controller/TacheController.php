@@ -273,6 +273,7 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
         return $this->render('tache/listfront.html.twig', [
             'taches' => $taches,
             'flash_message' => $flashMessage,
+            'user_type' => $typeUser,
         ]);
     }
 
