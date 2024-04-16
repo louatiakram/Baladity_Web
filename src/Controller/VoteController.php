@@ -50,7 +50,8 @@ public function add(Request $request): Response
     // Create a new Vote object
     $vote = new vote();
     $vote->setIdUser(50);
-
+    // Set the date_SV field to the current date
+    $vote->setDateSV(new \DateTime());
 
     // Handle form submission
     $form = $this->createForm(VoteType::class, $vote);
