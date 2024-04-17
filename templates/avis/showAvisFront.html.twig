@@ -40,9 +40,9 @@
                                         <!-- Modify button -->
                                         <a href="{{ path('modifierAvis', {'id': avis_item.getIdAvis()}) }}" class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-pencil"></i> Modifier
-                                        </a>
+                                        </a>                                      
                                         <!-- Delete button -->
-                                        <button onclick="location.href='{{ path('avis_delete', {'id': avis_item.getIdAvis()})}}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i>Supprimer</button>
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('{{ avis_item.getIdAvis() }}')"><i class="bi bi-trash"></i>Supprimer</button>
                                     {% endblock %}
                                         </td>
                                     </tr>
@@ -87,5 +87,13 @@
     {% block ListeTalacheNav %}
         <!-- Éléments de navigation supplémentaires si nécessaire -->
     {% endblock %}
+<script>
+    function confirmDelete(id) {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cet avis")) {
+            // Si l'utilisateur confirme la suppression, redirigez vers l'action de suppression appropriée
+            window.location.href = "{{ path('avis_delete', {'id': 'avis_item_ID'}) }}".replace('avis_item_ID', id);
+        }
+    }
+</script>
 {% endblock %}
 

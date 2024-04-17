@@ -92,21 +92,24 @@ class AvisController extends AbstractController
     }
     
     #[Route('/avis/deleteAvis/{id}', name: 'avis_delete')]
-    public function deleteAvis($id, AvisRepository $rep, ManagerRegistry $doctrine): Response
-    {
-        $avis = $rep->find($id);
-    
-        if (!$avis) {
-            throw $this->createNotFoundException('avis not found');
-        }
-    
-        $em = $doctrine->getManager();
-        $em->remove($avis);
-        $em->flush();
-    
-        // Redirect to the list of avis after successful deletion
-        return $this->redirectToRoute('app_avis');
+public function deleteAvis($id, AvisRepository $rep, ManagerRegistry $doctrine): Response
+{
+    $avis = $rep->find($id);
+
+    if (!$avis) {
+        throw $this->createNotFoundException('Avis not found');
     }
+
+    // Récupérer l'ID de l'équipement avant la suppression de l'avis
+    $equipementId = $avis->getEquipement()->getIdEquipement();
+
+    $em = $doctrine->getManager();
+    $em->remove($avis);
+    $em->flush();
+
+    // Rediriger vers la page de liste des avis de l'équipement après la suppression réussie
+    return $this->redirectToRoute('avis_show_front', ['id' => $equipementId]);
+}
     #[Route('/avis/modifierAvis/{id}', name: 'modifierAvis')]
     public function modifierAvis($id, ManagerRegistry $doctrine, Request $request): Response
     {

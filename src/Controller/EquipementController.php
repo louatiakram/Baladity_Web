@@ -181,6 +181,21 @@ public function detailEquipement($id, EquipementRepository $equipementRepository
         'equipement' => $equipement,
     ]);
 }
+#[Route('/equipement/detailFront/{id}', name: 'equipement_detail_front')]
+public function detailEquipementFront($id, EquipementRepository $equipementRepository): Response
+{
+    // Récupérer l'équipement par son ID
+    $equipement = $equipementRepository->find($id);
+
+    if (!$equipement) {
+        throw $this->createNotFoundException('Equipement not found');
+    }
+
+    // Passer l'équipement à la vue Twig pour affichage
+    return $this->render('equipement/detailEquipementFront.html.twig', [
+        'equipement' => $equipement,
+    ]);
+}
 #[Route('/equipement/use/{id}', name: 'equipement_use')]
 public function useEquipement($id, EquipementRepository $rep, EntityManagerInterface $entityManager): JsonResponse
 {
