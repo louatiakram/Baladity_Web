@@ -244,11 +244,11 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
     #[Route('/tache/listfront', name: 'tache_listfront')]
     public function listfront(Request $request, TacheRepository $repository, SessionInterface $session): Response
     {
-        $userId = 58; // You can get the user ID from wherever it's stored
+        $userId = 55; // You can get the user ID from wherever it's stored
         $session->set('user_id', $userId); // Store user ID in session
 
         // Get the user by ID
-        $user = $this->getDoctrine()->getRepository(EndUser::class)->find($userId);
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
 
         // Check if the user exists
         if (!$user) {
@@ -285,6 +285,14 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
         if (!$user) {
             throw $this->createNotFoundException('User Existe Pas');
         }
+        // Retrieve user type from session
+        $typeUser = $session->get('user_type');
+
+        if (!$typeUser) {
+            // If user type is not found in session, handle the error (redirect or display message)
+            // For example:
+            throw $this->createNotFoundException('User type not found in session.');
+        }
 
         $tache = $rep->find($i);
         if (!$tache) {
@@ -317,6 +325,7 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
             'tache' => $tache,
             'commentForm' => $commentForm->createView(),
             'userId' => $userId,
+            'user_type' => $typeUser,
         ]);
     }
     
@@ -327,7 +336,7 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
     $userId = $session->get('user_id');
 
     // Get the user entity from the database based on the user ID
-    $user = $this->getDoctrine()->getRepository(EndUser::class)->find($userId);
+    $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
     
         $entityManager = $this->getDoctrine()->getManager();
         $tache = $entityManager->getRepository(Tache::class)->find($tacheId);
@@ -480,7 +489,7 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
         $userId = $session->get('user_id');
     
         // Get the user by ID
-        $user = $this->getDoctrine()->getRepository(EndUser::class)->find($userId);
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
     
         // Check if the user exists
         if (!$user) {

@@ -2,16 +2,17 @@
 
 namespace App\Controller;
 
-use App\Entity\commentairetache;
-use App\Entity\enduser;
 use App\Entity\tache;
+use App\Entity\enduser;
+use App\Entity\commentairetache;
 use App\Form\CommentaireTacheType;
-use App\Repository\CommentaireTacheRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use App\Repository\CommentaireTacheRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CommentaireTacheController extends AbstractController
 {
@@ -42,9 +43,9 @@ class CommentaireTacheController extends AbstractController
     }
 
     #[Route('/commentairetache/add/{id}', name: 'commentairetache_add')]
-    public function add($id, Request $req, ManagerRegistry $doctrine): Response
+    public function add($id, Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
     {
-        $userId = 50; // Assuming the user ID is 50
+        $userId = $session->get('user_id');
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
 
         if (!$user) {

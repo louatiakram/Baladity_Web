@@ -77,26 +77,30 @@
 					<!-- Comment Section -->
 					<div class="card mb-3">
 						<div class="card-body">
+
+
 							<div class="comment-section">
-								<h5 class="card-title text-primary">Commentaire</h5>
+								<h5 class="card-title text-primary">Commentaires</h5>
 								{% if tache.getCommentaireTache() is not empty %}
-									{% for commentaire in tache.getCommentaireTache() %}
-										<div class="comment">
-											<h6><textarea class="form-control" style="height: 150px" readonly>{{ commentaire.getTexteC() }}</textarea></h6>
-											<p>
-												<h6>Date: {{ commentaire.getDateC()|date('d-m-Y') }}</h6>
-											</p>
-											<!-- Add Edit and Remove Options for the Comment -->
-											{% if userId == commentaire.getIdUser().getIdUser() %}
-<div class="comment-options">
-    <button onclick="location.href='{{ path('commentairetache_update', {'i': commentaire.getIdC()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i> Modifier</button>
-    <button onclick="location.href='{{ path('commentairetache_delete', {'i': commentaire.getIdC()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i> Supprimer</button>
-</div>
-{% endif %}
-										</div>
-									{% endfor %}
+								{% for commentaire in tache.getCommentaireTache() %}
+								<div class="comment">
+									<div>
+										<h6>Nom: {{ commentaire.getIdUser().getNomUser() }} | Date: {{ commentaire.getDateC()|date('d-m-Y') }}</h6>
+										<!-- Add Edit and Remove Options for the Comment -->
+									
+									<div class="comment-options">
+										<button onclick="location.href='{{ path('commentairetache_update', {'i': commentaire.getIdC()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i> Modifier</button>
+										<button onclick="location.href='{{ path('commentairetache_delete', {'i': commentaire.getIdC()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i> Supprimer</button>
+									</div>
+								
+									</div>
+									<h6><textarea class="form-control" style="height: 150px" readonly>{{ commentaire.getTexteC() }}</textarea></h6>
+								</div>
+								{% endfor %}
 								{% endif %}
 							</div>
+
+
 							
 						</div>
 						<div class="card-body">
@@ -164,7 +168,5 @@
 				</div>
 			</div>
 
-
 		</div>
-	</div>
 	{% endblock %}
