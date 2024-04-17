@@ -1,0 +1,23 @@
+{% extends 'base-front.html.twig' %}
+
+{% block title %}Baladity Home{% endblock %}
+
+{% block barreTitre %}
+					<li><a href="{{ path('app_main_front') }}" class="active">Home</a></li>
+					<li><a href="{{ path('ajouterPub') }}">Actualite</a></li>
+					<li><a href="services.html">Reclamation</a></li>
+					<li><a href="pricing.html">Evenement</a></li>
+					<li><a href="contact.html">Contact</a></li>
+                    <li><a href="contact.html">About Us</a></li>
+{% endblock %}
+
+{% block imageFrontHome %}<img src="{{ asset('front-office/img/LOGOL.png') }}" class="img-fluid mb-3 mb-lg-0" alt="">{% endblock %}
+
+
+{%block slogon %}Là où il fait extrêmement bon de vivre{%endblock %}
+{%block desc %}
+Baladity est une application innovante conçue pour simplifier la gestion des fonctionnalités municipales 
+au sein d'une municipalité. En combinant une interface conviviale avec des fonctionnalités intuitives, 
+Baladity offre aux résidents et aux responsables municipaux un outil efficace pour interagir 
+et coordonner divers aspects de la vie communautaire.
+{%endblock %}

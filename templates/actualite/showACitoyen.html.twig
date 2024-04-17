@@ -5,12 +5,12 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Logis Bootstrap Template - Index</title>
+    <title>Baladity Home</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="{{ asset('front-office/img/favicon.png') }}" rel="icon">
+    <link href="{{ asset('front-office/img/LOGOL.png') }}" rel="icon">
     <link href="{{ asset('front-office/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
@@ -47,39 +47,22 @@
 
         <a href="index.html" class="logo d-flex align-items-center">
             <!-- Uncomment the line below if you also wish to use an image logo -->
-            <!-- <img src="{{ asset('front-office/img/logo.png') }}" alt=""> -->
-            <h1>Logis</h1>
+         <img src="{{ asset('front-office/img/LOGOL.png') }}" class="img-fluid mb-3 mb-lg-0" alt="">
+            <h1>Baladity</h1>
         </a>
 
         <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
         <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
         <nav id="navbar" class="navbar">
             <ul>
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="pricing.html">Pricing</a></li>
-                <li class="dropdown"><a href="#"><span>Drop Down</span> <i
-                                class="bi bi-chevron-down dropdown-indicator"></i></a>
-                    <ul>
-                        <li><a href="#">Drop Down 1</a></li>
-                        <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i
-                                        class="bi bi-chevron-down dropdown-indicator"></i></a>
-                            <ul>
-                                <li><a href="#">Deep Drop Down 1</a></li>
-                                <li><a href="#">Deep Drop Down 2</a></li>
-                                <li><a href="#">Deep Drop Down 3</a></li>
-                                <li><a href="#">Deep Drop Down 4</a></li>
-                                <li><a href="#">Deep Drop Down 5</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">Drop Down 2</a></li>
-                        <li><a href="#">Drop Down 3</a></li>
-                        <li><a href="#">Drop Down 4</a></li>
-                    </ul>
-                </li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a class="get-a-quote" href="get-a-quote.html">Get a Quote</a></li>
+                <li><a href="{{ path('app_main_front') }}" >Home</a></li>
+					<li><a href="about.html"  class="active">Actualite</a></li>
+					<li><a href="services.html">Reclamation</a></li>
+					<li><a href="pricing.html">Evenement</a></li>
+					<li><a href="contact.html">Contact</a></li>
+                    <li><a href="contact.html">About Us</a></li>
+             
+                                
             </ul>
         </nav><!-- .navbar -->
 
@@ -92,10 +75,11 @@
     <div class="container">
         <div class="row gy-4 d-flex justify-content-between">
             <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
-                <h2 data-aos="fade-up">Your Lightning Fast Delivery Partner</h2>
-                <p data-aos="fade-up" data-aos-delay="100">Facere distinctio molestiae nisi fugit tenetur repellat non
-                    praesentium nesciunt optio quis sit odio nemo quisquam. eius quos reiciendis eum vel eum voluptatem
-                    eum maiores eaque id optio ullam occaecati odio est possimus vel reprehenderit</p>
+                <h2 data-aos="fade-up">Là où il fait extrêmement bon de vivre</h2>
+                <p data-aos="fade-up" data-aos-delay="100">Baladity est une application innovante conçue pour simplifier la gestion des fonctionnalités municipales 
+au sein d'une municipalité. En combinant une interface conviviale avec des fonctionnalités intuitives, 
+Baladity offre aux résidents et aux responsables municipaux un outil efficace pour interagir 
+et coordonner divers aspects de la vie communautaire.</p>
 
                 <form action="#" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up"
                       data-aos-delay="200">
@@ -109,7 +93,7 @@
                         <div class="stats-item text-center w-100 h-100">
                             <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1"
                                   class="purecounter"></span>
-                            <p>Clients</p>
+                            <p>Citoyens</p>
                         </div>
                     </div><!-- End Stats Item -->
 
@@ -117,7 +101,7 @@
                         <div class="stats-item text-center w-100 h-100">
                             <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1"
                                   class="purecounter"></span>
-                            <p>Projects</p>
+                            <p>évenements</p>
                         </div>
                     </div><!-- End Stats Item -->
 
@@ -125,7 +109,7 @@
                         <div class="stats-item text-center w-100 h-100">
                             <span data-purecounter-start="0" data-purecounter-end="1453" data-purecounter-duration="1"
                                   class="purecounter"></span>
-                            <p>Support</p>
+                            <p>Publicité</p>
                         </div>
                     </div><!-- End Stats Item -->
 
@@ -133,7 +117,7 @@
                         <div class="stats-item text-center w-100 h-100">
                             <span data-purecounter-start="0" data-purecounter-end="32" data-purecounter-duration="1"
                                   class="purecounter"></span>
-                            <p>Workers</p>
+                            <p>employés</p>
                         </div>
                     </div><!-- End Stats Item -->
 
@@ -141,7 +125,7 @@
             </div>
 
             <div class="col-lg-5 order-1 order-lg-2 hero-img" data-aos="zoom-out">
-                <img src="{{ asset('front-office/img/hero-img.svg') }}" class="img-fluid mb-3 mb-lg-0" alt="">
+               <img src="{{ asset('front-office/img/LOGOL.png') }}" class="img-fluid mb-3 mb-lg-0" alt="">
             </div>
 
         </div>
@@ -190,7 +174,7 @@
         <div class="row gy-4">
             <div class="col-lg-5 col-md-12 footer-info">
                 <a href="index.html" class="logo d-flex align-items-center">
-                    <span>Logis</span>
+                    <span>Baladity</span>
                 </a>
                 <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies
                     darta donna mare fermentum iaculis eu non diam phasellus.</p>
@@ -206,32 +190,24 @@
                 <h4>Useful Links</h4>
                 <ul>
                     <li><a href="#">Home</a></li>
-                    <li><a href="#">About us</a></li>
-                    <li><a href="#">Services</a></li>
-                    <li><a href="#">Terms of service</a></li>
-                    <li><a href="#">Privacy policy</a></li>
+                    <li><a href="#">Actualité</a></li>
+                    <li><a href="#">réclamation</a></li>
+                    <li><a href="#">evenement</a></li>
+                    <li><a href="#">contact</a></li>
+                    <li><a href="#">about us</a></li>
                 </ul>
             </div>
 
-            <div class="col-lg-2 col-6 footer-links">
-                <h4>Our Services</h4>
-                <ul>
-                    <li><a href="#">Web Design</a></li>
-                    <li><a href="#">Web Development</a></li>
-                    <li><a href="#">Product Management</a></li>
-                    <li><a href="#">Marketing</a></li>
-                    <li><a href="#">Graphic Design</a></li>
-                </ul>
-            </div>
+      
 
             <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
                 <h4>Contact Us</h4>
                 <p>
-                    A108 Adam Street <br>
-                    New York, NY 535022<br>
-                    United States <br><br>
-                    <strong>Phone:</strong> +1 5589 55488 55<br>
-                    <strong>Email:</strong> info@example.com<br>
+                   Ariana <br>
+                    la petite ariana<br>
+                    Tunis <br><br>
+                    <strong>Phone:</strong> +21694007815<br>
+                    <strong>Email:</strong> Baladity@gmail.com<br>
                 </p>
 
             </div>

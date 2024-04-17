@@ -142,7 +142,7 @@ class ActualiteController extends AbstractController
     ]);
 }
 
-    #[Route('/actualite/modifierA/{id}', name: 'modifierA')]
+ #[Route('/actualite/modifierA/{id}', name: 'modifierA')]
 
     public function modifierA($id, ManagerRegistry $doctrine, Request $request): Response
 
@@ -218,7 +218,7 @@ public function ajouterA2(ManagerRegistry $doctrine, Request $req): Response
     $form->handleRequest($req);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        // Set the image_a field
+       
         $image = $form->get('image_a')->getData();
         if ($image) {
             // Handle image upload and persist its filename to the database

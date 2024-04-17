@@ -13,4 +13,9 @@ class MainController extends AbstractController
     {
         return $this->render('main/index.html.twig');
     }
+    #[Route('/front', name: 'app_main_front')]
+    public function indexfront(): Response
+    {
+        return $this->render('main/index_front.html.twig');
+    }
 }
