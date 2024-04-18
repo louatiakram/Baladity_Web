@@ -4,24 +4,44 @@ namespace App\Entity;
 
 use App\Repository\PubliciteRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PubliciteRepository::class)]
 class publicite
 {
    
-    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id_pub;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Vous devez ajouter un titre.")]
+    #[Assert\Regex(
+        pattern: '/\d/',
+        match: false,
+        message: "Le titre de la publicité ne peut pas contenir de chiffres."
+    )]
     private $titre_pub;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Vous devez ajouter une description.")]
+    #[Assert\Regex(
+        pattern: '/\d/',
+        match: false,
+      //  message: "La description de la publicité ne peut pas contenir de chiffres."
+    )]
+    #[Assert\Length(
+        min: 5,
+        minMessage: "La description de la publicité doit contenir au moins {{ limit }} caractères."
+    )]
     private $description_pub;
-
     #[ORM\Column(type: 'integer')]
+    #[Assert\Length(
+        min: 8,
+        max: 8,
+        exactMessage: "Le numéro de contact doit contenir exactement 8 chiffres."
+    )]
     private $contact_pub;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -38,6 +58,7 @@ class publicite
     private $id_user;
 
     #[ORM\Column(type: 'string', length: 255)]
+    
     private $image_pub;
 
     #[ORM\Column(type: 'string', length: 255)]

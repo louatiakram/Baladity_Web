@@ -18,6 +18,7 @@ use App\Form\PubliciteType;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Stripe\PaymentIntent;
+
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -78,6 +79,8 @@ class PubliciteController extends AbstractController
         // For example:
         return $this->redirectToRoute('publicite_show');
     }
+   
+
     #[Route('/publicite/ajouterPub', name: 'ajouterPub')]     
     public function ajouterPub(ManagerRegistry $doctrine, Request $req): Response
     {
@@ -91,17 +94,12 @@ class PubliciteController extends AbstractController
     
         $publicite->setIdUser($user);
         
-        // Set the current date to the date_a property
-       
-    
         $form = $this->createForm(PubliciteType::class, $publicite);
         $form->handleRequest($req);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            // Set the image_a field
             $image = $form->get('image_pub')->getData();
             if ($image) {
-                // Handle image upload and persist its filename to the database
                 $fileName = uniqid().'.'.$image->guessExtension();
                 try {
                     $image->move($this->getParameter('uploadsDirectory'), $fileName);
@@ -110,24 +108,34 @@ class PubliciteController extends AbstractController
                     // Handle the exception if file upload fails
                     // For example, log the error or display a flash message
                 }
+            } else {
+                // Add an error to the image_pub field if no image is selected
+                $form->get('image_pub')->addError(new FormError('Vous devez sélectionner une image.'));
+            }
+    
+            // Render the form with errors if image_pub is not valid
+            if ($form->isSubmitted() && !$form->isValid()) {
+                return $this->render('publicite/ajouterPub.html.twig', [
+                    'form' => $form->createView()
+                ]);
             }
     
             // Get the entity manager
             $em = $doctrine->getManager();
     
-       
+            // Persist and flush the entity
             $em->persist($publicite);
             $em->flush();
-
+    
+            // Redirect to the appropriate route
             return $this->redirectToRoute('app_actualite');
-           
-        
         }
     
         return $this->render('publicite/ajouterPub.html.twig', [
             'form' => $form->createView()
         ]);
     }
+    
     #[Route('/publicite/modifierPub/{id}', name: 'modifierPub')]
 
     public function modifierPub($id, ManagerRegistry $doctrine, Request $request): Response

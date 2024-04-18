@@ -153,33 +153,49 @@ et coordonner divers aspects de la vie communautaire.</p>
     </div>
 </div>
 
-                            <div class="mb-3 row">
-                                <label for="inputTitle" class="col-sm-4 col-form-label">Title</label>
-                                <div class="col-sm-8">
-                                    {{ form_widget(form.titre_pub, {'attr': {'class': 'form-control'}}) }}
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="inputDescription" class="col-sm-4 col-form-label">Description</label>
-                                <div class="col-sm-8">
-                                    {{ form_widget(form.description_pub, {'attr': {'class': 'form-control', 'rows': '3'}}) }}
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="inputImage" class="col-sm-4 col-form-label">Image</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        {{ form_widget(form.image_pub, {'attr': {'class': 'form-control', 'onchange': 'previewImage(event)'}}) }}
-                                    </div>
-                                    <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 100%; max-height: 200px; display: none;">
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="inputContact" class="col-sm-4 col-form-label">Contact</label>
-                                <div class="col-sm-8">
-                                    {{ form_widget(form.contact_pub, {'attr': {'class': 'form-control'}}) }}
-                                </div>
-                            </div>
+                     <div class="mb-3 row">
+    <label for="inputTitle" class="col-sm-4 col-form-label">Titre</label>
+    <div class="col-sm-8">
+        {{ form_widget(form.titre_pub, {'attr': {'class': 'form-control'}}) }}
+        {% if form_errors(form.titre_pub) %}
+            <div class="text-danger">{{ form_errors(form.titre_pub) }}</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="mb-3 row">
+    <label for="inputDescription" class="col-sm-4 col-form-label">Description</label>
+    <div class="col-sm-8">
+        {{ form_widget(form.description_pub, {'attr': {'class': 'form-control', 'rows': '3'}}) }}
+        {% if form_errors(form.description_pub) %}
+            <div class="text-danger">{{ form_errors(form.description_pub) }}</div>
+        {% endif %}
+    </div>
+</div>
+                           <div class="mb-3 row">
+    <label for="inputImage" class="col-sm-4 col-form-label">Image</label>
+    <div class="col-sm-8">
+        <div class="input-group">
+            {{ form_widget(form.image_pub, {'attr': {'class': 'form-control', 'onchange': 'previewImage(event)'}}) }}
+        </div>
+        {# Afficher les erreurs de validation pour le champ image_pub #}
+        {% if form_errors(form.image_pub) %}
+            <div class="text-danger">{{ form_errors(form.image_pub) }}</div>
+        {% endif %}
+        <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 100%; max-height: 200px; display: none;">
+    </div>
+</div>
+
+                        <div class="mb-3 row">
+    <label for="inputContact" class="col-sm-4 col-form-label">Contact</label>
+    <div class="col-sm-8">
+        {{ form_widget(form.contact_pub, {'attr': {'class': 'form-control'}}) }}
+        {% if form_errors(form.contact_pub) %}
+            <div class="text-danger">{{ form_errors(form.contact_pub) }}</div>
+        {% endif %}
+    </div>
+</div>
+
                             <div class="mb-3 row">
                                 <label for="inputLocation" class="col-sm-4 col-form-label">Location</label>
                                 <div class="col-sm-8">
@@ -227,7 +243,7 @@ et coordonner divers aspects de la vie communautaire.</p>
 
 
 
-<!-- ======= Footer ======= -->
+
 <footer id="footer" class="footer">
 
     <div class="container">

@@ -148,12 +148,18 @@ et coordonner divers aspects de la vie communautaire.</p>
                                     <label for="inputTitle" class="col-sm-2 col-form-label">Titre</label>
                                     <div class="col-sm-10">
                                         {{ form_widget(form.titre_pub, {'attr': {'class': 'form-control'}}) }}
+                                        {% if form_errors(form.titre_pub) %}
+                                            <div class="text-danger">{{ form_errors(form.titre_pub) }}</div>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputDescription" class="col-sm-2 col-form-label">Description</label>
                                     <div class="col-sm-10">
                                         {{ form_widget(form.description_pub, {'attr': {'class': 'form-control'}}) }}
+                                        {% if form_errors(form.description_pub) %}
+                                            <div class="text-danger">{{ form_errors(form.description_pub) }}</div>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -161,6 +167,9 @@ et coordonner divers aspects de la vie communautaire.</p>
                                     <div class="col-sm-10">
                                         <div class="text-center">
                                             {{ form_widget(form.image_pub, {'attr': {'class': 'form-control', 'onchange': 'previewImage(event)'}}) }}
+                                            {% if form_errors(form.image_pub) %}
+                                                <div class="text-danger">{{ form_errors(form.image_pub) }}</div>
+                                            {% endif %}
                                             <img id="imagePreview" src="{{ asset('uploads/' ~ publicite.getImagePub()) }}" alt="Aperçu de l'image" style="max-width: 100%; max-height: 200px;">
                                         </div>
                                     </div>
@@ -169,6 +178,9 @@ et coordonner divers aspects de la vie communautaire.</p>
                                     <label for="inputContact" class="col-sm-2 col-form-label">Contact</label>
                                     <div class="col-sm-10">
                                         {{ form_widget(form.contact_pub, {'attr': {'class': 'form-control'}}) }}
+                                        {% if form_errors(form.contact_pub) %}
+                                            <div class="text-danger">{{ form_errors(form.contact_pub) }}</div>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -203,6 +215,7 @@ et coordonner divers aspects de la vie communautaire.</p>
         </div>
     </section>
 </main>
+
 
 
 <script>
