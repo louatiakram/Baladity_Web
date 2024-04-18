@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AvisRepository;
 use App\Entity\Equipement;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AvisRepository::class)]
@@ -15,9 +16,11 @@ class Avis
     private $id_avis;
 
     #[ORM\Column(type: 'integer')]
+    #[Assert\NotBlank]
     private $note_avis;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
     private $commentaire_avis;
 
     #[ORM\Column(type: 'datetime')]
