@@ -325,6 +325,4 @@ public function generatePdf(Request $request): Response
 
     return $response;
 }
-
-
 }
