@@ -10,11 +10,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 
-class AjoutMuniFormType extends AbstractType
+class EditMuniFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('id_muni')
             ->add('nom_muni')
             ->add('email_muni')
             ->add('password_muni', PasswordType::class,)

@@ -5,14 +5,18 @@ security:
     Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     App\Entity\Enduser:
       algorithm: auto
+    App\Entity\User:
+      algorithm: auto
+
 
   # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
   providers:
     # used to reload user from session & other features (e.g. switch_user)
     app_user_provider:
       entity:
-        class: App\Entity\Enduser
-        property: email
+        class: App\Entity\User
+        property: id
+    # used to reload user from session & other features (e.g. switch_user)
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/

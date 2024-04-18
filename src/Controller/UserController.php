@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Entity\enduser;
 use App\Entity\muni;
+use App\Form\AdminEditUserType;
+use App\Form\EditProfileType;
 use App\Form\RegisterType;
 use App\Repository\enduserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +24,7 @@ class UserController extends AbstractController
             'controller_name' => 'UserController',
         ]);
     }
-    
+     
     #[Route('/afficher', name: 'afficher_user')]
     public function afficher(enduserRepository $Rep): Response
     {
@@ -33,21 +36,57 @@ class UserController extends AbstractController
     }
 
     #[Route('/afficher/detail/{i}', name: 'user_detail')]
-    public function detail($i, enduserRepository $rep): Response
+    public function detail($i,Request $request, ManagerRegistry $doctrine): Response
     {
-        $user = $rep->find($i);
+        $entityManager = $doctrine->getManager();
+
+        //$user = $rep->find($i);
+        //get user
+        $userRepository = $doctrine->getRepository(enduser::class);
+        $user = $userRepository->findOneBy(['id_user' => $i]);
+
+        //get muni name
+        $muniId = $user->getIdMuni();
+        $muniRepository = $doctrine->getRepository(muni::class);
+        $muni = $muniRepository->findOneBy(['id_muni' => $muniId]);
+        $muniName = $muni->getNomMuni();
+
+        //edit
         if (!$user) {
-            throw $this->createNotFoundException('Task not found');
+            throw $this->createNotFoundException('User not found');
         }
 
-        return $this->render('user/detail.html.twig', ['user' => $user]);
+        // Create the form for modifying the actualite
+        $form = $this->createForm(AdminEditUserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+    
+            // Persist the modified actualite object to the database
+            $entityManager->flush();
+    
+            // Redirect to a success page or display a success message
+            // For example:
+            return $this->redirectToRoute('user_detail', ['i' => $i]);
+        }
+
+        return $this->render('user/detail.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+            'muni' => $muniName,
+            'i' => $i,
+        ]);
     }
 
     #[Route('/profile', name: 'profile_user')]
     public function profile(Request $request, ManagerRegistry $doctrine): Response
     {
+
+        $entityManager = $doctrine->getManager();
+
         // Retrieving user ID from the session
         $userId = $request->getSession()->get('user_id');
+        //$userId = 81;
 
         //get user
         $userRepository = $doctrine->getRepository(enduser::class);
@@ -59,50 +98,45 @@ class UserController extends AbstractController
         $muni = $muniRepository->findOneBy(['id_muni' => $muniId]);
         $muniName = $muni->getNomMuni();
 
-        return $this->render('user/profile.html.twig', [
-            'controller_name' => 'UserController',
-            'user' => $user,
-            'muniName' => $muniName,
-        ]);
-    }
 
-    #[Route('/update', name: 'update_user')]
-    public function updateUser(ManagerRegistry $doctrine, Request $request): Response
-    {
-
-        // Retrieving user ID from the session
-        $userId = $request->getSession()->get('user_id');
-
-        //get user
-        $userRepository = $doctrine->getRepository(enduser::class);
-        $user = $userRepository->findOneBy(['id_user' => $userId]);
-
-        // If the user doesn't exist, handle the case accordingly (e.g., show an error message)
+        //edit
         if (!$user) {
-            // Handle the case where the user doesn't exist (e.g., show an error message)
-            // You can redirect to an error page or any other action
-            // For now, let's redirect to the main page
-            return $this->redirectToRoute('app_main');
+            throw $this->createNotFoundException('User not found');
         }
 
-        // Create the form with the user entity
-        $form = $this->createForm(RegisterType::class, $user);
+        // Create the form for modifying the actualite
+        $form = $this->createForm(EditProfileType::class, $user);
         $form->handleRequest($request);
 
-        // Handle form submission
         if ($form->isSubmitted() && $form->isValid()) {
-            // Save the updated user entity to the database
-            $entityManager = $doctrine->getManager();
+            // Set the image_a field
+            $image = $form->get('image_user')->getData();
+            if ($image) {
+                // Handle image upload and persist its filename to the database
+                $fileName = uniqid().'.'.$image->guessExtension();
+                try {
+                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    // Set the image filename to the user entity
+                    $user->setImageUser($fileName);
+                } catch (FileException $e) {
+                    // Handle the exception if file upload fails
+                    // For example, log the error or display a flash message
+                }
+            }
+    
+            // Persist the modified actualite object to the database
             $entityManager->flush();
-
-            // Redirect to the main page or any other desired page after successful update
-            return $this->redirectToRoute('app_main');
+    
+            // Redirect to a success page or display a success message
+            // For example:
+            return $this->redirectToRoute('profile_user');
         }
 
-        // Render the update form
         return $this->render('user/profile.html.twig', [
+            'controller_name' => 'UserController',
             'form' => $form->createView(),
-            'user' => $user, // Pass the user entity to the template if needed
+            'user' => $user,
+            'muni' => $muniName,
         ]);
     }
 
@@ -115,5 +149,4 @@ class UserController extends AbstractController
         $em->flush();
         return $this->redirectToRoute('afficher_user');
     }
-
 }

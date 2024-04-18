@@ -23,7 +23,7 @@
               <h5 class="card-title">Ajouter Municipality</h5>
               {{ form_errors(form) }}
                         
-                        {{ form_start(form, {'attr': {'action': path('ajouter_municipality'), 'method': 'POST'}}) }}
+              {{ form_start(form, {'attr': {'action': path('update_muni', {'i': muni.getIdMuni}), 'method': 'POST'}}) }}
                         <div class="col-12">
                             <label for="yourEmail" class="form-label">Nom</label>
                             {{ form_widget(form.nom_muni, {'attr': {'class': 'form-control', 'id': 'yourEmail'}}) }}

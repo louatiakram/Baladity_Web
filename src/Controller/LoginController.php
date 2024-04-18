@@ -7,8 +7,10 @@ use App\Form\LoginType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -76,9 +78,26 @@ class LoginController extends AbstractController
         }
 
         // Render the login form
-        return $this->render('login/login.html.twig', [
+        return $this->render('login.html.twig', [
             'form' => $form->createView(),
             'error' => $error,
         ]);
     }
+
+
+
+    #[Route('/sign-out', name: 'sign_out')]
+    public function signOut(SessionInterface $session,Request $request): RedirectResponse
+    {
+        // Invalidate the session (logout the user)
+        $session->invalidate();
+
+        // Optionally, you can add a flash message indicating successful sign-out
+        $this->addFlash('success', 'You have been signed out successfully.');
+
+        // Redirect to the homepage or any other desired page
+        return $this->redirectToRoute('app_login');
+    }
+
+
 }

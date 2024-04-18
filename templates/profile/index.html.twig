@@ -41,12 +41,12 @@
 
               <h2>{{ user.getNomUser() }}</h2>
               <h3>{{ user.getTypeUser() }}</h3>
-              <div class="row mb-3">
-                      <div class="col-md-8 col-lg-9">
-                        <div class="pt-2">
-                        </div>
-                      </div>
-            </div>
+              <div class="social-links mt-2">
+                <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+              </div>
             </div>
           </div>
 
@@ -59,91 +59,27 @@
               <!-- Bordered Tabs -->
               <ul class="nav nav-tabs nav-tabs-bordered" role="tablist">
 
-                
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview" aria-selected="true" role="tab">Overview</button>
+                </li>
 
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit" aria-selected="false" role="tab" tabindex="-1">Edit Profile</button>
                 </li>
 
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings" aria-selected="false" role="tab" tabindex="-1">Settings</button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password" aria-selected="false" role="tab" tabindex="-1">Change Password</button>
+                </li>
 
               </ul>
-              <div class="tab-content pt-2">
 
-                <div class="tab-pane fade profile-overview pt-3" id="profile-overview" role="tabpanel">
+                <div class="tab-pane fade profile-edit pt-3" id="profile-edit" role="tabpanel">
 
-                  <h5 class="card-title">Details</h5>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                    <div class="col-lg-9 col-md-8">{{ user.getNomUser() }}</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Email</div>
-                    <div class="col-lg-9 col-md-8">{{ user.getEmailUser() }}</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Phone Number</div>
-                    <div class="col-lg-9 col-md-8">{{ user.getPhoneNumberUser() }}</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Addresse</div>
-                    <div class="col-lg-9 col-md-8">{{ user.getLocationUser() }}</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Addresse</div>
-                    <div class="col-lg-9 col-md-8">{{ muni }}</div>
-                  </div>
-
-                </div>
-
-                <div class="tab-pane fade profile-edit active show" id="profile-edit" role="tabpanel">
-
-                  
-                  <!-- Profile Edit Form -->
-                  {{ form_start(form, {'attr': {'action': path('profile_user', {'i': user.getIdUser}), 'method': 'POST'}}) }}
-                        <div class="col-12">
-                            <label for="yourEmail" class="form-label">Nom</label>
-                            {{ form_widget(form.nom_user, {'attr': {'class': 'form-control', 'id': 'yourName'}}) }}
-                            {{ form_errors(form.nom_user) }}
-                        </div><br>
-                        <div class="col-12">
-                            <label for="yourPassword" class="form-label">Email</label>
-                            {{ form_widget(form.email_user, {'attr': {'class': 'form-control', 'id': 'yourEmail'}}) }}
-                            {{ form_errors(form.email_user) }}
-                        </div><br>
-                        <div class="col-12">
-                            <label for="yourPassword" class="form-label">Password</label>
-                            {{ form_widget(form.password, {'attr': {'class': 'form-control', 'id': 'yourPassword'}}) }}
-                            {{ form_errors(form.password) }}
-                        </div><br>
-                        <div class="col-12">
-                            <label for="yourEmail" class="form-label">Phone Number</label>
-                            {{ form_widget(form.phoneNumber_user, {'attr': {'class': 'form-control', 'id': 'yourPhoneNumber'}}) }}
-                            {{ form_errors(form.phoneNumber_user) }}
-                        </div><br>
-                        <div class="col-12">
-                            <label for="yourEmail" class="form-label">Location</label>
-                            {{ form_widget(form.location_user, {'attr': {'class': 'form-control', 'id': 'yourLocation'}}) }}
-                            {{ form_errors(form.location_user) }}
-                        </div><br>
-                        <div class="col-12">
-                            <label for="yourPassword" class="form-label">Image</label>
-                            {{ form_widget(form.image_user, {'attr': {'class': 'form-control', 'id': 'yourImage'}}) }}
-                            {{ form_errors(form.image_user) }}
-                        </div><br>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary w-100">Modifier</button>
-                        </div>
-                        {{ form_end(form) }}
-                    
-
-                        <!-- End Profile Edit Form -->
-
-
+                  {% include 'user/edit_profile.html.twig' %}
 
                 <div class="tab-pane fade pt-3" id="profile-settings" role="tabpanel">
 

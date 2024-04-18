@@ -17,71 +17,50 @@
 		<div class="container mt-4">
 			<div class="row">
 				<div class="col-md-6">
-					<div class="card mb-3">
-						<div class="card-body">
-							<h5 class="card-title text-primary">Nom</h5>
-							<p class="card-text">
-								{{ user.getNomUser() }}
-							</p>
-						</div>
-					</div>
 
-					<div class="card mb-3">
-						<div class="card-body">
-							<h5 class="card-title text-primary">Email</h5>
-							<p class="card-text">
-								{{ user.getEmailUser() }}
-							</p>
-						</div>
-					</div>
 
-					<div class="card mb-3">
-						<div class="card-body">
-							<h5 class="card-title text-primary">Type</h5>
-							<p class="card-text">
-								{{ user.getTypeUser()}}
-							</p>
-						</div>
-					</div>
+				<!-- Profile Edit Form -->
+				{{ form_start(form, {'attr': {'action': path('user_detail', {'i': i}), 'method': 'POST'}}) }}
+				<div class="col-12">
+    			<label for="yourName" class="form-label">Nom</label>
+    				<input type="text" class="form-control" id="yourName" value="{{ user.getNomUser() }}" readonly>
+				</div><br>
 
-					<div class="card mb-3">
-						<div class="card-body">
-							<h5 class="card-title text-primary">Municipalité</h5>
-							<p class="card-text">
-								{{ user.getIdMuni()}}
-							</p>
-						</div>
-					</div>
+				<div class="col-12">
+   					<label for="yourEmail" class="form-label">Email</label>
+    				<input type="text" class="form-control" id="yourEmail" value="{{ user.getEmailUser() }}" readonly>
+				</div><br>
+				<div class="col-12">
+    				<label for="yourPhoneNumber" class="form-label">Phone Number</label>
+    				<input type="text" class="form-control" id="yourPhoneNumber" value="{{ user.getPhoneNumberUser() }}" readonly>
+				</div><br>
+				<div class="col-12">
+    				<label for="yourLocation" class="form-label">Location</label>
+    				<input type="text" class="form-control" id="yourLocation" value="{{ user.getLocationUser() }}" readonly>
+				</div><br>
+				<div class="col-12">
+                            <label for="userType" class="form-label">Type</label>
+                            {{ form_widget(form.type_user, {'attr': {'class': 'form-control', 'id': 'userType'}}) }}
+                            {{ form_errors(form.type_user) }}
+                </div><br>
+				<div class="col-12">
+					<button type="submit" class="btn btn-primary w-100">Modifier</button>
+				</div><br>
+				{{ form_end(form) }}
+			
 
-					<div class="card mb-3">
-						<div class="card-body">
-							<h5 class="card-title text-primary">Numéro de télèphone</h5>
-							<p class="card-text">
-								{{ user.getPhoneNumberUser()}}
-							</p>
-						</div>
-					</div>
+				<!-- End Profile Edit Form -->
 
-					
-					<div class="card mb-3">
-						<div class="card-body">
-							<h5 class="card-title text-primary">Etat</h5>
-							<p class="card-text">
-								{{ user.getLocationUser() }}
-							</p>
-						</div>
-					</div>
-
-					<div class="card mb-3">
-						<div class="card-body">
-							<h5 class="card-title text-primary">Localisation</h5>
-							<div class="row mb-3">
-								<div class="col-sm-10">
-									<textarea class="form-control" style="height: 100px" readonly>{{ user.getLocationUser() }}</textarea>
-								</div>
-							</div>
-						</div>
-					</div>
+				
+				</div>
+				<div class="col-md-6">
+            {% if user.getImageuser() %}
+                {% set fileExtension = user.getImageuser()|split('.')|last %}
+                {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
+                    <img src="{{ asset('uploads/' ~ user.getImageuser()) }}" class="img-thumbnail" alt="Piece jointe" style="width: 100%; max-width: 250px;"> <!-- Adjusted max-width -->
+                {% endif %}
+            {% endif %}
+        </div>
         </div>
     </div>
 </div>

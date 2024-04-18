@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\muni;
 use App\Form\AjoutMuniFormType;
+use App\Form\EditMuniFormType;
 use App\Repository\MunicipalityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -81,28 +82,49 @@ class MunicipalityController extends AbstractController
     }
 
     #[Route('/update/{i}', name: 'update_muni')]
-    public function editAuthor(MunicipalityRepository $Rep,$i,ManagerRegistry $doc,Request $req): Response
-    {
-        $municipality = $doc->getRepository(muni::class)->find($i);
+    public function modifierMuni($i, ManagerRegistry $doctrine, Request $request): Response
 
-        // Create a form based on the AuthorType and populate it with the existing author data
-        //créer $form en se basant sur la classe généré et $ author
-        $form = $this->createForm(AjoutMuniFormType::class, $municipality);
-        $form->handleRequest($req);
-        
-       
-        if($form->isSubmitted() && $form->isValid()){
-            
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->flush();
+{
+    $entityManager = $doctrine->getManager();
+    $municipality = $entityManager->getRepository(muni::class)->find($i);
 
-
-            return $this->redirectToRoute('app_affiche');
-        }
-        return $this->renderForm('municipality/edit.html.twig', [
-            'form' => $form,
-        ]);
+    if (!$municipality) {
+        throw $this->createNotFoundException('Municipality not found');
     }
+
+    // Create the form for modifying the actualite
+    $form = $this->createForm(AjoutMuniFormType::class, $municipality);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Set the image_a field
+        $image = $form->get('imagee_user')->getData();
+        if ($image) {
+            // Handle image upload and persist its filename to the database
+            $fileName = uniqid().'.'.$image->guessExtension();
+            try {
+                $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                // Set the image filename to the user entity
+                $municipality->setImageeuser($fileName);
+            } catch (FileException $e) {
+                // Handle the exception if file upload fails
+                // For example, log the error or display a flash message
+            }
+        }
+
+        // Persist the modified actualite object to the database
+        $entityManager->flush();
+
+        // Redirect to a success page or display a success message
+        // For example:
+        return $this->redirectToRoute('afficher_muni');
+    }
+
+    return $this->render('municipality/edit.html.twig', [
+        'form' => $form->createView(),
+        'muni' => $municipality,
+    ]);
+}
 
     #[Route('/Municipality/delete/{i}', name: 'muni_delete')]
     public function delete($i, MunicipalityRepository $rep, ManagerRegistry $doctrine): Response

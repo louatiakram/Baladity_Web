@@ -11,6 +11,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Length;
 
 class RegisterType extends AbstractType
 {
@@ -34,6 +36,7 @@ class RegisterType extends AbstractType
             ])
             ->add('type_user', ChoiceType::class, [
                 'label' => 'User Type',
+                'required' => false,
                 'choices' => [
                     'Citoyen' => 'Citoyen',
                     'Directeur' => 'Directeur',
@@ -44,6 +47,14 @@ class RegisterType extends AbstractType
             ->add('phoneNumber_user', TextType::class, [    
                 'label' => 'Phone Number', // Customize the label
                 // Add more options if needed (e.g., required, constraints)
+                'required' => true,
+                'constraints' => [
+                    new Length([
+                        'min' => 8,
+                        'max' => 8,
+                        'exactMessage' => 'Phone number must be exactly {{ limit }} digits long.',
+                    ]),
+                ],
             ])
             // Assuming 'id_muni' is a ManyToOne relationship, consider using EntityType instead of TextType
             // ->add('id_muni') 
@@ -61,7 +72,17 @@ class RegisterType extends AbstractType
             ->add('image_user', FileType::class, [ // Add FileType for image upload
                 'label' => 'Image URL',
                 'mapped' => false, // This means it won't be mapped to an entity property directly
-                'required' => false, // It's not required
+                'required' => true, // It's required
+                'constraints' => [
+                    new File([
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/gif',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid image file (JPEG, PNG)',
+                    ])
+                ],
             ]);
     }
 
