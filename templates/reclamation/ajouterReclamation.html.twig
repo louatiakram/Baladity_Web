@@ -13,7 +13,12 @@
 
         <div class="container">
             {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    {{ form_label(form.id_user, "Utilisateur qui fait la réclamation", {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.id_user, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
             <div class="row mb-3">
                 <div class="form-group col-sm-12">
                     {{ form_label(form.sujet_reclamation, "Sujet de la réclamation", {'label_attr': {'class': 'form-label'}}) }}

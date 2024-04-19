@@ -114,4 +114,12 @@ public function countByMonth(): array
 
         return $statement->fetchAllAssociative();
     }
+    public function findReclamationsByUserId(int $userId): array
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.id_user = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult();
+    }
 }
