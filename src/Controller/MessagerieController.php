@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use DateTime;
 use App\Entity\messagerie;
+use App\Form\MessagerieType;
 use App\Form\MessagerieAdminType;
 use Symfony\Component\Form\FormError;
 use App\Form\MessagerieModificationType;
@@ -43,6 +44,49 @@ public function afficherMessagerie(int $id, MessagerieRepository $messagerieRepo
     return $this->render('messagerie/afficherMessagerie.html.twig', [
         'messages' => $messages,
         'id' => $id, // Passer l'identifiant de l'utilisateur à la vue
+    ]);
+}
+#[Route('/messagerie/afficherMessagerieF', name: 'afficherMessagerieF')]
+public function afficherMessagerieF(MessagerieRepository $messagerieRepository, Request $request): Response
+{
+    $userId1 = 48;
+    $userId2 = 49;
+
+    // Retrieve messages between the two users
+    $messages = $messagerieRepository->findByUsers($userId1, $userId2);
+
+    // Create a new message entity
+    $messagerie = new Messagerie();
+    $form = $this->createForm(MessagerieType::class, $messagerie);
+    $form->handleRequest($request);
+
+    // Check if the form is submitted and valid
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Get the currently logged in user (replace with your authentication logic)
+        $currentUser = $this->getDoctrine()->getRepository(EndUser::class)->find($userId1);
+
+        // Set the current user as the sender of the message
+        $messagerie->setSenderIdMessage($currentUser);
+
+        // Set the message date
+        $messagerie->setDateMessage(new \DateTime());
+
+        // Set the message type (you can add logic to determine the type)
+        $messagerie->setTypeMessage('text');
+
+        // Persist and flush the Messagerie entity
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($messagerie);
+        $entityManager->flush();
+
+        // Refresh the page to display the new message (you can redirect to another page if necessary)
+        return $this->redirectToRoute('afficherMessagerieF');
+    }
+
+    return $this->render('messagerie/afiicherMessagerieF.html.twig', [
+        'form' => $form->createView(),
+        'messages' => $messages,
+        'id' => $userId1,
     ]);
 }
 
@@ -97,6 +141,40 @@ public function modifierMessagerie(int $id, Request $request): Response
         'messagerie' => $messagerie,
     ]);
 }
+#[Route('/messagerie/modifierMessagerieF/{id}', name: 'modifierMessagerieF')]
+public function modifierMessagerieF(int $id, Request $request): Response
+{
+    $entityManager = $this->getDoctrine()->getManager();
+
+    // Trouver le message à modifier
+    $message = $entityManager->getRepository(Messagerie::class)->find($id);
+
+    // Vérifier si le message existe
+    if (!$message) {
+        throw $this->createNotFoundException('Message not found');
+    }
+
+    // Créer le formulaire pour modifier le message
+    $form = $this->createForm(MessagerieType::class, $message);
+    $form->handleRequest($request);
+
+    // Vérifier si le formulaire a été soumis et est valide
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Mettre à jour le message dans la base de données
+        $entityManager->flush();
+
+        // Redirection vers une autre page ou un affichage approprié
+        return $this->redirectToRoute('afficherMessagerieF');
+    }
+
+    // Rendre le formulaire et le message à modifier dans le modèle Twig
+    return $this->render('messagerie/modifierMessagerieF.html.twig', [
+        'form' => $form->createView(),
+        'message' => $message,
+    ]);
+}
+
+
 
 
 #[Route('/messagerie/supprimerMessagerie/{id}', name: 'supprimerMessagerie')]
@@ -117,6 +195,25 @@ public function supprimerMessagerie(int $id, MessagerieRepository $messagerieRep
 
     // Rediriger vers la page d'affichage des messages ou une autre page appropriée
     return $this->redirectToRoute('afficherMessagerie', ['id' => $message->getSenderIdMessage()->getIdUser()]);
+}
+#[Route('/messagerie/supprimerMessagerieF/{id}', name: 'supprimerMessagerieF')]
+public function supprimerMessagerieF(int $id, MessagerieRepository $messagerieRepository): Response
+{
+    // Récupérer le message à supprimer
+    $message = $messagerieRepository->find($id);
+
+    // Vérifier si le message existe
+    if (!$message) {
+        throw $this->createNotFoundException('Message not found');
+    }
+
+    // Supprimer le message de la base de données
+    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager->remove($message);
+    $entityManager->flush();
+
+    // Rediriger vers la page d'affichage des messages ou une autre page appropriée
+    return $this->redirectToRoute('afficherMessagerieF');
 }
 #[Route('/messagerie/ajouterMessage', name: 'ajouterMessage')]
 public function ajouterMessage(Request $request): Response
@@ -161,4 +258,7 @@ public function ajouterMessage(Request $request): Response
         'form' => $form->createView(),
     ]);
 }
+
 }
+
+
