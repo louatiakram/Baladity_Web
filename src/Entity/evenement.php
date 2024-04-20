@@ -17,6 +17,8 @@ class evenement
     #[ORM\Column(type: 'integer')]
     private $id_E;
 
+    #[ORM\ManyToOne(targetEntity: enduser::class)]
+    #[ORM\JoinColumn(name: 'id_user', referencedColumnName: 'id_user')]
     #[ORM\Column(type: 'integer')]
     private $id_user;
 

@@ -4,8 +4,8 @@
  * Author: BootstrapMade.com
  * License: https://bootstrapmade.com/license/
  */
-document.addEventListener('DOMContentLoaded', () => {
-    "use strict";
+(function () {
+  'use strict';
 
     /**
      * Preloader
@@ -149,4 +149,129 @@ document.addEventListener('DOMContentLoaded', () => {
         aos_init();
     });
 
-});
+    /**
+     * Drag Drop
+     */
+    document.addEventListener('DOMContentLoaded', function () {
+      const grids = document.querySelectorAll('.grid');
+      const taches = document.querySelectorAll('.tache');
+  
+      taches.forEach(tache => {
+        tache.addEventListener('dragstart', dragStart);
+        tache.addEventListener('dragend', dragEnd);
+      });
+  
+      grids.forEach(grid => {
+        grid.addEventListener('dragover', dragOver);
+        grid.addEventListener('dragenter', dragEnter);
+        grid.addEventListener('dragleave', dragLeave);
+        grid.addEventListener('drop', dragDrop);
+      });
+  
+      function updateCounters() {
+        const todoCounter = document.getElementById('todo-counter');
+        const doingCounter = document.getElementById('doing-counter');
+        const doneCounter = document.getElementById('done-counter');
+  
+        const todoTasks = document.querySelectorAll('#TODO .tache');
+        const doingTasks = document.querySelectorAll('#DOING .tache');
+        const doneTasks = document.querySelectorAll('#DONE .tache');
+  
+        todoCounter.textContent = todoTasks.length;
+        doingCounter.textContent = doingTasks.length;
+        doneCounter.textContent = doneTasks.length;
+      }
+  
+      function dragStart() {
+        if (!this.closest('#DONE')) {
+          this.classList.add('dragging');
+        }
+      }
+  
+      function dragEnd() {
+        this.classList.remove('dragging');
+      }
+  
+      function dragOver(e) {
+        e.preventDefault();
+      }
+  
+      function dragEnter(e) {
+        e.preventDefault();
+        this.classList.add('hovered');
+      }
+  
+      function dragLeave() {
+        this.classList.remove('hovered');
+      }
+  
+      function dragDrop() {
+        const tache = document.querySelector('.dragging');
+        const gridId = this.id;
+        const taskId = tache.id;
+  
+        if (gridId === 'DONE') {
+          // Show confirm dialog for irreversible action
+          const confirmResult = confirm(
+            "This action cannot be undone. Are you sure you want to move this task to 'DONE'?"
+          );
+  
+          if (!confirmResult) {
+            // If the user cancels, exit the function
+            tache.classList.remove('dragging');
+            this.classList.remove('hovered');
+            return;
+          }
+        }
+  
+        // Here, you can update the etat_T of the tache based on the grid's id
+        // Assuming grid id format is "{etat}_grid", e.g., "todo_grid", "doing_grid", "done_grid"
+        const newState = gridId.split('_')[0];
+        // Example AJAX request to update etat_T
+        // Replace this with your actual logic to update the tache's state
+        fetch(`/update-tache-state/${taskId}/${newState}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ taskId, newState }),
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            // Handle response data if needed
+            console.log('Tache state updated successfully:', data);
+            // Update counters after successful update
+            updateCounters();
+          })
+          .catch(error => {
+            console.error('Error updating tache state:', error);
+          });
+  
+        this.appendChild(tache);
+        this.classList.remove('hovered');
+      }
+    });
+  
+    document.getElementById('import-csv-btn').addEventListener('click', function() {
+      document.getElementById('csv-file-input').click();
+  });
+
+    /**
+     * Autoresize echart charts
+     */
+    const mainContainer = select('#main');
+    if (mainContainer) {
+      setTimeout(() => {
+        new ResizeObserver(function () {
+          select('.echart', true).forEach(getEchart => {
+            echarts.getInstanceByDom(getEchart).resize();
+          });
+        }).observe(mainContainer);
+      }, 200);
+    }
+  })();

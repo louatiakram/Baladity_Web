@@ -15,9 +15,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-
-
-
 class EvenementController extends AbstractController
 {
     #[Route('/evenement', name: 'app_evenement')]
@@ -32,6 +29,7 @@ class EvenementController extends AbstractController
     public function list(Request $request, EvenementRepository $repository): Response
     {
         $query = $request->query->get('query');
+        $orderBy = $request->query->get('orderBy', 'default_value'); // Define the default value for orderBy
 
         // If a search query is provided, filter events based on the name
         if ($query) {
@@ -44,48 +42,73 @@ class EvenementController extends AbstractController
         return $this->render('evenement/list.html.twig', [
             'evenements' => $evenements,
             'query' => $query, // Pass the query to the template for displaying in the search bar
+            'orderBy' => $orderBy, // Pass the orderBy variable to the template
+        ]);
+    }
+
+
+    #[Route('/evenement/listFront', name: 'evenement_listFront')]
+    public function listFront(Request $request, EvenementRepository $repository): Response
+    {
+        $query = $request->query->get('query');
+
+        // If a search query is provided, filter events based on the name
+        if ($query) {
+            $evenements = $repository->findByNomE($query); // Assuming findByNomE is a custom method in your repository
+        } else {
+            // If no search query is provided, fetch all events
+            $evenements = $repository->findAll();
+        }
+
+        return $this->render('evenement/listFront.html.twig', [
+            'evenements' => $evenements,
+            'query' => $query, // Pass the query to the template for displaying in the search bar
         ]);
     }
 
     #[Route('/evenement/ajouter', name: 'ajouter_evenement')]
-public function ajouter(Request $request, EntityManagerInterface $entityManager): Response
+    public function ajouter(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
 {
-    // Create a new Evenement instance
+    // Créer une nouvelle instance d'événement
     $evenement = new Evenement();
     
-    // Set the static user ID (48 in this case)
+    // Définir l'identifiant de l'utilisateur statique (48 dans ce cas)
     $evenement->setIdUser(48);
 
-    // Handle form submission
+    // Gérer la soumission du formulaire
     $form = $this->createForm(EvenementType::class, $evenement);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+        // Gérer le téléchargement de fichier
         $imageFile = $form->get('imageEvent')->getData();
-            if ($imageFile) {
-                $fileName = uniqid().'.'.$imageFile->guessExtension();
-                try {
-                    $imageFile->move($this->getParameter('uploadsDirectory'), $fileName);
-                    $evenement->setImageEvent($fileName);
-                } catch (FileException $e) {
-                    $this->addFlash('error', 'Failed to upload image.');
-                    return $this->redirectToRoute('ajouter_evenement', ['id' => $id]);
-                }
+        if ($imageFile) {
+            $fileName = uniqid().'.'.$imageFile->guessExtension();
+            try {
+                $imageFile->move($this->getParameter('uploadsDirectory'), $fileName);
+                $evenement->setImageEvent($fileName);
+            } catch (FileException $e) {
+                $this->addFlash('error', 'Failed to upload image.');
+                return $this->redirectToRoute('ajouter_evenement');
             }
+        }
 
-        // Persist the evenement object to the database
+        // Persister l'objet événement dans la base de données
         $entityManager->persist($evenement);
         $entityManager->flush();
+        // Définir le message de succès dans la session
+        $session->getFlashBag()->add('success', 'L\'événement a été ajouté avec succès.');
 
-        // Redirect to a success page or route
+        // Rediriger vers une page de réussite ou une route
         return $this->redirectToRoute('evenement_list');
     }
 
-    // Render the form view
+    // Rendre la vue du formulaire
     return $this->render('evenement/ajouter.html.twig', [
         'form' => $form->createView(),
     ]);
 }
+
 #[Route('/evenement/supprimer/{id}', name: 'supprimer_evenement')]
     public function supprimerEvenement($id, EvenementRepository $repository, ManagerRegistry $doctrine, SessionInterface $session): Response
     {

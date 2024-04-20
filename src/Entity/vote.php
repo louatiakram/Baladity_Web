@@ -14,6 +14,8 @@ class vote
     #[ORM\Column(type: 'integer')]
     private $id_V;
 
+    #[ORM\ManyToOne(targetEntity: enduser::class)]
+    #[ORM\JoinColumn(name: 'id_user', referencedColumnName: 'id_user')]
     #[ORM\Column(type: 'integer')]
     private $id_user;
 
