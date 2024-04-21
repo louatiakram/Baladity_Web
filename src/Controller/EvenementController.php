@@ -14,6 +14,8 @@ use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 
 class EvenementController extends AbstractController
 {
@@ -105,6 +107,49 @@ class EvenementController extends AbstractController
 
     // Rendre la vue du formulaire
     return $this->render('evenement/ajouter.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+
+#[Route('/evenement/ajouterFront', name: 'ajouter_evenement')]
+    public function ajouterFront(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
+{
+    // Créer une nouvelle instance d'événement
+    $evenement = new Evenement();
+    
+    // Définir l'identifiant de l'utilisateur statique (48 dans ce cas)
+    $evenement->setIdUser(48);
+
+    // Gérer la soumission du formulaire
+    $form = $this->createForm(EvenementType::class, $evenement);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Gérer le téléchargement de fichier
+        $imageFile = $form->get('imageEvent')->getData();
+        if ($imageFile) {
+            $fileName = uniqid().'.'.$imageFile->guessExtension();
+            try {
+                $imageFile->move($this->getParameter('uploadsDirectory'), $fileName);
+                $evenement->setImageEvent($fileName);
+            } catch (FileException $e) {
+                $this->addFlash('error', 'Failed to upload image.');
+                return $this->redirectToRoute('ajouter_evenement');
+            }
+        }
+
+        // Persister l'objet événement dans la base de données
+        $entityManager->persist($evenement);
+        $entityManager->flush();
+        // Définir le message de succès dans la session
+        $session->getFlashBag()->add('success', 'L\'événement a été ajouté avec succès.');
+
+        // Rediriger vers une page de réussite ou une route
+        return $this->redirectToRoute('evenement_listFront');
+    }
+
+    // Rendre la vue du formulaire
+    return $this->render('evenement/ajouterFront.html.twig', [
         'form' => $form->createView(),
     ]);
 }

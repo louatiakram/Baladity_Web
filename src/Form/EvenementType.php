@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 
 class EvenementType extends AbstractType
@@ -17,6 +18,10 @@ class EvenementType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+        ->add('envoyer', SubmitType::class, [
+            'label' => 'Envoyer',
+            'attr' => ['class' => 'btn btn-primary']
+        ])
             ->add('nom_E')
             ->add('date_DHE', DateType::class, [
                 'widget' => 'single_text',
@@ -27,6 +32,7 @@ class EvenementType extends AbstractType
 
             ])
             ->add('capacite_E')
+            
             ->add('categorie_E', ChoiceType::class, [
                 'choices' => [
                     'Sprotif' => 'Sportif',
