@@ -20,7 +20,7 @@ class vote
     private $id_user;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank(message: 'Description cannot be empty.')]
+    #[Assert\NotBlank(message: 'Veuillez fournit une description.')]
     #[Assert\Type(type: 'string', message: 'Description must be a string.')]
     private $desc_E;
 

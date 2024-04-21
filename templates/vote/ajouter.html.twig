@@ -1,4 +1,3 @@
-{# templates/vote/ajouter.html.twig #}
 {% extends 'base-back.html.twig' %}
 
 {% block title %}Ajouter Proposition{% endblock %}
@@ -18,7 +17,7 @@
 
 <div class="col-md-4">
     <label for="desc_E" class="form-label">Description</label>
-    {{ form_widget(form.desc_E, { 'attr': {'class': 'form-control'} }) }}
+    {{ form_widget(form.desc_E, { 'attr': {'class': 'form-control', 'style': 'height: 150px;'} }) }}
     {% if form.desc_E.vars.errors|length > 0 %}
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <i class="bi bi-exclamation-octagon me-1"></i>
