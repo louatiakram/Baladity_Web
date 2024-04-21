@@ -111,7 +111,7 @@ class EvenementController extends AbstractController
     ]);
 }
 
-#[Route('/evenement/ajouterFront', name: 'ajouter_evenement')]
+#[Route('/evenement/ajouterFront', name: 'ajouterFront_evenement')]
     public function ajouterFront(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
 {
     // Créer une nouvelle instance d'événement
@@ -134,7 +134,7 @@ class EvenementController extends AbstractController
                 $evenement->setImageEvent($fileName);
             } catch (FileException $e) {
                 $this->addFlash('error', 'Failed to upload image.');
-                return $this->redirectToRoute('ajouter_evenement');
+                return $this->redirectToRoute('ajouterFront_evenement');
             }
         }
 
@@ -172,6 +172,24 @@ class EvenementController extends AbstractController
         return $this->redirectToRoute('evenement_list');
     }
 
+    #[Route('/evenement/supprimerFront/{id}', name: 'supprimerFront_evenement')]
+    public function supprimerEvenementFront($id, EvenementRepository $repository, ManagerRegistry $doctrine, SessionInterface $session): Response
+    {
+        $evenement = $repository->find($id);
+
+        if (!$evenement) {
+            throw $this->createNotFoundException('Événement non trouvé avec l\'id : ' . $id);
+        }
+
+        $entityManager = $doctrine->getManager();
+        $entityManager->remove($evenement);
+        $entityManager->flush();
+
+        $session->getFlashBag()->add('success', 'L\'événement a été supprimé avec succès.');
+
+        return $this->redirectToRoute('evenement_listFront');
+    }
+
 #[Route('/evenement/modifier/{id}', name: 'modifier_evenement')]
 public function update($id, EvenementRepository $rep, Request $req, ManagerRegistry $doctrine): Response
     {
@@ -207,6 +225,43 @@ public function update($id, EvenementRepository $rep, Request $req, ManagerRegis
             return $this->redirectToRoute('evenement_list');
         }
         return $this->renderForm('evenement/modifier.html.twig', ['form' => $form]);
+    }
+
+    #[Route('/evenement/modifierFront/{id}', name: 'modifierFront_evenement')]
+public function updateFront($id, EvenementRepository $rep, Request $req, ManagerRegistry $doctrine): Response
+    {
+        $x = $rep->find($id);
+        $form = $this->createForm(EvenementType::class, $x);
+        $form->handleRequest($req);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // Handle file upload
+            /** @var UploadedFile|null $pieceJointe */
+            $image = $form->get('imageEvent')->getData();
+            if ($image) {
+                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // Move the file to the uploads directory
+                try {
+                    $uploadedFile = $image->move(
+                        $this->getParameter('uploadsDirectory'), // Use the parameter defined in services.yaml
+                        $originalFilename . '.' . $image->guessExtension()
+                    );
+                    $x->setImageEvent($uploadedFile->getFilename());
+                } catch (FileException $e) {}
+            }
+            // Get the selected etat_T value from the form
+            $selectedCategorieE = $form->get('categorie_E')->getData();
+
+            // Set the etat_T property of the tache entity
+            $x->setCategorieE($selectedCategorieE);
+
+            $em = $doctrine->getManager();
+            $em->flush();
+
+            return $this->redirectToRoute('evenement_listFront');
+        }
+        return $this->renderForm('evenement/modifierFront.html.twig', ['form' => $form]);
     }
 
     
