@@ -223,6 +223,19 @@ public function detailsEvenement($id, EntityManagerInterface $entityManager): Re
         'evenement' => $evenement,
     ]);
 }
+#[Route('/evenement/detailsFront/{id}', name: 'details_evenementFront')]
+public function detailsEvenementFront($id, EntityManagerInterface $entityManager): Response
+{
+    $evenement = $entityManager->getRepository(Evenement::class)->find($id);
+
+    if (!$evenement) {
+        throw $this->createNotFoundException('Événement non trouvé avec l\'id : '.$id);
+    }
+
+    return $this->render('evenement/detailsFront.html.twig', [
+        'evenement' => $evenement,
+    ]);
+}
 
 
 }

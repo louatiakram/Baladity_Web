@@ -1,0 +1,92 @@
+{% extends 'base-front.html.twig' %}
+
+{% block title %}Baladity Home{% endblock %}
+
+{% block barreTitre %}
+					<li><a href="{{ path('app_main_front') }}">Home</a></li>
+					<li><a href="about.html">Actualite</a></li>
+          <li class="dropdown"><a href="#"><span>Reclamation</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class="active"></i></a>
+					</li>
+					<li><a href="pricing.html">Evenement</a></li>
+					<li><a href="contact.html">Contact</a></li>
+                    <li><a href="contact.html">About Us</a></li>
+{% endblock %}
+{% block body %}
+
+{% endblock %}
+{% block rest %}
+
+<div class="breadcrumbs">
+  <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+    <div class="container position-relative">
+      <div class="row d-flex justify-content-center">
+        <div class="col-lg-6 text-center">
+          <h2>Evenement</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav>
+    <div class="container">
+      <ol>
+        <li><a href="{{path('app_main_front')}}">Home</a></li>
+        <li>Evenement</li>
+      </ol>
+    </div>
+  </nav>
+</div>
+<section id="about" class="about">
+    <div class="container aos-init aos-animate" data-aos="fade-up">
+
+      <div class="row gy-4">
+        <div class="col-lg-6 position-relative align-self-start order-lg-last order-first">
+            <img src="{{ asset('uploads/' ~ evenement.getImageEvent()) }}" alt=""
+            class="img-fluid"
+           >
+        </div>
+        <div class="col-lg-6 content order-last  order-lg-first">
+          <h3>{{ evenement.getNomE }}
+        </h3>
+    
+          <ul>
+            <li data-aos="fade-up" data-aos-delay="100" class="aos-init aos-animate">
+              <i class="bi bi-calendar"></i>
+              <div>
+                <h5>Date debut de l'Evenement : </h5>
+                <p>             {{ evenement.getDateDHE()|date('d/m/Y') }}
+</p>
+              </div>
+            </li>
+            <li data-aos="fade-up" data-aos-delay="200" class="aos-init aos-animate">
+              <i class="bi bi-calendar"></i>
+              <div>
+                <h5>Date fin de l'Evenement :</h5>
+                <p>{{ evenement.getDateDHF()|date('d/m/Y') }}  </p>
+              </div>
+            </li>
+            <li data-aos="fade-up" data-aos-delay="300" class="aos-init aos-animate">
+              <i class="bi bi-map"></i>
+              <div>
+                <h5>Capacite de l'Evenement :</h5>
+                <p>{{ evenement.getCapaciteE() }}
+                </p>
+              </div>
+            </li>
+            <li data-aos="fade-up" data-aos-delay="300" class="aos-init aos-animate">
+                <i class="bi bi-activity"></i>
+                <div>
+                  <h5>Categorie de l'Evenement :</h5>
+                  <p>{{ evenement.getCategorieE() }}</p>
+                </div>
+              </li>
+              <li >
+                
+              </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+{% endblock %}
