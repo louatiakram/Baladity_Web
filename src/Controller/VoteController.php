@@ -28,17 +28,20 @@ class VoteController extends AbstractController
     {
         $query = $request->query->get('query');
 
-        // If a search query is provided, filter votes based on the description
+        // Trier les votes par date de soumission
+        $orderBy = ['date_SV' => 'ASC']; // Ordonner par date de soumission de manière ascendante
+
+        // Si une requête de recherche est fournie, filtrer les votes en fonction de la description
         if ($query) {
-            $votes = $repository->findByDescE($query); // Assuming findByDescE is a custom method in your repository
+            $votes = $repository->findByDescE($query, $orderBy); // Supposons que findByDescE est une méthode personnalisée dans votre repository
         } else {
-            // If no search query is provided, fetch all votes
-            $votes = $repository->findAll();
+            // Si aucune requête de recherche n'est fournie, récupérer tous les votes triés par date de soumission
+            $votes = $repository->findBy([], $orderBy);
         }
 
         return $this->render('vote/list.html.twig', [
             'votes' => $votes,
-            'query' => $query, // Pass the query to the template for displaying in the search bar
+            'query' => $query, // Passer la requête au modèle pour l'afficher dans la barre de recherche
         ]);
     }
 

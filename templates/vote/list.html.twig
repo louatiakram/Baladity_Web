@@ -1,71 +1,132 @@
 {% extends 'base-back.html.twig' %}
 
-{% block title %}List of Propositions{% endblock %}
+{% block title %}Liste des Propositions{% endblock %}
 
-{% block body %}
-    <main id="main" class="main">
-        <br>
-        <h1 class="card-title" style="text-align: center; font-size: 2em;">List of Propositions</h1>
-        <br>
-
-        <!-- Search form -->
-        <form action="{{ path('vote_list') }}" method="get" class="mb-3">
-            <div class="input-group">
-                <input type="text" name="query" class="form-control" placeholder="Search by description" value="{{ query }}">
-                <button type="submit" class="btn btn-primary">Search</button>
-            </div>
+{% block searchbar %}
+    <div class="search-bar">
+        <form class="search-form d-flex align-items-center" method="POST" action="#">
+            <input type="text" placeholder="Rechercher..." id="search-input" class="form-control" name="query" title="Enter search keyword">
+            <div id="search-results"></div>
         </form>
+    </div>
+{% endblock %}
 
-        <!-- Display search query -->
-        {% if query %}
-            <p class="text-center">Showing results for: <strong>{{ query }}</strong></p>
-        {% endif %}
+{% block TacheNavState %}
+<a class="nav-link" data-bs-target="#GestionEvenement-nav" data-bs-toggle="collapse" href="#" aria-expanded="true">{% endblock %}
+    {% block TacheContentState %}
+    <ul id="GestionEvenement-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+        {% endblock %}
+        {% block ListeTacheNav %}
+        <a href="{{ path('vote_list') }}" class="active"><i class="bi bi-circle"></i><span>Liste Propositions</span></a>{% endblock %}
 
-        <!-- Ajouter Proposition button -->
-        <div class="text-center mb-3">
-            <a href="{{ path('ajouter_vote') }}" class="btn btn-primary">Ajouter Proposition</a>
-        </div>
 
-        <!-- Check if there are votes to display -->
-        {% if votes|length > 0 %}
-            <div class="col-10 mx-auto"> <!-- Adjusted column width -->
-                <div class="card">
-                    <div class="card-body">
-                        {% block vote_list %}
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Description</th>
-                                        <th>Date</th>
-                                        <th>Action</th> {# Added header for action #}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for vote in votes %}
-                                        <tr>
-                                            <td>{{ vote.getDescE }}</td>
-                                            <td>{{ vote.getDateSV|date('Y-m-d') }}</td>
-                                            <td>
-                                                <a href="{{ path('modifier_vote', {'id': vote.getIdV()}) }}" class="btn btn-sm btn-outline-primary">
-                                                    <i class="bi bi-pencil"></i> Modifier
-                                                </a>
-                                                <a href="{{ path('details_vote', {'id': vote.getIdV()}) }}" class="btn btn-sm btn-outline-info">
-                                                    <i class="bi bi-info-circle"></i> Details
-                                                </a>
-                                                <a href="{{ path('supprimer_vote', {'id': vote.getIdV()}) }}" class="btn btn-sm btn-outline-danger">
-                                                    <i class="bi bi-trash"></i> Supprimer
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        {% endblock %}
-                    </div>
+        {% block body %}
+
+		<div class="d-flex justify-content-between align-items-center mb-3">
+			<div class="btn-group">
+                <button id="filterBtn" type="button" class="btn btn-outline-primary filter-btn">
+                    <i class="bi bi-funnel"></i> Filter
+                </button>
+                <div id="filterOptions">
+                    <a href="{{ path('vote_list') }}" class="btn btn-danger">Clear</a>
                 </div>
             </div>
-        {% else %}
-            <p class="text-center">No Propositions found.</p>
-        {% endif %}
-    </main>
-{% endblock %}
+            
+		</div>
+
+
+		{% for message in app.flashes('success') %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+
+
+        <table class="table table-hover">
+            <thead>
+                <tr class="table-primary">
+                    <th scope="col">Description</th>
+                    <th scope="col">Date Soummision</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vote in votes %}
+                <tr>
+                    <td><h6>{{ vote.getDescE() }}</h6></td>
+                    <td><h6>{{ vote.getDateSV()|date('d-m-Y') }}</h6></td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <button onclick="location.href='{{ path('details_vote', {'id': vote.getIdV()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+                            <button onclick="location.href='{{ path('modifier_vote', {'id': vote.getIdV()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                            <button onclick="location.href='{{ path('supprimer_vote', {'id': vote.getIdV()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>    
+
+        <button onclick="location.href='{{ path('ajouter_vote') }}'" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Ajouter Proposition</button>		
+
+		<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+		
+		<style>
+			.btn-group {
+				display: flex;
+				align-items: center;
+			}
+		
+			#filterOptions {
+				margin-left: 10px; /* Adjust the left margin as needed */
+				display: none;
+			}
+		</style>
+        <style>
+			.search-bar {
+				margin-top: 20px;
+				margin-bottom: 20px;
+			}
+		
+			.search-form {
+				position: relative;
+			}
+		
+			#search-input {
+				width: 100%;
+				padding: 10px;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				font-size: 16px;
+			}
+		
+			#search-results {
+				position: absolute;
+				top: 100%;
+				left: 0;
+				z-index: 1000;
+				width: 100%;
+				background-color: #fff;
+				border: 1px solid #ccc;
+				border-top: none;
+				border-radius: 0 0 5px 5px;
+				box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+				display: none;
+			}
+		
+			#search-results a {
+				display: block;
+				padding: 10px;
+				color: #333;
+				text-decoration: none;
+				transition: background-color 0.3s ease;
+			}
+		
+			#search-results a:hover {
+				background-color: #f5f5f5;
+			}
+		</style>
+
+        {% endblock %}
