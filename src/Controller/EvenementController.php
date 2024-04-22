@@ -31,22 +31,24 @@ class EvenementController extends AbstractController
     public function list(Request $request, EvenementRepository $repository): Response
     {
         $query = $request->query->get('query');
-        $orderBy = $request->query->get('orderBy', 'default_value'); // Define the default value for orderBy
-
-        // If a search query is provided, filter events based on the name
+        $orderBy = $request->query->get('orderBy', 'default_value');
+    
         if ($query) {
-            $evenements = $repository->findByNomE($query); // Assuming findByNomE is a custom method in your repository
+            // Use your repository method to search events by name
+            $evenements = $repository->findBy(['nom_E' => $query]); // Using 'nom_E' field for event name
         } else {
             // If no search query is provided, fetch all events
             $evenements = $repository->findAll();
         }
-
+    
         return $this->render('evenement/list.html.twig', [
             'evenements' => $evenements,
             'query' => $query, // Pass the query to the template for displaying in the search bar
-            'orderBy' => $orderBy, // Pass the orderBy variable to the template
+            'orderBy' => $orderBy,
         ]);
     }
+    
+
 
 
     #[Route('/evenement/listFront', name: 'evenement_listFront')]
