@@ -31,7 +31,6 @@ class messagerie
     private $senderId_message;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank(message: "Le type de message ne peut pas être vide.")]
     private $type_message;
 
     public function getIdMessage(): ?int

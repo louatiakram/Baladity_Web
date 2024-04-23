@@ -54,7 +54,7 @@
                                     <img alt="" class="img-circle medium-image" src="{{ message.senderIdMessage.getImageUser() }}">
                                     <div class="message-body">
                                         <div class="message-body-inner">
-                                            <div class="message-info">
+                                            <div class="message-info">  
                                                 <h4>{{ message.senderIdMessage.getNomUser() }}</h4>
                                                 <h7> <i class="bi bi-clock"></i> {{ message.dateMessage|date('Y-m-d H:i:s') }}</h7>
                                                 <a href="{{ path('supprimerMessagerieF', { id: message.getIdMessage() }) }}">
@@ -73,22 +73,18 @@
                             {% endfor %}
                         </div>
                         <div class="chat-footer">
-                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-                            {{ form_label(form.contenu_message, "Ecrivez votre message : ", {'label_attr': {'class': 'form-label'}}) }}
+                           {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                    {{ form_label(form.contenu_message, "Contenu du message", {'label_attr': {'class': 'form-label'}}) }}
                         {{ form_widget(form.contenu_message, {'attr': {'class': 'form-control'}}) }}
-                        {% if form_errors(form.contenu_message) is not empty %}
-                            <div class="alert alert-danger">
-                                {{ form_errors(form.contenu_message) }}
-                            </div>
-                        {% endif %}
-                        {{ form_widget(form.envoyer, {'attr': {'class': 'btn btn-primary'}}) }}
-                        {{ form_end(form) }}
-                        </div>  
+                {{ form_widget(form.envoyer, {'attr': {'class': 'btn btn-primary'}}) }}
+                {{ form_end(form) }}
+                        </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        
 {% endblock %}
 
 {% block javascripts %}

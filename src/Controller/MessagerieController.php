@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Entity\enduser;
 use App\Entity\messagerie;
 use App\Form\MessagerieType;
 use App\Form\MessagerieAdminType;
@@ -49,47 +50,56 @@ public function afficherMessagerie(int $id, MessagerieRepository $messagerieRepo
 #[Route('/messagerie/afficherMessagerieF', name: 'afficherMessagerieF')]
 public function afficherMessagerieF(MessagerieRepository $messagerieRepository, Request $request): Response
 {
-    $userId1 = 48;
-    $userId2 = 49;
+    $entityManager = $this->getDoctrine()->getManager();
 
-    // Retrieve messages between the two users
-    $messages = $messagerieRepository->findByUsers($userId1, $userId2);
+    // Récupérer l'utilisateur actuellement connecté (ID statique)
+    $currentUserId = 48; // Exemple d'ID utilisateur
+    $currentUser = $entityManager->getRepository(enduser::class)->find($currentUserId);
 
-    // Create a new message entity
+    // ID de l'autre utilisateur (statique)
+    $otherUserId = 49; // Exemple d'ID utilisateur
+    $currentUser2 = $entityManager->getRepository(enduser::class)->find($otherUserId);
+
+
+    // Récupérer les messages entre les deux utilisateurs
+    $messages = $messagerieRepository->findByUsers($currentUserId, $otherUserId);
+
+    // Créer une nouvelle entité Messagerie
     $messagerie = new Messagerie();
     $form = $this->createForm(MessagerieType::class, $messagerie);
     $form->handleRequest($request);
 
-    // Check if the form is submitted and valid
+    // Vérifier si le formulaire est soumis et valide
     if ($form->isSubmitted() && $form->isValid()) {
-        // Get the currently logged in user (replace with your authentication logic)
-        $currentUser = $this->getDoctrine()->getRepository(EndUser::class)->find($userId1);
-
-        // Set the current user as the sender of the message
+        // Add this line to ensure the form submission is reaching here
+        // Définir l'utilisateur actuellement connecté comme expéditeur du message
         $messagerie->setSenderIdMessage($currentUser);
+        $messagerie->setReceiverIdMessage($currentUser2);
+        $messagerie->setTypeMessage('text');
+        // Définir l'utilisateur destinataire du message
+        
+        // Vous devrez implémenter cette partie selon votre logique métier
 
-        // Set the message date
+        // Définir la date du message
         $messagerie->setDateMessage(new \DateTime());
 
-        // Set the message type (you can add logic to determine the type)
-        $messagerie->setTypeMessage('text');
-
         // Persist and flush the Messagerie entity
-        $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($messagerie);
         $entityManager->flush();
 
-        // Refresh the page to display the new message (you can redirect to another page if necessary)
-        return $this->redirectToRoute('afficherMessagerieF');
+        // Ajouter un message flash pour confirmer que le message a été envoyé avec succès
+        $this->addFlash('success', 'Votre message a été envoyé avec succès.');
+
+        // Redirection vers la même route pour rafraîchir les messages
+       return $this->redirectToRoute('afficherMessagerieF');
     }
 
-    return $this->render('messagerie/afiicherMessagerieF.html.twig', [
+    return $this->render('messagerie/afficherMessagerieF.html.twig', [
         'form' => $form->createView(),
         'messages' => $messages,
-        'id' => $userId1,
+        'currentUser' => $currentUser,
     ]);
 }
-
 #[Route('/messagerie/modifierMessagerie/{id}', name: 'modifierMessagerie')]
 public function modifierMessagerie(int $id, Request $request): Response
 {
