@@ -48,6 +48,13 @@
                             <h5 class="card-title text-center pb-0 fs-4">Login</h5>
                             <p class="text-center small">Enter your personal details to create an account</p>
                         </div>
+                        {% if app.flashes('error') is not empty %}
+                            <div class="alert alert-danger">
+                                {% for message in app.flashes('error') %}
+                                    {{ message }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                         {% if error %}
                             <div class="alert alert-danger" role="alert">
                                 {{ error }}

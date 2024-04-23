@@ -28,7 +28,7 @@ class UserController extends AbstractController
     #[Route('/afficher', name: 'afficher_user')]
     public function afficher(enduserRepository $Rep): Response
     {
-        $users = $Rep->findAll();
+        $users = $Rep->findBy(['type_user' => ['Citoyen', 'Directeur', 'Employé', 'Responsable employé']]);
         return $this->render('user/afficherUser.html.twig', [
             'controller_name' => 'AuthorController',
             'users' => $users

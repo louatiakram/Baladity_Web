@@ -65,7 +65,12 @@ class LoginController extends AbstractController
                         return $this->redirectToRoute('app_main');
                     } else {
                         //redirect the user to the app_main route
-                        return $this->redirectToRoute('app_front_main');
+                        if($user->getIsBanned() == 0){
+                            return $this->redirectToRoute('app_front_main');
+                        }else{
+                            $this->addFlash('error', 'Votre compte a été banni.');
+                            return $this->redirectToRoute('app_login');
+                        }
                     }
                 } else {
                     // Add a form error for incorrect password

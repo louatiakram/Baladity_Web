@@ -1,6 +1,6 @@
 {% extends 'base-back.html.twig' %}
 
-{% block title %}Détails de la Tâche{% endblock %}
+{% block title %}Détails de l'utilisateur{% endblock %}
 
 {% block TacheNavState %}
 <a class="nav-link" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#" aria-expanded="true">
@@ -43,9 +43,14 @@
                             {{ form_widget(form.type_user, {'attr': {'class': 'form-control', 'id': 'userType'}}) }}
                             {{ form_errors(form.type_user) }}
                 </div><br>
-				<!-- div class="col-12">
+				<div class="col-12">
+					<label for="isBanned" class="form-label">Banned</label>
+					{{ form_widget(form.isBanned, {'attr': {'class': 'form-control', 'id': 'isBanned'}}) }}
+					{{ form_errors(form.isBanned) }}
+				</div><br>
+				<div class="col-12">
 					<button type="submit" class="btn btn-primary w-100">Modifier</button>
-				</div--><br>
+				</div><br>
 				{{ form_end(form) }}
 			
 

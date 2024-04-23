@@ -22,20 +22,21 @@ class AdminEditUserType extends AbstractType
                 'Directeur' => 'Directeur',
                 'Employé' => 'Employé',
                 'Responsable employé' => 'Responsable employé',
+                'Admin' => 'Admin',
             ],
-            'data' => 'Citoyen', // Set 'Citoyen' as the default choice
+            'data' => $options['data']->getTypeUser(), // Set 'Citoyen' as the default choice
         ])
         
-        //->add('isBanned', ChoiceType::class, [
-        //    'label' => 'isBanned', // Customize the label
-        //    'choices' => [
-        //        'Yes' => true,
-        //        'No' => false,
-        //    ],
-        //    'expanded' => true, // This will display radio buttons for choices
-        //    'multiple' => false, // Allow only one selection
-        //    'required' => true, // Make it required, adjust as needed
-        //])
+            ->add('isBanned', ChoiceType::class, [
+                'label' => 'isBanned', // Customize the label
+                'choices' => [
+                    'Yes' => true,
+                    'No' => false,
+                ],
+                'expanded' => true, // This will display radio buttons for choices
+                'multiple' => false, // Allow only one selection
+                'required' => true, // Make it required, adjust as needed
+            ])
         
         ;
     }

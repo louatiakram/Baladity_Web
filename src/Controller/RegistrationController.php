@@ -45,12 +45,15 @@ class RegistrationController extends AbstractController
                 }
             }
 
+            $user->setTypeUser('Citoyen');
+            $user->setIsBanned(0);
+
             $entityManager->persist($user);
             $entityManager->flush();
             // Storing user ID in the session
             $request->getSession()->set('user_id', $user->getIdUser());
 
-            return $this->redirectToRoute('app_main');
+            return $this->redirectToRoute('app_front_main');
         }
 
         return $this->render('registration/register.html.twig', [
