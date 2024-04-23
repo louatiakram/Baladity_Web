@@ -5,58 +5,97 @@
 {% block barreTitre %}
     <li><a href="{{ path('app_main_front') }}">Home</a></li>
     <li><a href="about.html">Actualite</a></li>
-    <li><a href="services.html">Reclamation</a></li>
-    <li><a href="{{ path('evenement_listFront') }}" class="active">Evenement</a></li>
+    <li class="dropdown">
+        <a href="#">
+            <span>Evenement</span>
+            <i class="bi bi-chevron-down dropdown-indicator active"></i>
+            <ul>
+                <li><a href="{{ path('ajouterFront_evenement') }}">Ajouter Evenement</a></li>
+                <li><a href="{{ path('evenement_listFront') }}">Mes evenements</a></li>
+            </ul>
+        </a>
+    
+    </li>
+    <li><a href="pricing.html">Reclamation</a></li>
     <li><a href="contact.html">Contact</a></li>
     <li><a href="contact.html">About Us</a></li>
 {% endblock %}
 
 {% block body %}
-    <br>
-    <h1 class="card-title" style="text-align: center; font-size: 2em;">La liste des événements</h1>
-    <br>
+    <div class="breadcrumbs">
+        <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+            <div class="container position-relative">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <h2>Evenements</h2>
+                        <p>Liste des événements disponibles.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <ol>
+                    <li><a href="{{path('app_main_front')}}">Home</a></li>
+                    <li>Evenements</li>
+                </ol>
+            </div>
+        </nav>
+    </div>
 
-    <div class="col-10 mx-auto"> <!-- Adjusted column width -->
-        <div class="card">
-            <div class="card-body">
-                {% block evenement_list %}
+    <!-- Event cards section -->
+    <section id="service" class="services pt-0">
+        <div class="container aos-init aos-animate" data-aos="fade-up">
+            <div class="row gy-4">
+                {% if evenements is not empty %}
                     {% for evenement in evenements %}
-                        <div class="row">
-                            <div class="col-md-5"> <!-- Adjusted column width -->
-                                <div class="d-flex flex-column">
+                        <div class="col-lg-4 col-md-6 aos-init aos-animate" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+                            <div class="card">
+                                <div class="card-img">
                                     {% block evenement_image %}
                                         {% if evenement.getImageEvent() %}
-                                            {% set fileExtension = evenement.getImageEvent()|split('.')|last %}
-                                            {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
-                                                <img src="{{ asset('uploads/' ~ evenement.getImageEvent()) }}" class="img-thumbnail" alt="Image" style="width: 100%; max-width: 400px;"> <!-- Adjusted max-width -->
-                                            {% elseif fileExtension == 'pdf' %}
-                                                <a href="{{ asset('uploads/' ~ evenement.getImageEvent()) }}">View PDF</a>
-                                            {% endif %}
+                                            <img src="{{ asset('uploads/' ~ evenement.getImageEvent()) }}" alt="" class="img-fluid card-img-top">
                                         {% endif %}
                                     {% endblock %}
                                 </div>
-                            </div>
-                            <div class="col-md-7"> <!-- Adjusted column width -->
-                                <h4 class="card-title" style="font-size: 1.5rem; margin-bottom: 10px;">{{ evenement.getNomE() }}</h4>
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button onclick="location.href='{{ path('details_evenementFront', {'id': evenement.getId()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i> Détails</button>
-                                    <button onclick="location.href='{{ path('modifierFront_evenement', {'id': evenement.getId()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i> Modifier</button>
-                                    <button onclick="location.href='{{ path('supprimerFront_evenement', {'id': evenement.getId()}) }}'" type="button" class="btn btn-outline-danger"><i class="bi bi-trash"></i> Supprimer</button>
+                                <div class="card-body">
+                                    <div class="text-center mb-3">
+                                        <h3 class="card-title">{{ evenement.getNomE() }}</h3>
+                                    </div>
+                                    <div class="d-flex justify-content-around">
+                                        <a href="{{ path('details_evenementFront', { id: evenement.getId() }) }}">
+                                            <img src="{{ asset('images/detail.png') }}" width="35" height="35">
+                                        </a>
+                                        <a href="{{ path('modifierFront_evenement', { id: evenement.getId() }) }}">
+                                            <img src="{{ asset('images/editer.png') }}" width="35" height="35">
+                                        </a>
+                                        <a href="{{ path('supprimerFront_evenement', { id: evenement.getId() }) }}">
+                                            <img src="{{ asset('images/delete.png') }}" width="35" height="35">
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <hr> <!-- Horizontal line between event items -->
                     {% endfor %}
-                {% endblock %}
+                {% else %}
+                    <div class="col-12 text-center">
+                        <p>Aucun événement trouvé.</p>
+                    </div>
+                {% endif %}
             </div>
         </div>
-    </div>
-    <!-- Bouton pour ajouter un nouvel événement -->
-    <button onclick="location.href='{{ path('ajouterFront_evenement') }}'" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Ajouter Événement</button>		
+    </section>
 
-    {% block ListeTalacheNav %}
-        <!-- Additional navigation elements if needed -->
-    {% endblock %}
 
+    <section id="call-to-action">
+        <div class="container aos-init aos-animate" data-aos="zoom-out">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h3>Contactez-nous pour plus d'informations</h3>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
-{%block rest%}{% endblock %}
+
+{% block rest %}{% endblock %}

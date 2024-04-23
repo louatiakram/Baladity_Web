@@ -5,11 +5,18 @@
 {% block barreTitre %}
     <li><a href="{{ path('app_main_front') }}">Home</a></li>
     <li><a href="about.html">Actualite</a></li>
-    <li class="dropdown"><a href="#"><span>Reclamation</span> <i
-        class="bi bi-chevron-down dropdown-indicator" class="active"></i></a>
-       
+    <li class="dropdown">
+        <a href="#">
+            <span>Evenement</span>
+            <i class="bi bi-chevron-down dropdown-indicator active"></i>
+            <ul>
+                <li><a href="{{ path('ajouterFront_evenement') }}">Ajouter Evenement</a></li>
+                <li><a href="{{ path('evenement_listFront') }}">Mes evenements</a></li>
+            </ul>
+        </a>
+    
     </li>
-    <li><a href="{{ path('evenement_listFront') }}">Evenement</a></li>
+    <li><a href="pricing.html">Reclamation</a></li>
     <li><a href="contact.html">Contact</a></li>
     <li><a href="contact.html">About Us</a></li>
 {% endblock %}
@@ -24,8 +31,8 @@
         <div class="container position-relative">
             <div class="row d-flex justify-content-center">
                 <div class="col-lg-6 text-center">
-                    <h2>Ajouter événement</h2>
-                    <p>Ajoutez votre nouvel événement en remplissant le formulaire ci-dessous.</p>
+                    <h2>Modifier événement</h2>
+                    <p>Modifier votre événement en remplissant le formulaire ci-dessous.</p>
                 </div>
             </div>
         </div>
@@ -47,7 +54,7 @@
             <div class="col-lg-7">
                 <div class="card">
                     <div class="card-body">
-                        <h3>Ajouter votre événement</h3>
+                        <h3>Modifier votre événement</h3>
                         <br>
                         <div class="container">
                             {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}

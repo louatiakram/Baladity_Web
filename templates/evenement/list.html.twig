@@ -17,10 +17,16 @@
 		
 		<div class="search-bar">
 			<form class="search-form" action="{{ path('evenement_list') }}" method="GET">
-				<input id="search-input" type="text" name="query" placeholder="Search by event name" value="{{ query }}">
+				<input id="search-input" type="text" name="query" placeholder="Recherche par nom" value="{{ query }}">
 				<div id="search-results"></div> <!-- This will display search results -->
 			</form>
 		</div>
+	
+		{% if evenements|length == 0 %}
+			<div class="alert alert-warning" role="alert">
+				Aucun événement trouvé avec ce nom.
+			</div>
+		{% endif %}
 
 		<div class="d-flex justify-content-between align-items-center mb-3">
 			<div class="btn-group">
@@ -79,6 +85,8 @@
 		
 
         <button onclick="location.href='{{ path('ajouter_evenement') }}'" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Ajouter Événement</button>		
+		<!-- Add the button to access the vote_list twig -->
+        <button onclick="location.href='{{ path('vote_list') }}'" class="btn btn-outline-primary"><i class="bi bi-list"></i> Liste des Propositions</button>
 
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 		
