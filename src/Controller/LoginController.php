@@ -15,8 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-use function PHPUnit\Framework\equalTo;
-
 class LoginController extends AbstractController
 {
     private $passwordEncoder;
@@ -27,11 +25,11 @@ class LoginController extends AbstractController
     }
 
     #[Route('/login', name: 'app_login')]
-    public function login(ManagerRegistry $doctrine, Request $request,AuthenticationUtils $authenticationUtils): Response
+    public function login(ManagerRegistry $doctrine, Request $request, AuthenticationUtils $authenticationUtils): Response
     {
 
         // Create an instance of the Enduser entity
-        $user = new enduser();
+        $user = new Enduser();
 
         // Get any authentication error message
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -45,27 +43,29 @@ class LoginController extends AbstractController
             // Retrieve the submitted data from the form
             $emailSaisie = $form->get('email_user')->getData();
             $passwordSaisie = $form->get('password')->getData();
-            
+
+            $hashedPassword = $this->passwordEncoder->encodePassword($user, $form->get('password')->getData());
+            $user->setPassword($hashedPassword);
 
             // Retrieve the user from the database based on the provided email
-            $userRepository = $doctrine->getRepository(enduser::class);
+            $userRepository = $doctrine->getRepository(Enduser::class);
             $user = $userRepository->findOneBy(['email_user' => $emailSaisie]);
 
             // Check if a user with the provided email exists
             if ($user) {
                 // Verify if the password from the form matches the hashed password stored in the database
                 $hashedPassword = $user->getPassword();
-                if ($passwordSaisie == $hashedPassword) {
+                if ($this->passwordEncoder->isPasswordValid($user, $passwordSaisie)) {
                     // Password is correct, store user ID in session
                     $request->getSession()->set('user_id', $user->getIdUser());
 
                     // Password is correct
-                    if($user->getTypeUser() == "Admin"){
+                    if ($user->getTypeUser() == "Admin") {
                         //redirect the user to the app_main route
                         return $this->redirectToRoute('app_main');
-                    }else{
+                    } else {
                         //redirect the user to the app_main route
-                        return $this->redirectToRoute('app_main');
+                        return $this->redirectToRoute('app_front_main');
                     }
                 } else {
                     // Add a form error for incorrect password
@@ -78,16 +78,14 @@ class LoginController extends AbstractController
         }
 
         // Render the login form
-        return $this->render('login.html.twig', [
+        return $this->render('login/login.html.twig', [
             'form' => $form->createView(),
             'error' => $error,
         ]);
     }
 
-
-
     #[Route('/sign-out', name: 'sign_out')]
-    public function signOut(SessionInterface $session,Request $request): RedirectResponse
+    public function signOut(SessionInterface $session, Request $request): RedirectResponse
     {
         // Invalidate the session (logout the user)
         $session->invalidate();
@@ -98,6 +96,4 @@ class LoginController extends AbstractController
         // Redirect to the homepage or any other desired page
         return $this->redirectToRoute('app_login');
     }
-
-
 }

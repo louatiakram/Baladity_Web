@@ -43,7 +43,7 @@ class RegisterController extends AbstractController
                     'form' => $form->createView()
                 ]);
             }
-
+ 
             
             $image = $form->get('image_user')->getData();
             if ($image) {
@@ -65,7 +65,7 @@ class RegisterController extends AbstractController
                 // Storing user ID in the session
                 $request->getSession()->set('user_id', $user->getIdUser());
 
-                return $this->redirectToRoute('app_main');
+                return $this->redirectToRoute('app_front_main');
 
         }
 

@@ -24,7 +24,7 @@ class AjoutMuniFormType extends AbstractType
                 'required' => true, // It's required
                 'constraints' => [
                     new File([
-                        'mimeTypes' => [
+                        'mimeTypes' => [ 
                             'image/jpeg',
                             'image/png',
                             'image/gif',

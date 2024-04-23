@@ -4,10 +4,12 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['id'], message: 'There is already an account with this id')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -17,6 +19,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'json')]
     private $roles = [];
+
+    #[ORM\Column(type: 'string')]
+    private $type_user;
 
     #[ORM\Column(type: 'string')]
     private $password;
@@ -89,6 +94,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->roles = $roles;
 
+        return $this;
+    }
+
+    public function getTypeUser(): ?string
+    {
+        return $this->type_user;
+    }
+    
+    public function setTypeUser(string $type_user): self
+    {
+        $this->type_user = $type_user;
         return $this;
     }
 

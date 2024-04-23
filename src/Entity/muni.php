@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\MunicipalityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: MunicipalityRepository::class)]
 class muni
@@ -23,6 +25,7 @@ class muni
     private $password_muni;
 
     #[ORM\Column(type: 'string', length: 255)]
+    //#[Assert\NotBlank(message: "Vous devez sélectionner une image.")]
     private $imagee_user;
 
     public function getIdMuni(): ?int

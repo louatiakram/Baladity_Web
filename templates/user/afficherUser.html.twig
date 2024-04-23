@@ -35,8 +35,7 @@
                 <td>{{ user.getTypeUser() }}</td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Actions">
-                        <button onclick="location.href='{{ path('user_detail', {'i': user.getIdUser()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
-                        <button onclick="location.href='#'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button onclick="location.href='{{ path('user_detail', {'i': user.getIdUser()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></button>
                         <button onclick="location.href='{{ path('user_delete', {'i': user.getIdUser()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button>
                     </div>
                 </td>
