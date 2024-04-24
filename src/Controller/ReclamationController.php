@@ -34,7 +34,7 @@ class ReclamationController extends AbstractController
     #[Route('/reclamation/typeReclamation', name: 'typeReclamation')]
     public function typeReclamation(): Response
     {
-        return $this->render('reclamation/typeReclamationF.html.twig');
+        return $this->render('reclamation/typeReclamation.html.twig');
     }
 
     #[Route('/reclamation/ajouterReclamation/{cas}', name: 'ajouterReclamation')]

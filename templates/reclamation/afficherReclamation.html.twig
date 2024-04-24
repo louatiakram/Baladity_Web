@@ -2,12 +2,16 @@
 
 {% block title %}Afficher les réclamations{% endblock %}
 
+
 {% block body %}
 </div>
 
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">Tableau des réclamations</h5>
+         <div class="datatable-search">
+        <input id="searchInput" class="datatable-input" placeholder="Search..." type="search" title="Search within table">
+        </div>
         <div class="container-fluid mb-3 d-flex justify-content-end">
             <a href="{{path('ajouterMessage')}}" class="btn btn-primary">
                 Ajouter un message
@@ -76,4 +80,21 @@
         <!-- End Pagination -->
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#searchInput').on('input', function() {
+            var searchText = $(this).val().toLowerCase();
+            $('tbody tr').each(function() {
+                var rowText = $(this).text().toLowerCase();
+                if (rowText.includes(searchText)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+</script>
+
 {% endblock %}
