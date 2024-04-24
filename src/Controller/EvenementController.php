@@ -32,16 +32,13 @@ class EvenementController extends AbstractController
     {
         $query = $request->query->get('query');
         $orderBy = $request->query->get('orderBy', 'default_value');
-    
         // Fetch all events
         $queryBuilder = $repository->createQueryBuilder('e');
-        
         if ($query) {
             // Use your repository method to search events by name
             $queryBuilder->where('e.nom_E LIKE :query')
                          ->setParameter('query', '%'.$query.'%');
         }
-    
         if ($orderBy === 'nom') {
             $queryBuilder->orderBy('e.nom_E');
         } elseif ($orderBy === 'categorie') {
@@ -49,13 +46,11 @@ class EvenementController extends AbstractController
         } else {
             $queryBuilder->orderBy('e.date_DHE');
         }
-    
         $evenements = $paginator->paginate(
             $queryBuilder->getQuery(),
             $request->query->getInt('page', 1), // Current page number, default is 1
             5 // Number of items per page
         );
-    
         return $this->render('evenement/list.html.twig', [
             'evenements'=> $evenements,
             'query' => $query, // Pass the query to the template for displaying in the search bar
