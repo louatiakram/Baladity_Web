@@ -33,13 +33,10 @@ class TacheController extends AbstractController
     #[Route('/tache', name: 'tache_list')]
 public function list(Request $request, TacheRepository $repository, PaginatorInterface $paginator, SessionInterface $session): Response
 {
-    // Fetch all tasks from the repository
-    $orderBy = $request->query->get('orderBy', 'date_FT'); // Default ordering by date_FT
-
-    // Set default ordering
     $defaultOrderBy = 'date_FT';
+    $orderBy = $request->query->get('orderBy', 'date_FT'); // Default ordering by date_FT
     $queryBuilder = $repository->createQueryBuilder('t')->orderBy('t.' . $defaultOrderBy, 'ASC');
-
+    
     // Set order by based on user input
     switch ($orderBy) {
         case 'titre':
@@ -54,6 +51,22 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
             break;
     }
 
+    // Set order direction
+    $orderDirection = 'ASC';
+
+    // Get start and end dates from the query parameters if provided
+    $startDate = $request->query->get('startDate');
+    $endDate = $request->query->get('endDate');
+
+    // If start and end dates are provided, apply date filtering
+    if ($startDate && $endDate) {
+        $queryBuilder
+            ->andWhere('t.date_FT >= :startDate')
+            ->andWhere('t.date_FT <= :endDate')
+            ->setParameter('startDate', new \DateTime($startDate))
+            ->setParameter('endDate', new \DateTime($endDate));
+    }
+
     $query = $queryBuilder->getQuery();
 
     // Paginate the query
@@ -63,20 +76,22 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
         3 // Limit per page
     );
 
-        // Calculate task counts for different "Etat" (status)
-        $tasksDoneCount = $repository->countByEtat('DONE');
-        $tasksDoingCount = $repository->countByEtat('DOING');
-        $tasksToDoCount = $repository->countByEtat('TODO');
+    // Calculate task counts for different "Etat" (status)
+    $tasksDoneCount = $repository->countByEtat('DONE');
+    $tasksDoingCount = $repository->countByEtat('DOING');
+    $tasksToDoCount = $repository->countByEtat('TODO');
 
     $successMessage = $session->getFlashBag()->get('success');
 
     return $this->render('tache/list.html.twig', [
         'tasks' => $tasks,
-        'successMessage' => $successMessage ? $successMessage[0] : null, // Pass the success message if it exists
+        'successMessage' => $successMessage ? $successMessage[0] : null,
+        'orderBy' => $orderBy,
         'tasksDoneCount' => $tasksDoneCount,
         'tasksDoingCount' => $tasksDoingCount,
         'tasksToDoCount' => $tasksToDoCount,
-        'orderBy' => $orderBy // Pass the orderBy parameter to the Twig template
+        'startDate' => $startDate, // Pass the start date to pre-fill the date picker
+        'endDate' => $endDate, // Pass the end date to pre-fill the date picker
     ]);
 }
 

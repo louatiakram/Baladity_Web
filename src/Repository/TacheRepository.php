@@ -126,40 +126,15 @@ class TacheRepository extends ServiceEntityRepository
         return (int)$qb->getQuery()->getSingleScalarResult();
     }
 
-    public function findByDateRange(?DateTimeInterface $startDate, ?DateTimeInterface $endDate, string $orderBy, string $orderDirection, int $limit, int $offset)
+    public function findByDateRange(\DateTimeInterface $startDate, \DateTimeInterface $endDate): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('t');
+        $qb = $this->createQueryBuilder('t')
+            ->where('t.date_FT >= :startDate')
+            ->andWhere('t.date_FT <= :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate);
 
-        if ($startDate && $endDate) {
-            $qb->andWhere('t.date_FT BETWEEN :startDate AND :endDate')
-               ->setParameter('startDate', $startDate)
-               ->setParameter('endDate', $endDate);
-        } elseif ($startDate && !$endDate) {
-            $qb->andWhere('t.date_FT >= :startDate')
-               ->setParameter('startDate', $startDate);
-        } elseif (!$startDate && $endDate) {
-            $qb->andWhere('t.date_FT <= :endDate')
-               ->setParameter('endDate', $endDate);
-        }
-
-        // Adjust the field name based on your entity
-        switch ($orderBy) {
-            case 'title':
-                $qb->orderBy('t.title_T', $orderDirection);
-                break;
-            case 'etat':
-                $qb->orderBy('t.etat_T', $orderDirection);
-                break;
-            case 'date_FT':
-            default:
-                $qb->orderBy('t.date_FT', $orderDirection);
-                break;
-        }
-
-        $qb->setMaxResults($limit)
-           ->setFirstResult($offset);
-
-        return $qb->getQuery()->getResult();
+        return $qb;
     }
 
 }
