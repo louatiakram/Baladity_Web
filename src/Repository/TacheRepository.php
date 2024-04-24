@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -113,6 +114,52 @@ class TacheRepository extends ServiceEntityRepository
             ->getQuery();
 
         return $qb->getResult();
+    }
+
+    public function countByEtat(string $etat): int
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->select('COUNT(t.id_T)')
+            ->where('t.etat_T = :etat')
+            ->setParameter('etat', $etat);
+
+        return (int)$qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function findByDateRange(?DateTimeInterface $startDate, ?DateTimeInterface $endDate, string $orderBy, string $orderDirection, int $limit, int $offset)
+    {
+        $qb = $this->createQueryBuilder('t');
+
+        if ($startDate && $endDate) {
+            $qb->andWhere('t.date_FT BETWEEN :startDate AND :endDate')
+               ->setParameter('startDate', $startDate)
+               ->setParameter('endDate', $endDate);
+        } elseif ($startDate && !$endDate) {
+            $qb->andWhere('t.date_FT >= :startDate')
+               ->setParameter('startDate', $startDate);
+        } elseif (!$startDate && $endDate) {
+            $qb->andWhere('t.date_FT <= :endDate')
+               ->setParameter('endDate', $endDate);
+        }
+
+        // Adjust the field name based on your entity
+        switch ($orderBy) {
+            case 'title':
+                $qb->orderBy('t.title_T', $orderDirection);
+                break;
+            case 'etat':
+                $qb->orderBy('t.etat_T', $orderDirection);
+                break;
+            case 'date_FT':
+            default:
+                $qb->orderBy('t.date_FT', $orderDirection);
+                break;
+        }
+
+        $qb->setMaxResults($limit)
+           ->setFirstResult($offset);
+
+        return $qb->getQuery()->getResult();
     }
 
 }

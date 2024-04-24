@@ -63,11 +63,19 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
         3 // Limit per page
     );
 
+        // Calculate task counts for different "Etat" (status)
+        $tasksDoneCount = $repository->countByEtat('DONE');
+        $tasksDoingCount = $repository->countByEtat('DOING');
+        $tasksToDoCount = $repository->countByEtat('TODO');
+
     $successMessage = $session->getFlashBag()->get('success');
 
     return $this->render('tache/list.html.twig', [
         'tasks' => $tasks,
         'successMessage' => $successMessage ? $successMessage[0] : null, // Pass the success message if it exists
+        'tasksDoneCount' => $tasksDoneCount,
+        'tasksDoingCount' => $tasksDoingCount,
+        'tasksToDoCount' => $tasksToDoCount,
         'orderBy' => $orderBy // Pass the orderBy parameter to the Twig template
     ]);
 }

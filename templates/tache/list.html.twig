@@ -23,6 +23,82 @@
 
         {% block body %}
 
+
+
+		<!-- Counter Cards -->
+		<div class="row">
+			<!-- Tache Done Card -->
+			<div class="col-xxl-4 col-md-6">
+				<div class="card info-card sales-card">
+					<!-- Filter dropdown -->
+					<div class="filter">
+						<!-- Your filter dropdown code -->
+					</div>
+					<div class="card-body">
+						<h5 class="card-title">Tache Done <span>| Total</span></h5>
+						<div class="d-flex align-items-center">
+							<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+								<i class="bi bi-clipboard-check fs-2"></i>
+							</div>
+							<div class="ps-3">
+								<h6><strong>{{ tasksDoneCount }}</strong></h6>
+								<!-- Additional stats if needed -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	
+			<!-- Tache Doing Card -->
+			<div class="col-xxl-4 col-md-6">
+				<div class="card info-card revenue-card">
+					<!-- Filter dropdown -->
+					<div class="filter">
+						<!-- Your filter dropdown code -->
+					</div>
+					<div class="card-body">
+						<h5 class="card-title">Tache Doing <span>| Total</span></h5>
+						<div class="d-flex align-items-center">
+							<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+								<i class="bi bi-gear-wide-connected fs-2"></i>
+							</div>
+							<div class="ps-3">
+								<h6><strong>{{ tasksDoingCount }}</strong></h6>
+								<!-- Additional stats if needed -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	
+			<!-- Tache To Do Card -->
+			<div class="col-xxl-4 col-md-6">
+				<div class="card info-card customers-card">
+					<!-- Filter dropdown -->
+					<div class="filter">
+						<!-- Your filter dropdown code -->
+					</div>
+					<div class="card-body">
+						<h5 class="card-title">Tache To Do <span>| Total</span></h5>
+						<div class="d-flex align-items-center">
+							<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+								<i class="bi bi-card-checklist fs-2"></i>
+							</div>
+							<div class="ps-3">
+								<h6><strong>{{ tasksToDoCount }}</strong></h6>
+								<!-- Additional stats if needed -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Counter Cards -->
+
+
+
+
+
 		<div class="d-flex justify-content-between align-items-center mb-3">
 			<div class="btn-group">
 				<button id="filterBtn" type="button" class="btn btn-outline-primary filter-btn">
