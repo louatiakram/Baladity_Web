@@ -87,6 +87,26 @@
         </div>
     </section>
 
+    <!-- Pagination -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item {% if evenements.currentPageNumber == 1 %}disabled{% endif %}">
+                <a class="page-link" href="{{ path('evenement_listFront', {'page': 1}) }}" aria-label="Previous">
+                    <span aria-hidden="true">«</span>
+                </a>
+            </li>
+            {% for page in 1..evenements.pageCount %}
+                <li class="page-item {% if page == evenements.currentPageNumber %}active{% endif %}">
+                    <a class="page-link" href="{{ path('evenement_listFront', {'page': page}) }}">{{ page }}</a>
+                </li>
+            {% endfor %}
+            <li class="page-item {% if evenements.currentPageNumber == evenements.pageCount %}disabled{% endif %}">
+                <a class="page-link" href="{{ path('evenement_listFront', {'page': evenements.pageCount}) }}" aria-label="Next">
+                    <span aria-hidden="true">»</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 
     <section id="call-to-action">
         <div class="container aos-init aos-animate" data-aos="zoom-out">

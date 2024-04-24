@@ -59,23 +59,30 @@ class EvenementController extends AbstractController
     }
     
     #[Route('/evenement/listFront', name: 'evenement_listFront')]
-    public function listFront(Request $request, EvenementRepository $repository): Response
-    {
-        $query = $request->query->get('query');
+public function listFront(Request $request, EvenementRepository $repository, PaginatorInterface $paginator): Response
+{
+    $query = $request->query->get('query');
 
-        // If a search query is provided, filter events based on the name
-        if ($query) {
-            $evenements = $repository->findByNomE($query); // Assuming findByNomE is a custom method in your repository
-        } else {
-            // If no search query is provided, fetch all events
-            $evenements = $repository->findAll();
-        }
+    // Fetch all events
+    $queryBuilder = $repository->createQueryBuilder('e');
 
-        return $this->render('evenement/listFront.html.twig', [
-            'evenements' => $evenements,
-            'query' => $query, // Pass the query to the template for displaying in the search bar
-        ]);
+    // If a search query is provided, filter events based on the name
+    if ($query) {
+        $queryBuilder->where('e.nomE LIKE :query')
+                     ->setParameter('query', '%'.$query.'%');
     }
+
+    $evenements = $paginator->paginate(
+        $queryBuilder->getQuery(),
+        $request->query->getInt('page', 1), // Current page number, default is 1
+        6 // Number of items per page
+    );
+
+    return $this->render('evenement/listFront.html.twig', [
+        'evenements' => $evenements,
+        'query' => $query, // Pass the query to the template for displaying in the search bar
+    ]);
+}
 
     #[Route('/evenement/ajouter', name: 'ajouter_evenement')]
     public function ajouter(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
