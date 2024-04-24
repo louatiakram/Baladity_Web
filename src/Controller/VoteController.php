@@ -12,6 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;  // Import the correct class
 use Symfony\Component\Form\FormFactoryInterface;
 use App\Form\VoteType;
+use Knp\Component\Pager\PaginatorInterface;
 
 class VoteController extends AbstractController
 {
@@ -24,27 +25,29 @@ class VoteController extends AbstractController
     }
 
     #[Route('/vote/list', name: 'vote_list')]
-    public function list(Request $request, VoteRepository $repository): Response
+    public function list(Request $request, VoteRepository $repository, PaginatorInterface $paginator): Response
     {
         $query = $request->query->get('query');
-
-        // Trier les votes par date de soumission
-        $orderBy = ['date_SV' => 'ASC']; // Ordonner par date de soumission de manière ascendante
-
-        // Si une requête de recherche est fournie, filtrer les votes en fonction de la description
+        $orderBy = ['date_SV' => 'ASC']; // Order by submission date in ascending order
+        $queryBuilder = $repository->createQueryBuilder('v');
         if ($query) {
-            $votes = $repository->findByDescE($query, $orderBy); // Supposons que findByDescE est une méthode personnalisée dans votre repository
-        } else {
-            // Si aucune requête de recherche n'est fournie, récupérer tous les votes triés par date de soumission
-            $votes = $repository->findBy([], $orderBy);
+            // If a search query is provided, filter votes based on the description
+            $queryBuilder->where('v.description LIKE :query')
+                         ->setParameter('query', '%'.$query.'%');
         }
-
+        // Fetch votes using query builder
+        $queryBuilder->orderBy('v.date_SV', 'ASC'); // Sort votes by submission date in ascending order
+        $votes = $paginator->paginate(
+            $queryBuilder->getQuery(),
+            $request->query->getInt('page', 1), // Current page number, default is 1
+            5 // Number of items per page
+        );
         return $this->render('vote/list.html.twig', [
             'votes' => $votes,
-            'query' => $query, // Passer la requête au modèle pour l'afficher dans la barre de recherche
+            'query' => $query, // Pass the query to the template for displaying in the search bar
         ]);
     }
-
+    
     #[Route('/vote/ajouter', name: 'ajouter_vote')]
 public function add(Request $request): Response
 {

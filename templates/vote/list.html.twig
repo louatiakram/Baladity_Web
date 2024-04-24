@@ -78,12 +78,32 @@
                 </tr>
                 {% endfor %}
             </tbody>
-        </table>    
+        </table>   
+
+		<!-- Pagination -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item {% if votes.currentPageNumber == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ path('vote_list', {'page': 1}) }}" aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                    </a>
+                </li>
+                {% for page in 1..votes.pageCount %}
+                    <li class="page-item {% if page == votes.currentPageNumber %}active{% endif %}">
+                        <a class="page-link" href="{{ path('vote_list', {'page': page}) }}">{{ page }}</a>
+                    </li>
+                {% endfor %}
+                <li class="page-item {% if votes.currentPageNumber == votes.pageCount %}disabled{% endif %}">
+                    <a class="page-link" href="{{ path('vote_list', {'page': votes.pageCount}) }}" aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                    </a>
+                </li>
+            </ul>
+        </nav> 
 
         <button onclick="location.href='{{ path('ajouter_vote') }}'" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Ajouter Proposition</button>		
 
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-		
 		<style>
 			.btn-group {
 				display: flex;

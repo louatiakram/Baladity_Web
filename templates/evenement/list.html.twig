@@ -80,10 +80,29 @@
                 </tr>
                 {% endfor %}
             </tbody>
-        </table>    
+        </table>
 
-		
-
+		<!-- Pagination -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item {% if evenements.currentPageNumber == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ path('evenement_list', {'page': 1}) }}" aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                    </a>
+                </li>
+                {% for page in 1..evenements.pageCount %}
+                    <li class="page-item {% if page == evenements.currentPageNumber %}active{% endif %}">
+                        <a class="page-link" href="{{ path('evenement_list', {'page': page}) }}">{{ page }}</a>
+                    </li>
+                {% endfor %}
+                <li class="page-item {% if evenements.currentPageNumber == evenements.pageCount %}disabled{% endif %}">
+                    <a class="page-link" href="{{ path('evenement_list', {'page': evenements.pageCount}) }}" aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+ 
         <button onclick="location.href='{{ path('ajouter_evenement') }}'" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Ajouter Événement</button>		
 		<!-- Add the button to access the vote_list twig -->
         <button onclick="location.href='{{ path('vote_list') }}'" class="btn btn-outline-primary"><i class="bi bi-list"></i> Liste des Propositions</button>

@@ -1,6 +1,6 @@
 {% extends 'base-back.html.twig' %}
 
-{% block title %}Ajouter Tâche{% endblock %}
+{% block title %}Ajouter Evenement{% endblock %}
 
 {% block TacheNavState %}
 <a class="nav-link" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#" aria-expanded="true">{% endblock %}
@@ -98,7 +98,5 @@
 <div class="mb-3">
     {{ form_widget(form.imageEvent, {'attr': {'class': 'form-control', 'accept': 'image/*'}}) }}
 </div>
-
-<button type="submit" class="btn btn-primary">Ajouter</button>
 {{ form_end(form) }}
 {% endblock %}

@@ -8,14 +8,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\evenement;
 use App\Repository\EvenementRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\EntityManagerInterface;  // Import the correct class
+use Doctrine\ORM\EntityManagerInterface; 
 use App\Form\EvenementType;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
+use Knp\Component\Pager\PaginatorInterface;
 
 class EvenementController extends AbstractController
 {
@@ -26,31 +26,43 @@ class EvenementController extends AbstractController
             'controller_name' => 'EvenementController',
         ]);
     }
-    
+
     #[Route('/evenement/list', name: 'evenement_list')]
-    public function list(Request $request, EvenementRepository $repository): Response
+    public function list(Request $request, EvenementRepository $repository, PaginatorInterface $paginator): Response
     {
         $query = $request->query->get('query');
         $orderBy = $request->query->get('orderBy', 'default_value');
     
+        // Fetch all events
+        $queryBuilder = $repository->createQueryBuilder('e');
+        
         if ($query) {
             // Use your repository method to search events by name
-            $evenements = $repository->findBy(['nom_E' => $query]); // Using 'nom_E' field for event name
-        } else {
-            // If no search query is provided, fetch all events
-            $evenements = $repository->findAll();
+            $queryBuilder->where('e.nom_E LIKE :query')
+                         ->setParameter('query', '%'.$query.'%');
         }
     
+        if ($orderBy === 'nom') {
+            $queryBuilder->orderBy('e.nom_E');
+        } elseif ($orderBy === 'categorie') {
+            $queryBuilder->orderBy('e.categorie');
+        } else {
+            $queryBuilder->orderBy('e.date_DHE');
+        }
+    
+        $evenements = $paginator->paginate(
+            $queryBuilder->getQuery(),
+            $request->query->getInt('page', 1), // Current page number, default is 1
+            5 // Number of items per page
+        );
+    
         return $this->render('evenement/list.html.twig', [
-            'evenements' => $evenements,
+            'evenements'=> $evenements,
             'query' => $query, // Pass the query to the template for displaying in the search bar
             'orderBy' => $orderBy,
         ]);
     }
     
-
-
-
     #[Route('/evenement/listFront', name: 'evenement_listFront')]
     public function listFront(Request $request, EvenementRepository $repository): Response
     {
