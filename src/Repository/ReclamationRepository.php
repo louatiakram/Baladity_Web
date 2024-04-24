@@ -122,4 +122,14 @@ public function countByMonth(): array
             ->getQuery()
             ->getResult();
     }
+    public function findReclamationsByDate(int $userId): array
+    {
+    return $this->createQueryBuilder('r')
+        ->where('r.id_user = :userId')
+        ->setParameter('userId', $userId)
+        ->orderBy('r.date_reclamation', 'ASC')
+        ->getQuery()
+        ->getResult();
+    }
+
 }

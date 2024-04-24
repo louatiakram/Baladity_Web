@@ -238,6 +238,28 @@ public function afficherReclamationF(Request $request, ReclamationRepository $re
         'reclamations' => $reclamations,
     ]);
 }
+
+#[Route('/reclamation/filtrerParDate', name: 'filtrerParDate')]
+public function filtrerParDate(Request $request, ReclamationRepository $repository, SessionInterface $session): Response
+{
+    $sortingState = $session->get('sorting_state', 'normal');
+    
+    if ($sortingState === 'normal') {
+        $userId = 48; // Utilisateur pour lequel vous souhaitez filtrer les réclamations par date
+        $reclamations = $repository->findReclamationsByDate($userId);
+        $session->set('sorting_state', 'sorted');
+    } else {
+        $userId = 48; // Utilisateur pour lequel vous souhaitez filtrer les réclamations par date
+        $reclamations = $repository->findReclamationsByUserId($userId);
+        $session->set('sorting_state', 'normal');    }
+
+    return $this->render('reclamation/afficherReclamationF.html.twig', [
+        'reclamations' => $reclamations,
+        'sorting_state' => $sortingState,
+    ]);
+}
+
+
    
 
  #[Route('/reclamation/supprimerReclamation/{i}', name: 'supprimerReclamation')]
