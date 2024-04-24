@@ -125,7 +125,7 @@
 							{% if userId == commentaire.getIdUser().getIdUser() %}
 							<div class="comment-options">
 								<button onclick="location.href='{{ path('commentairetache_update', {'i': commentaire.getIdC()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i> Modifier</button>
-								<button onclick="location.href='{{ path('commentairetache_delete', {'i': commentaire.getIdC()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i> Supprimer</button>
+								<button onclick="location.href='{{ path('commentairetache_deletefront', {'i': commentaire.getIdC()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i> Supprimer</button>
 							</div>
 							{% endif %}
 							</div>

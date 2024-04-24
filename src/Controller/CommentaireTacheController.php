@@ -102,4 +102,14 @@ class CommentaireTacheController extends AbstractController
         $em->flush();
         return $this->redirectToRoute('tache_list');
     }
+
+    #[Route('/commentairetache/deletefront/{i}', name: 'commentairetache_deletefront')]
+    public function deletefront($i, CommentaireTacheRepository $rep, ManagerRegistry $doctrine): Response
+    {
+        $xs = $rep->find($i);
+        $em = $doctrine->getManager();
+        $em->remove($xs);
+        $em->flush();
+        return $this->redirectToRoute('tache_listfront');
+    }
 }
