@@ -80,6 +80,38 @@ public function add(Request $request): Response
     ]);
 }
 
+#[Route('/vote/ajouterFront', name: 'ajouter_voteFront')]
+public function addFront(Request $request): Response
+{
+    $entityManager = $this->getDoctrine()->getManager();
+
+    // Create a new Vote object
+    $vote = new vote();
+    $vote->setIdUser(50);
+    // Set the date_SV field to the current date
+    $vote->setDateSV(new \DateTime());
+
+    // Handle form submission
+    $form = $this->createForm(VoteType::class, $vote);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Persist the vote object
+        $entityManager->persist($vote);
+        $entityManager->flush();
+
+        // Flash message for success
+        $this->addFlash('success', 'Proposition added successfully.');
+
+        // Redirect to the vote list page
+        return $this->redirectToRoute('evenement_listFront');
+    }
+
+    return $this->render('vote/ajouterFront.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+
 #[Route('/vote/modifier/{id}', name: 'modifier_vote')]
     public function update($id, VoteRepository $repository, Request $request, ManagerRegistry $doctrine, FormFactoryInterface $formFactory): Response
     {

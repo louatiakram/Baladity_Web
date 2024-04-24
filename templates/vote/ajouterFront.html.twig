@@ -1,0 +1,102 @@
+{% extends 'base-front.html.twig' %}
+
+{% block title %}Ajouter Proposition{% endblock %}
+
+{% block barreTitre %}
+    <li><a href="{{ path('app_main_front') }}">Home</a></li>
+    <li><a href="about.html">Actualite</a></li>
+    <li class="dropdown">
+        <a href="#">
+            <span>Evenement</span>
+            <i class="bi bi-chevron-down dropdown-indicator active"></i>
+            <ul>
+                <li><a href="{{ path('ajouterFront_evenement') }}">Ajouter Evenement</a></li>
+                <li><a href="{{ path('evenement_listFront') }}">Mes evenements</a></li>
+                <li><a href="{{ path('ajouter_voteFront') }}">Ajouter propositions</a></li>
+            </ul>
+        </a>
+    </li>
+    <li><a href="pricing.html">Reclamation</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="contact.html">About Us</a></li>
+{% endblock %}
+
+{% block body %}
+
+<div class="breadcrumbs">
+    <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+        <div class="container position-relative">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <h2>Ajouter Proposition</h2>
+                    <p>Ajoutez votre nouvelle proposition en remplissant le formulaire ci-dessous.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav>
+        <div class="container">
+            <ol>
+                <li><a href="{{ path('app_main_front') }}">Home</a></li>
+                <li>Proposition</li>
+            </ol>
+        </div>
+    </nav>
+</div>
+
+<section id="get-a-quote" class="get-a-quote">
+    <div class="container aos-init aos-animate" data-aos="fade-up">
+        <div class="row g-0">
+            <div class="col-lg-5 quote-bg" style="background-image: url('{{ asset('images/quote-bg.jpg') }}');"></div>
+            <div class="col-lg-7">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Ajouter votre proposition</h3>
+                        <br>
+                        <div class="container">
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gy-4'}}) }}
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        {{ form_label(form.desc_E, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                                        <div class="input-group">
+                                            {{ form_widget(form.desc_E, {'attr': {'class': 'form-control', 'style': 'height: 150px; border: 1px solid #ced4da;'}}) }}
+                                        </div>
+                                        {% if form_errors(form.desc_E) is not empty %}
+                                            <div class="alert alert-danger">
+                                                {{ form_errors(form.desc_E) }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="date_SV" class="form-label">Date</label>
+                                    <div class="input-group">
+                                        {{ form_widget(form.date_SV, {'attr': {'class': 'form-control', 'style': 'border: 1px solid #ced4da;'}}) }}
+                                    </div>
+                                    {% if form.date_SV.vars.errors|length > 0 %}
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <i class="bi bi-exclamation-octagon me-1"></i>
+                                            {% for error in form.date_SV.vars.errors %}
+                                                {{ error.message }}
+                                            {% endfor %}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End Quote Form -->
+        </div>
+    </div>
+</section>
+
+</div>
+
+</div>
+
+{% endblock %}
