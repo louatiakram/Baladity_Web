@@ -1,48 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offres</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Baladity Home</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{{ asset('front-office/img/LOGOL.png') }}" rel="icon">
+    <link href="{{ asset('front-office/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{{ asset('front-office/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/aos/aos.css') }}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="{{ asset('front-office/css/main.css') }}" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: Logis
+    * Updated: Mar 13 2024 with Bootstrap v5.3.3
+    * Template URL: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+
+<!-- ======= Header ======= -->
+<header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+        <a href="index.html" class="logo d-flex align-items-center">
+            <!-- Uncomment the line below if you also wish to use an image logo -->
+         <img src="{{ asset('front-office/img/LOGOL.png') }}" class="img-fluid mb-3 mb-lg-0" alt="">
+            <h1>Baladity</h1>
+        </a>
+
+        <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+        <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a href="{{ path('app_main_front') }}" >Home</a></li>
+					<li><a href="about.html"  class="active">Actualite</a></li>
+					<li><a href="services.html">Reclamation</a></li>
+					<li><a href="pricing.html">Evenement</a></li>
+					<li><a href="contact.html">Contact</a></li>
+                    <li><a href="contact.html">About Us</a></li>
+             
+                                
+            </ul>
+        </nav><!-- .navbar -->
+
+    </div>
+</header><!-- End Header -->
+<!-- End Header -->
+
+<!-- ======= Hero Section ======= -->
+<section id="hero" class="hero d-flex align-items-center">
+    <div class="container">
+        <div class="row gy-4 d-flex justify-content-between">
+            <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
+                <h2 data-aos="fade-up">Là où il fait extrêmement bon de vivre</h2>
+                <p data-aos="fade-up" data-aos-delay="100">Baladity est une application innovante conçue pour simplifier la gestion des fonctionnalités municipales 
+au sein d'une municipalité. En combinant une interface conviviale avec des fonctionnalités intuitives, 
+Baladity offre aux résidents et aux responsables municipaux un outil efficace pour interagir 
+et coordonner divers aspects de la vie communautaire.</p>
+
+                <form action="#" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up"
+                      data-aos-delay="200">
+                    <input type="text" class="form-control" placeholder="ZIP code or CitY">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+
+                <div class="row gy-4" data-aos="fade-up" data-aos-delay="400">
+
+                    <div class="col-lg-3 col-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1"
+                                  class="purecounter"></span>
+                            <p>Citoyens</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                    <div class="col-lg-3 col-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1"
+                                  class="purecounter"></span>
+                            <p>évenements</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                    <div class="col-lg-3 col-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="1453" data-purecounter-duration="1"
+                                  class="purecounter"></span>
+                            <p>Publicité</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                    <div class="col-lg-3 col-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="32" data-purecounter-duration="1"
+                                  class="purecounter"></span>
+                            <p>employés</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                </div>
+            </div>
+
+            <div class="col-lg-5 order-1 order-lg-2 hero-img" data-aos="zoom-out">
+               <img src="{{ asset('front-office/img/LOGOL.png') }}" class="img-fluid mb-3 mb-lg-0" alt="">
+            </div>
+
+        </div>
+    </div>
+</section><!-- End Hero Section -->
+    <style>
+        .custom-container {
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
+
+        .custom-title {
+            color: #2c3e50;
+        }
+
+        .custom-form {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            border: none;
+        }
+
+        .btn-secondary {
+            background-color: #2c3e50;
+            border: none;
+        }
+    </style>
+
+    <!-- ======= Get a Quote Section ======= -->
+ {% block body %}
+<body>
+<title>Choisissez une offre</title>
+    <link rel="stylesheet" href="style.css"> <!-- Ajoutez votre fichier CSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script> <!-- QRCode.js -->
+    <script>
+
+function copyFormValues() {
+    console.log("Copying form values..."); // Débogage
+    document.getElementById("hidden_offre").value = document.getElementById("offre").value;
+    document.getElementById("hidden_numero_carte").value = document.getElementById("numero_carte").value;
+    document.getElementById("hidden_nom").value = document.getElementById("nom").value;
+    document.getElementById("hidden_prenom").value = document.getElementById("prenom").value;
+}
+
+document.getElementById("exportPdfForm").addEventListener("submit", copyFormValues);
+
+
+document.getElementById("exportPdfForm").addEventListener("submit", copyFormValues);
+
+
+document.getElementById("exportPdfForm").addEventListener("submit", copyFormValues);
+
+    function updateQRCode() {
+        const offre = document.getElementById('offre').value;
+        const numeroCarte = document.getElementById('numero_carte').value;
+        const nom = document.getElementById('nom').value;
+        const prenom = document.getElementById('prenom').value;
+
+        const qrData = `Offre: ${offre}, Carte: ${numeroCarte}, Nom: ${nom}, Prénom: ${prenom}`;
+        const qrCanvas = document.getElementById('qrcode');
+
+        // Efface le code QR précédent
+        qrCanvas.innerHTML = "";
+
+        // Génère un nouveau code QR
+        const qrcode = new QRCode(qrCanvas, {
+            text: qrData,
+            width: 128,
+            height: 128,
+        });
+    }
+    </script>
 </head>
 <body>
-    <h1>Choisissez une offre :</h1>
+    <section class="section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h2 class="text-center">Choisissez une offre :</h2>
 
-    <form action="{{ path('payment') }}" method="post">
-        <label for="offre">Offre :</label>
-        <select name="offre_pub" id="offre">
-            <option value="3 mois - 50 DT">Offre 3 mois - 50 DT</option>
-            <option value="6 mois - 90 DT">Offre 6 mois - 90 DT</option>
-            <option value="9 mois - 130 DT">Offre 9 mois - 130 DT</option>
-        </select>
+                    <!-- Formulaire pour choisir une offre -->
+              <form id="paymentForm" action="{{ path('payment') }}" method="post">
+                        <!-- Sélection de l'offre -->
+                        <div class="mb-3">
+                            <label for="offre" class="form-label">Offre :</label>
+                            <select name="offre_pub" id="offre" class="form-select" onchange="updateQRCode()">
+                                <option value="3 mois">Offre 3 mois - 50 DT</option>
+                                <option value="6 mois">Offre 6 mois - 90 DT</option>
+                                <option value="9 mois">Offre 9 mois - 130 DT</option>
+                            </select>
+                        </div>
 
-        <br><br>
+                        <!-- Numéro de carte -->
+                        <div class="mb-3">
+                            <label for="numero_carte" class="form-label">Numéro de carte :</label>
+                            <input type="text" id="numero_carte" name="numero_carte" class="form-control" oninput="updateQRCode()" required>
+                        </div>
 
-        <label for="numero_carte">Numéro de votre carte :</label>
-        <input type="text" id="numero_carte" name="numero_carte" required>
+                        <!-- Nom -->
+                        <div class="mb-3">
+                            <label for="nom" class="form-label">Nom :</label>
+                            <input type="text" id="nom" name="nom" class="form-control" oninput="updateQRCode()" required>
+                        </div>
 
-        <br><br>
+                        <!-- Prénom -->
+                        <div class="mb-3">
+                            <label pour="prenom" class="form-label">Prénom :</label>
+                            <input type="text" id="prenom" name="prenom" class="form-control" oninput="updateQRCode()" required>
+                        </div>
 
-        <label for="nom">Nom :</label>
-        <input type="text" id="nom" name="nom" required>
+                        <!-- Bouton de soumission -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Payer</button>
+                        </div>
+                    </form>
 
-        <br><br>
+                    <!-- Affichage du code QR -->
+                    <div class="qr-code-container text-center mt-4">
+                        <div id="qrcode"></div> <!-- Espace pour le code QR -->
+                    </div>
 
-        <label for="prenom">Prénom :</label>
-        <input type="text" id="prenom" name="prenom" required>
-
-        <br><br>
-
-        <button type="submit">Payer</button>
-    </form>
-
-    <!-- Bouton pour exporter en PDF -->
-    <form action="{{ path('generate_pdf') }}" method="post">
+                    <!-- Formulaire pour exporter en PDF -->
+                   <!-- Formulaire pour exporter en PDF -->
+  <form action="{{ path('generate_pdf') }}" method="post">
         <input type="hidden" name="offre_pub" value="{{ app.request.get('offre_pub') }}">
         <input type="hidden" name="numero_carte" value="{{ app.request.get('numero_carte') }}">
         <input type="hidden" name="nom" value="{{ app.request.get('nom') }}">
         <input type="hidden" name="prenom" value="{{ app.request.get('prenom') }}">
         <button type="submit">Exporter en PDF</button>
     </form>
+
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+<footer id="footer" class="footer">
+
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-5 col-md-12 footer-info">
+                <a href="index.html" class="logo d-flex align-items-center">
+                    <span>Baladity</span>
+                </a>
+               <p>Baladity est une application innovante conçue pour simplifier la gestion des fonctionnalités municipales 
+au sein d'une municipalité. En combinant une interface conviviale avec des fonctionnalités intuitives, 
+Baladity offre aux résidents et aux responsables municipaux un outil efficace pour interagir 
+et coordonner divers aspects de la vie communautaire.</p>
+                <div class="social-links d-flex mt-4">
+                    <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-6 footer-links">
+                <h4>Useful Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Actualité</a></li>
+                    <li><a href="#">réclamation</a></li>
+                    <li><a href="#">evenement</a></li>
+                    <li><a href="#">contact</a></li>
+                    <li><a href="#">about us</a></li>
+                </ul>
+            </div>
+
+      
+
+            <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+                <h4>Contact Us</h4>
+                <p>
+                   Ariana <br>
+                    la petite ariana<br>
+                    Tunis <br><br>
+                    <strong>Phone:</strong> +21694007815<br>
+                    <strong>Email:</strong> Baladity@gmail.com<br>
+                </p>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="copyright">
+            &copy; Copyright <strong><span>Logis</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+    </div>
+
+</footer><!-- End Footer -->
+<!-- End Footer -->
+
+ 
+
+
+  <!-- End Footer -->
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center active"><i class="bi bi-arrow-up-short"></i></a>
+
+  
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+
+
 </body>
+
+
+
+
+
+       
+
+   
+
+  </main>
+
+
+<a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<div id="preloader"></div>
+
+<!-- Vendor JS Files -->
+<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+<script src="{{ asset('front-office/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('front-office/vendor/purecounter/purecounter_vanilla.js') }}"></script>
+<script src="{{ asset('front-office/vendor/glightbox/js/glightbox.min.js') }}"></script>
+<script src="{{ asset('front-office/vendor/swiper/swiper-bundle.min.js') }}"></script>
+<script src="{{ asset('front-office/vendor/aos/aos.js') }}"></script>
+<script src="{{ asset('front-office/vendor/php-email-form/validate.js') }}"></script>
+
+<!-- Template Main JS File -->
+<script src="{{ asset('front-office/js/main.js') }}"></script>
+
+</body>
+
 </html>
+

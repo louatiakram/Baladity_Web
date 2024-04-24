@@ -208,7 +208,8 @@ public function index2(PubliciteRepository $repository): Response
 public function payment(Request $request): Response
 {
     // Récupérer la durée de l'offre et le montant correspondant depuis la requête ou la base de données
-    $offre = $request->get('offre_pub');
+    $offre = strtolower(trim($request->request->get('offre_pub')));  // Validation de l'offre
+
     $montant = 0; // Initialiser le montant
 
     // Définir le montant en fonction de la durée de l'offre
@@ -280,7 +281,7 @@ public function generatePdf(Request $request): Response
         $logoImagePath = '/uploads/' . $logoFileName;
     } else {
         // Utiliser une image par défaut si aucune image n'a été téléversée
-        $logoImagePath = 'templates/publicite/img/default_logo.png';
+        $logoImagePath = 'public\front-office\img\LOGOL.png';
     }
 
     // Créer une nouvelle instance de TCPDF
@@ -325,4 +326,42 @@ public function generatePdf(Request $request): Response
 
     return $response;
 }
+#[Route('/publicite/recherche', name: 'publicite_recherche')]
+public function recherche(Request $request, PubliciteRepository $repository): Response
+{
+    $titre = $request->query->get('titre');
+    
+    $queryBuilder = $repository->createQueryBuilder('p');
+
+    if ($titre) {
+        $queryBuilder->andWhere('p.titre_pub LIKE :titre')
+                     ->setParameter('titre', '%' . $titre . '%');
+    }
+
+    $publicites = $queryBuilder->getQuery()->getResult();
+
+    return $this->render('publicite/showPub.html.twig', [
+        'publicites' => $publicites,
+    ]);
+}
+
+#[Route('/publicite/sorted', name: 'publicite_sorted')]
+public function sortedPublicites(Request $request, PubliciteRepository $repository): Response
+{
+    $sortBy = $request->query->get('sortBy', 'titre_pub'); // Default sort field
+    $sortOrder = strtoupper($request->query->get('sortOrder', 'ASC')); // Default sort order
+
+    // Add debugging information to check parameter values
+    dump("Sort by: $sortBy, Order: $sortOrder");
+
+    $publicites = $repository->findSortedPublicites($sortBy, $sortOrder);
+
+    return $this->render('publicite/showPub.html.twig', [
+        'publicites' => $publicites,
+        'sortBy' => $sortBy,
+        'sortOrder' => $sortOrder,
+    ]);
+}
+
+
 }

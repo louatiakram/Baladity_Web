@@ -46,7 +46,36 @@ class PubliciteRepository extends ServiceEntityRepository
             $this->_em->flush();
         }
     }
-
+    public function findByTitrePub(string $titre): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.titre_pub LIKE :titre') // recherche avec LIKE pour permettre la recherche partielle
+            ->setParameter('titre', '%' . $titre . '%') // ajout des wildcards pour recherche flexible
+            ->orderBy('p.titre_pub', 'ASC') // ordre par titre (optionnel)
+            ->getQuery()
+            ->getResult();
+    }
+    public function findSortedPublicites(string $sortBy = 'id', string $sortOrder = 'ASC'): array
+    {
+        // Add debugging information to check parameter values
+        dump("Sorting by: $sortBy, Order: $sortOrder");
+    
+        $allowedSortFields = ['id', 'titre_pub', 'date_pub']; // Authorized fields
+        if (!in_array($sortBy, $allowedSortFields)) {
+            $sortBy = 'id'; // Default field if invalid
+        }
+    
+        $allowedSortOrders = ['ASC', 'DESC']; // Authorized orders
+        if (!in_array($sortOrder, $allowedSortOrders)) {
+            $sortOrder = 'ASC'; // Default order if invalid
+        }
+    
+        return $this->createQueryBuilder('p')
+            ->orderBy("p.$sortBy", $sortOrder)
+            ->getQuery()
+            ->getResult();
+    }
+    
     // /**
     //  * @return Publicite[] Returns an array of Publicite objects
     //  */

@@ -52,12 +52,16 @@
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
 
-        <div class="search-bar">
-            <form class="search-form d-flex align-items-center" method="POST" action="#">
-                <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-            </form>
-        </div><!-- End Search Bar -->
+<div class="search-bar">
+    <form class="search-form d-flex align-items-center" method="GET" action="{{ path('publicite_recherche') }}">
+        <input type="text" name="titre" placeholder="Rechercher par titre..." title="Entrez un titre">
+
+        <button type="submit" title="Rechercher"><i class="bi bi-search"></i></button>
+    </form>
+</div>
+
+
+
 
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
@@ -421,15 +425,24 @@
 
     <div class="col-8 mx-auto"> <!-- Added mx-auto class to center content -->
         <div class="card">
-            <!-- Filter dropdown -->
-            <div class="filter">
-                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                        <h6>Filter</h6>
-                    </li>
-                </ul>
-            </div>
+         <!-- Filter dropdown -->
+<div class="filter">
+    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+        <li class="dropdown-header text-start">
+            <h6>Filtrer d'ordre</h6>
+        </li>
+        <li>
+            <a href="{{ path('publicite_sorted', {'sortBy': 'titre_pub', 'sortOrder': 'ASC'}) }}">croissant</a> 
+        </li>
+        <li>
+            <a href="{{ path('publicite_sorted', {'sortBy': 'titre_pub', 'sortOrder': 'DESC'}) }}">décroissant</a> 
+        </li>
+        <!-- Add more sorting options if needed -->
+    </ul>
+</div>
+
+
             <!-- Card body with title -->
             <div class="card-body">
                 <!-- Line Chart or other content -->

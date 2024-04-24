@@ -261,30 +261,7 @@ public function index3(ActualiteRepository $repository): Response
         
     ]);
 }
-#[Route('/actualite/search', name: 'search_actualites')]
-public function search(Request $request, ActualiteRepository $repository): Response
-{
-    $query = $request->query->get('query');
 
-    // Fetch the current page number from the query parameters
-    $currentPage = $request->query->getInt('page', 1);
-
-    // Assuming you have logic to calculate the total number of pages, let's say it's stored in $totalPages
-    $totalPages = 10; 
-    if ($query) {
-        $actualites = $repository->findByTitre($query); // Replace with appropriate method
-    } else {
-        // If no search query is provided, fetch all actualites
-        $actualites = $repository->findAll();
-    }
-
-    return $this->render('actualite/search.html.twig', [
-        'actualites' => $actualites,
-        'query' => $query,
-        'currentPage' => $currentPage, // Pass the currentPage variable to the Twig template
-        'totalPages' => $totalPages, // Pass the totalPages variable to the Twig template
-    ]);
-}
 #[Route('/ModifierResponsable/{id}', name: 'modifierA2')]
 
 public function modifierA2($id, ManagerRegistry $doctrine, Request $request): Response
@@ -347,6 +324,39 @@ public function showDetails($id, ActualiteRepository $actualiteRepository, Publi
     return $this->render('actualite/details.html.twig', [
         'actualite' => $actualite,
         'publicites' => $publicites,
+    ]);
+}
+
+#[Route('/actualite/search', name: 'search_actualites', methods: ['GET', 'POST'])]
+public function search(Request $request, ActualiteRepository $repository): Response
+{
+    $query = $request->query->get('query');
+    $currentPage = $request->query->getInt('page', 1);
+
+    if ($query) {
+        $actualites = $repository->findByTitre($query);
+    } else {
+        $actualites = $repository->findAll();
+    }
+
+    // If the request is AJAX, return JSON data
+    if ($request->isXmlHttpRequest()) {
+        $actualitesArray = array_map(fn($a) => [
+            'titre' => $a->getTitreA(),
+            'description' => $a->getDescriptionA(),
+            'image' => $a->getImageA(),
+            'date' => $a->getDateA()->format('Y-m-d'),
+            'id' => $a->getIdA(),
+        ], $actualites);
+
+        return new JsonResponse($actualitesArray);
+    }
+
+    return $this->render('actualite/showAResponsable.html.twig', [
+        'actualites' => $actualites,
+        'query' => $query,
+        'currentPage' => $currentPage,
+        'totalPages' => 10, // This would be calculated from data
     ]);
 }
 
