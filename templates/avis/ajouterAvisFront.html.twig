@@ -3,12 +3,27 @@
 {% block title %}Ajouter avis{% endblock %}
 
 {% block body %}
+<div class="breadcrumbs">
+  <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+    <div class="container position-relative">
+      <div class="row d-flex justify-content-center">
+        <div class="col-lg-6 text-center">
+          <h2>Avis</h2>
+          <p>
+L'avis sur l'équipement est un retour d'expérience ou une évaluation fournie par les employés concernant un équipement spécifique. Il peut inclure des commentaires sur les performances, la qualité, l'utilité ou d'autres aspects pertinents de l'équipement, permettant ainsi aux autres employés potentiels de prendre des décisions éclairées.</p>
+        </div>
+      </div>
+    </div>
+  </div>  
+{% endblock %}
+
+{% block rest%}
     <section class="section">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Ajouter avis</h5>
+                        <h5 class="card-title">Ajouter un avis</h5>
                         <form method="POST" action="{{ path('ajouterAvisFront', {'id': equipement.getIdEquipement()}) }}" enctype="multipart/form-data">
                             {{ form_start(form, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate'}}) }}
 

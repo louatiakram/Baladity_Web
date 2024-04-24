@@ -1,8 +1,22 @@
 {% extends 'base-front.html.twig' %}
 
 {% block title %}Liste des avis{% endblock %}
-
 {% block body %}
+<div class="breadcrumbs">
+  <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+    <div class="container position-relative">
+      <div class="row d-flex justify-content-center">
+        <div class="col-lg-6 text-center">
+          <h2>Avis</h2>
+          <p>
+L'avis sur l'équipement est un retour d'expérience ou une évaluation fournie par les employés concernant un équipement spécifique. Il peut inclure des commentaires sur les performances, la qualité, l'utilité ou d'autres aspects pertinents de l'équipement, permettant ainsi aux autres employés potentiels de prendre des décisions éclairées.</p>
+        </div>
+      </div>
+    </div>
+  </div>  
+{% endblock %}
+
+{% block rest%}
     <br>
     <h1 class="card-title" style="text-align: center; font-size: 2em;">Liste des avis</h1>
     <br>
@@ -32,7 +46,16 @@
                             <tbody>
                                 {% for avis_item in avis %}
                                     <tr>
-                                        <td>{{ avis_item.getNoteAvis() }}</td>
+                                        <td>
+                                             {% set starCount = avis_item.getNoteAvis() %}
+                                                {% for i in 1..5 %}
+                                                {% if i <= starCount %}
+                                                    <i class="bi bi-star-fill text-warning"></i>
+                                                {% else %}
+                                                    <i class="bi bi-star text-warning"></i>
+                                                 {% endif %}
+                                                {% endfor %}
+                                        </td>
                                         <td>{{ avis_item.getCommentaireAvis() }}</td>
                                         <td>{{ avis_item.getDateAvis()|date('d/m/Y ') }}</td>
                                         <td>
