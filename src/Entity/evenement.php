@@ -49,6 +49,19 @@ class evenement
     #[ORM\Column(name: 'imageEvent',type: 'string', length: 255)]
     private $imageEvent;
 
+    private $enduser;
+
+    public function getEnduser(): ?enduser
+    {
+        return $this->enduser;
+    }
+
+    public function setEnduser(?enduser $enduser): self
+    {
+        $this->enduser = $enduser;
+
+        return $this;
+    }
     public function getId(): ?int
     {
         return $this->id_E;

@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\evenement;
+use App\Entity\enduser;
 use App\Repository\EvenementRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface; 
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Security\Core\Security;
 
 class EvenementController extends AbstractController
 {
@@ -79,6 +81,31 @@ public function listFront(Request $request, EvenementRepository $repository, Pag
     );
 
     return $this->render('evenement/listFront.html.twig', [
+        'evenements' => $evenements,
+        'query' => $query, // Pass the query to the template for displaying in the search bar
+    ]);
+}
+#[Route('/evenement/listCitoyen', name: 'evenement_listCitoyen')]
+public function listCitoyen(Request $request, EvenementRepository $repository, PaginatorInterface $paginator): Response
+{
+    $query = $request->query->get('query');
+
+    // Fetch all events
+    $queryBuilder = $repository->createQueryBuilder('e');
+
+    // If a search query is provided, filter events based on the name
+    if ($query) {
+        $queryBuilder->where('e.nomE LIKE :query')
+                     ->setParameter('query', '%'.$query.'%');
+    }
+
+    $evenements = $paginator->paginate(
+        $queryBuilder->getQuery(),
+        $request->query->getInt('page', 1), // Current page number, default is 1
+        6 // Number of items per page
+    );
+
+    return $this->render('evenement/listCitoyen.html.twig', [
         'evenements' => $evenements,
         'query' => $query, // Pass the query to the template for displaying in the search bar
     ]);
@@ -308,5 +335,75 @@ public function detailsEvenementFront($id, EntityManagerInterface $entityManager
     ]);
 }
 
+#[Route('/evenement/detailsCitoyen/{id}', name: 'details_evenementCitoyen')]
+public function detailsEvenementCitoyen($id, EntityManagerInterface $entityManager): Response
+{
+    $evenement = $entityManager->getRepository(Evenement::class)->find($id);
 
+    if (!$evenement) {
+        throw $this->createNotFoundException('Événement non trouvé avec l\'id : '.$id);
+    }
+
+    return $this->render('evenement/detailsCitoyen.html.twig', [
+        'evenement' => $evenement,
+    ]);
+}
+
+public function __construct(Security $security)
+{
+    $this->security = $security;
+}
+
+#[Route('/evenement/join/{id}', name: 'join_evenement')]
+public function joinEvenement($id, EvenementRepository $repository, EntityManagerInterface $entityManager, SessionInterface $session, Security $security): Response
+{
+    // Get the event by ID
+    $evenement = $repository->find($id);
+
+    // Check if the event exists
+    if (!$evenement) {
+        throw $this->createNotFoundException('Événement non trouvé avec l\'id : ' . $id);
+    }
+
+    // Check if the event's start date has already passed
+    $currentDate = new \DateTime();
+    if ($evenement->getDateDHE() <= $currentDate) {
+        $session->getFlashBag()->add('error', 'La date de début de l\'événement est déjà passée. Vous ne pouvez pas rejoindre cet événement.');
+        return $this->redirectToRoute('evenement_listCitoyen');
+    }
+
+    // Check if the authenticated user is null
+    $user = $security->getUser();
+    if (!$user) {
+        // Handle unauthenticated user
+        // Redirect to login page or handle the case accordingly
+    }
+
+    // Check if the user has already joined the event (using session or cache)
+    $eventsJoined = $session->get('events_joined', []);
+    if (in_array($id, $eventsJoined)) {
+        $session->getFlashBag()->add('error', 'Vous avez déjà rejoint cet événement.');
+        return $this->redirectToRoute('details_evenementFront', ['id' => $id]);
+    }
+
+    // Check if the capacity is greater than zero
+    if ($evenement->getCapaciteE() <= 0) {
+        $session->getFlashBag()->add('error', 'La capacité de l\'événement est atteinte. Vous ne pouvez pas rejoindre cet événement.');
+        return $this->redirectToRoute('evenement_listCitoyen');
+    }
+
+    // Decrement the capacity
+    $evenement->setCapaciteE($evenement->getCapaciteE() - 1);
+    $entityManager->flush();
+
+    // Add the event ID to the user's list of joined events (session or cache)
+    $eventsJoined[] = $id;
+    $session->set('events_joined', $eventsJoined);
+
+    // Add success message
+    $session->getFlashBag()->add('success', 'Vous avez rejoint l\'événement avec succès.');
+
+    // Redirect to the event details page
+    return $this->redirectToRoute('details_evenementCitoyen', ['id' => $id]);
+}
 }
