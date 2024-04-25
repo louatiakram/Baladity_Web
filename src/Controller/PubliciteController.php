@@ -266,7 +266,8 @@ public function generatePdf(Request $request): Response
     // Vérifier si un fichier a été téléversé
     if ($logoFile) {
         // Définir le répertoire de destination pour enregistrer l'image téléversée
-        $uploadsDirectory = $this->getParameter('kernel.project_dir') . '/public/uploads';
+        $logoImagePath = $this->getParameter('kernel.project_dir') . '/public/front-office/img/LOGOL.png';
+
         $logoFileName = md5(uniqid()) . '.' . $logoFile->guessExtension();
 
         // Déplacer le fichier téléversé vers le répertoire de destination
@@ -329,6 +330,7 @@ public function generatePdf(Request $request): Response
 #[Route('/publicite/recherche', name: 'publicite_recherche')]
 public function recherche(Request $request, PubliciteRepository $repository): Response
 {
+    
     $titre = $request->query->get('titre');
     
     $queryBuilder = $repository->createQueryBuilder('p');

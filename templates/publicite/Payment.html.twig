@@ -188,7 +188,7 @@ document.getElementById("exportPdfForm").addEventListener("submit", copyFormValu
         const nom = document.getElementById('nom').value;
         const prenom = document.getElementById('prenom').value;
 
-        const qrData = `Offre: ${offre}, Carte: ${numeroCarte}, Nom: ${nom}, Prénom: ${prenom}`;
+        const qrData = `Offre: ${offre}, Carte: ${numeroCarte}, Nom: ${nom}, Prenom: ${prenom}`;
         const qrCanvas = document.getElementById('qrcode');
 
         // Efface le code QR précédent
@@ -204,69 +204,67 @@ document.getElementById("exportPdfForm").addEventListener("submit", copyFormValu
     </script>
 </head>
 <body>
-    <section class="section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <h2 class="text-center">Choisissez une offre :</h2>
+  <section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="text-center">Choisissez une offre :</h2>
 
-                    <!-- Formulaire pour choisir une offre -->
-              <form id="paymentForm" action="{{ path('payment') }}" method="post">
-                        <!-- Sélection de l'offre -->
-                        <div class="mb-3">
-                            <label for="offre" class="form-label">Offre :</label>
-                            <select name="offre_pub" id="offre" class="form-select" onchange="updateQRCode()">
-                                <option value="3 mois">Offre 3 mois - 50 DT</option>
-                                <option value="6 mois">Offre 6 mois - 90 DT</option>
-                                <option value="9 mois">Offre 9 mois - 130 DT</option>
-                            </select>
-                        </div>
-
-                        <!-- Numéro de carte -->
-                        <div class="mb-3">
-                            <label for="numero_carte" class="form-label">Numéro de carte :</label>
-                            <input type="text" id="numero_carte" name="numero_carte" class="form-control" oninput="updateQRCode()" required>
-                        </div>
-
-                        <!-- Nom -->
-                        <div class="mb-3">
-                            <label for="nom" class="form-label">Nom :</label>
-                            <input type="text" id="nom" name="nom" class="form-control" oninput="updateQRCode()" required>
-                        </div>
-
-                        <!-- Prénom -->
-                        <div class="mb-3">
-                            <label pour="prenom" class="form-label">Prénom :</label>
-                            <input type="text" id="prenom" name="prenom" class="form-control" oninput="updateQRCode()" required>
-                        </div>
-
-                        <!-- Bouton de soumission -->
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Payer</button>
-                        </div>
-                    </form>
-
-                    <!-- Affichage du code QR -->
-                    <div class="qr-code-container text-center mt-4">
-                        <div id="qrcode"></div> <!-- Espace pour le code QR -->
+                <!-- Formulaire pour choisir une offre -->
+                <form id="paymentForm" action="{{ path('payment') }}" method="post">
+                    <!-- Sélection de l'offre -->
+                    <div class="mb-3">
+                        <label for="offre" class="form-label">Offre :</label>
+                        <select name="offre_pub" id="offre" class="form-select" onchange="updateQRCode()">
+                            <option value="3 mois">Offre 3 mois - 50 DT</option>
+                            <option value="6 mois">Offre 6 mois - 90 DT</option>
+                            <option value="9 mois">Offre 9 mois - 130 DT</option>
+                        </select>
                     </div>
 
-                    <!-- Formulaire pour exporter en PDF -->
-                   <!-- Formulaire pour exporter en PDF -->
-  <form action="{{ path('generate_pdf') }}" method="post">
-        <input type="hidden" name="offre_pub" value="{{ app.request.get('offre_pub') }}">
-        <input type="hidden" name="numero_carte" value="{{ app.request.get('numero_carte') }}">
-        <input type="hidden" name="nom" value="{{ app.request.get('nom') }}">
-        <input type="hidden" name="prenom" value="{{ app.request.get('prenom') }}">
-        <button type="submit">Exporter en PDF</button>
-    </form>
+                    <!-- Numéro de carte -->
+                    <div class="mb-3">
+                        <label for="numero_carte" class="form-label">Numéro de carte :</label>
+                        <input type="text" id="numero_carte" name="numero_carte" class="form-control" oninput="updateQRCode()" required>
+                    </div>
 
+                    <!-- Nom -->
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom :</label>
+                        <input type="text" id="nom" name="nom" class="form-control" oninput="updateQRCode()" required>
+                    </div>
 
+                    <!-- Prénom -->
+                    <div class="mb-3">
+                        <label for="prenom" class="form-label">Prénom :</label>
+                        <input type="text" id="prenom" name="prenom" class="form-control" oninput="updateQRCode()" required>
+                    </div>
 
+                    <!-- Bouton de soumission -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Payer</button>
+                    </div>
+                </form>
+
+                <!-- Bouton Exporter en PDF -->
+                <div class="text-center mt-3">
+                    <form action="{{ path('generate_pdf') }}" method="post">
+                        <input type="hidden" name="offre_pub" value="{{ app.request.get('offre_pub') }}">
+                        <input type="hidden" name="numero_carte" value="{{ app.request.get('numero_carte') }}">
+                        <input type="hidden" name="nom" value="{{ app.request.get('nom') }}">
+                        <input type="hidden" name="prenom" value="{{ app.request.get('prenom') }}">
+                        <button type="submit" class="btn btn-primary">reçu de paiement</button>
+                    </form>
+                </div>
+
+                <!-- Affichage du code QR -->
+                <div class="qr-code-container text-center mt-4">
+                    <div id="qrcode"></div> <!-- Espace pour le code QR -->
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
 
 
