@@ -43,5 +43,26 @@
         </tbody>
     </table>
 
+    <!-- Pagination -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item {% if munis.currentPageNumber == 1 %}disabled{% endif %}">
+                <a class="page-link" href="{{ path('afficher_muni', {'page': 1}) }}" aria-label="Previous">
+                    <span aria-hidden="true">«</span>
+                </a>
+            </li>
+            {% for page in 1..munis.pageCount %}
+                <li class="page-item {% if page == munis.currentPageNumber %}active{% endif %}">
+                    <a class="page-link" href="{{ path('afficher_muni', {'page': page}) }}">{{ page }}</a>
+                </li>
+            {% endfor %}
+            <li class="page-item {% if munis.currentPageNumber == munis.pageCount %}disabled{% endif %}">
+                <a class="page-link" href="{{ path('afficher_muni', {'page': munis.pageCount}) }}" aria-label="Next">
+                    <span aria-hidden="true">»</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
     <button onclick="location.href='{{ path('ajouter_municipality') }}'" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Ajouter Municipalité</button>
 {% endblock %}

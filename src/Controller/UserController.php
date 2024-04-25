@@ -9,6 +9,7 @@ use App\Form\EditProfileType;
 use App\Form\RegisterType;
 use App\Repository\enduserRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,14 +27,23 @@ class UserController extends AbstractController
     }
      
     #[Route('/afficher', name: 'afficher_user')]
-    public function afficher(enduserRepository $Rep): Response
+    public function afficher(Request $request, EnduserRepository $repository, PaginatorInterface $paginator): Response
     {
-        $users = $Rep->findBy(['type_user' => ['Citoyen', 'Directeur', 'Employé', 'Responsable employé']]);
-        return $this->render('user/afficherUser.html.twig', [
-            'controller_name' => 'AuthorController',
-            'users' => $users
-        ]);
-    }
+        $queryBuilder = $repository->createQueryBuilder('u')
+            ->where('u.type_user IN (:types)')
+            ->setParameter('types', ['Citoyen', 'Directeur', 'Employé', 'Responsable employé']);
+
+        $users = $paginator->paginate(
+            $queryBuilder->getQuery(),
+            $request->query->getInt('page', 1), // Current page number, default is 1
+            5 // Number of items per page
+    );
+
+    return $this->render('user/afficherUser.html.twig', [
+        'controller_name' => 'AuthorController',
+        'users' => $users
+    ]);
+}
 
     #[Route('/afficher/detail/{i}', name: 'user_detail')]
     public function detail($i,Request $request, ManagerRegistry $doctrine): Response

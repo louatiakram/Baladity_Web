@@ -7,6 +7,7 @@ use App\Form\AjoutMuniFormType;
 use App\Form\EditMuniFormType;
 use App\Repository\MunicipalityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,12 +62,18 @@ class MunicipalityController extends AbstractController
 
 
     #[Route('/listMuni', name: 'afficher_muni')]
-    public function afficherMuni(MunicipalityRepository $Rep): Response
+    public function afficherMuni(Request $request, MunicipalityRepository $repository, PaginatorInterface $paginator): Response
     {
-        $muni = $Rep->findAll();
+        $queryBuilder = $repository->createQueryBuilder('m');
+        $munis = $paginator->paginate(
+        $queryBuilder->getQuery(),
+        $request->query->getInt('page', 1), // Current page number, default is 1
+        5 // Number of items per page
+    );
+    
         return $this->render('municipality/afficherMunicipality.html.twig', [
             'controller_name' => 'AuthorController',
-            'munis' => $muni
+            'munis' => $munis
         ]);
     }
 
