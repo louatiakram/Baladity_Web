@@ -357,6 +357,9 @@ public function __construct(Security $security)
 #[Route('/evenement/join/{id}', name: 'join_evenement')]
 public function joinEvenement($id, EvenementRepository $repository, EntityManagerInterface $entityManager, SessionInterface $session, Security $security): Response
 {
+    // Static user ID for testing
+    $userId = 60; // Replace with the actual user ID
+
     // Get the event by ID
     $evenement = $repository->find($id);
 
@@ -372,16 +375,17 @@ public function joinEvenement($id, EvenementRepository $repository, EntityManage
         return $this->redirectToRoute('evenement_listCitoyen');
     }
 
-    // Check if the authenticated user is null
+    // Get the authenticated user
     $user = $security->getUser();
+
+    // Check if the user is authenticated
     if (!$user) {
         // Handle unauthenticated user
         // Redirect to login page or handle the case accordingly
     }
 
     // Check if the user has already joined the event (using session or cache)
-    $eventsJoined = $session->get('events_joined', []);
-    if (in_array($id, $eventsJoined)) {
+    if ($evenement->getAttendees()->contains($user)) {
         $session->getFlashBag()->add('error', 'Vous avez déjà rejoint cet événement.');
         return $this->redirectToRoute('details_evenementFront', ['id' => $id]);
     }
@@ -392,13 +396,17 @@ public function joinEvenement($id, EvenementRepository $repository, EntityManage
         return $this->redirectToRoute('evenement_listCitoyen');
     }
 
-    // Decrement the capacity
-    $evenement->setCapaciteE($evenement->getCapaciteE() - 1);
-    $entityManager->flush();
+    // Find the user by ID
+    $enduser = $entityManager->getRepository(Enduser::class)->find($userId);
 
-    // Add the event ID to the user's list of joined events (session or cache)
-    $eventsJoined[] = $id;
-    $session->set('events_joined', $eventsJoined);
+    // Check if the user exists
+    if (!$enduser) {
+        throw $this->createNotFoundException('Utilisateur non trouvé avec l\'id : ' . $userId);
+    }
+
+    // Add the user as an attendee to the event
+    $evenement->addAttendee($enduser);
+    $entityManager->flush();
 
     // Add success message
     $session->getFlashBag()->add('success', 'Vous avez rejoint l\'événement avec succès.');
@@ -406,4 +414,8 @@ public function joinEvenement($id, EvenementRepository $repository, EntityManage
     // Redirect to the event details page
     return $this->redirectToRoute('details_evenementCitoyen', ['id' => $id]);
 }
+
+
+
+
 }

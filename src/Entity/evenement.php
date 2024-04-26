@@ -6,9 +6,9 @@ use App\Repository\EvenementRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use DateTimeInterface;
-
-
-
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Enduser; // Make sure to import the
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
 class evenement
 {
@@ -50,6 +50,45 @@ class evenement
     private $imageEvent;
 
     private $enduser;
+    private $attendees;
+
+   public function __construct()
+    {
+        $this->attendees = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection|Enduser[]
+     */
+    public function getAttendees(): Collection
+{
+    if ($this->attendees === null) {
+        $this->attendees = new ArrayCollection();
+    }
+    return $this->attendees;
+}
+
+    public function addAttendee(Enduser $enduser): self
+    {
+        if (!$this->attendees->contains($enduser)) {
+            $this->attendees[] = $enduser;
+            $enduser->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttendee(Enduser $enduser): self
+    {
+        if ($this->attendees->removeElement($enduser)) {
+            // set the owning side to null (unless already changed)
+            if ($enduser->getEvent() === $this) {
+                $enduser->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
 
     public function getEnduser(): ?enduser
     {

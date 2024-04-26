@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EndUserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+
 #[ORM\Entity(repositoryClass: EndUserRepository::class)]
 class enduser
 {
@@ -149,4 +150,10 @@ class enduser
         $this->isBanned = $isBanned;
         return $this;
     }
+
+   public function setEvent(evenement $event): self
+{
+    $this->event = $event;
+    return $this;
+}
 }
