@@ -1,162 +1,153 @@
 {% extends 'base-front.html.twig' %}
+
 {% block title %}Liste des Tâches{% endblock %}
+
 {% block barreTitre %}
-{% if user_type == "Employé" %}
-<li><a href="{{ path('app_main_front') }}">Home</a></li>
-<li><a href="{{ path('tache_listfront') }}" class="active">Tache</a></li>
-<li><a href="equipement.html">Equipement</a></li>
-<li><a href="reclamation.html">Reclamation</a></li>
-<li style="margin-left: 20px;"></li>
-<label class="switch" id="dark-mode-toggle">
-<input type="checkbox" id="dark-mode-checkbox">
-<span class="slider"></span>
-</label>
-{% elseif user_type == "Responsable employé" %}
-<li><a href="{{ path('app_main_front') }}">Home</a></li>
-<li><a href="{{ path('tache_listfront') }}" class="active">Tache</a></li>
-<li><a href="actualite.html">Actualite</a></li>
-<li><a href="reclamation.html">Reclamation</a></li>
-<li><a href="evenement.html">Evenement</a></li>
-<li><a href="equipement.html">Equipement</a></li>
-<li style="margin-left: 20px;"></li>
-<label class="switch" id="dark-mode-toggle">
-<input type="checkbox" id="dark-mode-checkbox">
-<span class="slider"></span>
-</label>
-{% else %}
-<li>Error: Page not found</li>
-{% endif %}
+    {% if user_type == "Employé" %}
+        <li><a href="{{ path('app_main_front') }}">Home</a></li>
+        <li><a href="{{ path('tache_listfront') }}" class="active">Tache</a></li>
+        <li><a href="equipement.html">Equipement</a></li>
+        <li><a href="reclamation.html">Reclamation</a></li>
+        <li style="margin-left: 20px;"></li>
+        <label class="switch" id="dark-mode-toggle">
+            <input type="checkbox" id="dark-mode-checkbox">
+            <span class="slider"></span>
+        </label>
+    {% elseif user_type == "Responsable employé" %}
+        <li><a href="{{ path('app_main_front') }}">Home</a></li>
+        <li><a href="{{ path('tache_listfront') }}" class="active">Tache</a></li>
+        <li><a href="actualite.html">Actualite</a></li>
+        <li><a href="reclamation.html">Reclamation</a></li>
+        <li><a href="evenement.html">Evenement</a></li>
+        <li><a href="equipement.html">Equipement</a></li>
+        <li style="margin-left: 20px;"></li>
+        <label class="switch" id="dark-mode-toggle">
+            <input type="checkbox" id="dark-mode-checkbox">
+            <span class="slider"></span>
+        </label>
+    {% else %}
+        <li>Error: Page not found</li>
+    {% endif %}
 {% endblock %}
+
 {% block body %}
-{# Check if there's a flash message #}
-{% if flash_message is not empty %}
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-   {{ flash_message }}
-   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{% endif %}
-<div class="actions-container">
-   <div class="actions">
-      <a href="{{ path('tache_download_csv') }}" class="btn btn-primary">Export Excel</a>
-      <label for="csv-file-input" class="btn btn-primary">Import CSV</label>
-      <form id="csv-upload-form" action="{{ path('tache_import_csv') }}" method="post" enctype="multipart/form-data" style="display: none;">
-         <input type="file" name="csv_file" accept=".csv" id="csv-file-input" onchange="this.form.submit()">
-      </form>
-   </div>
-   {% if quote %}
-   <div class="quote-container">
-      <blockquote class="quote" id="quote">
-         <p>{{ quote.content }}</p>
-         <footer class="author">{{ quote.author }}</footer>
-         <button class="btn btn-primary" onclick="refreshQuote()"><i class="bi bi-arrow-clockwise"></i></button>
-      </blockquote>
-   </div>
-   {% endif %}
-   <div id="chatbot-button" onclick="showChat()">
-      <img src="{{ asset('back-office/img/chat-botT.gif') }}" alt="ChatBot" class="rounded-circle" style="width: 100px; height: auto;">
-   </div>
-   <div id="chat-container">
-      <div id="chat-header" onclick="toggleChat()">Baladity</div>
-      <div id="chat-area"></div>
-      <input type="text" id="user-input">
-      <button class="button" onclick="sendMessage()">Send</button>
-      <button class="button" onclick="clearConversation()">Clear Conversation</button>
-      <button class="button" onclick="hideChat()">Hide Chat</button>
-   </div>
-</div>
-<div class="d-flex justify-content-between">
-   <div class="flex-fill mr-3">
-      <div class="card">
-         <div class="card-header">
-            <h2>TODO<span id="todo-counter"
-               class="task-counter">{{ taches|filter(t => t.etatT == 'TODO')|length }}</span></h2>
-         </div>
-         <div class="card-body">
-            <div id="TODO" class="grid">
-               {% for tache in taches %}
-               {% if tache.etatT == 'TODO' %}
-               <div class="tache" draggable="true" id="{{ tache.idT }}">
-                  <h6>
-                     {{ tache.titreT }}
-                     <button id="detail-front"
-                        onclick="location.href='{{ path('tache_detail_front', {'i': tache.getIdT()}) }}'"
-                        type="button" class="btn btn-outline-primary"><i
-                        class="bi bi-info-circle"></i></button>
-                  </h6>
-               </div>
-               {% endif %}
-               {% endfor %}
+    {% if flash_message is not empty %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ flash_message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    <div class="actions-container">
+        <div class="actions">
+            <a href="{{ path('tache_download_csv') }}" class="btn btn-primary">Export Excel</a>
+            <label for="csv-file-input" class="btn btn-primary">Import CSV</label>
+            <form id="csv-upload-form" action="{{ path('tache_import_csv') }}" method="post" enctype="multipart/form-data" style="display: none;">
+                <input type="file" name="csv_file" accept=".csv" id="csv-file-input" onchange="this.form.submit()">
+            </form>
+        </div>
+        <div id="chatbot-button" onclick="showChat()">
+            <img src="{{ asset('back-office/img/chat-botT.gif') }}" alt="ChatBot" class="rounded-circle" style="width: 100px; height: auto;">
+        </div>
+        <div id="chat-container">
+            <div id="chat-header" onclick="toggleChat()">Baladity</div>
+            <div id="chat-area"></div>
+            <input type="text" id="user-input">
+            <button class="button" onclick="sendMessage()">Send</button>
+            <button class="button" onclick="clearConversation()">Clear Conversation</button>
+            <button class="button" onclick="hideChat()">Hide Chat</button>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between">
+        <div class="flex-fill mr-3">
+            <div class="card">
+                <div class="card-header">
+                    <h2>TODO<span id="todo-counter" class="task-counter">{{ taches|filter(t => t.etatT == 'TODO')|length }}</span></h2>
+                </div>
+                <div class="card-body">
+                    <div id="TODO" class="grid">
+                        {% for tache in taches %}
+                            {% if tache.etatT == 'TODO' %}
+                                <div class="tache" draggable="true" id="{{ tache.idT }}">
+                                    <h6>
+                                        {{ tache.titreT }}
+                                        <button id="detail-front" onclick="location.href='{{ path('tache_detail_front', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+                                    </h6>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-         </div>
-      </div>
-   </div>
-   <div class="flex-fill mx-3">
-      <div class="card">
-         <div class="card-header">
-            <h2>DOING<span id="doing-counter"
-               class="task-counter">{{ taches|filter(t => t.etatT == 'DOING')|length }}</span></h2>
-         </div>
-         <div class="card-body">
-            <div id="DOING" class="grid">
-               {% for tache in taches %}
-               {% if tache.etatT == 'DOING' %}
-               <div class="tache" draggable="true" id="{{ tache.idT }}">
-                  <h6>
-                     {{ tache.titreT }}
-                     <button id="detail-front"
-                        onclick="location.href='{{ path('tache_detail_front', {'i': tache.getIdT()}) }}'"
-                        type="button" class="btn btn-outline-primary"><i
-                        class="bi bi-info-circle"></i></button>
-                  </h6>
-               </div>
-               {% endif %}
-               {% endfor %}
+        </div>
+        <div class="flex-fill mx-3">
+            <div class="card">
+                <div class="card-header">
+                    <h2>DOING<span id="doing-counter" class="task-counter">{{ taches|filter(t => t.etatT == 'DOING')|length }}</span></h2>
+                </div>
+                <div class="card-body">
+                    <div id="DOING" class="grid">
+                        {% for tache in taches %}
+                            {% if tache.etatT == 'DOING' %}
+                                <div class="tache" draggable="true" id="{{ tache.idT }}">
+                                    <h6>
+                                        {{ tache.titreT }}
+                                        <button id="detail-front" onclick="location.href='{{ path('tache_detail_front', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+                                    </h6>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-         </div>
-      </div>
-   </div>
-   <div class="flex-fill ml-3">
-      <div class="card">
-         <div class="card-header">
-            <h2>DONE<span id="done-counter"
-               class="task-counter">{{ taches|filter(t => t.etatT == 'DONE')|length }}</span></h2>
-         </div>
-         <div class="card-body">
-            <div id="DONE" class="grid">
-               {% for tache in taches %}
-               {% if tache.etatT == 'DONE' %}
-               <div class="tache" draggable="true" id="{{ tache.idT }}">
-                  <h6>
-                     {{ tache.titreT }}
-                     <button id="detail-front"
-                        onclick="location.href='{{ path('tache_detail_front', {'i': tache.getIdT()}) }}'"
-                        type="button" class="btn btn-outline-primary"><i
-                        class="bi bi-info-circle"></i></button>
-                  </h6>
-               </div>
-               {% endif %}
-               {% endfor %}
+        </div>
+        <div class="flex-fill ml-3">
+            <div class="card">
+                <div class="card-header">
+                    <h2>DONE<span id="done-counter" class="task-counter">{{ taches|filter(t => t.etatT == 'DONE')|length }}</span></h2>
+                </div>
+                <div class="card-body">
+                    <div id="DONE" class="grid">
+                        {% for tache in taches %}
+                            {% if tache.etatT == 'DONE' %}
+                                <div class="tache" draggable="true" id="{{ tache.idT }}">
+                                    <h6>
+                                        {{ tache.titreT }}
+                                        <button id="detail-front" onclick="location.href='{{ path('tache_detail_front', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+                                    </h6>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-         </div>
-      </div>
-   </div>
-</div>
+        </div>
+    </div>
+    <div>
+        {% if quote %}
+            <div class="quote-container">
+                <blockquote class="quote" id="quote">
+                    <div>{{ quote.content }}</div>
+                    <footer class="author">{{ quote.author }}</footer>
+                    <button class="btn btn-primary refresh-btn" onclick="refreshQuote()"><i class="bi bi-arrow-clockwise"></i></button>
+                </blockquote>
+            </div>
+        {% endif %}
+    </div>
+
 <style>
    /* Actions Container Styles */
    .actions-container {
-   display: flex;
-   align-items: center; /* Center items vertically */
-   justify-content: space-between; /* Distribute items evenly */
-   padding: 20px; /* Add padding for spacing */
+      display: flex;
+      flex-direction: column;
    }
-   /* Actions Styles */
-   .actions .btn {
-   margin-bottom: 10px; /* Add margin below each button */
+   .actions {
+      margin-bottom: 10px; /* Add margin between buttons */
    }
    /* Quote Styles */
    .quote-container {
    flex: 1; /* Expand to fill remaining space */
    margin-left: 20px; /* Add space between actions and quote */
+   position: relative; /* Make the container relative */
    }
    .quote {
    font-style: italic;
@@ -165,7 +156,7 @@
    background-color: #f8f9fa; /* Light background color */
    border-radius: 10px; /* Add rounded corners */
    }
-   .quote p {
+   .quote div {
    color: #012545;
    margin: 0;
    font-size: 1.2em;
@@ -178,6 +169,11 @@
    font-size: 1em;
    font-weight: bold;
    color: #666; /* Change color to your preference */
+   }
+   .refresh-btn {
+   position: absolute; /* Position the button absolutely */
+   top: 10px; /* 10px from the top */
+   right: 10px; /* 10px from the right */
    }
    .grid {
    min-height: 400px;
@@ -427,7 +423,7 @@
            .then(response => response.json())
            .then(data => {
                // Update the quote content
-               document.getElementById('quote').querySelector('p').textContent = data.content;
+               document.getElementById('quote').querySelector('div').textContent = data.content;
                document.getElementById('quote').querySelector('.author').textContent = data.author;
            })
            .catch(error => {
