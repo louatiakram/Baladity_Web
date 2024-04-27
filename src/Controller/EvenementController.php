@@ -415,6 +415,20 @@ public function joinEvenement($id, EvenementRepository $repository, EntityManage
     return $this->redirectToRoute('details_evenementCitoyen', ['id' => $id]);
 }
 
+#[Route('/evenement/stats', name: 'stats_evenement')]
+    public function statsEvenement(EvenementRepository $evenementRep): Response
+{
+    $evenementStats = $evenementRep->countByCategorie();
+    $evenementStatsDate = $evenementRep->countByDateDebut();
+    $evenementStatsMonth = $evenementRep->countByMonth();
+
+    return $this->render('evenement/stats.html.twig', [
+        'evenementStats' => $evenementStats,
+        'evenementStatsDate' => $evenementStatsDate,
+        'evenementStatsMonth' => $evenementStatsMonth,
+    ]);
+}
+
 
 
 

@@ -7,6 +7,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @extends ServiceEntityRepository<Evenement>
@@ -20,7 +22,54 @@ class EvenementRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Evenement::class);
+        parent::__construct($registry, evenement::class);
+    }
+
+    // Function to find events by user ID
+    public function findByUserId($userId)
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.id_user = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    // Function to count events by date debut (dhe)
+    public function countByDateDebut(): array
+    {
+    $connection = $this->getEntityManager()->getConnection();
+    $sql = '
+        SELECT DATE(date_DHE) as date, COUNT(id_E) as count
+        FROM evenement
+        GROUP BY DATE(date_DHE)
+    ';
+    $statement = $connection->executeQuery($sql);
+
+    return $statement->fetchAllAssociative();
+    }
+
+    // Function to count events by categorie
+    public function countByCategorie()
+    {
+        return $this->createQueryBuilder('e')
+            ->select('COUNT(e.id_E) as eventCount', 'e.categorie_E')
+            ->groupBy('e.categorie_E')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countByMonth(): array
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $sql = '
+            SELECT MONTH(date_DHE) as month, COUNT(id_E) as count
+            FROM evenement
+            GROUP BY MONTH(date_DHE)
+        ';
+        $statement = $connection->executeQuery($sql);
+
+        return $statement->fetchAllAssociative();
     }
 
     /**
