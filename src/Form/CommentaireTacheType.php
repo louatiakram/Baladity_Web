@@ -17,8 +17,8 @@ class CommentaireTacheType extends AbstractType
         $builder
             ->add('texte_C', TextareaType::class, [
                 'attr' => [
-                    'placeholder' => 'Commentaire'
-                ]
+                    'placeholder' => 'Commentaire',
+                ],
             ])
             ->add('Save', SubmitType::class)
             ->add('Reset', ResetType::class);

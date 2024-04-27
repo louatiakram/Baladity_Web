@@ -2,17 +2,17 @@
 
 namespace App\Controller;
 
-use App\Entity\tache;
-use App\Entity\enduser;
 use App\Entity\commentairetache;
+use App\Entity\enduser;
+use App\Entity\tache;
 use App\Form\CommentaireTacheType;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Request;
 use App\Repository\CommentaireTacheRepository;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CommentaireTacheController extends AbstractController
 {
@@ -20,7 +20,7 @@ class CommentaireTacheController extends AbstractController
     public function index(CommentaireTacheRepository $r): Response
     {
         $xs = $r->findAll();
-        return $this->render('commentairetache/list.html.twig', ['l' => $xs,]);
+        return $this->render('commentairetache/list.html.twig', ['l' => $xs]);
     }
 
     #[Route('/commentairetache/list', name: 'commentairetache_list')]
@@ -30,7 +30,7 @@ class CommentaireTacheController extends AbstractController
 
         // If a search query is provided, filter cmnts based on the title
         if ($query) {
-            $cmnts = $repository->findByCommentaire($query); // Replace with appropriate method
+            $cmnts = $repository->findByCommentaire($query);
         } else {
             // If no search query is provided, fetch all cmnts
             $cmnts = $repository->findAll();
@@ -38,7 +38,7 @@ class CommentaireTacheController extends AbstractController
 
         return $this->render('commentairetache/list.html.twig', [
             'l' => $cmnts,
-            'query' => $query, // Pass the query to the template for displaying in the search bar
+            'query' => $query,
         ]);
     }
 
@@ -74,7 +74,7 @@ class CommentaireTacheController extends AbstractController
             return $this->redirectToRoute('tache_list');
         }
 
-        return $this->renderForm('commentairetache/add.html.twig', ['f' => $form,]);
+        return $this->renderForm('commentairetache/add.html.twig', ['f' => $form]);
     }
 
     #[Route('/commentairetache/update/{i}', name: 'commentairetache_update')]
@@ -90,7 +90,7 @@ class CommentaireTacheController extends AbstractController
             $em->flush();
             return $this->redirectToRoute('tache_list');
         }
-        return $this->renderForm('commentairetache/add.html.twig', ['f' => $form,]);
+        return $this->renderForm('commentairetache/add.html.twig', ['f' => $form]);
     }
 
     #[Route('/commentairetache/delete/{i}', name: 'commentairetache_delete')]

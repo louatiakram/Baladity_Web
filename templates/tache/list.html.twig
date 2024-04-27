@@ -1,299 +1,269 @@
 {% extends 'base-back.html.twig' %}
-
 {% block title %}Liste des Tâches{% endblock %}
-
 {% block searchbar %}
-    <div class="search-bar">
-        <form class="search-form d-flex align-items-center" method="POST" action="#">
-            <input type="text" placeholder="Rechercher..." id="search-input" class="form-control" name="query" title="Enter search keyword">
-            <div id="search-results"></div>
-        </form>
-    </div>
-{% endblock %}
-
-
-{% block TacheNavState %}
-<a class="nav-link" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#" aria-expanded="true">{% endblock %}
-    {% block TacheContentState %}
-    <ul id="GestionTache-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
-        {% endblock %}
-        {% block ListeTacheNav %}
-        <a href="{{ path('tache_list') }}" class="active"><i class="bi bi-circle"></i><span>Liste Tache</span></a>{% endblock %}
-
-
-        {% block body %}
-
-
-
-		<!-- Counter Cards -->
-		<div class="row">
-			<!-- Tache Done Card -->
-			<div class="col-xxl-4 col-md-6">
-				<div class="card info-card sales-card">
-					<!-- Filter dropdown -->
-					<div class="filter">
-						<!-- Your filter dropdown code -->
-					</div>
-					<div class="card-body">
-						<h5 class="card-title">Tache Done <span>| Total</span></h5>
-						<div class="d-flex align-items-center">
-							<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-								<i class="bi bi-clipboard-check fs-2"></i>
-							</div>
-							<div class="ps-3">
-								<h6><strong>{{ tasksDoneCount }}</strong></h6>
-								<!-- Additional stats if needed -->
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-	
-			<!-- Tache Doing Card -->
-			<div class="col-xxl-4 col-md-6">
-				<div class="card info-card revenue-card">
-					<!-- Filter dropdown -->
-					<div class="filter">
-						<!-- Your filter dropdown code -->
-					</div>
-					<div class="card-body">
-						<h5 class="card-title">Tache Doing <span>| Total</span></h5>
-						<div class="d-flex align-items-center">
-							<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-								<i class="bi bi-gear-wide-connected fs-2"></i>
-							</div>
-							<div class="ps-3">
-								<h6><strong>{{ tasksDoingCount }}</strong></h6>
-								<!-- Additional stats if needed -->
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-	
-			<!-- Tache To Do Card -->
-			<div class="col-xxl-4 col-md-6">
-				<div class="card info-card customers-card">
-					<!-- Filter dropdown -->
-					<div class="filter">
-						<!-- Your filter dropdown code -->
-					</div>
-					<div class="card-body">
-						<h5 class="card-title">Tache To Do <span>| Total</span></h5>
-						<div class="d-flex align-items-center">
-							<div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-								<i class="bi bi-card-checklist fs-2"></i>
-							</div>
-							<div class="ps-3">
-								<h6><strong>{{ tasksToDoCount }}</strong></h6>
-								<!-- Additional stats if needed -->
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End Counter Cards -->
-
-		<!-- Date Picker -->
-        <form action="{{ path('tache_list') }}" method="GET" class="input-group">
-            <span class="input-group-text">Date Range:</span>
-            <input type="date" class="form-control" id="startDate" name="startDate" value="{{ startDate }}" />
-            <span class="input-group-text">to</span>
-            <input type="date" class="form-control" id="endDate" name="endDate" value="{{ endDate }}" />
-            <button type="submit" class="btn btn-outline-primary">Apply</button>
-        </form>
-
-
-
-		<div class="d-flex justify-content-between align-items-center mb-3">
-			<div class="btn-group">
-				<button id="filterBtn" type="button" class="btn btn-outline-primary filter-btn">
-					<i class="bi bi-funnel"></i> Filter
-				</button>
-				<div id="filterOptions">
-					<a href="{{ path('tache_list', {'orderBy': 'titre'}) }}" class="btn btn-outline-primary {% if orderBy == 'titre' %}active{% endif %}">Titre</a>
-					<a href="{{ path('tache_list', {'orderBy': 'etat'}) }}" class="btn btn-outline-primary {% if orderBy == 'etat' %}active{% endif %}">Etat</a>
-					<a href="{{ path('tache_list') }}" class="btn btn-danger {% if orderBy == 'date_FT' %}active{% endif %}">Clear</a>
-				</div>
-			</div>
-		</div>
-
-
-		{% if successMessage %}
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-    {{ successMessage }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="search-bar">
+   <form class="search-form d-flex align-items-center" method="POST" action="#">
+      <input type="text" placeholder="Rechercher..." id="search-input" class="form-control" name="query" title="Enter search keyword">
+      <div id="search-results"></div>
+   </form>
 </div>
-
+{% endblock %}
+{% block TacheNavState %}
+<a class="nav-link" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#" aria-expanded="true">
+   {% endblock %}
+   {% block TacheContentState %}
+   <ul id="GestionTache-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+   {% endblock %}
+   {% block ListeTacheNav %}
+<a href="{{ path('tache_list') }}" class="active"><i class="bi bi-circle"></i><span>Liste Tache</span></a>{% endblock %}
+{% block body %}
+<!-- Counter Cards -->
+<div class="row">
+   <!-- Tache Done Card -->
+   <div class="col-xxl-4 col-md-6">
+      <div class="card info-card sales-card">
+         <!-- Filter dropdown -->
+         <div class="filter">
+            <!-- Your filter dropdown code -->
+         </div>
+         <div class="card-body">
+            <h5 class="card-title">Tache Done <span>| Total</span></h5>
+            <div class="d-flex align-items-center">
+               <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                  <i class="bi bi-clipboard-check fs-2"></i>
+               </div>
+               <div class="ps-3">
+                  <h6><strong>{{ tasksDoneCount }}</strong></h6>
+                  <!-- Additional stats if needed -->
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- Tache Doing Card -->
+   <div class="col-xxl-4 col-md-6">
+      <div class="card info-card revenue-card">
+         <!-- Filter dropdown -->
+         <div class="filter">
+            <!-- Your filter dropdown code -->
+         </div>
+         <div class="card-body">
+            <h5 class="card-title">Tache Doing <span>| Total</span></h5>
+            <div class="d-flex align-items-center">
+               <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                  <i class="bi bi-gear-wide-connected fs-2"></i>
+               </div>
+               <div class="ps-3">
+                  <h6><strong>{{ tasksDoingCount }}</strong></h6>
+                  <!-- Additional stats if needed -->
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- Tache To Do Card -->
+   <div class="col-xxl-4 col-md-6">
+      <div class="card info-card customers-card">
+         <!-- Filter dropdown -->
+         <div class="filter">
+            <!-- Your filter dropdown code -->
+         </div>
+         <div class="card-body">
+            <h5 class="card-title">Tache To Do <span>| Total</span></h5>
+            <div class="d-flex align-items-center">
+               <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                  <i class="bi bi-card-checklist fs-2"></i>
+               </div>
+               <div class="ps-3">
+                  <h6><strong>{{ tasksToDoCount }}</strong></h6>
+                  <!-- Additional stats if needed -->
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- End Counter Cards -->
+<!-- Date Picker -->
+<form action="{{ path('tache_list') }}" method="GET" class="input-group">
+   <span class="input-group-text">Date Range:</span>
+   <input type="date" class="form-control" id="startDate" name="startDate" value="{{ startDate }}" />
+   <span class="input-group-text">to</span>
+   <input type="date" class="form-control" id="endDate" name="endDate" value="{{ endDate }}" />
+   <button type="submit" class="btn btn-outline-primary">Apply</button>
+</form>
+<div class="d-flex justify-content-between align-items-center mb-3">
+   <div class="btn-group">
+      <button id="filterBtn" type="button" class="btn btn-outline-primary filter-btn">
+      <i class="bi bi-funnel"></i> Filter
+      </button>
+      <div id="filterOptions">
+         <a href="{{ path('tache_list', {'orderBy': 'titre'}) }}" class="btn btn-outline-primary {% if orderBy == 'titre' %}active{% endif %}">Titre</a>
+         <a href="{{ path('tache_list', {'orderBy': 'etat'}) }}" class="btn btn-outline-primary {% if orderBy == 'etat' %}active{% endif %}">Etat</a>
+         <a href="{{ path('tache_list') }}" class="btn btn-danger {% if orderBy == 'date_FT' %}active{% endif %}">Clear</a>
+      </div>
+   </div>
+</div>
+{% if successMessage %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+   {{ successMessage }}
+   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 {% endif %}
-
-
 <table class="table table-hover">
-	<thead>
-		<tr class="table-primary">
-			<th scope="col">Titre</th>
-			<th scope="col">Date Fin</th>
-			<th scope="col">Echeance</th>
-			<th scope="col">Etat</th>
-			<th scope="col">Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for tache in tasks %}
-			<tr>
-				<td><h6>{{ tache.getTitreT() }}</h6></td>
-				<td><h6>{{ tache.getDateFT()|date('d-m-Y') }}</h6></td>
-				<td><h6>{{ tache.getEcheance().days }} jours</h6></td>
-				<td><h6>{{ tache.getEtatT() }}</h6></td>
-				<td>
-					<div class="btn-group" role="group" aria-label="Actions">
-						<button onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
-						<button onclick="location.href='{{ path('tache_update', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></button>
-						<button onclick="location.href='{{ path('tache_delete', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button>
-					</div>
-				</td>
-			</tr>
-		{% endfor %}
-	</tbody>
+   <thead>
+      <tr class="table-primary">
+         <th scope="col">Titre</th>
+         <th scope="col">Date Fin</th>
+         <th scope="col">Echeance</th>
+         <th scope="col">Etat</th>
+         <th scope="col">Actions</th>
+      </tr>
+   </thead>
+   <tbody>
+      {% for tache in tasks %}
+      <tr>
+         <td>
+            <h6>{{ tache.getTitreT() }}</h6>
+         </td>
+         <td>
+            <h6>{{ tache.getDateFT()|date('d-m-Y') }}</h6>
+         </td>
+         <td>
+            <h6>{{ tache.getEcheance().days }} jours</h6>
+         </td>
+         <td>
+            <h6>{{ tache.getEtatT() }}</h6>
+         </td>
+         <td>
+            <div class="btn-group" role="group" aria-label="Actions">
+               <button onclick="location.href='{{ path('tache_detail', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+               <button onclick="location.href='{{ path('tache_update', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></button>
+               <button onclick="location.href='{{ path('tache_delete', {'i': tache.getIdT()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+            </div>
+         </td>
+      </tr>
+      {% endfor %}
+   </tbody>
 </table>
-
-        <!-- pagination2024 -->
-		<div class="pagination2024">
-		{{ knp_pagination_render(tasks) }}
-	</div>
-        
-
-        <button onclick="location.href='{{ path('tache_add') }}'" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Ajouter Tâche</button>
-        <button onclick="location.href='{{ path('tache_piechart') }}'" class="btn btn-outline-primary"><i class="bi bi-star me-1"></i> TOP 10 Meilleurs Employées</button>
-		
-        <script>
-            function filterByDate() {
-                const startDate = document.getElementById('startDate').value;
-                const endDate = document.getElementById('endDate').value;
-                const url = '{{ path('tache_list') }}?startDate=' + startDate + '&endDate=' + endDate;
-                window.location.href = url;
-            }
-        </script>
-		<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-		
-		<style>
-			.btn-group {
-				display: flex;
-				align-items: center;
-			}
-		
-			#filterOptions {
-				margin-left: 10px; /* Adjust the left margin as needed */
-				display: none;
-			}
-		</style>
-		<style>
-			/* Pagination container */
-			.pagination {
-				margin: 0px 25px 25px 0px;
-			  text-align: center;
-			}
-			
-			/* Pagination links */
-			.pagination a {
-			  display: inline-block;
-			  margin: 0 5px;
-			  padding: 8px 16px;
-			  border: 1px solid #ddd;
-			  border-radius: 5px;
-			  background-color: #fff;
-			  color: #333;
-			  text-decoration: none;
-			  transition: background-color 0.3s;
-			}
-			
-			/* Active pagination link */
-			.pagination a.active {
-			  background-color: #007bff;
-			  color: #fff;
-			}
-			
-			/* Hover state for pagination links */
-			.pagination a:hover:not(.active) {
-			  background-color: #ddd;
-			}
-			
-			/* Disabled state for previous and next buttons */
-			.pagination .disabled {
-			  pointer-events: none;
-			  opacity: 0.5;
-			}
-			
-			/* Responsive pagination */
-			@media screen and (max-width: 768px) {
-			  .pagination {
-				margin-top: 10px;
-			  }
-			  .pagination a {
-				padding: 6px 12px;
-			  }
-			}
-.pagination span.current {
-	display: inline-block;
-	margin: 0 5px;
-	padding: 8px 16px;
-	border: 1px solid #007bff;
-	border-radius: 5px;
-	background-color: #007bff;
-	color: #fff;
-	text-decoration: none;
-  }
-  
-  /* Hover state for current page */
-  .pagination span.current:hover {
-	background-color: #0056b3;
-  }
-
-		</style>
-        <style>
-			.search-bar {
-				margin-top: 20px;
-				margin-bottom: 20px;
-			}
-		
-			.search-form {
-				position: relative;
-			}
-		
-			#search-input {
-				width: 100%;
-				padding: 10px;
-				border: 1px solid #ccc;
-				border-radius: 5px;
-				font-size: 16px;
-			}
-		
-			#search-results {
-				position: absolute;
-				top: 100%;
-				left: 0;
-				z-index: 1000;
-				width: 100%;
-				background-color: #fff;
-				border: 1px solid #ccc;
-				border-top: none;
-				border-radius: 0 0 5px 5px;
-				box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-				display: none;
-			}
-		
-			#search-results a {
-				display: block;
-				padding: 10px;
-				color: #333;
-				text-decoration: none;
-				transition: background-color 0.3s ease;
-			}
-		
-			#search-results a:hover {
-				background-color: #f5f5f5;
-			}
-		</style>
-
-        {% endblock %}
+<!-- pagination2024 -->
+<div class="pagination2024">
+   {{ knp_pagination_render(tasks) }}
+</div>
+<button onclick="location.href='{{ path('tache_add') }}'" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Ajouter Tâche</button>
+<button onclick="location.href='{{ path('tache_piechart') }}'" class="btn btn-outline-primary"><i class="bi bi-star me-1"></i> TOP 10 Meilleurs Employées</button>
+<script>
+   function filterByDate() {
+       const startDate = document.getElementById('startDate').value;
+       const endDate = document.getElementById('endDate').value;
+       const url = '{{ path('tache_list') }}?startDate=' + startDate + '&endDate=' + endDate;
+       window.location.href = url;
+   }
+</script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<style>
+   .btn-group {
+   display: flex;
+   align-items: center;
+   }
+   #filterOptions {
+   margin-left: 10px; /* Adjust the left margin as needed */
+   display: none;
+   }
+</style>
+<style>
+   /* Pagination container */
+   .pagination {
+   margin: 0px 25px 25px 0px;
+   text-align: center;
+   }
+   /* Pagination links */
+   .pagination a {
+   display: inline-block;
+   margin: 0 5px;
+   padding: 8px 16px;
+   border: 1px solid #ddd;
+   border-radius: 5px;
+   background-color: #fff;
+   color: #333;
+   text-decoration: none;
+   transition: background-color 0.3s;
+   }
+   /* Active pagination link */
+   .pagination a.active {
+   background-color: #007bff;
+   color: #fff;
+   }
+   /* Hover state for pagination links */
+   .pagination a:hover:not(.active) {
+   background-color: #ddd;
+   }
+   /* Disabled state for previous and next buttons */
+   .pagination .disabled {
+   pointer-events: none;
+   opacity: 0.5;
+   }
+   /* Responsive pagination */
+   @media screen and (max-width: 768px) {
+   .pagination {
+   margin-top: 10px;
+   }
+   .pagination a {
+   padding: 6px 12px;
+   }
+   }
+   .pagination span.current {
+   display: inline-block;
+   margin: 0 5px;
+   padding: 8px 16px;
+   border: 1px solid #007bff;
+   border-radius: 5px;
+   background-color: #007bff;
+   color: #fff;
+   text-decoration: none;
+   }
+   /* Hover state for current page */
+   .pagination span.current:hover {
+   background-color: #0056b3;
+   }
+</style>
+<style>
+   .search-bar {
+   margin-top: 20px;
+   margin-bottom: 20px;
+   }
+   .search-form {
+   position: relative;
+   }
+   #search-input {
+   width: 100%;
+   padding: 10px;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+   font-size: 16px;
+   }
+   #search-results {
+   position: absolute;
+   top: 100%;
+   left: 0;
+   z-index: 1000;
+   width: 100%;
+   background-color: #fff;
+   border: 1px solid #ccc;
+   border-top: none;
+   border-radius: 0 0 5px 5px;
+   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+   display: none;
+   }
+   #search-results a {
+   display: block;
+   padding: 10px;
+   color: #333;
+   text-decoration: none;
+   transition: background-color 0.3s ease;
+   }
+   #search-results a:hover {
+   background-color: #f5f5f5;
+   }
+</style>
+{% endblock %}

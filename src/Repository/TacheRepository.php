@@ -7,7 +7,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -49,7 +48,6 @@ class TacheRepository extends ServiceEntityRepository
         }
     }
 
-
     // Define findByQuery method to search for tasks based on a query
 
     // /**
@@ -58,28 +56,28 @@ class TacheRepository extends ServiceEntityRepository
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    return $this->createQueryBuilder('t')
+    ->andWhere('t.exampleField = :val')
+    ->setParameter('val', $value)
+    ->orderBy('t.id', 'ASC')
+    ->setMaxResults(10)
+    ->getQuery()
+    ->getResult()
+    ;
     }
-    */
+     */
 
     /*
     public function findOneBySomeField($value): ?tache
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+    return $this->createQueryBuilder('t')
+    ->andWhere('t.exampleField = :val')
+    ->setParameter('val', $value)
+    ->getQuery()
+    ->getOneOrNullResult()
+    ;
     }
-    */
+     */
 
     public function findByUserType(string $typeUser): array
     {
@@ -89,7 +87,7 @@ class TacheRepository extends ServiceEntityRepository
             ->where('u.type_user = :typeUser')
             ->setParameter('typeUser', $typeUser)
             ->getQuery();
-    
+
         return $qb->getResult();
     }
 
@@ -123,7 +121,7 @@ class TacheRepository extends ServiceEntityRepository
             ->where('t.etat_T = :etat')
             ->setParameter('etat', $etat);
 
-        return (int)$qb->getQuery()->getSingleScalarResult();
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function findByDateRange(\DateTimeInterface $startDate, \DateTimeInterface $endDate): QueryBuilder

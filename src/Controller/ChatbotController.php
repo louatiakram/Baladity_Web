@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-const MIN_SIMILARITY_THRESHOLD = 70; // Adjust this value as needed
+const MIN_SIMILARITY_THRESHOLD = 70; 
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse; // Add this line
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,7 +31,6 @@ class ChatbotController extends AbstractController
     #[Route('/chatbot/clear', name: 'chatbot_clear', methods: ['POST'])]
     public function clearConversation(): Response
     {
-        // Clear conversation logic here
         return new Response();
     }
 
@@ -39,7 +38,6 @@ class ChatbotController extends AbstractController
     {
         $input = strtolower($input);
 
-        // Check for exact matches first
         $keywordResponses = [
             "" => "Hello, write something please!",
             "hi" => "Hello!",
@@ -62,7 +60,7 @@ class ChatbotController extends AbstractController
             "what's up" => "Not much, you?",
             "how's it going" => "It's going well, thanks!",
             "how are you" => "I'm just a bot, but I'm doing well, thanks for asking!",
-            // Date and time
+
             "time temp wa9t wakt heure hours minutes d9aye9" => "The current time is " . date("H:i"),
             "date" => "Today's date is " . date("Y-m-d"),
             "day nhar lyoum" => "Today is " . date("l"),
@@ -78,17 +76,17 @@ class ChatbotController extends AbstractController
             "last year 3amnewel" => "Last year was " . date("Y", strtotime("-1 year")),
             "holiday" => "Today is a holiday!",
             "workday" => "Today is a workday.",
-            // Current weather
-            "weather ta9s" => "The current weather is sunny.", // Replace with actual weather API call
-            // Job-related queries
-            "job 5idma travail" => "Sorry, I'm just a chatbot and don't have job listings.", // Replace with actual job API call
-            // Animal-related queries
-            "animal 7ayawen" => "I love animals too!", // Respond to general animal queries
-            "dog kalb" => "Dogs are great companions!", // Respond to specific animal queries
+
+            "weather ta9s" => "The current weather is sunny.",
+
+            "job 5idma travail" => "Sorry, I'm just a chatbot and don't have job listings.",
+            
+            "animal 7ayawen" => "I love animals too!",
+            "dog kalb" => "Dogs are great companions!",
             "cat katous" => "Cats are independent creatures!",
-            // Bad words recognition
-            "badword klem mirzi" => "Please be polite!", // Example of recognizing bad words
-            // Bot questions
+            
+            "badword klem mirzi" => "Please be polite!",
+            
             "how old are you kdeh omrik" => "I'm just a computer program, so I don't have an age.",
             "where are you from mnin enty" => "I exist in the digital world, so I don't have a physical location.",
             "what is your purpose chnia feyidtik f denya" => "My purpose is to assist you with tasks and provide information.",
@@ -169,7 +167,7 @@ class ChatbotController extends AbstractController
             return $keywordResponses[$input];
         }
 
-        // Find the closest matching keyword using similar_text
+        // similar_text
         $bestMatch = '';
         $highestSimilarity = 0;
         foreach ($keywordResponses as $keyword => $response) {

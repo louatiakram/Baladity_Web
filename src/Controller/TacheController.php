@@ -9,7 +9,10 @@ use App\Form\CommentaireTacheType;
 use App\Form\TacheType;
 use App\Repository\TacheRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Knp\Component\Pager\PaginatorInterface;
+use League\Csv\Reader;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -22,78 +25,74 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use League\Csv\Reader;
-
 
 class TacheController extends AbstractController
 {
 
     #[Route('/tache', name: 'tache_list')]
-public function list(Request $request, TacheRepository $repository, PaginatorInterface $paginator, SessionInterface $session): Response
-{
-    $defaultOrderBy = 'date_FT';
-    $orderBy = $request->query->get('orderBy', 'date_FT'); // Default ordering by date_FT
-    $queryBuilder = $repository->createQueryBuilder('t')->orderBy('t.' . $defaultOrderBy, 'ASC');
-    
-    // Set order by based on user input
-    switch ($orderBy) {
-        case 'titre':
-            $queryBuilder->orderBy('t.titre_T', 'ASC');
-            break;
-        case 'etat':
-            $queryBuilder->orderBy('t.etat_T', 'ASC');
-            break;
-        case 'date_FT':
-        default:
-            $queryBuilder->orderBy('t.date_FT', 'ASC');
-            break;
+    public function list(Request $request, TacheRepository $repository, PaginatorInterface $paginator, SessionInterface $session): Response
+    {
+        $defaultOrderBy = 'date_FT';
+        $orderBy = $request->query->get('orderBy', 'date_FT'); // Default ordering by date_FT
+        $queryBuilder = $repository->createQueryBuilder('t')->orderBy('t.' . $defaultOrderBy, 'ASC');
+
+        // Set order by based on user input
+        switch ($orderBy) {
+            case 'titre':
+                $queryBuilder->orderBy('t.titre_T', 'ASC');
+                break;
+            case 'etat':
+                $queryBuilder->orderBy('t.etat_T', 'ASC');
+                break;
+            case 'date_FT':
+            default:
+                $queryBuilder->orderBy('t.date_FT', 'ASC');
+                break;
+        }
+
+        // Set order direction
+        $orderDirection = 'ASC';
+
+        // Get start and end dates from the query parameters if provided
+        $startDate = $request->query->get('startDate');
+        $endDate = $request->query->get('endDate');
+
+        // If start and end dates are provided, apply date filtering
+        if ($startDate && $endDate) {
+            $queryBuilder
+                ->andWhere('t.date_FT >= :startDate')
+                ->andWhere('t.date_FT <= :endDate')
+                ->setParameter('startDate', new \DateTime($startDate))
+                ->setParameter('endDate', new \DateTime($endDate));
+        }
+
+        $query = $queryBuilder->getQuery();
+
+        // Paginate the query
+        $tasks = $paginator->paginate(
+            $query, // Doctrine Query object
+            $request->query->getInt('page', 1), // Page number
+            3// Limit per page
+        );
+
+        // Calculate task counts for different "Etat" (status)
+        $tasksDoneCount = $repository->countByEtat('DONE');
+        $tasksDoingCount = $repository->countByEtat('DOING');
+        $tasksToDoCount = $repository->countByEtat('TODO');
+
+        $successMessage = $session->getFlashBag()->get('success');
+
+        return $this->render('tache/list.html.twig', [
+            'tasks' => $tasks,
+            'successMessage' => $successMessage ? $successMessage[0] : null,
+            'orderBy' => $orderBy,
+            'tasksDoneCount' => $tasksDoneCount,
+            'tasksDoingCount' => $tasksDoingCount,
+            'tasksToDoCount' => $tasksToDoCount,
+            'startDate' => $startDate, // Pass the start date to pre-fill the date picker
+            'endDate' => $endDate, // Pass the end date to pre-fill the date picker
+        ]);
     }
-
-    // Set order direction
-    $orderDirection = 'ASC';
-
-    // Get start and end dates from the query parameters if provided
-    $startDate = $request->query->get('startDate');
-    $endDate = $request->query->get('endDate');
-
-    // If start and end dates are provided, apply date filtering
-    if ($startDate && $endDate) {
-        $queryBuilder
-            ->andWhere('t.date_FT >= :startDate')
-            ->andWhere('t.date_FT <= :endDate')
-            ->setParameter('startDate', new \DateTime($startDate))
-            ->setParameter('endDate', new \DateTime($endDate));
-    }
-
-    $query = $queryBuilder->getQuery();
-
-    // Paginate the query
-    $tasks = $paginator->paginate(
-        $query, // Doctrine Query object
-        $request->query->getInt('page', 1), // Page number
-        3 // Limit per page
-    );
-
-    // Calculate task counts for different "Etat" (status)
-    $tasksDoneCount = $repository->countByEtat('DONE');
-    $tasksDoingCount = $repository->countByEtat('DOING');
-    $tasksToDoCount = $repository->countByEtat('TODO');
-
-    $successMessage = $session->getFlashBag()->get('success');
-
-    return $this->render('tache/list.html.twig', [
-        'tasks' => $tasks,
-        'successMessage' => $successMessage ? $successMessage[0] : null,
-        'orderBy' => $orderBy,
-        'tasksDoneCount' => $tasksDoneCount,
-        'tasksDoingCount' => $tasksDoingCount,
-        'tasksToDoCount' => $tasksToDoCount,
-        'startDate' => $startDate, // Pass the start date to pre-fill the date picker
-        'endDate' => $endDate, // Pass the end date to pre-fill the date picker
-    ]);
-}
 
     #[Route('/tache/search', name: 'tache_search', methods: ['GET'])]
     public function search(TacheRepository $tacheRepository, Request $request): JsonResponse
@@ -136,7 +135,7 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
     #[Route('/tache/add', name: 'tache_add')]
     public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
     {
-        $userId = 50; // Assuming the user ID is 50
+        $userId = 50;
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
 
         if (!$user) {
@@ -284,6 +283,15 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
         // Store the user type in the session
         $session->set('user_type', $typeUser);
 
+        // Define the API base URL
+        $api_url = 'https://api.quotable.io/';
+
+        // Create a Guzzle HTTP client
+        $httpClient = new Client([
+            'base_uri' => $api_url,
+            'timeout' => 10, // Adjust timeout as needed
+        ]);
+
         // Fetch taches based on the current user's category
         $taches = [];
         if ($typeUser === "Responsable employé" || $typeUser === "Employé") {
@@ -293,10 +301,21 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
         // Get flash message from the request
         $flashMessage = $request->query->get('flash_message');
 
+        // Make the API request to get a random quote
+        try {
+            $response = $httpClient->get('random');
+            $quoteData = json_decode($response->getBody()->getContents(), true);
+            $quote = isset($quoteData['content']) ? $quoteData : null;
+        } catch (RequestException $e) {
+            // Log or handle the error as needed
+            $quote = null;
+        }
+
         return $this->render('tache/listfront.html.twig', [
             'taches' => $taches,
             'flash_message' => $flashMessage,
             'user_type' => $typeUser,
+            'quote' => $quote, // Pass the quote to the Twig template
         ]);
     }
 
@@ -312,8 +331,6 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
         $typeUser = $session->get('user_type');
 
         if (!$typeUser) {
-            // If user type is not found in session, handle the error (redirect or display message)
-            // For example:
             throw $this->createNotFoundException('User type not found in session.');
         }
 
@@ -351,16 +368,16 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
             'user_type' => $typeUser,
         ]);
     }
-    
+
     #[Route('/update-tache-state/{tacheId}/{newState}', name: 'update_tache_state')]
     public function updateTacheState(Request $request, int $tacheId, string $newState, SessionInterface $session): JsonResponse
     {
-            // Get the user ID from the session
-    $userId = $session->get('user_id');
+        // Get the user ID from the session
+        $userId = $session->get('user_id');
 
-    // Get the user entity from the database based on the user ID
-    $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
-    
+        // Get the user entity from the database based on the user ID
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+
         $entityManager = $this->getDoctrine()->getManager();
         $tache = $entityManager->getRepository(Tache::class)->find($tacheId);
 
@@ -371,14 +388,14 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
         // Update etat_T attribute of the tache entity
         $tache->setEtatT($newState);
         // Update id_user if the task is moved to the "DONE" state
-    if ($newState === 'DONE') {
-        
-        if ($user) {
-            $tache->setIdUser($user);
-        } else {
-            return new JsonResponse(['error' => 'User Existe Pas'], Response::HTTP_NOT_FOUND);
+        if ($newState === 'DONE') {
+
+            if ($user) {
+                $tache->setIdUser($user);
+            } else {
+                return new JsonResponse(['error' => 'User Existe Pas'], Response::HTTP_NOT_FOUND);
+            }
         }
-    }
 
         try {
             $entityManager->flush(); // Save changes to the database
@@ -440,42 +457,47 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
         $sheet->setCellValue('C1', 'date_DT')->getStyle('C1')->applyFromArray($titleStyle);
         $sheet->setCellValue('D1', 'date_FT')->getStyle('D1')->applyFromArray($titleStyle);
         $sheet->setCellValue('E1', 'desc_T')->getStyle('E1')->applyFromArray($titleStyle);
-        $sheet->setCellValue('F1', 'etat_T')->getStyle('F1')->applyFromArray($titleStyle); // Add this line for etat_T
+        $sheet->setCellValue('F1', 'etat_T')->getStyle('F1')->applyFromArray($titleStyle);
 
         // Populate data
-        $row = 2;
-        foreach ($tasks as $task) {
-            $sheet->setCellValue('A' . $row, $task->getTitreT());
+// Populate data
+$row = 2;
+foreach ($tasks as $task) {
+    $sheet->setCellValue('A' . $row, $task->getTitreT());
 
-            // Check if the task has a piece jointe
-            if ($task->getPieceJointeT() !== null) {
-                // Create hyperlink for the file name
-                $hyperlinkFormula = '=HYPERLINK("C:/Users/ASUS/Desktop/3A5S2/PIDEV/DevMasters-Baladity/public/uploads/' . $task->getPieceJointeT() . '", "' . $task->getPieceJointeT() . '")';
-                $sheet->getCell('B' . $row)->setValueExplicit($hyperlinkFormula, DataType::TYPE_FORMULA);
-            } else {
-                // Set the cell value to empty if no piece jointe
-                $sheet->setCellValue('B' . $row, '');
-            }
+    // Check if the task has a piece jointe
+    if ($task->getPieceJointeT() !== null) {
+        // Create hyperlink for the file name
+        $uploadsDirectory = $this->getParameter('uploadsDirectory');
+        $hyperlinkUrl = $uploadsDirectory . '/' . $task->getPieceJointeT();
+        $hyperlinkText = $task->getPieceJointeT();
+        $sheet->getCell('B' . $row)->getHyperlink()->setUrl($hyperlinkUrl);
+        $sheet->getCell('B' . $row)->setValue($hyperlinkText);
+    } else {
+        // Set the cell value to empty if no piece jointe
+        $sheet->setCellValue('B' . $row, ''); // Set the cell value to empty
+    }
 
-            $sheet->setCellValue('C' . $row, $task->getDateDT()->format('Y-m-d'));
-            $sheet->setCellValue('D' . $row, $task->getDateFT()->format('Y-m-d'));
-            $sheet->setCellValue('E' . $row, $task->getDescT());
-            $sheet->setCellValue('F' . $row, $task->getEtatT()); // Add this line for etat_T
+    // Set other cell values
+    $sheet->setCellValue('C' . $row, $task->getDateDT()->format('Y-m-d'));
+    $sheet->setCellValue('D' . $row, $task->getDateFT()->format('Y-m-d'));
+    $sheet->setCellValue('E' . $row, $task->getDescT());
+    $sheet->setCellValue('F' . $row, $task->getEtatT()); // Add this line for etat_T
 
-            // Apply cell styles
-            $sheet->getStyle('A' . $row . ':F' . $row)->applyFromArray([
-                'borders' => [
-                    'allBorders' => [
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                        'color' => ['rgb' => '000000'],
-                    ],
-                ],
-                'alignment' => [
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-                ],
-            ]);
-            $row++;
-        }
+    // Apply cell styles
+    $sheet->getStyle('A' . $row . ':F' . $row)->applyFromArray([
+        'borders' => [
+            'allBorders' => [
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'color' => ['rgb' => '000000'],
+            ],
+        ],
+        'alignment' => [
+            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+        ],
+    ]);
+    $row++;
+}
 
         // Auto-size columns
         foreach (range('A', 'F') as $column) {
@@ -505,53 +527,52 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
         return $response;
     }
 
-
     #[Route('/tache/import-csv', name: 'tache_import_csv')]
     public function importCsv(Request $request, TacheRepository $repository, SessionInterface $session, ManagerRegistry $doctrine): Response
     {
         $userId = $session->get('user_id');
-    
+
         // Get the user by ID
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
-    
+
         // Check if the user exists
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non trouvé.');
         }
-    
+
         // Retrieve user type from session
         $typeUser = $session->get('user_type');
-    
+
         if (!$typeUser) {
             throw $this->createNotFoundException('User type not found in session.');
         }
-    
+
         // Check if the form is submitted and valid
         if ($request->isMethod('POST')) {
             // Get the uploaded CSV file
             $uploadedFile = $request->files->get('csv_file');
-    
+
             // Check if a file was uploaded
             if ($uploadedFile && $uploadedFile->isValid()) {
                 // Create a CSV reader instance
                 $csvReader = Reader::createFromPath($uploadedFile->getPathname());
                 $csvReader->setHeaderOffset(0); // Skip header row
-    
+
                 // Get CSV records
                 $records = $csvReader->getRecords();
-    
+
                 // Start importing data into the database
                 $entityManager = $this->getDoctrine()->getManager();
                 foreach ($records as $record) {
                     // Create a new task entity for each record
                     $task = new Tache();
-    
+
                     // Check if a task with the same titre_T and nom_Cat already exists
                     $existingTask = $entityManager->getRepository(Tache::class)->findOneBy([
                         'titre_T' => $record['titre_T'],
                         'nom_Cat' => $typeUser, // Assuming $typeUser is used for nom_Cat
                     ]);
-    
+
                     if ($existingTask) {
                         // Handle existing task
                         // For example, add an error message
@@ -566,20 +587,20 @@ public function list(Request $request, TacheRepository $repository, PaginatorInt
                         $task->setEtatT($record['etat_T']);
                         $task->setNomCat($typeUser); // Set category based on user type
                         $task->setIdUser($user);
-    
+
                         // Persist the task entity
                         $entityManager->persist($task);
                     }
                 }
-    
+
                 // Flush the changes to the database
                 $entityManager->flush();
-    
+
                 // Redirect to the list page or display a success message
                 return $this->redirectToRoute('tache_listfront');
             }
         }
-    
+
         // If the form is not submitted or the file upload fails, redirect back to the list page
         return $this->redirectToRoute('tache_listfront');
     }
