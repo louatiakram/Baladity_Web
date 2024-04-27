@@ -7,6 +7,10 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr\Func;
+use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * @extends ServiceEntityRepository<Vote>
@@ -18,9 +22,57 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class VoteRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
-        parent::__construct($registry, vote::class);
+        parent::__construct($registry, Vote::class);
+        $this->entityManager = $entityManager;
+    }
+    public function getMonthlyYearlyVotes()
+    {
+        $currentMonth = (int) date('m');
+        $currentYear = (int) date('Y');
+
+        $sql = "SELECT COUNT(*) AS vote_count FROM vote WHERE MONTH(date_SV) = :month AND YEAR(date_SV) = :year";
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('vote_count', 'voteCount');
+        $query = $this->entityManager->createNativeQuery($sql, $rsm);
+        $query->setParameter('month', $currentMonth);
+        $query->setParameter('year', $currentYear);
+
+        $result = $query->getSingleResult();
+
+        return $result['voteCount'];
+    }
+
+    public function getTotalVotes()
+    {
+        $sql = "SELECT COUNT(*) AS vote_count FROM vote";
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('vote_count', 'voteCount');
+        $query = $this->entityManager->createNativeQuery($sql, $rsm);
+
+        $result = $query->getSingleResult();
+
+        return $result['voteCount'];
+    }
+
+    public function getLatestVotes()
+    {
+        $currentTime = new \DateTime();
+        $twentyFourHoursAgo = (new \DateTime())->modify('-24 hours');
+
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->select('v')
+                     ->from('App\Entity\vote', 'v')
+                     ->where('v.date_SV BETWEEN :start AND :end')
+                     ->setParameter('start', $twentyFourHoursAgo)
+                     ->setParameter('end', $currentTime)
+                     ->orderBy('v.date_SV', 'DESC')
+                     ->setMaxResults(10);
+
+        $latestVotes = $queryBuilder->getQuery()->getResult();
+
+        return $latestVotes;
     }
 
     /**
@@ -54,6 +106,7 @@ class VoteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+   
 
     // /**
     //  * @return Vote[] Returns an array of Vote objects

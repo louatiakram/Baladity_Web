@@ -13,6 +13,9 @@ use Doctrine\ORM\EntityManagerInterface;  // Import the correct class
 use Symfony\Component\Form\FormFactoryInterface;
 use App\Form\VoteType;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\ORM\Query\Expr;
+
 
 class VoteController extends AbstractController
 {
@@ -172,4 +175,28 @@ public function detailsVote($id, EntityManagerInterface $entityManager): Respons
         'vote' => $vote,
     ]);
 }
+
+#[Route('/vote/stats', name: 'app_vote')]
+public function stats(VoteRepository $voteRepository): Response
+{
+     // Fetch monthly and yearly vote statistics
+     $monthlyYearlyVotes = $voteRepository->getMonthlyYearlyVotes();
+
+     // Fetch total number of votes
+     $totalVotes = $voteRepository->getTotalVotes();
+
+     // Fetch latest votes (last 24 hours)
+     $latestVotes = $voteRepository->getLatestVotes();
+
+    return $this->render('vote/stats.html.twig', [
+        'monthlyYearlyVotes' => $monthlyYearlyVotes,
+        'totalVotes' => $totalVotes,
+        'latestVotes' => $latestVotes,
+    ]);
 }
+}
+
+
+
+
+

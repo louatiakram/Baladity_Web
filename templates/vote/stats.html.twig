@@ -1,0 +1,87 @@
+{% extends 'base-back.html.twig' %}
+{% block title %}Proposition Statistique{% endblock %}
+
+{% block body %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Proposition Statistique</title>
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Proposition Statistique</h1>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card border-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Propositions Mensuelles et Annuelles</h5>
+                    <p>Nombre de votes pour le mois et l'année en cours : {{ monthlyYearlyVotes }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Nombre Total de Propositions</h5>
+                    <p>Nombre total de propositions : {{ totalVotes }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card border-primary">
+        <div class="card-body">
+            <h5 class="card-title">Dernières Propositions (Dernières 24 heures)</h5>
+            <ul>
+                {% for vote in latestVotes %}
+                    <li>{{ vote.getDescE }} - {{ vote.getDateSV|date('Y-m-d H:i:s') }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+    <div class="card border-primary">
+        <div class="card-body">
+            <h5 class="card-title">Graphique des Propositions</h5>
+            <canvas id="votesChart"></canvas>
+        </div>
+    </div>    
+    </div>
+    
+    <script>
+        // JavaScript code to render the chart
+        var ctx = document.getElementById('votesChart').getContext('2d');
+        var votesChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Monthly/Yearly', 'Total'],
+                datasets: [{
+                    label: 'Nombre de Propositions',
+                    data: [{{ monthlyYearlyVotes }}, {{ totalVotes }}],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+{% endblock %}
