@@ -73,19 +73,13 @@ L'équipement municipal désigne l'ensemble des infrastructures, équipements et
                                     <i class="bi bi-info-circle"></i> Détails
                                 </a>
                                 <!-- Use button -->
-                                 <button {% if equipement.quantiteInitiale == 0 %}disabled{% endif %}
-                                    onclick="equipement_use({{ equipement.getIdEquipement() }})"
-                                    data-quantite-initiale="{{ equipement.quantiteInitiale }}"
-                                    class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-briefcase"></i> Utiliser
-                                </button>
+                                 <button onclick="utiliserEquipement({{ equipement.getIdEquipement() }})" class="btn btn-sm btn-outline-primary {% if equipement.getQuantiteEq() == 0 %}disabled{% endif %}">
+        <i class="bi bi-briefcase"></i> Utiliser
+    </button>
                                 <!-- Render button -->
-                                 <button {% if equipement.getQuantiteEq() == equipement.quantiteInitiale %}disabled{% endif %}
-                                    onclick="equipement_return({{ equipement.getIdEquipement() }})"
-                                    data-quantite-initiale="{{ equipement.quantiteInitiale }}"
-                                    class="btn btn-sm btn-outline-warning">
-                                    <i class="bi bi-arrow-repeat"></i> Rendre
-                                </button>
+                                 <button onclick="rendreEquipement({{ equipement.getIdEquipement() }})" class="btn btn-sm btn-outline-warning">
+    <i class="bi bi-arrow-repeat"></i> Rendre
+</button>
                                 <!-- Avis button -->
                                 <a href="{{ path('avis_show_front', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-info">
                                     <i class="bi bi-chat-square-text"></i> Avis
@@ -125,49 +119,56 @@ L'équipement municipal désigne l'ensemble des infrastructures, équipements et
     {% block ListeTalacheNav %}
         <!-- Additional navigation elements if needed -->
     {% endblock %} 
-
-    <script>
-       function equipement_use(idEquipement) {
-    var quantiteInitiale = $(`#equipement-${idEquipement}`).data('quantite-initiale');
-
-    // Effectuez une requête AJAX pour utiliser l'équipement avec l'ID donné
-    // Par exemple, vous pouvez utiliser jQuery pour effectuer une requête AJAX
+<script>
+function utiliserEquipement(id) {
     $.ajax({
-        url: "/equipement/use/" + idEquipement,
-        method: "GET",
+        type: 'POST',
+        url: '/equipement/utiliser/' + id,
         success: function(response) {
-            // Traitez la réponse si nécessaire
-            alert(response.message); // Affichez un message de succès
-            location.reload(); // Rechargez la page après avoir utilisé l'équipement
+            if (response.success) {
+                alert('Equipement utilisé avec succès.');
+                // Recharger la page après avoir utilisé l'équipement avec succès
+                location.reload();
+            } else {
+                alert('Erreur : ' + response.error);
+            }
         },
         error: function(xhr, status, error) {
-            // Gérez les erreurs
-            console.error(xhr.responseText); // Affichez l'erreur dans la console
-            alert("Une erreur s'est produite lors de l'utilisation de l'équipement.");
+            alert('Une erreur s\'est produite : ' + error);
         }
+        
     });
 }
 
-function equipement_return(idEquipement) {
-    var quantiteInitiale = $(`#equipement-${idEquipement}`).data('quantite-initiale');
-
-    // Effectuez une requête AJAX pour rendre l'équipement avec l'ID donné
-    // Par exemple, vous pouvez utiliser jQuery pour effectuer une requête AJAX
-    $.ajax({
-        url: "/equipement/return/" + idEquipement,
-        method: "GET",
-        success: function(response) {
-            // Traitez la réponse si nécessaire
-            alert(response.message); // Affichez un message de succès
-            location.reload(); // Rechargez la page après avoir rendu l'équipement
-        },
-        error: function(xhr, status, error) {
-            // Gérez les erreurs
-            console.error(xhr.responseText); // Affichez l'erreur dans la console
-            alert("Une erreur s'est produite lors du retour de l'équipement.");
+function rendreEquipement(id) {
+    var quantiteUtilisee = prompt("Entrez la quantité utilisée :", "1"); // Demander à l'utilisateur la quantité utilisée
+    if (quantiteUtilisee !== null) { // Vérifier si l'utilisateur a cliqué sur "OK"
+        quantiteUtilisee = parseInt(quantiteUtilisee); // Convertir la chaîne en entier
+        if (!isNaN(quantiteUtilisee) && quantiteUtilisee > 0) { // Vérifier si la quantité est un nombre valide et supérieure à zéro
+            $.ajax({
+                type: 'POST',
+                url: '/equipement/rendre/' + id,
+                data: { quantite_utilisee: quantiteUtilisee }, // Envoyer la quantité utilisée avec la requête
+                success: function(response) {
+                    if (response.success) {
+                        alert('Equipement rendu avec succès.');
+                        // Recharger la page
+                        location.reload();
+                    } else {
+                        alert('Erreur : ' + response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Une erreur s\'est produite : ' + error);
+                }
+            });
+        } else {
+            alert('Veuillez entrer un nombre entier valide supérieur à zéro.');
         }
-    });
+    }
 }
-    </script>
+
+
+</script>
 {% endblock %}
 

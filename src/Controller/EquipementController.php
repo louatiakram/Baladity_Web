@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
+use Twilio\Rest\Client;
 
 class EquipementController extends AbstractController
 {
@@ -196,55 +197,7 @@ public function detailEquipementFront($id, EquipementRepository $equipementRepos
         'equipement' => $equipement,
     ]);
 }
-#[Route('/equipement/use/{id}', name: 'equipement_use')]
-public function useEquipement($id, EquipementRepository $rep, EntityManagerInterface $entityManager): JsonResponse
-{
-    $equipement = $rep->find($id);
 
-    if (!$equipement) {
-        return new JsonResponse(['error' => 'Equipement not found'], Response::HTTP_NOT_FOUND);
-    }
-
-    // Vérifier si la quantité de l'équipement est supérieure à zéro
-    if ($equipement->getQuantiteEq() <= 0) {
-        return new JsonResponse(['error' => 'Cannot use equipment, quantity is zero'], Response::HTTP_BAD_REQUEST);
-    }
-
-    // Mettez en œuvre votre logique pour marquer l'équipement comme utilisé ici
-    // Par exemple, décrémentez la quantité de l'équipement
-    $equipement->setQuantiteEq($equipement->getQuantiteEq() - 1);
-
-    // Persistez les modifications dans la base de données
-    $entityManager->flush();
-
-    return new JsonResponse(['message' => 'Equipement marked as used successfully']);
-}
-#[Route('/equipement/return/{id}', name: 'equipement_return')]
-public function returnEquipement($id, EquipementRepository $rep, EntityManagerInterface $entityManager): JsonResponse
-{
-    $this->logger->info('Reached the returnEquipement function.'); 
-    $equipement = $rep->find($id);
-
-    if (!$equipement) {
-        return new JsonResponse(['error' => 'Equipement not found'], Response::HTTP_NOT_FOUND);
-    }
-    
-    // Définir la quantité initiale
-    $quantiteInitiale = 0; // Vous pouvez initialiser cette valeur à ce que vous voulez
-
-    // Récupérer la quantité initiale de l'équipement si la méthode getQuantiteEq() existe
-    if (method_exists($equipement, 'getQuantiteEq')) {
-        $quantiteInitiale = $equipement->getQuantiteEq();
-    } 
-
-    // Mettez en œuvre votre logique pour rendre l'équipement ici
-    $equipement->setQuantiteEq($quantiteInitiale);
-
-    // Persistez les modifications dans la base de données
-    $entityManager->flush();
-
-    return new JsonResponse(['message' => 'Equipement marked as returned successfully', 'quantiteInitiale' => $quantiteInitiale]);
-}
 #[Route('/equipement/showEquipementFront', name: 'equipement_show_front')]
 public function showEquipementFront(Request $request, EquipementRepository $repository): Response
 {
@@ -275,5 +228,73 @@ public function showEquipementFront(Request $request, EquipementRepository $repo
         'currentPage' => $currentPage,
         'totalPages' => $totalPages,
     ]);
+}
+#[Route('/equipement/utiliser/{id}', name: 'equipement_utiliser')]
+public function utiliserEquipement($id, EquipementRepository $equipementRepository, EntityManagerInterface $entityManager): JsonResponse
+{
+    // Récupérer l'équipement par son ID
+    $equipement = $equipementRepository->find($id);
+
+    if (!$equipement) {
+        return new JsonResponse(['error' => 'Equipement introuvable'], Response::HTTP_NOT_FOUND);
+    }
+
+    // Vérifier si la quantité d'équipement est supérieure à zéro
+    if ($equipement->getQuantiteEq() > 0) {
+        // Décrémenter la quantité d'équipement disponible
+        $nouvelleQuantite = $equipement->getQuantiteEq() - 1;
+        $equipement->setQuantiteEq($nouvelleQuantite);
+        $entityManager->flush();
+
+        if ($nouvelleQuantite == 0) {
+            // Configuration du client Twilio avec les paramètres
+            $accountSid = $this->getParameter('twilio_account_sid');
+            $authToken = $this->getParameter('twilio_auth_token');
+            $twilioNumber = '+19284400733'; // Remplacez par votre numéro Twilio
+
+            // Initialisation du client Twilio
+            $twilioClient = new Client($accountSid, $authToken);
+
+            // Envoi du SMS à l'administrateur pour l'informer que le stock de l'équipement est épuisé
+            $adminPhoneNumber = '+21655907840'; // Remplacez par le numéro de téléphone de l'administrateur
+            $messageBody = 'Le stock de l\'équipement '.$equipement->getNomEq().' (Référence: '.$equipement->getReferenceEq().') est épuisé.';
+            $twilioClient->messages->create(
+                $adminPhoneNumber,
+                ['from' => $twilioNumber, 'body' => $messageBody]
+            );
+        }
+
+        return new JsonResponse(['success' => true]);
+    } else {
+        return new JsonResponse(['error' => 'Stock déjà épuisé pour l\'équipement'], Response::HTTP_BAD_REQUEST);
+    }
+}
+#[Route('/equipement/rendre/{id}', name: 'equipement_rendre')]
+public function rendreEquipement($id, Request $request, EquipementRepository $repository): JsonResponse
+{
+    // Récupérer l'équipement par son ID
+    $equipement = $repository->find($id);
+
+    if (!$equipement) {
+        return new JsonResponse(['error' => 'Equipement introuvable'], Response::HTTP_NOT_FOUND);
+    }
+
+    // Récupérer la quantité utilisée envoyée depuis la requête AJAX
+    $quantiteUtilisee = $request->request->get('quantite_utilisee');
+
+    // Vérifier si la quantité utilisée est valide
+    if (!is_numeric($quantiteUtilisee) || $quantiteUtilisee <= 0) {
+        return new JsonResponse(['error' => 'Quantité utilisée invalide'], Response::HTTP_BAD_REQUEST);
+    }
+
+    // Effectuer les vérifications supplémentaires ici, par exemple, si la quantité utilisée ne dépasse pas la quantité disponible, etc.
+
+    // Mettre à jour l'équipement avec la nouvelle quantité (exemple)
+    $nouvelleQuantite = $equipement->getQuantiteEq() + $quantiteUtilisee;
+    $equipement->setQuantiteEq($nouvelleQuantite);
+    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager->flush();
+
+    return new JsonResponse(['success' => true]);
 }
 } 
