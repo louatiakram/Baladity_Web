@@ -39,6 +39,9 @@
     {% endif %}
     <div class="actions-container">
         <div class="actions">
+            <!-- Add the instruction button -->
+            <div id="tutorial-container"></div>
+            <button id="instruction-button" class="btn btn-primary">TUTORIEL</button>
             <a href="{{ path('tache_download_csv') }}" class="btn btn-primary">Export Excel</a>
             <label for="csv-file-input" class="btn btn-primary">Import CSV</label>
             <form id="csv-upload-form" action="{{ path('tache_import_csv') }}" method="post" enctype="multipart/form-data" style="display: none;">
@@ -128,13 +131,30 @@
                 <blockquote class="quote" id="quote">
                     <div>{{ quote.content }}</div>
                     <footer class="author">{{ quote.author }}</footer>
-                    <button class="btn btn-primary refresh-btn" onclick="refreshQuote()"><i class="bi bi-arrow-clockwise"></i></button>
+                    <div class="button-container">
+                        <!-- Reload quote button -->
+                        <button class="btn btn-primary refresh-btn" onclick="refreshQuote()"><i class="bi bi-arrow-clockwise"></i></button>
+                        <!-- Voice button -->
+                        <button class="btn btn-primary voice-btn" onclick="readQuote()"><i class="bi bi-mic"></i></button>
+                    </div>
                 </blockquote>
             </div>
         {% endif %}
     </div>
 
 <style>
+    /* Center the tutorial container */
+    #tutorial-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Style the video to be responsive and centered */
+    #tutorial-container iframe {
+        max-width: 100%; /* Ensure the video does not exceed its container */
+        max-height: 100%; /* Ensure the video does not exceed its container */
+    }
    /* Actions Container Styles */
    .actions-container {
       display: flex;
@@ -170,10 +190,14 @@
    font-weight: bold;
    color: #666; /* Change color to your preference */
    }
+   /* Position the buttons horizontally */
+   .button-container {
+       display: flex;
+       align-items: center; /* Center vertically */
+   }
+   /* Adjust margin between buttons */
    .refresh-btn {
-   position: absolute; /* Position the button absolutely */
-   top: 10px; /* 10px from the top */
-   right: 10px; /* 10px from the right */
+       margin-right: 5px;
    }
    .grid {
    min-height: 400px;
@@ -418,18 +442,90 @@
    }
 </style>
 <script>
-   function refreshQuote() {
-       fetch('https://api.quotable.io/random')
-           .then(response => response.json())
-           .then(data => {
-               // Update the quote content
-               document.getElementById('quote').querySelector('div').textContent = data.content;
-               document.getElementById('quote').querySelector('.author').textContent = data.author;
-           })
-           .catch(error => {
-               console.error('Error fetching quote:', error);
-           });
-   }
+    // Define a variable to track whether the tutorial card is already created
+    var tutorialCardCreated = false;
+
+    // Add event listener to the instruction button
+    document.getElementById('instruction-button').addEventListener('click', function() {
+        // Check if the tutorial card is already created
+        if (!tutorialCardCreated) {
+            // Create a new card body for embedding the video
+            var newCardBody = document.createElement('div');
+            newCardBody.className = 'card-body';
+            // Add styling to center the video
+            newCardBody.innerHTML = '<div id="tutorial-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/Qz2wnSVeITg?si=5nQsS7jh8lT2TuqP" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>';
+            // Append the new card body to the existing container
+            var tutorialContainer = document.getElementById('tutorial-container');
+            tutorialContainer.appendChild(newCardBody);
+
+            // Set tutorialCardCreated to true
+            tutorialCardCreated = true;
+        }
+    });
+</script>
+<script>
+    // Define voice index to keep track of the selected voice
+    var voiceIndex = 0;
+    var isReading = false; // Variable to track whether the quote is being read
+    
+    // Function to read the quote aloud with different voices
+    function readQuote() {
+        // Disable the voice and refresh buttons while reading
+        var voiceButton = document.querySelector('.voice-btn');
+        var refreshButton = document.querySelector('.refresh-btn');
+        voiceButton.disabled = true;
+        refreshButton.disabled = true;
+    
+        var quoteContent = document.getElementById('quote').querySelector('div').textContent;
+        var quoteAuthor = document.getElementById('quote').querySelector('.author').textContent;
+        var textToRead = quoteContent + " by " + quoteAuthor;
+    
+        // Create a new SpeechSynthesisUtterance object
+        var utterance = new SpeechSynthesisUtterance(textToRead);
+    
+        // Get available voices
+        var voices = speechSynthesis.getVoices();
+    
+        // Select the voice based on voiceIndex
+        utterance.voice = voices[voiceIndex];
+    
+        // Increment voiceIndex for the next call
+        voiceIndex = (voiceIndex + 1) % voices.length;
+    
+        // Speak the text
+        speechSynthesis.speak(utterance);
+    
+        // Set isReading to true
+        isReading = true;
+    
+        // Listen for the end of speech synthesis
+        utterance.onend = function() {
+            // Re-enable the voice and refresh buttons after reading is complete
+            voiceButton.disabled = false;
+            refreshButton.disabled = false;
+            isReading = false;
+        };
+    }
+    
+    // Function to refresh the quote
+    function refreshQuote() {
+        // If reading is in progress, prevent refreshing the quote
+        if (isReading) {
+            return;
+        }
+    
+        fetch('https://api.quotable.io/random')
+            .then(response => response.json())
+            .then(data => {
+                // Update the quote content
+                document.getElementById('quote').querySelector('div').textContent = data.content;
+                document.getElementById('quote').querySelector('.author').textContent = data.author;
+            })
+            .catch(error => {
+                console.error('Error fetching quote:', error);
+            });
+    }
+    
 </script>
 <script>
    // Function to toggle dark mode

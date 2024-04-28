@@ -132,7 +132,7 @@ class tache
 
     public function getPieceJointeT(): ?string
     {
-        return $this->pieceJointe_T;
+        return $this->pieceJointe_T ?? null;
     }
 
     public function setPieceJointeT(?string $pieceJointeT): self

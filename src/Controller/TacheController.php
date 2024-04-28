@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\File;
 
 class TacheController extends AbstractController
 {
@@ -190,7 +191,10 @@ class TacheController extends AbstractController
             }
 
         }
-        return $this->renderForm('tache/add.html.twig', ['f' => $form]);
+       // Pass the image path to the template
+       $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploadsDirectory') . '/' . $x->getPieceJointeT() : null;
+    
+       return $this->renderForm('tache/add.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
     }
 
     #[Route('/tache/update/{i}', name: 'tache_update')]
@@ -199,9 +203,9 @@ class TacheController extends AbstractController
         $x = $rep->find($i);
         $form = $this->createForm(TacheType::class, $x);
         $form->handleRequest($req);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-
+    
             // Handle file upload
             /** @var UploadedFile|null $pieceJointe */
             $pieceJointe = $form->get('pieceJointe_T')->getData();
@@ -216,19 +220,24 @@ class TacheController extends AbstractController
                     $x->setPieceJointeT($uploadedFile->getFilename());
                 } catch (FileException $e) {}
             }
+    
             // Get the selected etat_T value from the form
             $selectedEtatT = $form->get('etat_T')->getData();
-
+    
             // Set the etat_T property of the tache entity
             $x->setEtatT($selectedEtatT);
-
+    
             $em = $doctrine->getManager();
             $em->flush();
-
+    
             $session->getFlashBag()->add('success', 'Tâche mise à jour avec succès!');
             return $this->redirectToRoute('tache_list');
         }
-        return $this->renderForm('tache/add.html.twig', ['f' => $form]);
+    
+        // Pass the image path to the template
+        $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploadsDirectory') . '/' . $x->getPieceJointeT() : null;
+    
+        return $this->renderForm('tache/add.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
     }
 
     #[Route('/tache/delete/{i}', name: 'tache_delete')]

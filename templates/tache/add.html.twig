@@ -2,11 +2,11 @@
 {% block title %}Ajouter Tâche{% endblock %}
 {% block TacheNavState %}
 <a class="nav-link" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#" aria-expanded="true">
-   {% endblock %}
-   {% block TacheContentState %}
-   <ul id="GestionTache-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
-   {% endblock %}
-   {% block AjouterTacheNav %}
+{% endblock %}
+{% block TacheContentState %}
+<ul id="GestionTache-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+{% endblock %}
+{% block AjouterTacheNav %}
 <a href="{{ path('tache_add') }}" class="active">
 <i class="bi bi-circle"></i><span>Ajouter Tache</span>
 </a>
@@ -44,8 +44,15 @@
    </div>
    {% endif %}
 </div>
-<div class="col-md-4">
-   {{ form_widget(f.pieceJointe_T, { 'attr': {'class': 'form-control'}, 'type': 'file', 'id': 'pieceJointe_T', 'name': 'pieceJointe_T'}) }}
+<div class="col-sm-10">
+   <div class="col-sm-10">
+      {{ form_widget(f.pieceJointe_T, {'attr': {'class': 'form-control', 'onchange': 'afficherApercu(this)'}}) }}
+      {% if imagePath %}
+          <img id="imagePreview" src="{{ asset(imagePath) }}" alt="Aperçu de l'image" style="max-width: 100%; max-height: 100px; display: block; border: 1px solid #ccc; padding: 5px;">
+      {% else %}
+          <img id="imagePreview" src="#" alt="Aperçu de l'image" style="max-width: 100%; max-height: 100px; display: none; border: 1px solid #ccc; padding: 5px;">
+      {% endif %}
+  </div>
 </div>
 <div class="col-md-5">
    {{ form_widget(f.date_DT, { 'attr': {'class': 'form-control'} }) }}
@@ -111,8 +118,33 @@
    <button onclick="goBack()" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Go Back</button>
    <script>
       function goBack() {
-      	window.history.back();
+         window.history.back();
       }
    </script>
 </div>
+<script>
+   // Function to display the selected image preview
+   function afficherApercu(input) {
+       if (input.files && input.files[0]) {
+           var reader = new FileReader();
+           var file = input.files[0];
+           var fileType = file.type.toLowerCase();
+
+           // Check if the file type is an image
+           if (fileType.startsWith('image/')) {
+               reader.onload = function (e) {
+                   // Update the image source with the URL of the selected image
+                   document.getElementById('imagePreview').src = e.target.result;
+                   document.getElementById('imagePreview').style.display = 'block'; // Make the image visible
+               }
+
+               reader.readAsDataURL(input.files[0]); // Read the content of the image as a data URL
+           } else {
+               // If file type is not an image, hide the preview
+               document.getElementById('imagePreview').style.display = 'none';
+           }
+       }
+   }
+</script>
+
 {% endblock %}
