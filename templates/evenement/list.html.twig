@@ -2,166 +2,160 @@
 
 {% block title %}Liste des Événements{% endblock %}
 
-
-
 {% block TacheNavState %}
 <a class="nav-link" data-bs-target="#GestionEvenement-nav" data-bs-toggle="collapse" href="#" aria-expanded="true">{% endblock %}
-    {% block TacheContentState %}
-    <ul id="GestionEvenement-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
-        {% endblock %}
-        {% block ListeTacheNav %}
-        <a href="{{ path('evenement_list') }}" class="active"><i class="bi bi-circle"></i><span>Liste Événements</span></a>{% endblock %}
+{% block TacheContentState %}
+<ul id="GestionEvenement-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">{% endblock %}
+{% block ListeTacheNav %}
+<a href="{{ path('evenement_list') }}" class="active"><i class="bi bi-circle"></i><span>Liste Événements</span></a>
+{% endblock %}
 
+{% block body %}
+<div class="search-bar">
+    <form class="search-form" action="{{ path('evenement_list') }}" method="GET">
+        <input id="search-input" type="text" name="query" placeholder="Recherche par nom" value="{{ query }}">
+        <div id="search-results"></div> <!-- This will display search results -->
+    </form>
+</div>
 
-        {% block body %}
-		
-		<div class="search-bar">
-			<form class="search-form" action="{{ path('evenement_list') }}" method="GET">
-				<input id="search-input" type="text" name="query" placeholder="Recherche par nom" value="{{ query }}">
-				<div id="search-results"></div> <!-- This will display search results -->
-			</form>
-		</div>
-	
-		{% if evenements|length == 0 %}
-			<div class="alert alert-warning" role="alert">
-				Aucun événement trouvé avec ce nom.
-			</div>
-		{% endif %}
-
-		<div class="d-flex justify-content-between align-items-center mb-3">
-			<div class="btn-group">
-				<button id="filterBtn" type="button" class="btn btn-outline-primary filter-btn">
-					<i class="bi bi-funnel"></i> Filter
-				</button>
-				<div id="filterOptions">
-					<a href="{{ path('evenement_list', {'orderBy': 'nom'}) }}" class="btn btn-outline-primary {% if orderBy == 'nom' %}active{% endif %}">nom</a>
-					<a href="{{ path('evenement_list', {'orderBy': 'categorie'}) }}" class="btn btn-outline-primary {% if orderBy == 'categorie' %}active{% endif %}">categorie</a>
-					<a href="{{ path('evenement_list') }}" class="btn btn-danger {% if orderBy == 'date_DHE' %}active{% endif %}">Clear</a>
-				</div>
-			</div>
-		</div>
-
-
-		{% for message in app.flashes('success') %}
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+{% if evenements|length == 0 %}
+    <div class="alert alert-warning" role="alert">
+        Aucun événement trouvé avec ce nom.
     </div>
+{% endif %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="btn-group">
+        <button id="filterBtn" type="button" class="btn btn-outline-primary filter-btn">
+            <i class="bi bi-funnel"></i> Filter
+        </button>
+		<button onclick="location.href='{{ path('vote_list') }}'" class="btn btn-outline-primary"><i class="bi bi-list"></i> Liste des Propositions</button>
+        <div id="filterOptions">
+            <a href="{{ path('evenement_list', {'orderBy': 'nom'}) }}" class="btn btn-outline-primary {% if orderBy == 'nom' %}active{% endif %}">nom</a>
+            <a href="{{ path('evenement_list', {'orderBy': 'categorie'}) }}" class="btn btn-outline-primary {% if orderBy == 'categorie' %}active{% endif %}">categorie</a>
+            <a href="{{ path('evenement_list') }}" class="btn btn-danger {% if orderBy == 'date_DHE' %}active{% endif %}">Clear</a>
+        </div>
+    </div>
+</div>
+
+{% for message in app.flashes('success') %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 {% endfor %}
 
+<table class="table table-hover">
+    <thead>
+        <tr class="table-primary">
+            <th scope="col">Nom</th>
+            <th scope="col">Date Debut</th>
+            <th scope="col">Date Fin</th>
+            <th scope="col">Categorie</th>
+            <th scope="col">Capacite</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for evenement in evenements %}
+        <tr>
+            <td><h6>{{ evenement.getNomE() }}</h6></td>
+            <td><h6>{{ evenement.getDateDHE()|date('d-m-Y') }}</h6></td>
+            <td><h6>{{ evenement.getDateDHF()|date('d-m-Y')}}</h6></td>
+            <td><h6>{{ evenement.getCategorieE() }}</h6></td>
+            <td><h6>{{ evenement.getCapaciteE() }}</h6></td>
+            <td>
+                <div class="btn-group" role="group" aria-label="Actions">
+                    <button onclick="location.href='{{ path('details_evenement', {'id': evenement.getId()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
+                    <button onclick="location.href='{{ path('modifier_evenement', {'id': evenement.getId()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                    <button onclick="location.href='{{ path('supprimer_evenement', {'id': evenement.getId()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
+<!-- Pagination -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item {% if evenements.currentPageNumber == 1 %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('evenement_list', {'page': 1}) }}" aria-label="Previous">
+                <span aria-hidden="true">«</span>
+            </a>
+        </li>
+        {% for page in 1..evenements.pageCount %}
+            <li class="page-item {% if page == evenements.currentPageNumber %}active{% endif %}">
+                <a class="page-link" href="{{ path('evenement_list', {'page': page}) }}">{{ page }}</a>
+            </li>
+        {% endfor %}
+        <li class="page-item {% if evenements.currentPageNumber == evenements.pageCount %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('evenement_list', {'page': evenements.pageCount}) }}" aria-label="Next">
+                <span aria-hidden="true">»</span>
+            </a>
+        </li>
+    </ul>
+</nav>
 
-        <table class="table table-hover">
-            <thead>
-                <tr class="table-primary">
-                    <th scope="col">Nom</th>
-                    <th scope="col">Date Debut</th>
-                    <th scope="col">Date Fin</th>
-                    <th scope="col">Categorie</th>
-                    <th scope="col">Capacite</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for evenement in evenements %}
-                <tr>
-                    <td><h6>{{ evenement.getNomE() }}</h6></td>
-                    <td><h6>{{ evenement.getDateDHE()|date('d-m-Y') }}</h6></td>
-                    <td><h6>{{ evenement.getDateDHF()|date('d-m-Y')}}</h6></td>
-                    <td><h6>{{ evenement.getCategorieE() }}</h6></td>
-                    <td><h6>{{ evenement.getCapaciteE() }}</h6></td>
-                    <td>
-                        <div class="btn-group" role="group" aria-label="Actions">
-                            <button onclick="location.href='{{ path('details_evenement', {'id': evenement.getId()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-info-circle"></i></button>
-                            <button onclick="location.href='{{ path('modifier_evenement', {'id': evenement.getId()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></button>
-                            <button onclick="location.href='{{ path('supprimer_evenement', {'id': evenement.getId()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<button onclick="location.href='{{ path('ajouter_evenement') }}'" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Ajouter Événement</button>
+<!-- Add the button to access the stats page -->
+<button onclick="location.href='{{ path('stats_evenement') }}'" class="btn btn-outline-primary"><i class="bi bi-graph-up"></i> Statistiques</button>
 
-		<!-- Pagination -->
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item {% if evenements.currentPageNumber == 1 %}disabled{% endif %}">
-                    <a class="page-link" href="{{ path('evenement_list', {'page': 1}) }}" aria-label="Previous">
-                        <span aria-hidden="true">«</span>
-                    </a>
-                </li>
-                {% for page in 1..evenements.pageCount %}
-                    <li class="page-item {% if page == evenements.currentPageNumber %}active{% endif %}">
-                        <a class="page-link" href="{{ path('evenement_list', {'page': page}) }}">{{ page }}</a>
-                    </li>
-                {% endfor %}
-                <li class="page-item {% if evenements.currentPageNumber == evenements.pageCount %}disabled{% endif %}">
-                    <a class="page-link" href="{{ path('evenement_list', {'page': evenements.pageCount}) }}" aria-label="Next">
-                        <span aria-hidden="true">»</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
- 
-        <button onclick="location.href='{{ path('ajouter_evenement') }}'" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Ajouter Événement</button>		
-		<!-- Add the button to access the vote_list twig -->
-        <button onclick="location.href='{{ path('vote_list') }}'" class="btn btn-outline-primary"><i class="bi bi-list"></i> Liste des Propositions</button>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-		<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-		
-		<style>
-			.btn-group {
-				display: flex;
-				align-items: center;
-			}
-		
-			#filterOptions {
-				margin-left: 10px; /* Adjust the left margin as needed */
-				display: none;
-			}
-		</style>
-        <style>
-			.search-bar {
-				margin-top: 20px;
-				margin-bottom: 20px;
-			}
-			.search-form {
-				position: relative;
-			}
-		
-			#search-input {
-				width: 100%;
-				padding: 10px;
-				border: 1px solid #ccc;
-				border-radius: 5px;
-				font-size: 16px;
-			}
-		
-			#search-results {
-				position: absolute;
-				top: 100%;
-				left: 0;
-				z-index: 1000;
-				width: 100%;
-				background-color: #fff;
-				border: 1px solid #ccc;
-				border-top: none;
-				border-radius: 0 0 5px 5px;
-				box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-				display: none;
-			}
-		
-			#search-results a {
-				display: block;
-				padding: 10px;
-				color: #333;
-				text-decoration: none;
-				transition: background-color 0.3s ease;
-			}
-		
-			#search-results a:hover {
-				background-color: #f5f5f5;
-			}
-		</style>
+<style>
+    .btn-group {
+        display: flex;
+        align-items: center;
+    }
 
-        {% endblock %}
+    #filterOptions {
+        margin-left: 10px; /* Adjust the left margin as needed */
+        display: none;
+    }
+</style>
+<style>
+    .search-bar {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .search-form {
+        position: relative;
+    }
+
+    #search-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    #search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+        width: 100%;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-top: none;
+        border-radius: 0 0 5px 5px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        display: none;
+    }
+
+    #search-results a {
+        display: block;
+        padding: 10px;
+        color: #333;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    #search-results a:hover {
+        background-color: #f5f5f5;
+    }
+</style>
+
+{% endblock %}

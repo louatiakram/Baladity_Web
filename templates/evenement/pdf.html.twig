@@ -1,0 +1,14 @@
+<!-- evenement/pdf_content.html.twig -->
+
+<p>Merci d'avoir rejoint notre événement! Voici les détails:</p>
+
+<h3>{{ evenement.getNomE }}</h3>
+
+<ul>
+    <li><strong>Date début de l'événement:</strong> {{ evenement.getDateDHE()|date('d/m/Y') }}</li>
+    <li><strong>Date fin de l'événement:</strong> {{ evenement.getDateDHF()|date('d/m/Y') }}</li>
+    <li><strong>Capacité de l'événement:</strong> {{ evenement.getCapaciteE() }}</li>
+    <li><strong>Catégorie de l'événement:</strong> {{ evenement.getCategorieE() }}</li>
+</ul>
+
+<p>Veuillez présenter ce document au superviseur de l'événement à votre arrivée.</p>

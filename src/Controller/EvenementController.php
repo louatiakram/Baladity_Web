@@ -18,6 +18,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Security\Core\Security;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Symfony\Component\DomCrawler\Crawler;
 
 class EvenementController extends AbstractController
 {
@@ -397,7 +400,7 @@ public function joinEvenement($id, EvenementRepository $repository, EntityManage
     }
 
     // Find the user by ID
-    $enduser = $entityManager->getRepository(Enduser::class)->find($userId);
+    $enduser = $entityManager->getRepository(enduser::class)->find($userId);
 
     // Check if the user exists
     if (!$enduser) {
@@ -407,7 +410,9 @@ public function joinEvenement($id, EvenementRepository $repository, EntityManage
     // Add the user as an attendee to the event
     $evenement->addAttendee($enduser);
     $entityManager->flush();
-
+     // Decrement the capacity
+     $evenement->setCapaciteE($evenement->getCapaciteE() - 1);
+     $entityManager->flush();
     // Add success message
     $session->getFlashBag()->add('success', 'Vous avez rejoint l\'événement avec succès.');
 
@@ -428,8 +433,49 @@ public function joinEvenement($id, EvenementRepository $repository, EntityManage
         'evenementStatsMonth' => $evenementStatsMonth,
     ]);
 }
+#[Route('/evenement/generate-pdf/{id}', name: 'generate_pdf')]
+public function generatePdfForEvenement($id, EntityManagerInterface $entityManager): Response
+{
+    // Find the event by ID
+    $evenement = $entityManager->getRepository(Evenement::class)->find($id);
 
+    if (!$evenement) {
+        throw $this->createNotFoundException('Événement non trouvé avec l\'id : '.$id);
+    }
 
+    // Render the Twig template with event details
+    $html = $this->renderView('evenement/pdf.html.twig', [
+        'evenement' => $evenement,
+    ]);
 
+    // Configure dompdf
+    $options = new Options();
+    $options->set('isHtml5ParserEnabled', true);
 
+    // Instantiate dompdf
+    $dompdf = new Dompdf($options);
+
+    // Load HTML content
+    $dompdf->loadHtml($html);
+
+    // Set paper size and orientation (optional)
+    $dompdf->setPaper('A4', 'portrait');
+
+    // Render the HTML as PDF
+    $dompdf->render();
+
+    // Output the generated PDF
+    $pdfContent = $dompdf->output();
+
+    // Create a Response with the PDF content
+    $response = new Response($pdfContent);
+
+    // Set the content type header
+    $response->headers->set('Content-Type', 'application/pdf');
+
+    // Set the filename header
+    $response->headers->set('Content-Disposition', 'attachment; filename="details_evenement.pdf"');
+
+    return $response;
+}
 }
