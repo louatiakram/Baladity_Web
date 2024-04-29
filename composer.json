@@ -14,9 +14,9 @@
     "doctrine/orm": "^3.1",
     "dompdf/dompdf": "^2.0",
     "endroid/qr-code": "^5.0",
+    "fullcalendar/fullcalendar": "*",
     "google/apiclient": "^2.14",
     "knplabs/knp-paginator-bundle": "^5.9",
-    "knplabs/knp-snappy-bundle": "*",
     "mercuryseries/flashy-bundle": "^5.1",
     "php-flasher/flasher-symfony": "^1.15",
     "phpdocumentor/reflection-docblock": "^5.3",
@@ -60,7 +60,8 @@
       "composer/package-versions-deprecated": true,
       "php-http/discovery": true,
       "symfony/flex": true,
-      "symfony/runtime": true
+      "symfony/runtime": true,
+      "composer/installers": true
     },
     "optimize-autoloader": true,
     "preferred-install": {

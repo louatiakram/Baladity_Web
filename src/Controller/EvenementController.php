@@ -21,6 +21,8 @@ use Symfony\Component\Security\Core\Security;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\Mailer\MailerInterface;
+
 
 class EvenementController extends AbstractController
 {
@@ -115,8 +117,8 @@ public function listCitoyen(Request $request, EvenementRepository $repository, P
 }
 
     #[Route('/evenement/ajouter', name: 'ajouter_evenement')]
-    public function ajouter(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
-{
+    public function ajouter(Request $request, EntityManagerInterface $entityManager, SessionInterface $session, MailerInterface $mailer): Response
+    {
     // Créer une nouvelle instance d'événement
     $evenement = new Evenement();
     
