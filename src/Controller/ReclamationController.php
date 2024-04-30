@@ -8,6 +8,7 @@ use App\Entity\reclamation;
 use App\Form\ReclamationType;
 use App\Form\ReclamationAdminType;
 use App\Form\ReclamationModifierType;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReclamationRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
@@ -34,7 +35,7 @@ class ReclamationController extends AbstractController
     #[Route('/reclamation/typeReclamation', name: 'typeReclamation')]
     public function typeReclamation(): Response
     {
-        return $this->render('reclamation/typeReclamation.html.twig');
+        return $this->render('reclamation/typeReclamationF.html.twig');
     }
 
     #[Route('/reclamation/ajouterReclamation/{cas}', name: 'ajouterReclamation')]
@@ -238,6 +239,17 @@ public function afficherReclamationF(Request $request, ReclamationRepository $re
         'reclamations' => $reclamations,
     ]);
 }
+#[Route('/reclamation/afficherReclamationFA', name: 'afficherReclamationFA')]
+public function afficherReclamationFA(Request $request, ReclamationRepository $repository, PaginatorInterface $paginator): Response
+{
+    // Récupérer toutes les réclamations
+    $reclamations = $repository->findAll();
+
+    return $this->render('reclamation/afficherReclamationA.html.twig', [
+        'reclamations' => $reclamations,
+    ]);
+}
+
 
 #[Route('/reclamation/filtrerParDate', name: 'filtrerParDate')]
 public function filtrerParDate(Request $request, ReclamationRepository $repository, SessionInterface $session): Response
@@ -258,9 +270,6 @@ public function filtrerParDate(Request $request, ReclamationRepository $reposito
         'sorting_state' => $sortingState,
     ]);
 }
-
-
-   
 
  #[Route('/reclamation/supprimerReclamation/{i}', name: 'supprimerReclamation')]
     public function deleteA($i, ReclamationRepository $rep, ManagerRegistry $doctrine): Response
@@ -418,6 +427,78 @@ public function filtrerParDate(Request $request, ReclamationRepository $reposito
         ]);
 
     }
+
+    #[Route('/reclamation/detailReclamationFA/{id}', name: 'detailReclamationFA')]
+    public function detailReclamationFA($id, ReclamationRepository $rep): Response
+    {
+        $reclamation=$rep->find($id);
+        return $this->render('reclamation/detailReclamationFA.html.twig', [
+            'reclamation' => $reclamation,
+        ]);
+
+    }
+    
+    #[Route('/reclamation/modifierStatutD/{id}', name: 'modifierStatutD')]
+    public function modifierStatutD($id, EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer la réclamation à modifier
+        $reclamation = $this->getDoctrine()->getRepository(Reclamation::class)->find($id);
+
+        // Vérifier si la réclamation existe
+        if (!$reclamation) {
+            throw $this->createNotFoundException('Reclamation not found');
+        }
+
+        // Modifier le statut de la réclamation en "Non traité"
+        $reclamation->setStatusReclamation('traité');
+
+        // Enregistrer la réclamation modifiée dans la base de données
+        $entityManager->flush();
+
+        // Rediriger vers la même route de détail de réclamation avec le même ID
+        return $this->redirectToRoute('detailReclamationFA', ['id' => $id]);
+    }
+    #[Route('/reclamation/modifierStatutE/{id}', name: 'modifierStatutE')]
+    public function modifierStatutE($id, EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer la réclamation à modifier
+        $reclamation = $this->getDoctrine()->getRepository(Reclamation::class)->find($id);
+
+        // Vérifier si la réclamation existe
+        if (!$reclamation) {
+            throw $this->createNotFoundException('Reclamation not found');
+        }
+
+        // Modifier le statut de la réclamation en "Non traité"
+        $reclamation->setStatusReclamation('en cours');
+
+        // Enregistrer la réclamation modifiée dans la base de données
+        $entityManager->flush();
+
+        // Rediriger vers la même route de détail de réclamation avec le même ID
+        return $this->redirectToRoute('detailReclamationFA', ['id' => $id]);
+    }
+    #[Route('/reclamation/modifierStatut/{id}', name: 'modifier_statut_reclamation')]
+    public function modifierStatutReclamation($id, EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer la réclamation à modifier
+        $reclamation = $this->getDoctrine()->getRepository(Reclamation::class)->find($id);
+
+        // Vérifier si la réclamation existe
+        if (!$reclamation) {
+            throw $this->createNotFoundException('Reclamation not found');
+        }
+
+        // Modifier le statut de la réclamation en "Non traité"
+        $reclamation->setStatusReclamation('non traité');
+
+        // Enregistrer la réclamation modifiée dans la base de données
+        $entityManager->flush();
+
+        // Rediriger vers la même route de détail de réclamation avec le même ID
+        return $this->redirectToRoute('detailReclamationFA', ['id' => $id]);
+    }
+
 
     #[Route('/reclamation/statsReclamation', name: 'statsReclamation')]
     public function statsReclamation(ReclamationRepository $reclamationRepository): Response

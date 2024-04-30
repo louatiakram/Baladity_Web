@@ -53,11 +53,11 @@ public function afficherMessagerieF(MessagerieRepository $messagerieRepository, 
     $entityManager = $this->getDoctrine()->getManager();
 
     // Récupérer l'utilisateur actuellement connecté (ID statique)
-    $currentUserId = 48; // Exemple d'ID utilisateur
+    $currentUserId = 49; // Exemple d'ID utilisateur
     $currentUser = $entityManager->getRepository(enduser::class)->find($currentUserId);
 
     // ID de l'autre utilisateur (statique)
-    $otherUserId = 49; // Exemple d'ID utilisateur
+    $otherUserId = 48; // Exemple d'ID utilisateur
     $currentUser2 = $entityManager->getRepository(enduser::class)->find($otherUserId);
 
 
