@@ -557,28 +557,39 @@
        var chatContainer = document.getElementById('chat-container');
        chatContainer.style.display = 'block';
    }
-   
-   function sendMessage() {
-       var userInput = document.getElementById('user-input').value;
-       var chatArea = document.getElementById('chat-area');
-   
-       var formData = new FormData();
-       formData.append('user_input', userInput);
-   
-       fetch('{{ path('chatbot_process') }}', {
-           method: 'POST',
-           body: formData
-       })
-       .then(response => response.text())
-       .then(data => {
-           chatArea.innerHTML += 'You: ' + userInput + '<br>';
-           chatArea.innerHTML += 'ChatBot: ' + data + '<br>';
-       });
-   
-       // Clear user input field
-       document.getElementById('user-input').value = '';
-       document.getElementById('user-input').focus();
+
+
+   // Function to speak text in French
+   function speakFrench(text) {
+       var utterance = new SpeechSynthesisUtterance(text);
+       utterance.lang = 'fr-FR'; // Set language to French
+       speechSynthesis.speak(utterance);
    }
+
+    function sendMessage() {
+        var userInput = document.getElementById('user-input').value;
+        var chatArea = document.getElementById('chat-area');
+
+        var formData = new FormData();
+        formData.append('user_input', userInput);
+
+        fetch('{{ path('chatbot_process') }}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            chatArea.innerHTML += 'You: ' + userInput + '<br>';
+            chatArea.innerHTML += 'ChatBot: ' + data + '<br>';
+
+            // Speak the chatbot's response in French
+            speakFrench(data);
+        });
+
+        // Clear user input field
+        document.getElementById('user-input').value = '';
+        document.getElementById('user-input').focus();
+}
    
    function clearConversation() {
        var chatArea = document.getElementById('chat-area');
