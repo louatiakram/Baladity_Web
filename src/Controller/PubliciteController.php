@@ -25,6 +25,8 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use TCPDF;
+use App\Repository\ActualiteRepository;
+
 class PubliciteController extends AbstractController
 {
     #[Route('/publicite', name: 'app_publicite')]
@@ -365,5 +367,26 @@ public function sortedPublicites(Request $request, PubliciteRepository $reposito
     ]);
 }
 
+#[Route('/publicite/stats', name: 'stats')]
+public function statsPublicite(
+    PubliciteRepository $publiciteRepository,
+    ActualiteRepository $actualiteRepository // Add the repository to fetch date-related data
+): Response {
+    // Fetch existing statistics for offers
+    $statsPublicite = $publiciteRepository->countByOffer();
+
+    // Fetch additional statistics by date
+    $statsByDate = $actualiteRepository->countByDate();
+
+    // Fetch additional statistics by month (if needed)
+    $statsByMonth = $actualiteRepository->countByMonth();
+
+    // Render the template with all the statistics
+    return $this->render('publicite/stats.html.twig', [
+        'statsPublicite' => $statsPublicite,
+        'statsA' => $statsByDate, // This is the variable expected by your Twig template
+        'statsByMonth' => $statsByMonth, // If you need month-based statistics
+    ]);
+}
 
 }

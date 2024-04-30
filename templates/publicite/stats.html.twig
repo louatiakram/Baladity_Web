@@ -1,0 +1,145 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Statistiques des publicités{% endblock %}
+
+{% block body %}
+<div class="row">
+    <!-- Pie Chart Section -->
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Pie Chart - Statistiques des publicités</h5>
+                <div id="pieChart" style="min-height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Line Chart Section -->
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Line Chart - Statistiques des actualités par date</h5>
+                <canvas id="lineChart" style="max-height: 400px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bar Chart Section -->
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Bar Chart - Statistiques des actualités par mois</h5> <!-- Mettre à jour le titre -->
+                <canvas id="barChart" style="max-height: 400px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript Section -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // Pie Chart
+    const pieStats = {{ statsPublicite | json_encode | raw }};
+    const pieChartElement = document.getElementById("pieChart");
+
+    if (pieStats && pieChartElement) {
+        const pieChart = echarts.init(pieChartElement);
+        pieChart.setOption({
+            title: {
+                text: 'Statistiques des publicités',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            series: [{
+                name: 'Statistiques des offres',
+                type: 'pie',
+                radius: '50%',
+                data: pieStats.map(entry => ({
+                    value: entry.count,
+                    name: entry.offre
+                })),
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        });
+    } else {
+        console.error("Pie chart initialization error.");
+    }
+
+    // Line Chart
+    const statsDate = {{ statsA | json_encode | raw }};
+    const lineChartElement = document.getElementById("lineChart");
+    
+    if (statsDate && lineChartElement) {
+        const dates = statsDate.map(entry => entry.date);
+        const counts = statsDate.map(entry => entry.count);
+        
+        new Chart(lineChartElement, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Nombre des publicités par date',
+                    data: counts,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    } else {
+        console.error("Line chart initialization error.");
+    }
+
+    // Bar Chart - Statistiques par mois
+    const statsByMonth = {{ statsByMonth | json_encode | raw }};
+    const barChartElement = document.getElementById("barChart");
+
+    if (statsByMonth && barChartElement) {
+        const months = statsByMonth.map(entry => entry.month);
+        const counts = statsByMonth.map(entry => entry.count);
+        
+        new Chart(barChartElement, {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Nombre des publicités par mois',
+                    data: counts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgb(75, 192, 192)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    } else {
+        console.error("Bar chart initialization error.");
+    }
+});
+</script>
+
+{% endblock %}

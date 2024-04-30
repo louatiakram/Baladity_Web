@@ -75,6 +75,38 @@ class PubliciteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function countByOffer(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p.offre_pub as offre, COUNT(p.id_pub) as count')
+            ->groupBy('p.offre_pub')
+            ->getQuery()
+            ->getResult();
+    }
+    public function countByDate(): array
+    {
+    $connection = $this->getEntityManager()->getConnection();
+    $sql = '
+        SELECT DATE(date_a) as date, COUNT(id_a) as count
+        FROM actualite
+        GROUP BY DATE(date_a)
+    ';
+    $statement = $connection->executeQuery($sql);
+
+    return $statement->fetchAllAssociative();
+    }
+public function countByMonth(): array
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $sql = '
+            SELECT MONTH(date_a) as month, COUNT(id_a) as count
+            FROM actualite
+            GROUP BY MONTH(date_a)
+        ';
+        $statement = $connection->executeQuery($sql);
+
+        return $statement->fetchAllAssociative();
+    }
     
     // /**
     //  * @return Publicite[] Returns an array of Publicite objects

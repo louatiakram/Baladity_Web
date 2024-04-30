@@ -360,5 +360,22 @@ public function search(Request $request, ActualiteRepository $repository): Respo
     ]);
 }
 
+#[Route('/publicite/stats', name: 'stats')]
+public function statsA(ActualiteRepository $actualiteRepository): Response
+{
+    try {
+        // Récupérer les statistiques par date
+        $statsByDate = $actualiteRepository->countByDate();
+        $statsByMonth = $actualiteRepository->countByMonth();
+
+        return $this->render('publicite/stats.html.twig', [
+            'statsByDate' => $statsByDate,
+            'statsByMonth' => $statsByMonth,
+        ]);
+    } catch (\Exception $e) {
+        // En cas d'erreur, retourner une réponse JSON avec le message d'erreur
+        return new JsonResponse(['error' => $e->getMessage()], 400);
+    }
+}
 
  }
