@@ -35,7 +35,7 @@ class VoteController extends AbstractController
         $queryBuilder = $repository->createQueryBuilder('v');
         if ($query) {
             // If a search query is provided, filter votes based on the description
-            $queryBuilder->where('v.description LIKE :query')
+            $queryBuilder->where('v.desc_E LIKE :query')
                          ->setParameter('query', '%'.$query.'%');
         }
         // Fetch votes using query builder

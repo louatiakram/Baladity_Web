@@ -39,6 +39,10 @@
                 <button id="filterBtn" type="button" class="btn btn-outline-primary filter-btn">
                     <i class="bi bi-funnel"></i> Filter
                 </button>
+                <!-- Button to access the stats -->
+                <button onclick="location.href='{{ path('app_vote') }}'" class="btn btn-outline-primary">
+                    <i class="bi bi-graph-up"></i> Statistiques
+                </button>
                 <div id="filterOptions">
                     <a href="{{ path('vote_list') }}" class="btn btn-danger">Clear</a>
                 </div>
