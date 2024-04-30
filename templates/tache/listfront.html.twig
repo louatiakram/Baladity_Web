@@ -55,8 +55,8 @@
             <div id="chat-header" onclick="toggleChat()">Baladity</div>
             <div id="chat-area"></div>
             <input type="text" id="user-input">
-            <button class="button" onclick="sendMessage()">Send</button>
-            <button class="button" onclick="clearConversation()">Clear Conversation</button>
+            <button class="button" onclick="sendMessage()"><i class="bi bi-arrow-up-circle-fill"></i></button>
+            <button class="button" onclick="clearConversation()"><i class="bi bi-trash-fill"></i></button>
             <button class="button" onclick="hideChat()">Hide Chat</button>
         </div>
     </div>
@@ -143,6 +143,10 @@
     </div>
 
 <style>
+    .button.button {
+        background-color: #012545;
+        color: solid white;
+    }
     /* Center the tutorial container */
     #tutorial-container {
         display: flex;
@@ -251,7 +255,7 @@
    }
    /* Chat Header Styling */
    #chat-header {
-   background-color: #4285f4;
+   background-color: #012545;
    color: #fff;
    padding: 10px;
    cursor: pointer;
@@ -566,35 +570,42 @@
        speechSynthesis.speak(utterance);
    }
 
-    function sendMessage() {
-        var userInput = document.getElementById('user-input').value;
-        var chatArea = document.getElementById('chat-area');
+   function sendMessage() {
+    var userInput = document.getElementById('user-input').value;
+    var chatArea = document.getElementById('chat-area');
 
-        var formData = new FormData();
-        formData.append('user_input', userInput);
+    var formData = new FormData();
+    formData.append('user_input', userInput);
 
-        fetch('{{ path('chatbot_process') }}', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-            chatArea.innerHTML += 'You: ' + userInput + '<br>';
-            chatArea.innerHTML += 'ChatBot: ' + data + '<br>';
+    fetch('{{ path('chatbot_process') }}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        chatArea.innerHTML += 'You : ' + userInput + '<br>';
+        chatArea.innerHTML += '<img src="{{ asset('back-office/img/chat-botT.gif') }}" alt="ChatBot" class="rounded-circle" style="width: 50px; height: auto;"> :   ' + data + '<br>';
 
-            // Speak the chatbot's response in French
-            speakFrench(data);
-        });
+        // Speak the chatbot's response in French
+        speakFrench(data);
 
-        // Clear user input field
-        document.getElementById('user-input').value = '';
-        document.getElementById('user-input').focus();
+        // Scroll to the bottom of the chat area
+        chatArea.scrollTop = chatArea.scrollHeight;
+    });
+
+    // Clear user input field
+    document.getElementById('user-input').value = '';
+    document.getElementById('user-input').focus();
 }
-   
-   function clearConversation() {
-       var chatArea = document.getElementById('chat-area');
-       chatArea.innerHTML = '';
-   }
+
+// Function to clear conversation
+function clearConversation() {
+    var chatArea = document.getElementById('chat-area');
+    chatArea.innerHTML = '';
+
+    // After clearing, scroll to the bottom
+    chatArea.scrollTop = chatArea.scrollHeight;
+}
    
    function hideChat() {
        var chatContainer = document.getElementById('chat-container');
