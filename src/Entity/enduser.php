@@ -43,6 +43,9 @@ class enduser implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'isBanned', type: 'boolean', nullable: true)]
     private $isBanned;
 
+    #[ORM\Column(type: 'boolean')]
+    private $isVerified = false;
+
     public function getIdUser(): ? int
     {
         return $this->id_user;
@@ -214,5 +217,17 @@ class enduser implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
     }
 }

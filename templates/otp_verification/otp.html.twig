@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Verify OTP{% endblock %}
+
+{% block body %}
+    <h1>Verify OTP</h1>
+    {% if error %}
+        <div>{{ error }}</div>
+    {% endif %}
+    {{ form_start(form, {'attr': {'action': path('verify_otp', {'otp1': otp1}), 'method': 'POST'}}) }}
+    {{ form_row(form.otp) }}
+        <button type="submit">Submit</button>
+    {{ form_end(form) }}
+{% endblock %}

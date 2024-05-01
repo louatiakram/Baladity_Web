@@ -16,7 +16,7 @@ class RegisterController extends AbstractController
 {
 
     
-    #[Route('/register', name: 'register_user')]
+    #[Route('/Register', name: 'register_user')]
     public function registerUser(ManagerRegistry $doctrine, Request $request): Response
     {
         $user = new enduser();
