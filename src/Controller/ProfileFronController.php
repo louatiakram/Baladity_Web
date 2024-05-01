@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\enduser;
 use App\Entity\muni;
+use App\Form\EditProfileType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,8 +44,11 @@ class ProfileFronController extends AbstractController
     public function profileEdit(Request $request, ManagerRegistry $doctrine): Response
     {
 
-        $userId = $request->getSession()->get('user_id');
+        $entityManager = $doctrine->getManager();
 
+        // Retrieving user ID from the session
+        $userId = $request->getSession()->get('user_id');
+        //$userId = 81;
 
         //get user
         $userRepository = $doctrine->getRepository(enduser::class);
@@ -56,10 +61,45 @@ class ProfileFronController extends AbstractController
         $muniName = $muni->getNomMuni();
 
 
+        //edit
+        if (!$user) {
+            throw $this->createNotFoundException('User not found');
+        }
+
+        // Create the form for modifying the user
+        $form = $this->createForm(EditProfileType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Set the image_a field
+            $image = $form->get('image_user')->getData();
+            if ($image) {
+                // Handle image upload and persist its filename to the database
+                $fileName = uniqid().'.'.$image->guessExtension();
+                try {
+                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    // Set the image filename to the user entity
+                    $user->setImageUser($fileName);
+                } catch (FileException $e) {
+                    // Handle the exception if file upload fails
+                    // For example, log the error or display a flash message
+                }
+            }
+    
+            // Persist the modified actualite object to the database
+            $entityManager->flush();
+    
+            // Redirect to a success page or display a success message
+            // For example:
+            return $this->redirectToRoute('app_profile_edit');
+        }
+
 
         return $this->render('profile_fron/profile_edit.html.twig', [
             'controller_name' => 'ProfileFronController',
             'user' => $user,
+            'muni' => $muni,
+            'form' => $form->createView(),
         ]);
     }
 

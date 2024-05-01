@@ -86,7 +86,7 @@
             {% if user.getImageUser() %}
                 {% set fileExtension = user.getImageUser()|split('.')|last %}
                 {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
-                    <img src="{{ asset('uploads/' ~ user.getImageUser()) }}" class="img-thumbnail rounded-circle" alt="Piece jointe" style="width: 100%; max-width: 300px;"> <!-- Added rounded-circle class -->
+                    <img src="{{ asset('uploads/' ~ user.getImageUser()) }}" class="img-thumbnail " alt="Piece jointe" style="width: 100%; max-width: 300px;"> <!-- Added rounded-circle class -->
                 {% endif %}
             {% endif %}
         </div>

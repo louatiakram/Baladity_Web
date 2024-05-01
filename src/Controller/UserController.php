@@ -88,6 +88,7 @@ class UserController extends AbstractController
         ]);
     }
 
+    #edit and display user
     #[Route('/profile', name: 'profile_user')]
     public function profile(Request $request, ManagerRegistry $doctrine): Response
     {
@@ -114,7 +115,7 @@ class UserController extends AbstractController
             throw $this->createNotFoundException('User not found');
         }
 
-        // Create the form for modifying the actualite
+        // Create the form for modifying the user
         $form = $this->createForm(EditProfileType::class, $user);
         $form->handleRequest($request);
 
