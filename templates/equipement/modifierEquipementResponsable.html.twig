@@ -1,0 +1,90 @@
+{% extends 'base-front.html.twig' %}
+
+{% block title %}Modifier Equipement{% endblock %}
+{% block barreTitre %}
+					<li><a href="{{ path('app_main_front') }}">Home</a></li>
+					<li><a href="about.html">Actualite</a></li>
+          <li class="dropdown"><a href="#"><span>Equipements</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class="active"></i></a>
+						<ul>
+							<li><a href="{{ path('equipement_show_responsable') }}">les equipements</a></li>
+						</ul>
+					</li>
+					<li><a href="pricing.html">Evenement</a></li>
+					<li><a href="contact.html">Contact</a></li>
+                    <li><a href="contact.html">About Us</a></li>
+{% endblock %}
+{% block body %}
+<div class="breadcrumbs">
+  <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+    <div class="container position-relative">
+      <div class="row d-flex justify-content-center">
+        <div class="col-lg-6 text-center">
+          <h2>Equipement</h2>
+          <p>
+L'équipement municipal désigne l'ensemble des infrastructures, équipements et services gérés par une municipalité dans le but d'assurer le bon fonctionnement et le bien-être de la communauté locale. Cela peut inclure les routes, les égouts, l'éclairage public, les parcs, les bâtiments municipaux, les services d'eau et d'assainissement, les services de collecte des déchets, entre autres. En signalant les problèmes liés à ces équipements, les citoyens contribuent à améliorer la qualité de vie dans leur quartier et à garantir que les services municipaux répondent aux besoins de la population.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+{% endblock %}
+{% block rest %}
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Modifier Equipement</h5>
+                        <form method="POST" action="{{ path('modifierEquipementResponsable', {'id': equipement.idEquipement}) }}" enctype="multipart/form-data">
+                            {{ form_start(form, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate'}}) }}
+
+                            <div class="mb-3">
+                                <label for="inputReference" class="form-label">Référence</label>
+                                {{ form_widget(form.reference_eq, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputNom" class="form-label">Nom</label>
+                                {{ form_widget(form.nom_eq, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputCategorie" class="form-label">Catégorie</label>
+                                {{ form_widget(form.categorie_eq, {'attr': {'class': 'form-select'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputQuantite" class="form-label">Quantité</label>
+                                {{ form_widget(form.quantite_eq, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputDateAjout" class="form-label">Date d'ajout</label>
+                                {{ form_widget(form.date_ajouteq, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputDescription" class="form-label">Description</label>
+                                {{ form_widget(form.description_eq, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="inputImage" class="form-label">Image</label>
+                                {{ form_widget(form.image_eq, {'attr': {'class': 'form-control', 'onchange': 'previewImage(this)'}}) }}
+                                <img id="imagePreview" src="{{ asset('uploads/' ~ equipement.imageEq) }}" alt="Aperçu de l'image" style="max-width: 100%; max-height: 200px;">
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Modifier</button>
+                                <a href="{{ path('equipement_show_responsable') }}" class="btn btn-secondary">Annuler</a> <!-- Bouton d'annulation -->
+                            </div>
+                            {{ form_end(form) }}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends 'base-front.html.twig' %}
+
+{% block title %}Baladity Home{% endblock %}
+
+{% block barreTitre %}
+					<li><a href="{{ path('app_main_front') }}">Home</a></li>
+					<li><a href="about.html">Actualite</a></li>
+          <li class="dropdown"><a href="#"><span>Equipements</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class="active"></i></a>
+						<ul>
+							<li><a href="{{ path('equipement_show_responsable') }}">les equipements</a></li>
+						</ul>
+					</li>
+					<li><a href="pricing.html">Evenement</a></li>
+					<li><a href="contact.html">Contact</a></li>
+                    <li><a href="contact.html">About Us</a></li>
+{% endblock %}
+{% block body %}
+<div class="breadcrumbs">
+  <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+    <div class="container position-relative">
+      <div class="row d-flex justify-content-center">
+        <div class="col-lg-6 text-center">
+          <h2>Equipement</h2>
+          <p>
+L'équipement municipal désigne l'ensemble des infrastructures, équipements et services gérés par une municipalité dans le but d'assurer le bon fonctionnement et le bien-être de la communauté locale. Cela peut inclure les routes, les égouts, l'éclairage public, les parcs, les bâtiments municipaux, les services d'eau et d'assainissement, les services de collecte des déchets, entre autres. En signalant les problèmes liés à ces équipements, les citoyens contribuent à améliorer la qualité de vie dans leur quartier et à garantir que les services municipaux répondent aux besoins de la population.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+{% endblock %}
+
+{% block rest %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <br>
+    <h1 class="card-title" style="text-align: center; font-size: 2em;">La liste des équipements</h1>
+    <br>
+     <!-- Button to navigate to the "ajouter" form -->
+        <div class="text-center">
+            <a href="{{ path('ajouterEquipementResponsable') }}" class="btn btn-primary">Ajouter équipement</a>
+        </div>
+
+    <div class="col-10 mx-auto"> <!-- Adjusted column width -->
+        <div class="card">
+            <div class="card-body">
+                {% block equipement_list %}
+                    {% for equipement in equipements %}
+                        {% if loop.index0 % 2 == 0 %} {# Start a new row for every even-indexed equipment #}
+                            <div class="row">
+                        {% endif %}
+                        <div class="col-md-6"> <!-- Adjusted column width to 6 for each equipment in a row -->
+                            <div class="d-flex flex-column">
+                                {% block equipement_image %}
+                                    {% if equipement.getImageEq() %}
+                                        {% set fileExtension = equipement.getImageEq()|split('.')|last %}
+                                        {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
+                                            <img src="{{ asset('uploads/' ~ equipement.getImageEq()) }}" class="img-thumbnail" alt="Image" style="width: 100%; max-width: 400px;"> <!-- Adjusted max-width -->
+                                        {% elseif fileExtension == 'pdf' %}
+                                            <a href="{{ asset('uploads/' ~ equipement.getImageEq()) }}">View PDF</a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endblock %}
+                            </div>
+                            <h4 class="card-title" style="font-size: 1.5rem; margin-bottom: 10px;">{{ equipement.getNomEq() }}</h4>
+                            <p class="card-text" style="margin-top: 5px;">
+                                Référence: {{ equipement.getReferenceEq() }}<br>
+                                Catégorie: {{ equipement.getCategorieEq() }}<br>
+                                Quantité: {{ equipement.getQuantiteEq() }}<br>
+                                <!-- Ajoutez d'autres attributs disponibles ici -->
+                            </p>
+
+                            {% block equipement_actions %}
+                                         <!-- Details button -->
+                                        <a href="{{ path('equipement_detail_responsable', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-info">
+                                            <i class="bi bi-info-circle"></i> Détails
+                                        </a>
+                                        <!-- Modify button -->
+                                        <a href="{{ path('modifierEquipementResponsable', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-pencil"></i> Modifier
+                                        </a>
+                                          <!-- Avis button -->
+                                        <a href="{{ path('avis_show_responsable', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-info">
+                                            <i class="bi bi-chat-square-text"></i> Avis
+                                        </a>
+                                        <!-- Delete button -->
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('{{ equipement.getIdEquipement() }}')"><i class="bi bi-trash"></i>Supprimer</button>
+                            {% endblock %}
+                        </div>
+                        {% if loop.index % 2 == 0 or loop.last %} {# Close the row for every pair of equipment or for the last equipment #}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endblock %}
+                <!-- Pagination -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item {% if currentPage == 1 %}disabled{% endif %}">
+                            <a class="page-link" href="{{ path('equipement_show', {'page': 1}) }}" aria-label="Previous">
+                                <span aria-hidden="true">«</span>
+                            </a>
+                        </li>
+                        {% for page in 1..totalPages %}
+                            <li class="page-item {% if page == currentPage %}active{% endif %}">
+                                <a class="page-link" href="{{ path('equipement_show', {'page': page}) }}">{{ page }}</a>
+                            </li>
+                        {% endfor %}
+                        <li class="page-item {% if currentPage == totalPages %}disabled{% endif %}">
+                            <a class="page-link" href="{{ path('equipement_show', {'page': totalPages}) }}" aria-label="Next">
+                                <span aria-hidden="true">»</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- End Pagination -->
+            </div>
+        </div>
+    </div>
+
+    {% block ListeTalacheNav %}
+        <!-- Additional navigation elements if needed -->
+    {% endblock %} 
+<script>
+  function confirmDelete(equipementId) {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cet équipement?")) {
+            // Si l'utilisateur confirme la suppression, redirigez vers l'action de suppression appropriée
+            window.location.href = "{{ path('equipement_delete_responsable', {'id': 'EQUIPEMENT_ID'}) }}".replace('EQUIPEMENT_ID', equipementId);
+        }
+    }
+
+</script>
+{% endblock %}
+

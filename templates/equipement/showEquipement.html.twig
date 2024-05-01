@@ -3,69 +3,47 @@
 {% block title %}Liste des équipements{% endblock %}
 
 {% block body %}
-        <br>
-        <h1 class="card-title" style="text-align: center; font-size: 2em;">La liste des équipements</h1>
-        <br>
+    <div class="container">
+        <h1 class="text-center">Liste des équipements</h1>
 
         <!-- Button to navigate to the "ajouter" form -->
-        <div class="text-center">
+        <div class="text-center mb-3">
             <a href="{{ path('ajouterEquipement') }}" class="btn btn-primary">Ajouter équipement</a>
         </div>
 
-        <br>
-
-        <div class="col-10 mx-auto"> <!-- Adjusted column width -->
-            <div class="card">
-                <div class="card-body">
-                    {% block equipement_list %}
-                        {% for equipement in equipements %}
-                            <div class="row">
-                                <div class="col-md-10"> <!-- Adjusted column width -->
-                                    <div class="d-flex flex-column">
-                                        {% block equipement_image %}
-                                            {% if equipement.getImageEq() %}
-                                                {% set fileExtension = equipement.getImageEq()|split('.')|last %}
-                                                {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
-                                                    <img src="{{ asset('uploads/' ~ equipement.getImageEq()) }}" class="img-thumbnail" alt="Image" style="width: 100%; max-width: 400px;"> <!-- Adjusted max-width -->
-                                                {% elseif fileExtension == 'pdf' %}
-                                                    <a href="{{ asset('uploads/' ~ equipement.getImageEq()) }}">View PDF</a>
-                                                {% endif %}
-                                            {% endif %}
-                                        {% endblock %}
-                                    </div>
-                                </div>
-                                <div class="col-md-15"> <!-- Adjusted column width -->
-                                    <h4 class="card-title" style="font-size: 1.5rem; margin-bottom: 10px;">{{ equipement.getNomEq() }}</h4>
-                                    {% block equipement_details %}
-                                    <p class="card-text" style="margin-top: 5px;">
-                                        Référence: {{ equipement.getReferenceEq() }}<br>
-                                        Catégorie: {{ equipement.getCategorieEq() }}<br>
-                                        Quantité: {{ equipement.getQuantiteEq() }}<br>
-                                        <!-- Ajoutez d'autres attributs disponibles ici -->
-                                    </p>
-                                    {% endblock %}
-
-                                    {% block equipement_actions %}
-                                        <!-- Details button -->
-                                        <a href="{{ path('equipement_detail', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-info">
-                                            <i class="bi bi-info-circle"></i> Détails
-                                        </a>
-                                        <!-- Modify button -->
-                                        <a href="{{ path('modifierEquipement', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-pencil"></i> Modifier
-                                        </a>
-                                          <!-- Avis button -->
-                                        <a href="{{ path('avis_show', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-info">
-                                            <i class="bi bi-chat-square-text"></i> Avis
-                                        </a>
-                                        <!-- Delete button -->
-                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('{{ equipement.getIdEquipement() }}')"><i class="bi bi-trash"></i>Supprimer</button>
-                                    {% endblock %}
-                                </div>
-                            </div>
-                            <hr> <!-- Horizontal line between equipment items -->
-                        {% endfor %}
-                    {% endblock %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Référence</th>
+                    <th>Nom</th>
+                    <th>Quantité</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for equipement in equipements %}
+                    <tr>
+                        <td>{{ equipement.getReferenceEq() }}</td>
+                        <td>{{ equipement.getNomEq() }}</td>
+                        <td>{{ equipement.getQuantiteEq() }}</td>
+                        <td>
+                            <a href="{{ path('equipement_detail', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-info">
+                                <i class="bi bi-info-circle"></i> Détails
+                            </a>
+                            <a href="{{ path('modifierEquipement', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i> Modifier
+                            </a>
+                            <a href="{{ path('avis_show', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-info">
+                                <i class="bi bi-chat-square-text"></i> Avis
+                            </a>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete('{{ equipement.getIdEquipement() }}')">
+                                <i class="bi bi-trash"></i> Supprimer
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
                            <!-- Pagination -->
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">

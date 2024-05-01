@@ -80,6 +80,58 @@ class EquipementController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    #[Route('/equipement/ajouterEquipementResponsable', name: 'ajouterEquipementResponsable')]     
+    public function ajouterEquipementResponsable(ManagerRegistry $doctrine, Request $req): Response
+    {
+        $equipement = new Equipement();
+        $userId = 48; 
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+    
+        if (!$user) {
+            throw $this->createNotFoundException('User not found');
+        }
+    
+        $equipement->setIdUser($user);
+        
+        // Set the current date to the date_a property
+        $equipement->setDateAjouteq(new DateTime());
+    
+        $form = $this->createForm(EquipementType::class, $equipement);
+        $form->handleRequest($req);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Set the image_a field
+            $image = $form->get('image_eq')->getData();
+            if ($image) {
+                // Handle image upload and persist its filename to the database
+                $fileName = uniqid().'.'.$image->guessExtension();
+                try {
+                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    $equipement->setImageEq($fileName);
+                } catch (FileException $e) {
+                    // Handle the exception if file upload fails
+                    // For example, log the error or display a flash message
+                }
+            }
+    
+            // Get the entity manager
+            $em = $doctrine->getManager();
+    
+            // Persist the equipement object to the database
+            $em->persist($equipement);
+            $em->flush();
+    
+            // Redirect to a success page or display a success message
+            // For example:
+            return $this->redirectToRoute('equipement_show_responsable');
+
+        }
+    
+        return $this->render('equipement/ajouterEquipementResponsable.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
     #[Route('/equipement/deleteEquipement/{id}', name: 'equipement_delete')]
 public function deleteEquipement($id, EquipementRepository $rep, ManagerRegistry $doctrine): Response
     {
@@ -97,6 +149,23 @@ public function deleteEquipement($id, EquipementRepository $rep, ManagerRegistry
         // For example:
         return $this->redirectToRoute('equipement_show');
     }
+    #[Route('/equipement/deleteEquipementResponsable/{id}', name: 'equipement_delete_responsable')]
+    public function deleteEquipementResponsable($id, EquipementRepository $rep, ManagerRegistry $doctrine): Response
+        {
+            $equipement = $rep->find($id);
+        
+            if (!$equipement) {
+                throw $this->createNotFoundException('Equipement not found');
+            }
+        
+            $em = $doctrine->getManager();
+            $em->remove($equipement);
+            $em->flush();
+        
+            // Redirect to a success page or return a response as needed
+            // For example:
+            return $this->redirectToRoute('equipement_show_responsable');
+        }
     #[Route('/equipement/modifierEquipement/{id}', name: 'modifierEquipement')]
 public function modifierEquipement($id, ManagerRegistry $doctrine, Request $request): Response
 {
@@ -137,6 +206,51 @@ public function modifierEquipement($id, ManagerRegistry $doctrine, Request $requ
     }
 
     return $this->render('equipement/modifierEquipement.html.twig', [
+        'form' => $form->createView(),
+        'equipement' => $equipement,
+    ]);
+}
+
+#[Route('/equipement/modifierEquipementResponsable/{id}', name: 'modifierEquipementResponsable')]
+public function modifierEquipementResponsable($id, ManagerRegistry $doctrine, Request $request): Response
+{
+    $entityManager = $doctrine->getManager();
+    $equipement = $entityManager->getRepository(Equipement::class)->find($id);
+
+    if (!$equipement) {
+        throw $this->createNotFoundException('Equipement not found');
+    }
+
+    // Create the form for modifying the equipement
+    $form = $this->createForm(EquipementType::class, $equipement);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Handle form submission
+        $equipement->setDateAjouteq(new DateTime());
+        // Set the image_eq field
+        $image = $form->get('image_eq')->getData();
+        if ($image) {
+            // Handle image upload and persist its filename to the database
+            $fileName = uniqid().'.'.$image->guessExtension();
+            try {
+                $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                $equipement->setImageEq($fileName);
+            } catch (FileException $e) {
+                // Handle the exception if file upload fails
+                // For example, log the error or display a flash message
+            }
+        }
+
+        // Persist the modified equipement object to the database
+        $entityManager->flush();
+
+        // Redirect to a success page or display a success message
+        // For example:
+        return $this->redirectToRoute('equipement_show_responsable');
+    }
+
+    return $this->render('equipement/modifierEquipementResponsable.html.twig', [
         'form' => $form->createView(),
         'equipement' => $equipement,
     ]);
@@ -197,6 +311,21 @@ public function detailEquipementFront($id, EquipementRepository $equipementRepos
         'equipement' => $equipement,
     ]);
 }
+#[Route('/equipement/detailEquipementResponsable/{id}', name: 'equipement_detail_responsable')]
+public function detailEquipementResponsable($id, EquipementRepository $equipementRepository): Response
+{
+    // Récupérer l'équipement par son ID
+    $equipement = $equipementRepository->find($id);
+
+    if (!$equipement) {
+        throw $this->createNotFoundException('Equipement not found');
+    }
+
+    // Passer l'équipement à la vue Twig pour affichage
+    return $this->render('equipement/detailEquipementResponsable.html.twig', [
+        'equipement' => $equipement,
+    ]);
+}
 
 #[Route('/equipement/showEquipementFront', name: 'equipement_show_front')]
 public function showEquipementFront(Request $request, EquipementRepository $repository): Response
@@ -223,6 +352,37 @@ public function showEquipementFront(Request $request, EquipementRepository $repo
     $totalPages = ceil($totalEquipements / $limit);
 
     return $this->render('equipement/showEquipementFront.html.twig', [
+        'equipements' => $equipements,
+        'query' => $query,
+        'currentPage' => $currentPage,
+        'totalPages' => $totalPages,
+    ]);
+}
+#[Route('/equipement/showEquipementResponsable', name: 'equipement_show_responsable')]
+public function showEquipementResponsable(Request $request, EquipementRepository $repository): Response
+{
+    $query = $request->query->get('query');
+    $currentPage = $request->query->getInt('page', 1);
+    $limit = 10; // Nombre d'équipements par page
+
+    // Récupérer les équipements en fonction de la recherche et de la pagination
+    if ($query) {
+        $equipements = $repository->findByTitre($query, $limit, ($currentPage - 1) * $limit);
+        $totalEquipements = count($equipements); // Mise à jour du nombre total d'équipements
+    } else {
+        $equipements = $repository->findAllPaginated($limit, ($currentPage - 1) * $limit);
+        $totalEquipements = $repository->countAll(); // Mise à jour du nombre total d'équipements
+    }
+    
+    // Calculer et transmettre la quantité initiale pour chaque équipement
+    foreach ($equipements as $equipement) {
+        $equipement->quantiteInitiale = $equipement->getQuantiteEq();
+    }
+
+    // Calculer le nombre total de pages
+    $totalPages = ceil($totalEquipements / $limit);
+
+    return $this->render('equipement/showEquipementResponsable.html.twig', [
         'equipements' => $equipements,
         'query' => $query,
         'currentPage' => $currentPage,

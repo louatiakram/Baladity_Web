@@ -110,6 +110,44 @@ public function deleteAvis($id, AvisRepository $rep, ManagerRegistry $doctrine):
     // Rediriger vers la page de liste des avis de l'équipement après la suppression réussie
     return $this->redirectToRoute('avis_show_front', ['id' => $equipementId]);
 }
+#[Route('/avis/deleteAvisResponsable/{id}', name: 'avis_delete_responsable')]
+public function deleteAvisResponsable($id, AvisRepository $rep, ManagerRegistry $doctrine): Response
+{
+    $avis = $rep->find($id);
+
+    if (!$avis) {
+        throw $this->createNotFoundException('Avis not found');
+    }
+
+    // Récupérer l'ID de l'équipement avant la suppression de l'avis
+    $equipementId = $avis->getEquipement()->getIdEquipement();
+
+    $em = $doctrine->getManager();
+    $em->remove($avis);
+    $em->flush();
+
+    // Rediriger vers la page de liste des avis de l'équipement après la suppression réussie
+    return $this->redirectToRoute('avis_show_responsable', ['id' => $equipementId]);
+}
+#[Route('/avis/deleteAvisAdmin/{id}', name: 'avis_delete_admin')]
+public function deleteAvisAdmin($id, AvisRepository $rep, ManagerRegistry $doctrine): Response
+{
+    $avis = $rep->find($id);
+
+    if (!$avis) {
+        throw $this->createNotFoundException('Avis not found');
+    }
+
+    // Récupérer l'ID de l'équipement avant la suppression de l'avis
+    $equipementId = $avis->getEquipement()->getIdEquipement();
+
+    $em = $doctrine->getManager();
+    $em->remove($avis);
+    $em->flush();
+
+    // Rediriger vers la page de liste des avis de l'équipement après la suppression réussie
+    return $this->redirectToRoute('avis_show', ['id' => $equipementId]);
+}
     #[Route('/avis/modifierAvis/{id}', name: 'modifierAvis')]
     public function modifierAvis($id, ManagerRegistry $doctrine, Request $request): Response
     {
@@ -226,6 +264,55 @@ public function showAvisFront($id, Request $request, EquipementRepository $equip
     $totalPages = ceil(count($paginator) / $limit);
 
     return $this->render('avis/showAvisFront.html.twig', [
+        'avis' => $paginator,
+        'equipement' => $equipement,
+        'id' => $id,
+        'query' => $query,
+        'currentPage' => $currentPage,
+        'totalPages' => $totalPages,
+    ]);
+}
+
+#[Route('/avis/showAvisResponsable/{id}', name: 'avis_show_responsable')]
+    
+public function showAvisResponsable($id, Request $request, EquipementRepository $equipementRepository, AvisRepository $avisRepository): Response
+{
+    // Récupérer l'équipement par son ID
+    $equipement = $equipementRepository->find($id);
+
+    if (!$equipement) {
+        throw $this->createNotFoundException('Equipement not found');
+    }
+
+    $query = $request->query->get('query');
+    $currentPage = $request->query->getInt('page', 1);
+    $limit = 10; // Nombre d'avis par page
+
+    // Récupérer les avis en fonction de l'équipement, de la recherche et de la pagination
+    $queryBuilder = $avisRepository->createQueryBuilder('a')
+        ->andWhere('a.equipement = :equipement')
+        ->setParameter('equipement', $equipement)
+        ->orderBy('a.date_avis', 'DESC'); // Tri par date de création, par exemple
+
+    if ($query) {
+        $queryBuilder->andWhere('a.commentaireAvis LIKE :query')
+            ->setParameter('query', '%'.$query.'%');
+    }
+
+    // Calculer l'offset
+    $offset = ($currentPage - 1) * $limit;
+
+    // Définir les limites de pagination
+    $queryBuilder->setMaxResults($limit)
+        ->setFirstResult($offset);
+
+    // Exécuter la requête
+    $paginator = new Paginator($queryBuilder->getQuery(), $fetchJoinCollection = true);
+
+    // Calculer le nombre total de pages
+    $totalPages = ceil(count($paginator) / $limit);
+
+    return $this->render('avis/showAvisResponsable.html.twig', [
         'avis' => $paginator,
         'equipement' => $equipement,
         'id' => $id,

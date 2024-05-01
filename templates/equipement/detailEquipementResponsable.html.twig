@@ -1,0 +1,64 @@
+{% extends 'base-front.html.twig' %}
+
+{% block title %}Détails de l'équipement{% endblock %}
+
+{% block barreTitre %}
+					<li><a href="{{ path('app_main_front') }}">Home</a></li>
+					<li><a href="about.html">Actualite</a></li>
+          <li class="dropdown"><a href="#"><span>Equipements</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class="active"></i></a>
+						<ul>
+							<li><a href="{{ path('equipement_show_responsable') }}">les equipements</a></li>
+						</ul>
+					</li>
+					<li><a href="pricing.html">Evenement</a></li>
+					<li><a href="contact.html">Contact</a></li>
+                    <li><a href="contact.html">About Us</a></li>
+{% endblock %}
+{% block body %}
+<div class="breadcrumbs">
+  <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+    <div class="container position-relative">
+      <div class="row d-flex justify-content-center">
+        <div class="col-lg-6 text-center">
+          <h2>Equipement</h2>
+          <p>
+L'équipement municipal désigne l'ensemble des infrastructures, équipements et services gérés par une municipalité dans le but d'assurer le bon fonctionnement et le bien-être de la communauté locale. Cela peut inclure les routes, les égouts, l'éclairage public, les parcs, les bâtiments municipaux, les services d'eau et d'assainissement, les services de collecte des déchets, entre autres. En signalant les problèmes liés à ces équipements, les citoyens contribuent à améliorer la qualité de vie dans leur quartier et à garantir que les services municipaux répondent aux besoins de la population.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+{% endblock %}
+
+{% block rest %}
+<div class="container">
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Détails de l'équipement</h5>
+                        <div class="mb-3">
+                            <img src="{{ asset('uploads/' ~ equipement.getImageEq()) }}" class="img-thumbnail" alt="Image de l'équipement">
+                        </div>
+                        <p>Référence: {{ equipement.getReferenceEq() }}</p>
+                        <p>Nom: {{ equipement.getNomEq() }}</p>
+                        <p>Catégorie: {{ equipement.getCategorieEq() }}</p>
+                        <p>Quantité: {{ equipement.getQuantiteEq() }}</p>
+                        <p>Date d'ajout: {{ equipement.getDateAjouteq()|date('Y-m-d') }}</p>
+                        <p>Description: {{ equipement.getDescriptionEq() }}</p>
+
+                        <!-- Ajoutez d'autres détails de l'équipement ici -->
+
+                        <div class="text-center">
+                            <a href="{{ path('equipement_show_responsable') }}" class="btn btn-secondary">Retour</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
