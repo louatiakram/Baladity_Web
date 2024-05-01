@@ -18,11 +18,6 @@ class CalendarController extends AbstractController
         ]);
     }
 
-
-
-
-
-
     #[Route('/calendar', name: 'calendar')]
     public function calendar(EvenementRepository $eventRepository): Response
     {
@@ -35,29 +30,25 @@ class CalendarController extends AbstractController
             $startDate = $event->getDateDHE();
             $endDate = $event->getDateDHF();
     
-            // Iterate through each day between start and end dates
-            $interval = new \DateInterval('P1D');
-            $dateRange = new \DatePeriod($startDate, $interval, $endDate->modify('+1 day')); // Adding 1 day to include the end date
+            // Format start and end dates with time component
+            $startDateTime = $startDate->format('Y-m-d H:i:s');
+            $endDateTime = $endDate->format('Y-m-d H:i:s');
     
-            foreach ($dateRange as $date) {
-                $rdvs[] = [
-                    'id' => $event->getId(),
-                    'start' => $date->format('Y-m-d') . 'T' . $startDate->format('H:i:s'),
-                    'end' => $date->format('Y-m-d') . 'T' . $endDate->format('H:i:s'),
-                    'name' => $event->getNomE(),
-                    // Adjust other properties based on your Event entity
-                ];
-            }
+            $rdvs[] = [
+                'id' => $event->getId(),
+                'start' => $startDateTime,
+                'end' => $endDateTime,
+                'title' => $event->getNomE(),
+                'name' => $event->getNomE(), // Change 'name' to 'title'
+                // Change 'name' to 'title'
+                // Adjust other properties based on your Event entity
+            ];
         }
     
         $data = json_encode($rdvs);
     
         return $this->render('calendar/calendar.html.twig', compact('data'));
     }
-    
-
-
-
 
 
 }

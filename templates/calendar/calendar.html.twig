@@ -85,11 +85,15 @@
                         content.innerHTML = '<b>' + arg.event.extendedProps.name + '</b>';
                         return { domNodes: [content] };
                     },
-                    // Ajouter d'autres options ou callbacks FullCalendar si nécessaire
+                    eventClick: function(eventInfo) {
+                        // Get the ID of the clicked event
+                        var eventId = eventInfo.event.id;
+                        // Redirect to the details page URL with the event ID
+                        window.location.href = '/evenement/details/' + eventId;
+                    }  
                 });
 
                 calendar.render();
-
                 // Function to toggle full screen
                 function toggleFullScreen() {
                     if (!document.fullscreenElement) {
@@ -98,14 +102,12 @@
                         document.exitFullscreen();
                     }
                 }
-
                 // Toggle full screen on double click
                 var isFullScreen = false;
                 calendarEl.addEventListener('dblclick', function () {
                     toggleFullScreen();
                     isFullScreen = !isFullScreen;
                 });
-
                 // Toggle full screen on double click on the calendar itself
                 calendarEl.addEventListener('dblclick', function () {
                     toggleFullScreen();
