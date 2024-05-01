@@ -17,7 +17,9 @@ class AvisType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('note_avis', IntegerType::class)
+        ->add('note_avis', HiddenType::class, [
+            'data' => 0,
+        ])
         ->add('commentaire_avis', TextareaType::class);
 
     }
