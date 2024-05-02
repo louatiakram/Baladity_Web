@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReclamationRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -166,18 +167,40 @@ public function ajouterReclamationF(Request $request, $cas): Response
 
         // Set the image_a field
         $image = $form->get('image_reclamation')->getData();
+        $imageFileName = null; // This will hold the name of the uploaded image
+
         if ($image) {
             // Gérer le téléchargement de l'image et enregistrer son nom de fichier dans la base de données
             $fileName = uniqid().'.'.$image->guessExtension();
             try {
                 $image->move($this->getParameter('uploads_directory'), $fileName);
                 $reclamation->setImageReclamation($fileName);
+                $imageFileName = $fileName;
             } catch (FileException $e) {
                 // Gérer l'exception si le téléchargement du fichier échoue
                 // Par exemple, journaliser l'erreur ou afficher un message flash
             }
         }
-
+         // Upload image to imgbb if an image was provided
+         if ($imageFileName) {
+            $client = HttpClient::create();
+            $response = $client->request('POST', 'https://api.imgbb.com/1/upload', [
+                'body' => [
+                    'image' => base64_encode(file_get_contents($this->getParameter('uploads_directory') . '/' . $imageFileName)),
+                    'key' => '9891cf19363a960cf78207d0934b3f79', // Replace with your actual API key
+                ],
+            ]);
+            // Vérifier la réponse HTTP
+            if ($response->getStatusCode() !== 200) {
+                throw new \Exception('Erreur lors du téléchargement de l\'image sur imgbb.');
+            }
+            $content = $response->toArray();
+        
+            // You can now use the $content array to access the uploaded image URL and other details
+            $imageUrl = $content['data']['url'];
+            // You might want to save this URL to your entity or use it as needed in your application
+        }
+        
         // Get the entity manager
         $em = $this->getDoctrine()->getManager();
 
@@ -189,7 +212,7 @@ public function ajouterReclamationF(Request $request, $cas): Response
         $this->addFlash('success', 'La réclamation a été ajoutée avec succès.');
 
         // Redirection vers la page d'affichage des réclamations
-       // return $this->redirectToRoute('afficherReclamation');
+       return $this->redirectToRoute('afficherReclamationF');
     }
 
     return $this->render('reclamation/ajouterReclamationF.html.twig', [
