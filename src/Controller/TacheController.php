@@ -118,10 +118,18 @@ class TacheController extends AbstractController
     }
 
     #[Route('/tache/detail/{i}', name: 'tache_detail')]
-    public function detail($i, TacheRepository $rep): Response
+    public function detail($i, TacheRepository $rep, SessionInterface $session): Response
     {
         $userId = 50; // Assuming the user ID is 50
+        $session->set('user_id', $userId); // Store user ID in session
+
+        // Get the user by ID
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+
+        // Check if the user exists
+        if (!$user) {
+            throw $this->createNotFoundException('Utilisateur non trouvé.');
+        }
         $tache = $rep->find($i);
         if (!$tache) {
             throw $this->createNotFoundException('Tache Existe Pas');
@@ -328,7 +336,7 @@ class TacheController extends AbstractController
         ]);
     }
 
-    #[Route('/tache/detailfront/{i}', name: 'tache_detail_front')]
+    #[Route('/tache/listfront/detail/{i}', name: 'tache_detail_front')]
     public function detailfront($i, Request $request, TacheRepository $rep, SessionInterface $session): Response
     {
         $userId = $session->get('user_id');
@@ -414,7 +422,7 @@ class TacheController extends AbstractController
         }
     }
 
-    #[Route('/tache/download-csv', name: 'tache_download_csv')]
+    #[Route('/tache/listfront/download-csv', name: 'tache_download_csv')]
     public function downloadCsv(TacheRepository $repository, SessionInterface $session): Response
     {
         // Retrieve user type from session
@@ -536,7 +544,7 @@ foreach ($tasks as $task) {
         return $response;
     }
 
-    #[Route('/tache/import-csv', name: 'tache_import_csv')]
+    #[Route('/tache/listfront/import-csv', name: 'tache_import_csv')]
     public function importCsv(Request $request, TacheRepository $repository, SessionInterface $session, ManagerRegistry $doctrine): Response
     {
         $userId = $session->get('user_id');
