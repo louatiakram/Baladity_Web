@@ -62,7 +62,7 @@ body {
     justify-content: center;	
 	background: linear-gradient(90deg, #5D54A4, #7C78B8);		
 	position: relative;	
-	height: 400;
+	height: 200px;
 	width: 360px;	
 	box-shadow: 0px 0px 24px #5C5696;
 }
@@ -243,37 +243,16 @@ body {
         <div class="screen">
             <div class="screen__content">
                 <div class="login">
-                    {% if app.flashes('error') is not empty %}
-						<div class="alert alert-danger">
-							{% for message in app.flashes('error') %}
-								{{ message }}
-							{% endfor %}
-						</div>
-					{% endif %}
-					{% if error %}
-						<div class="alert alert-danger" role="alert">
-							{{ error }}
-						</div>
-					{% endif %}
-					{{ form_errors(form) }}
-					
-					{{ form_start(form, {'attr': {'action': path('app_login'), 'method': 'POST'}}) }}
+					{{ form_start(form, {'attr': {'action': path('app_reset_pwd'), 'method': 'POST'}}) }}
 					<div class="col-12">
 						<label for="yourEmail" class="form-label">Email</label>
-						{{ form_widget(form.email_user, {'attr': {'class': 'form-control', 'id': 'yourEmail'}}) }}
-						{{ form_errors(form.email_user) }}
+						{{ form_widget(form.email, {'attr': {'class': 'form-control', 'id': 'yourEmail'}}) }}
+						{{ form_errors(form.email) }}
 					</div><br>
 					<div class="col-12">
-						<label for="yourPassword" class="form-label">Password</label>
-						{{ form_widget(form.password, {'attr': {'class': 'form-control', 'id': 'yourPassword'}}) }}
-						{{ form_errors(form.password) }}
-					</div><br>
-					<div class="col-12">
-						<button type="submit" class="btn btn-primary w-100">Login</button>
+						<button type="submit" class="btn btn-primary w-100">Submit</button>
 					</div>
 					{{ form_end(form) }}
-                    <div class="forgot-password"><a href="{{ path('app_reset_pwd') }}">Forget your password?</a></div>
-                    <div class="dont-haveaccount"><a href="{{ path('app_register') }}">Don't have an account?</a></div>
                 </div>
             </div>
             <div class="screen__background">

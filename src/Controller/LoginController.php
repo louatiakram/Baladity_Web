@@ -38,7 +38,6 @@ class LoginController extends AbstractController
         $form = $this->createForm(LoginType::class, $user);
         $form->handleRequest($request);
 
-        
 
         // Check if the form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
