@@ -331,12 +331,16 @@ public function detailEquipementResponsable($id, EquipementRepository $equipemen
 public function showEquipementFront(Request $request, EquipementRepository $repository): Response
 {
     $query = $request->query->get('query');
+    $category = $request->query->get('category');
     $currentPage = $request->query->getInt('page', 1);
     $limit = 10; // Nombre d'équipements par page
+    $categories = $repository->findAllCategories(); // Utilisez $repository ici
 
     // Récupérer les équipements en fonction de la recherche et de la pagination
-    if ($query) {
-        $equipements = $repository->findByTitre($query, $limit, ($currentPage - 1) * $limit);
+    $equipements = [];
+    $totalEquipements = 0;
+    if ($query || $category) {
+        $equipements = $repository->findBySearchAndCategory($query, $category, $limit, ($currentPage - 1) * $limit);
         $totalEquipements = count($equipements); // Mise à jour du nombre total d'équipements
     } else {
         $equipements = $repository->findAllPaginated($limit, ($currentPage - 1) * $limit);
@@ -356,37 +360,7 @@ public function showEquipementFront(Request $request, EquipementRepository $repo
         'query' => $query,
         'currentPage' => $currentPage,
         'totalPages' => $totalPages,
-    ]);
-}
-#[Route('/equipement/showEquipementResponsable', name: 'equipement_show_responsable')]
-public function showEquipementResponsable(Request $request, EquipementRepository $repository): Response
-{
-    $query = $request->query->get('query');
-    $currentPage = $request->query->getInt('page', 1);
-    $limit = 10; // Nombre d'équipements par page
-
-    // Récupérer les équipements en fonction de la recherche et de la pagination
-    if ($query) {
-        $equipements = $repository->findByTitre($query, $limit, ($currentPage - 1) * $limit);
-        $totalEquipements = count($equipements); // Mise à jour du nombre total d'équipements
-    } else {
-        $equipements = $repository->findAllPaginated($limit, ($currentPage - 1) * $limit);
-        $totalEquipements = $repository->countAll(); // Mise à jour du nombre total d'équipements
-    }
-    
-    // Calculer et transmettre la quantité initiale pour chaque équipement
-    foreach ($equipements as $equipement) {
-        $equipement->quantiteInitiale = $equipement->getQuantiteEq();
-    }
-
-    // Calculer le nombre total de pages
-    $totalPages = ceil($totalEquipements / $limit);
-
-    return $this->render('equipement/showEquipementResponsable.html.twig', [
-        'equipements' => $equipements,
-        'query' => $query,
-        'currentPage' => $currentPage,
-        'totalPages' => $totalPages,
+        'categories' => $categories,
     ]);
 }
 #[Route('/equipement/utiliser/{id}', name: 'equipement_utiliser')]

@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * @extends ServiceEntityRepository<Equipement>
@@ -92,5 +93,36 @@ class EquipementRepository extends ServiceEntityRepository
             ->select('COUNT(e)') // Utiliser COUNT(e) au lieu de COUNT(e.id)
             ->getQuery()
             ->getSingleScalarResult();
+    }
+    public function findBySearchAndCategory(?string $query, ?string $category, int $limit, int $offset): array
+{
+    $qb = $this->createQueryBuilder('e');
+
+    // Si une recherche est effectuée, ajoutez une clause WHERE pour filtrer par nom d'équipement
+    if ($query) {
+        $qb->andWhere($qb->expr()->like('e.nom_eq', ':query'))
+           ->setParameter('query', '%'.$query.'%');
+    }
+
+    // Si une catégorie est sélectionnée, ajoutez une clause WHERE pour filtrer par catégorie
+    if ($category) {
+        $qb->andWhere('e.categorie_eq = :category')
+           ->setParameter('category', $category);
+    }
+
+    // Limitez le nombre de résultats et définissez l'offset
+    $qb->setMaxResults($limit)
+       ->setFirstResult($offset);
+
+    return $qb->getQuery()->getResult();
+}
+public function findAllCategories(): array
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->select('DISTINCT e.categorie_eq');
+
+        $result = $qb->getQuery()->getResult();
+
+        return array_column($result, 'categorie_eq');
     }
 }

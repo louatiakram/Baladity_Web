@@ -3,6 +3,7 @@
 {% block title %}Baladity Home{% endblock %}
 
 {% block barreTitre %}
+
 					<li><a href="{{ path('app_main_front') }}">Home</a></li>
 					<li><a href="about.html">Actualite</a></li>
           <li class="dropdown"><a href="#"><span>Equipements</span> <i
@@ -16,6 +17,17 @@
                     <li><a href="contact.html">About Us</a></li>
 {% endblock %}
 {% block body %}
+
+ <form action="{{ path('equipement_show_front') }}" method="get" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up" data-aos-delay="200">
+    <input type="text" name="query" id="search-input" class="form-control" placeholder="Recherche...">
+    <select name="category" id="category-select" class="form-control">
+        <option value="">Toutes les catégories</option>
+        {% for category in categories %}
+            <option value="{{ category }}">{{ category }}</option>
+        {% endfor %}
+    </select>
+</form>
+
 <div class="breadcrumbs">
   <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
     <div class="container position-relative">
@@ -28,6 +40,16 @@ L'équipement municipal désigne l'ensemble des infrastructures, équipements et
       </div>
     </div>
   </div>
+  <script>
+    // Sélectionner l'élément d'entrée de recherche
+    const searchInput = document.getElementById('search-input');
+
+    // Écouter l'événement de saisie utilisateur dans le champ de recherche
+    searchInput.addEventListener('input', function() {
+        // Soumettre automatiquement le formulaire lors de la saisie dans le champ de recherche
+        document.querySelector('.form-search').submit();
+    });
+</script>
   
   
 {% endblock %}
