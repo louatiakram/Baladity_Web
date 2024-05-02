@@ -80,6 +80,9 @@ class RegistrationController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
+            // Storing user ID in the session
+            $request->getSession()->set('user_id', $user->getIdUser());
+
 
 
             #return $this->redirectToRoute('send_mail');
@@ -87,7 +90,7 @@ class RegistrationController extends AbstractController
 
         }
 
-        return $this->render('registration/register.html.twig', [
+        return $this->render('user/test.html.twig', [
             'form' => $form->createView(),
         ]);
     }

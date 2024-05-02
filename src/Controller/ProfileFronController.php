@@ -19,7 +19,7 @@ class ProfileFronController extends AbstractController
     {
 
         $userId = $request->getSession()->get('user_id');
-
+        #$userId = 141;
 
         //get user
         $userRepository = $doctrine->getRepository(enduser::class);
@@ -48,7 +48,7 @@ class ProfileFronController extends AbstractController
 
         // Retrieving user ID from the session
         $userId = $request->getSession()->get('user_id');
-        //$userId = 81;
+        #$userId = 141;
 
         //get user
         $userRepository = $doctrine->getRepository(enduser::class);
