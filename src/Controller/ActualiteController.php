@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\actualite;
 use App\Form\ActualiteType;
 use App\Entity\enduser;
+use Knp\Component\Pager\PaginatorInterface;
+
 use App\Repository\TacheRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -28,9 +30,6 @@ class ActualiteController extends AbstractController
             'controller_name' => 'ActualiteController',
         ]);
     }
-
-
-   
 
     #[Route('/actualite/ajouterA', name: 'ajouterA')]
     public function ajouterA(ManagerRegistry $doctrine, Request $req): Response
@@ -93,9 +92,7 @@ class ActualiteController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-    
-    
-    
+
     #[Route('/actualite/deleteA/{i}', name: 'actualite_delete')]
     public function deleteA($i, ActualiteRepository $rep, ManagerRegistry $doctrine): Response
     {
@@ -114,33 +111,39 @@ class ActualiteController extends AbstractController
         return $this->redirectToRoute('actualite_show');
     }
     #[Route('/actualite/showA', name: 'actualite_show')]
-    public function showA(Request $request, ActualiteRepository $repository): Response
-{
-    $query = $request->query->get('query');
-
-    // Fetch the current page number from the query parameters
-    $currentPage = $request->query->getInt('page', 1);
-
-    // Assuming you have logic to calculate the total number of pages, let's say it's stored in $totalPages
-    $totalPages = 10; // Replace this with your actual calculation
-
-    // If a search query is provided, filter tasks based on the title
-    if ($query) {
-        $tasks = $repository->findByTitre($query); // Replace with appropriate method
-    } else {
-        // If no search query is provided, fetch all tasks
-        $tasks = $repository->findAll();
+    public function showA(Request $request, ActualiteRepository $repository, PaginatorInterface $paginator): Response
+    {
+        $query = $request->query->get('query');
+    
+        // Fetch the current page number from the query parameters
+        $currentPage = $request->query->getInt('page', 1);
+    
+        // Number of items per page
+        $itemsPerPage = 3;
+    
+        // Create a query builder for finding the records
+        if ($query) {
+            // If a search query is provided, filter based on the title
+            $queryBuilder = $repository->createQueryBuilder('a')
+                ->where('a.titre LIKE :query')
+                ->setParameter('query', '%' . $query . '%');
+        } else {
+            // If no search query is provided, fetch all records
+            $queryBuilder = $repository->createQueryBuilder('a');
+        }
+    
+        // Use the Paginator service to paginate the results
+        $pagination = $paginator->paginate(
+            $queryBuilder->getQuery(), // Doctrine Query object
+            $currentPage, // Current page number
+            $itemsPerPage // Number of items per page
+        );
+    
+        return $this->render('actualite/showA.html.twig', [
+            'pagination' => $pagination, // Pass the paginated results to the template
+            'query' => $query,
+        ]);
     }
-
-    return $this->render('actualite/showA.html.twig', [
-        'l' => $tasks,
-        'query' => $query,
-        'currentPage' => $currentPage, // Pass the currentPage variable to the Twig template
-        'totalPages' => $totalPages, 
-        
-        // Pass the totalPages variable to the Twig template
-    ]);
-}
 
  #[Route('/actualite/modifierA/{id}', name: 'modifierA')]
 

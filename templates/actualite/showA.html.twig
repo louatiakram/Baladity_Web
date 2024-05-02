@@ -422,79 +422,67 @@
 {% endblock %}
 <main id="main" class="main">
     <br>
-    <h1 class="card-title" style="text-align: center; font-size: 2em;">La liste des Actualités</h1>
+    <h1 class="card-title text-center" style="font-size: 2em;">La liste des Actualités</h1>
     <br>
 
     <!-- Button to navigate to the "ajouter" form -->
-    <div class="text-center">
+    <div class="text-center mb-3">
         <a href="{{ path('ajouterA') }}" class="btn btn-primary">Ajouter Actualité</a>
     </div>
 
-    <br>
+    <div class="container">
+        <!-- Display each actualité in a card format -->
+        {% for actualite in pagination %}
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    <!-- Optional image display -->
+                    {% if actualite.getImageA() %}
+                        <div class="col-md-4">
+                            <img src="{{ asset('uploads/' ~ actualite.getImageA()) }}" class="img-thumbnail" alt="Actualité Image">
+                        </div>
+                    {% endif %}
 
-    <div class="col-10 mx-auto"> <!-- Adjusted column width -->
-        <div class="card">
-            <div class="card-body">
-                <!-- Bootstrap Carousel -->
-                <div id="actualiteCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        {% for key, actualite in l %}
-                            <div class="carousel-item {% if loop.first %}active{% endif %}">
-                                <div class="row">
-                                    <div class="col-md-5"> <!-- Adjusted column width -->
-                                        <div class="d-flex flex-column">
-                                            {% if actualite.getImageA() %}
-                                                {% set fileExtension = actualite.getImageA()|split('.')|last %}
-                                                {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
-                                                    <img src="{{ asset('uploads/' ~ actualite.getImageA()) }}" class="img-thumbnail" alt="Piece jointe" style="width: 100%; max-width: 400px;"> <!-- Adjusted max-width -->
-                                                {% elseif fileExtension == 'pdf' %}
-                                                    <a href="{{ asset('uploads/' ~ actualite.getImageA()) }}">View PDF</a>
-                                                {% endif %}
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-7"> <!-- Adjusted column width -->
-                                        <h4 class="card-title" style="font-size: 1.5rem; margin-bottom: 10px;">{{ actualite.getTitreA() }}</h4>
-                                        <p class="card-text" style="margin-top: 5px;">{{ actualite.getDescriptionA() }}</p>
-                                        <p class="card-text">Date: {{ actualite.getDateA()|date('Y-m-d') }}</p>
-                                        <!-- Details button -->
-                                       <a href="{{ path('publicite_show', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-outline-info">
-    <i class="bi bi-info-circle"></i> Voir les Publicités
-</a>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ actualite.getTitreA() }}</h4>
+                            <p class="card-text">{{ actualite.getDescriptionA() }}</p>
+                            <p class="card-text"><small class="text-muted">Date: {{ actualite.getDateA()|date('Y-m-d') }}</small></p>
 
-
-                                        <!-- Modify button -->
-                                        <a href="{{ path('modifierA', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-pencil"></i> Modifier
-                                        </a>
-                                        <!-- Delete button -->
-                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteActualite('{{ actualite.getIdA() }}')">
-                                            <i class="bi bi-trash"></i> Supprimer
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
+                            <!-- Buttons for details, modify, and delete -->
+                            <a href="{{ path('publicite_show', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-outline-info">Voir les Publicités</a>
+                            <a href="{{ path('modifierA', {'id': actualite.getIdA()}) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteActualite('{{ actualite.getIdA() }}')">Supprimer</button>
+                        </div>
                     </div>
-
-                    <!-- Carousel control buttons with custom styles -->
-                    <button class="carousel-control-prev" type="button" data-bs-target="#actualiteCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#actualiteCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
                 </div>
             </div>
-        </div>
+        {% endfor %}
     </div>
 
-    {% block ListeTalacheNav %}
-       
-    {% endblock %}
+ <!-- Pagination -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item {% if pagination.currentPageNumber == 1 %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('actualite_show', {'page': 1}) }}" aria-label="Previous">
+                <span aria-hidden="true">«</span>
+            </a>
+        </li>
+        {% for page in 1..pagination.pageCount %}
+            <li class="page-item {% if page == pagination.currentPageNumber %}active{% endif %}">
+                <a class="page-link" href="{{ path('actualite_show', {'page': page}) }}">{{ page }}</a>
+            </li>
+        {% endfor %}
+        <li class="page-item {% if pagination.currentPageNumber == pagination.pageCount %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('actualite_show', {'page': pagination.pageCount}) }}" aria-label="Next">
+                <span aria-hidden="true">»</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+
 </main>
+
 
 
 <style>
