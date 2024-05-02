@@ -225,35 +225,16 @@ body {
         <div class="screen">
             <div class="screen__content">
                 <div class="login">
-                    {% if app.flashes('error') is not empty %}
-						<div class="alert alert-danger">
-							{% for message in app.flashes('error') %}
-								{{ message }}
-							{% endfor %}
-						</div>
-					{% endif %}
-					{% if error %}
-						<div class="alert alert-danger" role="alert">
-							{{ error }}
-						</div>
-					{% endif %}
-					{{ form_errors(form) }}
-					
-					{{ form_start(form, {'attr': {'action': path('app_login'), 'method': 'POST'}}) }}
-					<div class="col-12">
-						<label for="yourEmail" class="form-label">Email</label>
-						{{ form_widget(form.email_user, {'attr': {'class': 'form-control', 'id': 'yourEmail'}}) }}
-						{{ form_errors(form.email_user) }}
-					</div><br>
-					<div class="col-12">
-						<label for="yourPassword" class="form-label">Password</label>
-						{{ form_widget(form.password, {'attr': {'class': 'form-control', 'id': 'yourPassword'}}) }}
-						{{ form_errors(form.password) }}
-					</div><br>
-					<div class="col-12">
-						<button type="submit" class="btn btn-primary w-100">Login</button>
-					</div>
-					{{ form_end(form) }}
+                    <h1>Verify OTP</h1>
+    				{% if error %}
+        				<div>{{ error }}</div>
+    				{% endif %}
+    				{{ form_start(form, {'attr': {'action': path('verify_otp', {'otp1': otp1}), 'method': 'POST'}}) }}
+    					<div class="login__field">
+					{{ form_row(form.otp) }}
+						</div><br>
+        				<button type="submit" class="btn btn-primary w-100">Submit</button>
+    				{{ form_end(form) }}
                 </div>
             </div>
             <div class="screen__background">
