@@ -217,6 +217,16 @@ body {
 .social-login__icon:hover {
 	transform: scale(1.5);	
 }
+.have-account {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #fff;
+        }
+		.have-account a {
+            color: #fff; /* Set text color to white */
+        }
+		
     </style>
 </head>
 
@@ -264,6 +274,7 @@ body {
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary w-100">Register</button>
                         </div>
+						<div class="have-account"><a href="{{ path('app_login') }}">Already have an account?</a></div>
                     {{ form_end(form) }}
                 </div>
             </div>

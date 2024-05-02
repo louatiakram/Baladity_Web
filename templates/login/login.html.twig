@@ -217,6 +217,24 @@ body {
 .social-login__icon:hover {
 	transform: scale(1.5);	
 }
+.dont-haveaccount {
+            text-align: center;
+            font-size: 14px;
+            color: #7875B5;
+        }
+        .dont-haveaccount a {
+            color: #7875B5; 
+        }
+.forgot-password {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #7875B5;
+        }
+        .forgot-password a {
+            color: #7875B5; 
+        }
+
     </style>
 </head>
 
@@ -254,6 +272,8 @@ body {
 						<button type="submit" class="btn btn-primary w-100">Login</button>
 					</div>
 					{{ form_end(form) }}
+                    <div class="forgot-password"><a href="{{ path('app_register') }}">Forget your password?</a></div>
+                    <div class="dont-haveaccount"><a href="{{ path('app_register') }}">Don't have an account?</a></div>
                 </div>
             </div>
             <div class="screen__background">
