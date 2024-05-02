@@ -11,6 +11,8 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3; // Ajout de l'import pour Recaptcha3
+use Karser\Recaptcha3Bundle\Form\Recaptcha3Type; // Ajout de l'import pour Recaptcha3Type
 
 class AvisType extends AbstractType
 {
@@ -20,7 +22,11 @@ class AvisType extends AbstractType
         ->add('note_avis', HiddenType::class, [
             'data' => 0,
         ])
-        ->add('commentaire_avis', TextareaType::class);
+        ->add('commentaire_avis', TextareaType::class)
+        ->add('captcha', Recaptcha3Type::class, [
+            'constraints' => new Recaptcha3(),
+            'action_name' => 'ajouterAvisFront',
+        ]);
 
     }
     
