@@ -431,4 +431,25 @@ public function rendreEquipement($id, Request $request, EquipementRepository $re
 
     return new JsonResponse(['success' => true]);
 }
-} 
+#[Route('/equipement/statsEquipements', name: 'stats_equipements')]
+public function statsEquipements(EquipementRepository $equipementRepository): Response
+{
+    try {
+        // Récupérer les statistiques par jour et par mois
+        $equipementsParJour = $equipementRepository->countEquipementsAddedByDay();
+        $equipementsParMois = $equipementRepository->countEquipementsAddedByMonth();
+        $countEquipementsFixe = $equipementRepository->countEquipementsByCategory('Fixe');
+        $countEquipementsMobile = $equipementRepository->countEquipementsByCategory('Mobile');
+
+        return $this->render('equipement/statsEquipements.html.twig', [
+            'equipementsParJour' => $equipementsParJour,
+            'equipementsParMois' => $equipementsParMois,
+            'countEquipementsFixe' => $countEquipementsFixe,
+            'countEquipementsMobile' => $countEquipementsMobile,
+        ]);
+    } catch (\Exception $e) {
+        // En cas d'erreur, retourner une réponse JSON avec le message d'erreur
+        return new JsonResponse(['error' => $e->getMessage()], 400);
+    }
+}
+}

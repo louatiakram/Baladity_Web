@@ -8,6 +8,7 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @extends ServiceEntityRepository<Equipement>
@@ -19,9 +20,12 @@ use Doctrine\ORM\Query\Expr\Join;
  */
 class EquipementRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, Equipement::class);
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -125,4 +129,38 @@ public function findAllCategories(): array
 
         return array_column($result, 'categorie_eq');
     }
+    public function countEquipementsAddedByDay(): array
+    {
+        $connection = $this->entityManager->getConnection();
+        $sql = '
+        SELECT DATE(date_ajouteq) AS date, SUM(quantite_eq) AS count
+        FROM equipement
+        GROUP BY DATE(date_ajouteq)
+        ';
+        $statement = $connection->executeQuery($sql);
+
+        return $statement->fetchAllAssociative();
+    }
+
+    public function countEquipementsAddedByMonth(): array
+    {
+        $connection = $this->entityManager->getConnection();
+        $sql = '
+        SELECT MONTH(date_ajouteq) as month, SUM(quantite_eq) as count
+        FROM equipement
+        GROUP BY MONTH(date_ajouteq)
+        ';
+        $statement = $connection->executeQuery($sql);
+
+        return $statement->fetchAllAssociative();
+    }
+    public function countEquipementsByCategory(string $category): int
+{
+    return $this->createQueryBuilder('e')
+        ->select('SUM(e.quantite_eq)')
+        ->where('e.categorie_eq = :category')
+        ->setParameter('category', $category)
+        ->getQuery()
+        ->getSingleScalarResult();
+}
 }
