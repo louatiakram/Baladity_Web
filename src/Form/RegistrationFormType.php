@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\enduser;
+use Karser\Recaptcha3Bundle\Form\Recaptcha3Type;
+use Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -86,6 +88,10 @@ class RegistrationFormType extends AbstractType
                     'mimeTypesMessage' => 'Please upload a valid image file (JPEG, PNG)',
                 ])
             ],
+        ])
+        ->add('captcha', Recaptcha3Type::class, [
+            'constraints' => new Recaptcha3(),
+            'action_name' => 'app_register',
         ]);
         ;
     }
