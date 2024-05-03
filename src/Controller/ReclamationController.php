@@ -14,6 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -21,6 +22,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Mime\Email;
+
 
 
 class ReclamationController extends AbstractController
@@ -116,7 +119,7 @@ class ReclamationController extends AbstractController
     }
 
     #[Route('/reclamation/ajouterReclamationF/{cas}', name: 'ajouterReclamationF')]
-public function ajouterReclamationF(Request $request, $cas): Response
+public function ajouterReclamationF(Request $request, $cas,MailerInterface $mailer): Response
 {
     // Créer une nouvelle instance de l'entité Reclamation
     $reclamation = new Reclamation();
@@ -165,6 +168,7 @@ public function ajouterReclamationF(Request $request, $cas): Response
         $reclamation->setDateReclamation(new DateTime());
         $reclamation->setStatusReclamation('non traité');
 
+
         // Set the image_a field
         $image = $form->get('image_reclamation')->getData();
         $imageFileName = null; // This will hold the name of the uploaded image
@@ -210,6 +214,19 @@ public function ajouterReclamationF(Request $request, $cas): Response
 
         // Ajout du message flash
         $this->addFlash('success', 'La réclamation a été ajoutée avec succès.');
+        // Create a new email
+        $email = (new Email())
+        ->from('zayaneyassine6@gmail.com') 
+        ->to($user->getEmailUser()) 
+        //->cc('exemple@mail.com') 
+        //->bcc('exemple@mail.com')
+        //->replyTo('test42@gmail.com')
+            ->priority(Email::PRIORITY_HIGH) 
+            ->subject('Reclamation')
+        // If you want use text mail only
+            ->text(' La réclamation a été envoyée avec succès. ');
+            $mailer->send($email);
+
 
         // Redirection vers la page d'affichage des réclamations
        return $this->redirectToRoute('afficherReclamationF');
