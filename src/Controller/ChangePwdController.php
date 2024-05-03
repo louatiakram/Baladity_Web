@@ -45,13 +45,8 @@ class ChangePwdController extends AbstractController
     
             // Redirect to a success page or display a success message
             // For example:
-            // Password is correct
-            if ($user->getTypeUser() == "Admin") {
-                //redirect the user to the app_main route
-                return $this->redirectToRoute('app_main');
-            } else {
-                return $this->redirectToRoute('app_front_main');
-            }
+           // Password is correct
+           return $this->redirectToRoute('app_login');
         }
 
 
