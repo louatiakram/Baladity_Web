@@ -73,59 +73,88 @@
 
         {# Ajouter une classe au conteneur du calendrier #}
         <div id="calendar" class="calendar-container"></div>
+    </section>
+{% endblock %}
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var calendarEl = document.getElementById('calendar');
-                var calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: 'dayGridMonth',
-                    events: {{ data | raw }},
-                    eventContent: function (arg) {
-                        var content = document.createElement('div');
-                        content.innerHTML = '<b>' + arg.event.extendedProps.name + '</b>';
-                        return { domNodes: [content] };
-                    },
-                    eventClick: function(eventInfo) {
-                        // Get the ID of the clicked event
-                        var eventId = eventInfo.event.id;
-                        // Redirect to the details page URL with the event ID
-                        window.location.href = '/evenement/details/' + eventId;
-                    }  
-                });
+{% block javascripts %}
+    {{ parent() }}
+    {# Inclure la bibliothèque FullCalendar JavaScript #}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"
+            integrity="sha256-DBxkGZLxKsLKhz054qUpBqtotG00r9AELGpSigJujLg=" crossorigin="anonymous"></script>
 
-                calendar.render();
-                // Function to toggle full screen
-                function toggleFullScreen() {
-                    if (!document.fullscreenElement) {
-                        calendarEl.requestFullscreen();
-                    } else {
-                        document.exitFullscreen();
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: {{ data | raw }},
+                eventContent: function (arg) {
+                    var content = document.createElement('div');
+                    content.innerHTML = '<b>' + arg.event.extendedProps.name + '</b>';
+                    return { domNodes: [content] };
+                },
+                eventDidMount: function (arg) {
+                    var eventCategory = arg.event.extendedProps.category;
+                    var eventElement = arg.el;
+                
+                    // Set different colors based on category
+                    switch (eventCategory) {
+                        case 'Charity':
+                            eventElement.style.backgroundColor = '#89CFF0'; // Light blue
+                            break;
+                        case 'Sportif':
+                            eventElement.style.backgroundColor = '#0000FF'; // Blue
+                            break;
+                        case 'Culturel':
+                            eventElement.style.backgroundColor = '#FDDA0D';
+                            break;
+                        case 'Social':
+                            eventElement.style.backgroundColor = '#702963'; 
+                            break;
+                        default:
+                            eventElement.style.backgroundColor = 'gray'; // Default color
+                            break;
+                    }
+                },
+                eventClick: function(eventInfo) {
+                    // Get the ID of the clicked event
+                    var eventId = eventInfo.event.id;
+                    // Redirect to the details page URL with the event ID
+                    window.location.href = '/evenement/detailsFront/' + eventId;
+                },
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridYear,dayGridMonth,dayGridWeek' // Adding dayGridWeek here
+                },
+                views: {
+                    Year: {
+                        type: 'dayGrid',
+                        duration: { months: 12 }
                     }
                 }
-                // Toggle full screen on double click
-                var isFullScreen = false;
-                calendarEl.addEventListener('dblclick', function () {
-                    toggleFullScreen();
-                    isFullScreen = !isFullScreen;
-                });
-                // Toggle full screen on double click on the calendar itself
-                calendarEl.addEventListener('dblclick', function () {
-                    toggleFullScreen();
-                    isFullScreen = !isFullScreen;
-                });
             });
-        </script>
 
-
-        {# Inclure la bibliothèque FullCalendar JavaScript #}
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"
-                integrity="sha256-DBxkGZLxKsLKhz054qUpBqtotG00r9AELGpSigJujLg=" crossorigin="anonymous"></script>
-
-        {% block javascript %}
-            {# Ajouter d'autres scripts JavaScript si nécessaire #}
-        {% endblock %}
-    </section>
-
-    {% block footerfront %}
-    {% endblock %}
+            calendar.render();
+            // Function to toggle full screen
+            function toggleFullScreen() {
+                if (!document.fullscreenElement) {
+                    calendarEl.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+            }
+            // Toggle full screen on double click
+            var isFullScreen = false;
+            calendarEl.addEventListener('dblclick', function () {
+                toggleFullScreen();
+                isFullScreen = !isFullScreen;
+            });
+            // Toggle full screen on double click on the calendar itself
+            calendarEl.addEventListener('dblclick', function () {
+                toggleFullScreen();
+                isFullScreen = !isFullScreen;
+            });
+        });
+    </script>
 {% endblock %}

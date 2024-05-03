@@ -39,8 +39,8 @@ class CalendarController extends AbstractController
                 'start' => $startDateTime,
                 'end' => $endDateTime,
                 'title' => $event->getNomE(),
-                'name' => $event->getNomE(), // Change 'name' to 'title'
-                // Change 'name' to 'title'
+                'name' => $event->getNomE(), 
+                'category' => $event->getCategorieE(), // Add category information
                 // Adjust other properties based on your Event entity
             ];
         }
