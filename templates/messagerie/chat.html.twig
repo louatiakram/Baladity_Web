@@ -1,4 +1,133 @@
-<!DOCTYPE html>
+{% extends 'base-front.html.twig' %}
+
+{% block title %}Baladity Home{% endblock %}
+
+{% block barreTitre %}
+    <li><a href="{{ path('app_main_front') }}">Home</a></li>
+    <li><a href="about.html">Actualite</a></li>
+    <li class="dropdown"><a href="#"><span>Reclamation</span> <i class="bi bi-chevron-down dropdown-indicator" class="active"></i></a>
+        <ul>
+            <li><a href="{{ path('typeReclamation') }}">Ajouter Réclamation</a></li>
+            <li><a href="{{ path('afficherReclamationF') }}">Mes réclamations</a></li>
+        </ul>
+    </li>
+    <li><a href="pricing.html">Evenement</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="{{ path('chatbot') }}">chatbot</a></li>
+    <li><a href="contact.html">About Us</a></li>
+{% endblock %}
+
+{% block body %}
+
+{% endblock %}
+
+{% block rest %}
+    <div class="breadcrumbs">
+        <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/gridAI.jpg') }}');">
+            <div class="container position-relative">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <h2>Our ChatBot</h2>
+                        <p>ChatGPT is an advanced computer program that can understand and generate human-like text based on the input it receives.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <ol>
+                    <li><a href="{{path('app_main_front')}}">Home</a></li>
+                    <li><a href="{{ path('afficherReclamationF') }}">Reclamation</a></li>
+                    <li>Chatgpt</li>
+                </ol>
+            </div>
+        </nav>
+    </div>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Interface</title>
+<link rel="stylesheet" href="{{ asset('styles.css') }}">
+</head>
+<body>
+    <section id="chat-gpt" class="chat-gpt">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="chat-container">
+                        <div class="chat-box" id="chat-box">
+                            <!-- Chat messages will be displayed here -->
+                        </div>
+                        <input type="text" id="user-input" placeholder="Type your message...">
+                        <button id="sendButton" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function sendMessage() {
+            var userInput = document.getElementById("user-input").value;
+            if (userInput.trim() === "") return;
+
+            appendMessage("user", userInput);
+
+            // Send user input to ChatGPT and get response
+            fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer sk-proj-7UMqhRojludlqjB3fcQET3BlbkFJlnS3yJV8oqgyA3hP1IeT' // Replace YOUR_API_KEY with your actual OpenAI API key
+                },
+                body: JSON.stringify({
+                    model: 'gpt-3.5-turbo', // Specify the GPT-3 model
+                    messages: [
+                        {
+                            role: 'user',
+                            content: userInput
+                        }
+                    ]
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from the server
+                appendMessage("bot", data.choices[0].message.content);
+
+                // Clear user input
+                document.getElementById("user-input").value = "";
+
+                // Scroll chat box to bottom
+                var chatBox = document.getElementById("chat-box");
+                chatBox.scrollTop = chatBox.scrollHeight;
+            })
+            .catch(error => {
+                // Handle errors
+                console.error('Error:', error);
+            });
+        }
+
+        function appendMessage(sender, message) {
+            var chatBox = document.getElementById("chat-box");
+            var messageDiv = document.createElement("div");
+            messageDiv.className = "chat-message";
+
+            if (sender === "user") {
+                messageDiv.className += " user-message";
+            } else {
+                messageDiv.className += " bot-message";
+            }
+
+            messageDiv.textContent = message;
+            chatBox.appendChild(messageDiv);
+        }
+    </script>
+{% endblock %}
+
+{# <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -77,9 +206,9 @@ function appendMessage(sender, message) {
 
 // Function to get bot response
 // Replace this with your actual code to communicate with ChatGPT
-{# function getBotResponse(userInput) {
+ function getBotResponse(userInput) {
     // Example response
     return "This is a bot response to: " + userInput;
-} #}
+} 
 
-</script>
+</script> #}
