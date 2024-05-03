@@ -92,4 +92,25 @@ class enduserRepository extends ServiceEntityRepository implements PasswordUpgra
         ;
     }
     */
+
+    public function findByTypeUser(string $type): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.type_user = :type')
+            ->setParameter('type', $type)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countUsersPerMuni(): array
+{
+    return $this->createQueryBuilder('u')
+        ->select('COUNT(u.id_user) as userCount', 'm.nom_muni as nom_muni')
+        ->leftJoin('u.id_muni', 'm')
+        ->groupBy('u.id_muni')
+        ->getQuery()
+        ->getResult();
+}
+
+
 }

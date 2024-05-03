@@ -160,4 +160,28 @@ class UserController extends AbstractController
         $em->flush();
         return $this->redirectToRoute('afficher_user');
     }
+
+    #[Route('/user/stat', name: 'stat')]
+    public function usersByType(enduserRepository $userRepository): Response
+    {
+        $citoyen = $userRepository->findByTypeUser('Citoyen');
+        $Responsable = $userRepository->findByTypeUser('Responsable employé');
+        $Employe = $userRepository->findByTypeUser('Employé');
+        $Directeur = $userRepository->findByTypeUser('Directeur'); 
+
+        // Count users per id_muni
+        $usersPerMuni = $userRepository->countUsersPerMuni();
+
+        // You can pass $users to your template for rendering
+
+        return $this->render('user/stat.html.twig', [
+            'citoyen' => $citoyen,
+            'Responsable' => $Responsable,
+            'Employe' => $Employe,
+            'Directeur' => $Directeur,
+            'usersPerMuni' => $usersPerMuni,
+        ]);
+    }
+
+
 }
