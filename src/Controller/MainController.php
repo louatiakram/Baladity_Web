@@ -26,8 +26,17 @@ class MainController extends AbstractController
         ]);
     }
     #[Route('/front', name: 'app_main_front')]
-    public function indexfront(): Response
+    public function indexfront(Request $request, ManagerRegistry $doctrine): Response
     {
-        return $this->render('main/index_front.html.twig');
+        $userId = $request->getSession()->get('user_id');
+        //$userId=81;
+
+        //get user
+        $userRepository = $doctrine->getRepository(enduser::class);
+        $users = $userRepository->findOneBy(['id_user' => $userId]);
+
+        return $this->render('main/index_front.html.twig',[
+            'user' => $users,  
+        ]);
     }
 }
