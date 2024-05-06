@@ -14,7 +14,7 @@ class MainController extends AbstractController
     #[Route('/', name: 'app_main')]
     public function index(Request $request, ManagerRegistry $doctrine): Response
     {
-            $userId = $request->getSession()->get('user_id');
+        $userId = $request->getSession()->get('user_id');
         //$userId=81;
 
         //get user
@@ -24,5 +24,10 @@ class MainController extends AbstractController
         return $this->render('main/index.html.twig',[
             'user' => $users,    
         ]);
+    }
+    #[Route('/front', name: 'app_main_front')]
+    public function indexfront(): Response
+    {
+        return $this->render('main/index_front.html.twig');
     }
 }
