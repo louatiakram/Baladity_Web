@@ -33,26 +33,10 @@
                 </div>
             </div>
         </div>
-        <nav>
-            <div class="container">
-                <ol>
-                    <li><a href="{{path('app_main_front')}}">Home</a></li>
-                    <li><a href="{{ path('afficherReclamationF') }}">Reclamation</a></li>
-                    <li>Chatgpt</li>
-                </ol>
-            </div>
-        </nav>
+ 
     </div>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatGPT Interface</title>
-<link rel="stylesheet" href="{{ asset('styles.css') }}">
-</head>
-<body>
-    <section id="chat-gpt" class="chat-gpt">
+
+  <section id="chat-gpt" class="chat-gpt">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
@@ -60,13 +44,95 @@
                         <div class="chat-box" id="chat-box">
                             <!-- Chat messages will be displayed here -->
                         </div>
-                        <input type="text" id="user-input" placeholder="Type your message...">
-                        <button id="sendButton" onclick="sendMessage()">Send</button>
+                        <div class="input-group">
+                            <input type="text" id="user-input" placeholder="Type your message..." class="form-control">
+                            <button id="sendButton" onclick="sendMessage()" class="btn btn-primary" type="button"><i class="fas fa-paper-plane"></i></button>
+                            <button id="clearButton" onclick="clearChat()" class="btn btn-danger" type="button"><i class="fas fa-trash-alt"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+  <style>
+    .user-input, .send-button {
+        border-radius: 5px;
+    }
+
+    .user-input {
+        width: calc(100% - 100px); /* Adjust width */
+        padding: 10px; /* Padding */
+        border: 1px solid #ddd; /* Border color */
+        margin-right: 10px; /* Margin */
+    }
+
+    .user-input:focus {
+        outline: none; /* Remove outline on focus */
+        border-color: #4CAF50; /* Change border color on focus */
+    }
+
+    .send-button {
+        background-color: #4CAF50; /* Green background */
+        border: none; /* No border */
+        color: white; /* White text */
+        padding: 10px 20px; /* Padding */
+        margin: 0; /* Adjust margin */
+        cursor: pointer; /* Cursor on hover */
+    }
+
+    .send-button:hover {
+        background-color: #45a049; /* Darker green on hover */
+    }
+
+    /* Adjust chat box appearance */
+    .chat-container {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-box {
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+        max-height: 400px; /* Adjust as needed */
+        overflow-y: auto;
+        border: 1px solid #ddd;
+    }
+
+    .chat-message {
+        margin-bottom: 10px;
+        border-radius: 10px;
+        padding: 10px;
+        max-width: 80%;
+        word-wrap: break-word;
+    }
+
+    .user-message {
+        background-color: #f1f0f0;
+        margin-right: auto;
+    }
+
+    .bot-message {
+        background-color: #e5f8ff;
+        margin-left: auto;
+    }
+    .icon-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 24px;
+        color: #333; /* Adjust icon color */
+        margin-left: 5px; /* Adjust margin between buttons */
+    }
+
+    .icon-button:focus {
+        outline: none; /* Remove focus outline */
+    }
+</style>
 
     <script>
         function sendMessage() {
