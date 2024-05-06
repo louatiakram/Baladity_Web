@@ -211,8 +211,7 @@
                 <li class="nav-item dropdown pe-3">
 
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                        <img src="{{ asset('back-office/img/profile-img.jpg') }}" alt="Profile" class="rounded-circle">
-                        <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+                        <span class="d-none d-md-block dropdown-toggle ps-2">Profile</span>
                     </a><!-- End Profile Iamge Icon -->
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -225,7 +224,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                            <a class="dropdown-item d-flex align-items-center" href="{{ path('profile_user') }}">
                                 <i class="bi bi-person"></i>
                                 <span>My Profile</span>
                             </a>
@@ -255,7 +254,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                            <a class="dropdown-item d-flex align-items-center" href="{{ path('sign_out') }}">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Sign Out</span>
                             </a>
@@ -293,18 +292,38 @@
                 </a>
                 <ul id="GestionUser-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="#">
-                            <i class="bi bi-circle"></i><span>Ajouter User</span>
+                        <a href="{{ path('afficher_user') }}">
+                            <i class="bi bi-circle"></i><span>Liste User</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
-                            <i class="bi bi-circle"></i><span>Liste User</span>
+                        <a href="{{ path('stat') }}">
+                            <i class="bi bi-circle"></i><span>User Stat</span>
                         </a>
                     </li>
                 </ul>
             </li>
             <!-- Gestion User -->
+            <!-- Gestion Muni -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#GestionMuni-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-layout-text-window-reverse"></i><span>Gestion Municipalité</span><i
+                            class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="GestionMuni-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ path('ajouter_municipality') }}">
+                            <i class="bi bi-circle"></i><span>Ajouter Municipalité</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('afficher_muni') }}">
+                            <i class="bi bi-circle"></i><span>Liste Municipalité</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!-- Gestion Muni -->
             <!-- Gestion Tache -->
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#">
@@ -313,12 +332,12 @@
                 </a>
                 <ul id="GestionTache-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="#">
+                        <a href="{{ path('afficher_user') }}">
                             <i class="bi bi-circle"></i><span>Ajouter Tache</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{ path('afficher_user') }}">
                             <i class="bi bi-circle"></i><span>Liste Tache</span>
                         </a>
                     </li>

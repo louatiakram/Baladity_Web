@@ -1,0 +1,100 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}User Statistics{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-body pb-0">
+            <h5 class="card-title">User Statistics</h5>
+
+            <div id="userPieChart" style="height: 400px;"></div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const userPieChart = echarts.init(document.querySelector("#userPieChart"));
+
+                    userPieChart.setOption({
+                        tooltip: {
+                            trigger: 'item'
+                        },
+                        legend: {
+                            top: '5%',
+                            left: 'center'
+                        },
+                        series: [{
+                            name: 'User Types',
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            avoidLabelOverlap: false,
+                            label: {
+                                show: true,
+                                position: 'inside',
+                                formatter: '{b}: {c} ({d}%)' // Display name, value, and percentage
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: '18',
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: {{ citoyen|length }}, name: 'Citoyen' },
+                                { value: {{ Responsable|length }}, name: 'Responsable employé' },
+                                { value: {{ Employe|length }}, name: 'Employé' },
+                                { value: {{ Directeur|length }}, name: 'Directeur' }
+                            ]
+                        }]
+                    });
+                });
+            </script>
+            <!-- Bar Chart -->
+        <canvas id="barChart" style="max-height: 400px;"></canvas>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                // Get the canvas element
+                const barChartCanvas = document.querySelector('#barChart');
+                
+                // Extract data from PHP variable
+                const usersPerMuniData = JSON.parse('{{ usersPerMuni|json_encode|raw }}');
+
+                // Extract labels and data for the chart
+                const labels = [];
+                const data = [];
+
+                usersPerMuniData.forEach(item => {
+                    labels.push(item.nom_muni); // Assuming muniName is the key for the municipality name
+                    data.push(item.userCount);
+                });
+
+                // Create the bar chart
+                new Chart(barChartCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Users per Municipality',
+                            data: data,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgb(75, 192, 192)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+        <!-- End Bar Chart -->
+        </div>
+    </div>
+{% endblock %}

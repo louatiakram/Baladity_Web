@@ -1,0 +1,56 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Liste des Municipalité{% endblock %}
+
+{% block searchbar %}
+    <div class="search-bar">
+        <form id="search-form" class="search-form d-flex align-items-center" action="{{ path('tache_list') }}" method="GET">
+            <input id="search-input" type="text" placeholder="Search..." name="query" value="{{ query ?? '' }}">
+            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block TacheNavState %}<a class="nav-link" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#" aria-expanded="true">{% endblock %}
+    {% block TacheContentState %}<ul id="GestionTache-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">{% endblock %}
+
+{% block ListeTacheNav %}<a href="#" class="active"><i class="bi bi-circle"></i><span>Ajouter Municipality</span></a>{% endblock %}
+
+{% block body %}
+
+    <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Ajouter Municipality</h5>
+              {{ form_errors(form) }}
+                        
+              {{ form_start(form, {'attr': {'action': path('update_muni', {'i': muni.getIdMuni}), 'method': 'POST'}}) }}
+                        <div class="col-12">
+                            <label for="yourEmail" class="form-label">Nom</label>
+                            {{ form_widget(form.nom_muni, {'attr': {'class': 'form-control', 'id': 'yourEmail'}}) }}
+                            {{ form_errors(form.nom_muni) }}
+                        </div><br>
+                        <div class="col-12">
+                            <label for="yourPassword" class="form-label">Email</label>
+                            {{ form_widget(form.email_muni, {'attr': {'class': 'form-control', 'id': 'yourPassword'}}) }}
+                            {{ form_errors(form.email_muni) }}
+                        </div><br>
+                        <div class="col-12">
+                            <label for="yourPassword" class="form-label">Password</label>
+                            {{ form_widget(form.password_muni, {'attr': {'class': 'form-control', 'id': 'yourPassword'}}) }}
+                            {{ form_errors(form.password_muni) }}
+                        </div><br>
+                        <div class="col-12">
+                            <label for="yourPassword" class="form-label">Image</label>
+                            {{ form_widget(form.imagee_user, {'attr': {'class': 'form-control', 'id': 'yourPassword'}}) }}
+                            {{ form_errors(form.imagee_user) }}
+                        </div><br>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary w-100">Modifier</button>
+                        </div>
+                        {{ form_end(form) }}
+
+
+            </div>
+          </div>
+
+{% endblock %}

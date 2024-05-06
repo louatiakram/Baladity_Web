@@ -2,16 +2,21 @@
 
 namespace App\Entity;
 
-use App\Repository\EndUserRepository;
+use App\Repository\enduserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ORM\Entity(repositoryClass: EndUserRepository::class)]
-class enduser
+#[ORM\Entity(repositoryClass: enduserRepository::class)]
+class enduser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: 'id_user', type: 'integer')]
+    #[ORM\Column(type: 'integer')]
     private $id_user;
+
+    #[ORM\Column(type: 'string')]
+    private $type_user;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $nom_user;
@@ -19,11 +24,8 @@ class enduser
     #[ORM\Column(type: 'string', length: 255)]
     private $email_user;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string')]
     private $password;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    private $type_user;
 
     #[ORM\Column(name: 'phoneNumber_user', type: 'string', length: 255)]
     private $phoneNumber_user;
@@ -41,13 +43,67 @@ class enduser
     #[ORM\Column(name: 'isBanned', type: 'boolean', nullable: true)]
     private $isBanned;
 
-    public function getIdUser(): ?int
+    #[ORM\Column(type: 'boolean')]
+    private $isVerified = false;
+
+    public function getIdUser(): ? int
     {
         return $this->id_user;
     }
-    public function setIdUser(int $id_user): self
+
+    public function setIdUser(int $id): self
     {
-        $this->id_user = $id_user;
+        $this->id_user = $id;
+
+        return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->id_user;
+    }
+
+    /**
+     * @deprecated since Symfony 5.3, use getUserIdentifier instead
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->id_user;
+    }
+
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): string
+    {
+        $type_user = $this->type_user;
+        // guarantee every user at least has ROLE_USER
+        $type_user = 'Citoyen';
+
+        return $type_user;
+    }
+
+    public function getTypeUser(): ?string
+    {
+        return $this->type_user;
+    }
+    
+    public function setTypeUser(string $type_user): self
+    {
+        $this->type_user = $type_user;
+        return $this;
+    }
+    
+    public function setRoles(string $type_user): self
+    {
+        $this->type_user = $type_user;
+
         return $this;
     }
 
@@ -73,7 +129,10 @@ class enduser
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -81,17 +140,7 @@ class enduser
     public function setPassword(string $password): self
     {
         $this->password = $password;
-        return $this;
-    }
 
-    public function getTypeUser(): ?string
-    {
-        return $this->type_user;
-    }
-
-    public function setTypeUser(string $type_user): self
-    {
-        $this->type_user = $type_user;
         return $this;
     }
 
@@ -147,6 +196,38 @@ class enduser
     public function setIsBanned(?bool $isBanned): self
     {
         $this->isBanned = $isBanned;
+        return $this;
+    }
+
+    /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+
         return $this;
     }
 }
