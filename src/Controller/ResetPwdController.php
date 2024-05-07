@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\enduser;
 use App\Form\ResetPwdType;
-use App\Repository\EnduserRepository;
+use App\Repository\enduserRepository;
 use App\Security\EmailVerifier;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

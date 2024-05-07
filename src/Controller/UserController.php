@@ -7,7 +7,7 @@ use App\Entity\muni;
 use App\Form\AdminEditUserType;
 use App\Form\EditProfileType;
 use App\Form\RegisterType;
-use App\Repository\EnduserRepository;
+use App\Repository\enduserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -152,7 +152,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/delete/{i}', name: 'user_delete')]
-    public function delete($i, EnduserRepository $rep, ManagerRegistry $doctrine): Response
+    public function delete($i, enduserRepository $rep, ManagerRegistry $doctrine): Response
     {
         $xs = $rep->find($i);
         $em = $doctrine->getManager();
@@ -162,7 +162,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/stat', name: 'stat')]
-    public function usersByType(EnduserRepository $userRepository): Response
+    public function usersByType(enduserRepository $userRepository): Response
     {
         $citoyen = $userRepository->findByTypeUser('Citoyen');
         $Responsable = $userRepository->findByTypeUser('Responsable employé');
