@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\enduserRepository;
+use App\Repository\EndUserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ORM\Entity(repositoryClass: enduserRepository::class)]
+#[ORM\Entity(repositoryClass: EndUserRepository::class)]
 class enduser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
