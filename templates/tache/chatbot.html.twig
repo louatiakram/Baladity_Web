@@ -1,0 +1,122 @@
+{% extends 'base-back.html.twig' %}
+{% block title %}BalBot{% endblock %}
+
+{% block body %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #012545;
+        }
+
+        form {
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-right: 10px;
+            width: 70%;
+        }
+
+        .response {
+            text-align: center; /* Center align the response */
+            margin-top: 20px;
+            color: #012545;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            font-size: 24px; /* Adjust the font size to make the dots larger */
+            color: #012545; /* Color of the dots */
+        }
+        
+        .loading::after {
+            content: '...';
+            animation: ellipsis 1.5s infinite; /* Adjust animation duration */
+        }
+        
+        @keyframes ellipsis {
+            0% {
+                content: '.';
+            }
+            33% {
+                content: '..';
+            }
+            66% {
+                content: '...';
+            }
+        }
+        
+        .button {
+            background-color: #012545;
+            color: #ffffff; /* Chat button text color */
+        }
+    </style>
+
+    <div class="container">
+        <h1>Chatbot</h1>
+        <form id="chatForm" method="post" action="{{ path('chatbot') }}">
+            <input type="text" id="user_message" name="user_message">
+            <button class="button" type="submit" onclick="showLoading()"><i class="bi bi-arrow-up-circle-fill"></i></button>
+            <button class="button" onclick="clearInput()"><i class="bi bi-trash-fill"></i></button>
+        </form>
+        <div id="loading" class="loading"></div>
+        {% if response %}
+            <div class="response">
+                {% set lines = response|split('.') %}
+                {% for line in lines %}
+                    <p>{{ line }}</p>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="response">
+                <p>Network error: Unable to connect to the chat server. Please try again later.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function clearInput() {
+            // Show loading indicator
+            document.getElementById("loading").style.display = "inline-block";
+            
+            // Add a short delay to simulate processing time
+            setTimeout(function() {
+                // Clear input field after delay
+                document.getElementById("user_message").value = "";
+                
+                // Hide loading indicator
+                document.getElementById("loading").style.display = "none";
+            }, 500); // Adjust the delay time as needed
+        }
+        
+        function showLoading() {
+            document.getElementById("loading").style.display = "inline-block";
+        }
+    </script>
+{% endblock %}

@@ -13,19 +13,18 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Knp\Component\Pager\PaginatorInterface;
 use League\Csv\Reader;
-use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\File\File;
 
 class TacheController extends AbstractController
 {
@@ -199,10 +198,10 @@ class TacheController extends AbstractController
             }
 
         }
-       // Pass the image path to the template
-       $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploadsDirectory') . '/' . $x->getPieceJointeT() : null;
-    
-       return $this->renderForm('tache/add.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
+        // Pass the image path to the template
+        $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploadsDirectory') . '/' . $x->getPieceJointeT() : null;
+
+        return $this->renderForm('tache/add.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
     }
 
     #[Route('/tache/update/{i}', name: 'tache_update')]
@@ -211,9 +210,9 @@ class TacheController extends AbstractController
         $x = $rep->find($i);
         $form = $this->createForm(TacheType::class, $x);
         $form->handleRequest($req);
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
-    
+
             // Handle file upload
             /** @var UploadedFile|null $pieceJointe */
             $pieceJointe = $form->get('pieceJointe_T')->getData();
@@ -228,23 +227,23 @@ class TacheController extends AbstractController
                     $x->setPieceJointeT($uploadedFile->getFilename());
                 } catch (FileException $e) {}
             }
-    
+
             // Get the selected etat_T value from the form
             $selectedEtatT = $form->get('etat_T')->getData();
-    
+
             // Set the etat_T property of the tache entity
             $x->setEtatT($selectedEtatT);
-    
+
             $em = $doctrine->getManager();
             $em->flush();
-    
+
             $session->getFlashBag()->add('success', 'Tâche mise à jour avec succès!');
             return $this->redirectToRoute('tache_list');
         }
-    
+
         // Pass the image path to the template
         $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploadsDirectory') . '/' . $x->getPieceJointeT() : null;
-    
+
         return $this->renderForm('tache/add.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
     }
 
@@ -478,43 +477,43 @@ class TacheController extends AbstractController
 
         // Populate data
 // Populate data
-$row = 2;
-foreach ($tasks as $task) {
-    $sheet->setCellValue('A' . $row, $task->getTitreT());
+        $row = 2;
+        foreach ($tasks as $task) {
+            $sheet->setCellValue('A' . $row, $task->getTitreT());
 
-    // Check if the task has a piece jointe
-    if ($task->getPieceJointeT() !== null) {
-        // Create hyperlink for the file name
-        $uploadsDirectory = $this->getParameter('uploadsDirectory');
-        $hyperlinkUrl = $uploadsDirectory . '/' . $task->getPieceJointeT();
-        $hyperlinkText = $task->getPieceJointeT();
-        $sheet->getCell('B' . $row)->getHyperlink()->setUrl($hyperlinkUrl);
-        $sheet->getCell('B' . $row)->setValue($hyperlinkText);
-    } else {
-        // Set the cell value to empty if no piece jointe
-        $sheet->setCellValue('B' . $row, ''); // Set the cell value to empty
-    }
+            // Check if the task has a piece jointe
+            if ($task->getPieceJointeT() !== null) {
+                // Create hyperlink for the file name
+                $uploadsDirectory = $this->getParameter('uploadsDirectory');
+                $hyperlinkUrl = $uploadsDirectory . '/' . $task->getPieceJointeT();
+                $hyperlinkText = $task->getPieceJointeT();
+                $sheet->getCell('B' . $row)->getHyperlink()->setUrl($hyperlinkUrl);
+                $sheet->getCell('B' . $row)->setValue($hyperlinkText);
+            } else {
+                // Set the cell value to empty if no piece jointe
+                $sheet->setCellValue('B' . $row, ''); // Set the cell value to empty
+            }
 
-    // Set other cell values
-    $sheet->setCellValue('C' . $row, $task->getDateDT()->format('Y-m-d'));
-    $sheet->setCellValue('D' . $row, $task->getDateFT()->format('Y-m-d'));
-    $sheet->setCellValue('E' . $row, $task->getDescT());
-    $sheet->setCellValue('F' . $row, $task->getEtatT()); // Add this line for etat_T
+            // Set other cell values
+            $sheet->setCellValue('C' . $row, $task->getDateDT()->format('Y-m-d'));
+            $sheet->setCellValue('D' . $row, $task->getDateFT()->format('Y-m-d'));
+            $sheet->setCellValue('E' . $row, $task->getDescT());
+            $sheet->setCellValue('F' . $row, $task->getEtatT()); // Add this line for etat_T
 
-    // Apply cell styles
-    $sheet->getStyle('A' . $row . ':F' . $row)->applyFromArray([
-        'borders' => [
-            'allBorders' => [
-                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                'color' => ['rgb' => '000000'],
-            ],
-        ],
-        'alignment' => [
-            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-        ],
-    ]);
-    $row++;
-}
+            // Apply cell styles
+            $sheet->getStyle('A' . $row . ':F' . $row)->applyFromArray([
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => ['rgb' => '000000'],
+                    ],
+                ],
+                'alignment' => [
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+            ]);
+            $row++;
+        }
 
         // Auto-size columns
         foreach (range('A', 'F') as $column) {
@@ -620,5 +619,48 @@ foreach ($tasks as $task) {
 
         // If the form is not submitted or the file upload fails, redirect back to the list page
         return $this->redirectToRoute('tache_listfront');
+    }
+
+    #[Route('/tache/chatbot', name: 'chatbot')]
+    public function chatbotAction(Request $request)
+    {
+        // Get the user message from the request
+        $userMessage = $request->request->get('user_message');
+
+        // Create a Guzzle client
+        $client = new Client();
+
+        // Make the API request
+        $response = $client->request('POST', 'https://chat-gtp-free.p.rapidapi.com/v1/chat/completions', [
+            'body' => json_encode([
+                "chatId" => "92d97036-3e25-442b-9a25-096ab45b0525",
+                "messages" => [
+                    [
+                        "role" => "system",
+                        "content" => "You are a virtual assistant. Your name is BalBot and you are a guide to the baladity project developed by 'Dev Masters' a group of 6 skilled IT Engineers, which is a virtual municipality with currently only one sector area: Ariana, tunisia."
+                    ],
+                    [
+                        "role" => "user",
+                        "content" => $userMessage // Use the user message here
+                    ]
+                ]
+            ]),
+            'headers' => [
+                'X-RapidAPI-Host' => 'chat-gtp-free.p.rapidapi.com',
+                'X-RapidAPI-Key' => 'c4ce61e66cmsh093df949f93970dp1167e8jsn5f0ee0024abd',
+                'content-type' => 'application/json',
+            ],
+        ]);
+
+        // Get the response body and decode it
+        $responseBody = json_decode($response->getBody()->getContents(), true);
+
+        // Get only the 'txt' attribute from the response
+        $displayText = $responseBody['text'] ?? null;
+
+        // Render a Twig template with the response
+        return $this->render('tache/chatbot.html.twig', [
+            'response' => $displayText,
+        ]);
     }
 }
