@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\enduserRepository;
+use App\Repository\EndUserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
