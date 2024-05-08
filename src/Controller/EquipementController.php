@@ -55,7 +55,7 @@ class EquipementController extends AbstractController
                 // Handle image upload and persist its filename to the database
                 $fileName = uniqid().'.'.$image->guessExtension();
                 try {
-                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    $image->move($this->getParameter('uploads_directory'), $fileName);
                     $equipement->setImageEq($fileName);
                 } catch (FileException $e) {
                     // Handle the exception if file upload fails
@@ -107,7 +107,7 @@ class EquipementController extends AbstractController
                 // Handle image upload and persist its filename to the database
                 $fileName = uniqid().'.'.$image->guessExtension();
                 try {
-                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    $image->move($this->getParameter('uploads_directory'), $fileName);
                     $equipement->setImageEq($fileName);
                 } catch (FileException $e) {
                     // Handle the exception if file upload fails
@@ -189,7 +189,7 @@ public function modifierEquipement($id, ManagerRegistry $doctrine, Request $requ
             // Handle image upload and persist its filename to the database
             $fileName = uniqid().'.'.$image->guessExtension();
             try {
-                $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                $image->move($this->getParameter('uploads_directory'), $fileName);
                 $equipement->setImageEq($fileName);
             } catch (FileException $e) {
                 // Handle the exception if file upload fails
@@ -234,7 +234,7 @@ public function modifierEquipementResponsable($id, ManagerRegistry $doctrine, Re
             // Handle image upload and persist its filename to the database
             $fileName = uniqid().'.'.$image->guessExtension();
             try {
-                $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                $image->move($this->getParameter('uploads_directory'), $fileName);
                 $equipement->setImageEq($fileName);
             } catch (FileException $e) {
                 // Handle the exception if file upload fails
@@ -451,5 +451,36 @@ public function statsEquipements(EquipementRepository $equipementRepository): Re
         // En cas d'erreur, retourner une réponse JSON avec le message d'erreur
         return new JsonResponse(['error' => $e->getMessage()], 400);
     }
+}
+#[Route('/equipement/showEquipementResponsable', name: 'equipement_show_responsable')]
+public function showEquipementResponsable(Request $request, EquipementRepository $repository): Response
+{
+    $query = $request->query->get('query');
+    $currentPage = $request->query->getInt('page', 1);
+    $limit = 10; // Nombre d'équipements par page
+
+    // Récupérer les équipements en fonction de la recherche et de la pagination
+    if ($query) {
+        $equipements = $repository->findByTitre($query, $limit, ($currentPage - 1) * $limit);
+        $totalEquipements = count($equipements); // Mise à jour du nombre total d'équipements
+    } else {
+        $equipements = $repository->findAllPaginated($limit, ($currentPage - 1) * $limit);
+        $totalEquipements = $repository->countAll(); // Mise à jour du nombre total d'équipements
+    }
+
+    // Calculer et transmettre la quantité initiale pour chaque équipement
+    foreach ($equipements as $equipement) {
+        $equipement->quantiteInitiale = $equipement->getQuantiteEq();
+    }
+
+    // Calculer le nombre total de pages
+    $totalPages = ceil($totalEquipements / $limit);
+
+    return $this->render('equipement/showEquipementResponsable.html.twig', [
+        'equipements' => $equipements,
+        'query' => $query,
+        'currentPage' => $currentPage,
+        'totalPages' => $totalPages,
+    ]);
 }
 }
