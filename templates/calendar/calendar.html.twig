@@ -1,0 +1,160 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calendrier des événements{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Inclure la feuille de style FullCalendar #}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css"
+          integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+    {# Ajouter des styles spécifiques au conteneur du calendrier #}
+    <style>
+        /* Styles pour le conteneur du calendrier */
+        .calendar-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #f8f9fa; /* Couleur de fond */
+            padding: 20px;
+            border-radius: 10px; /* Coins arrondis */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+            transition: all 0.3s ease-in-out; /* Animation de transition */
+        }
+
+        /* Styles pour l'en-tête du calendrier */
+        .fc-header-toolbar {
+            background-color: #343a40; /* Couleur de fond de l'en-tête */
+            color: #ffffff; /* Couleur du texte de l'en-tête */
+            border: none; /* Supprimer la bordure */
+            border-radius: 5px; /* Coins arrondis */
+        }
+
+        /* Styles pour le bouton de changement de vue (mois, semaine, jour) */
+        .fc-button-group {
+            margin-right: 10px;
+        }
+
+        /* Styles pour les événements du calendrier */
+        .fc-event {
+            background-color: #28a745; /* Couleur de fond des événements */
+            color: #ffffff; /* Couleur du texte des événements */
+            border: none; /* Supprimer la bordure des événements */
+            border-radius: 5px; /* Coins arrondis des événements */
+            white-space: normal; /* Permettre le passage à la ligne pour les noms d'événements longs */
+        }
+
+        /* Styles pour les jours de la semaine dans l'en-tête */
+        .fc-day-header {
+            background-color: #343a40; /* Couleur de fond */
+            color: #ffffff; /* Couleur du texte */
+            border: none; /* Supprimer la bordure */
+            border-radius: 5px; /* Coins arrondis */
+        }
+
+        /* Styles pour les jours du mois dans le corps du calendrier */
+        .fc-day {
+            border: 1px solid #dee2e6; /* Bordure légère entre les jours */
+            border-radius: 5px; /* Coins arrondis des jours */
+        }
+
+        /* Couleurs des liens */
+        a {
+            color: #007bff;
+        }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+    {# Contenu spécifique de votre page #}
+    <section class="meetings-page" id="meetings">
+        <div class="content-container">
+            {# Votre contenu existant #}
+        </div>
+
+        {# Ajouter une classe au conteneur du calendrier #}
+        <div id="calendar" class="calendar-container"></div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Inclure la bibliothèque FullCalendar JavaScript #}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"
+            integrity="sha256-DBxkGZLxKsLKhz054qUpBqtotG00r9AELGpSigJujLg=" crossorigin="anonymous"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: {{ data | raw }},
+                eventContent: function (arg) {
+                    var content = document.createElement('div');
+                    content.innerHTML = '<b>' + arg.event.extendedProps.name + '</b>';
+                    return { domNodes: [content] };
+                },
+                eventDidMount: function (arg) {
+                    var eventCategory = arg.event.extendedProps.category;
+                    var eventElement = arg.el;
+                
+                    // Set different colors based on category
+                    switch (eventCategory) {
+                        case 'Charity':
+                            eventElement.style.backgroundColor = '#89CFF0'; // Light blue
+                            break;
+                        case 'Sportif':
+                            eventElement.style.backgroundColor = '#0000FF'; // Blue
+                            break;
+                        case 'Culturel':
+                            eventElement.style.backgroundColor = '#FDDA0D';
+                            break;
+                        case 'Social':
+                            eventElement.style.backgroundColor = '#702963'; 
+                            break;
+                        default:
+                            eventElement.style.backgroundColor = 'gray'; // Default color
+                            break;
+                    }
+                },
+                eventClick: function(eventInfo) {
+                    // Get the ID of the clicked event
+                    var eventId = eventInfo.event.id;
+                    // Redirect to the details page URL with the event ID
+                    window.location.href = '/evenement/detailsFront/' + eventId;
+                },
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridYear,dayGridMonth,dayGridWeek' // Adding dayGridWeek here
+                },
+                views: {
+                    Year: {
+                        type: 'dayGrid',
+                        duration: { months: 12 }
+                    }
+                }
+            });
+
+            calendar.render();
+            // Function to toggle full screen
+            function toggleFullScreen() {
+                if (!document.fullscreenElement) {
+                    calendarEl.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+            }
+            // Toggle full screen on double click
+            var isFullScreen = false;
+            calendarEl.addEventListener('dblclick', function () {
+                toggleFullScreen();
+                isFullScreen = !isFullScreen;
+            });
+            // Toggle full screen on double click on the calendar itself
+            calendarEl.addEventListener('dblclick', function () {
+                toggleFullScreen();
+                isFullScreen = !isFullScreen;
+            });
+        });
+    </script>
+{% endblock %}

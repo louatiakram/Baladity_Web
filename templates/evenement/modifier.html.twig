@@ -1,0 +1,94 @@
+{# templates/evenement/Modifier.html.twig #}
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Modifier un Événement{% endblock %}
+
+{% block body %}
+{% if form_errors(form)|length > 0 %}
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+			<i class="bi bi-exclamation-octagon me-1"></i>
+			{{ form_errors(form) }}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		{% endif %}
+
+    <h1>Modifier un Événement</h1>
+
+    {{ form_start(form, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate'}}) }}
+    
+    <div class="col-md-4">
+        <label for="nom_E" class="form-label">Nom de l'Événement</label>
+        {{ form_widget(form.nom_E, { 'attr': {'class': 'form-control'} }) }}
+        {% if form.nom_E.vars.errors|length > 0 %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-octagon me-1"></i>
+            {% for error in form.nom_E.vars.errors %}
+            {{ error.message }}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        <label for="date_DHE" class="form-label">Date de début</label>
+        {{ form_widget(form.date_DHE, {'attr': {'class': 'form-control'}}) }}
+        {% if form.date_DHE.vars.errors|length > 0 %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-octagon me-1"></i>
+            {% for error in form.date_DHE.vars.errors %}
+            {{ error.message }}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        <label for="date_DHF" class="form-label">Date de fin</label>
+        {{ form_widget(form.date_DHF, {'attr': {'class': 'form-control'}}) }}
+        {% if form.date_DHF.vars.errors|length > 0 %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-octagon me-1"></i>
+            {% for error in form.date_DHF.vars.errors %}
+            {{ error.message }}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        <label for="capacite_E" class="form-label">Capacité de l'Événement</label>
+        {{ form_widget(form.capacite_E, {'attr': {'class': 'form-control'}}) }}
+        {% if form.capacite_E.vars.errors|length > 0 %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-octagon me-1"></i>
+            {% for error in form.capacite_E.vars.errors %}
+            {{ error.message }}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        <label for="categorie_E" class="form-label">Catégorie de l'Événement</label>
+        {{ form_widget(form.categorie_E, {'attr': {'class': 'form-control'}}) }}
+        {% if form.categorie_E.vars.errors|length > 0 %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-octagon me-1"></i>
+            {% for error in form.categorie_E.vars.errors %}
+            {{ error.message }}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+    </div>
+    
+    
+    <div class="mb-3">
+        {{ form_widget(form.imageEvent, {'attr': {'class': 'form-control', 'accept': 'image/*'}}) }}
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Ajouter Proposition{% endblock %}
+
+{% block body %}
+{% if form_errors(form)|length > 0 %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-octagon me-1"></i>
+        {{ form_errors(form) }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+<h1>Ajouter une Proposition</h1>
+
+{{ form_start(form, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate'}}) }}
+
+<div class="col-md-4">
+    <label for="desc_E" class="form-label">Description</label>
+    {{ form_widget(form.desc_E, { 'attr': {'class': 'form-control', 'style': 'height: 150px;'} }) }}
+    {% if form.desc_E.vars.errors|length > 0 %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-octagon me-1"></i>
+            {% for error in form.desc_E.vars.errors %}
+                {{ error.message }}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+</div>
+
+<div class="mb-3">
+    <label for="date_SV" class="form-label">Date</label>
+    {{ form_widget(form.date_SV, {'attr': {'class': 'form-control'}}) }}
+    {% if form.date_SV.vars.errors|length > 0 %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-octagon me-1"></i>
+            {% for error in form.date_SV.vars.errors %}
+                {{ error.message }}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+</div>
+
+<button type="submit" class="btn btn-primary">Ajouter</button>
+{{ form_end(form) }}
+
+{% endblock %}

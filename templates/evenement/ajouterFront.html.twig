@@ -1,0 +1,166 @@
+{% extends 'base-front.html.twig' %}
+
+{% block title %}Ajout événement{% endblock %}
+
+{% block barreTitre %}
+    <li><a href="{{ path('app_main_front') }}">Home</a></li>
+    <li><a href="about.html">Actualite</a></li>
+    <li class="dropdown">
+        <a href="#">
+            <span>Evenement</span>
+            <i class="bi bi-chevron-down dropdown-indicator active"></i>
+            <ul>
+                <li><a href="{{ path('ajouterFront_evenement') }}">Ajouter Evenement</a></li>
+                <li><a href="{{ path('evenement_listFront') }}">Mes evenements</a></li>
+                <li><a href="{{ path('ajouter_voteFront') }}">Ajouter propositions</a></li>
+            </ul>
+        </a>    
+    </li>
+    <li><a href="pricing.html">Reclamation</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="contact.html">About Us</a></li>
+{% endblock %}
+
+{% block body %}
+
+{% endblock %}
+
+{% block rest %}
+<div class="breadcrumbs">
+    <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+        <div class="container position-relative">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <h2>Ajouter événement</h2>
+                    <p>Ajoutez votre nouvel événement en remplissant le formulaire ci-dessous.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav>
+        <div class="container">
+            <ol>
+                <li><a href="{{ path('app_main_front') }}">Home</a></li>
+                <li>Evenement</li>
+            </ol>
+        </div>
+    </nav>
+</div>
+
+<section id="get-a-quote" class="get-a-quote">
+    <div class="container aos-init aos-animate" data-aos="fade-up">
+        <div class="row g-0">
+            <div class="col-lg-5 quote-bg" style="background-image: url('{{ asset('images/quote-bg.jpg') }}');"></div>
+            <div class="col-lg-7">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Ajouter votre événement</h3>
+                        <br>
+                        <div class="container">
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            <div class="row gy-4">
+                                <div class="col-md-12">
+                                    {{ form_label(form.nom_E, "Nom de l'événement", {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.nom_E, {'attr': {'class': 'form-control'}}) }}
+                                    {% if form_errors(form.nom_E) is not empty %}
+                                        <div class="alert alert-danger">
+                                            {{ form_errors(form.nom_E) }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    <label for="date_DHE" class="form-label">Date de début</label>
+                                    {{ form_widget(form.date_DHE, {'attr': {'class': 'form-control'}}) }}
+                                    {% if form.date_DHE.vars.errors|length > 0 %}
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <i class="bi bi-exclamation-octagon me-1"></i>
+                                        {% for error in form.date_DHE.vars.errors %}
+                                        {{ error.message }}
+                                        {% endfor %}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    <label for="date_DHF" class="form-label">Date de fin</label>
+                                    {{ form_widget(form.date_DHF, {'attr': {'class': 'form-control'}}) }}
+                                    {% if form.date_DHF.vars.errors|length > 0 %}
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <i class="bi bi-exclamation-octagon me-1"></i>
+                                        {% for error in form.date_DHF.vars.errors %}
+                                        {{ error.message }}
+                                        {% endfor %}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    <label for="capacite_E" class="form-label">Capacité de l'Événement</label>
+                                    {{ form_widget(form.capacite_E, {'attr': {'class': 'form-control'}}) }}
+                                    {% if form.capacite_E.vars.errors|length > 0 %}
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <i class="bi bi-exclamation-octagon me-1"></i>
+                                        {% for error in form.capacite_E.vars.errors %}
+                                        {{ error.message }}
+                                        {% endfor %}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    <label for="categorie_E" class="form-label">Catégorie de l'Événement</label>
+                                    {{ form_widget(form.categorie_E, {'attr': {'class': 'form-control'}}) }}
+                                    {% if form.categorie_E.vars.errors|length > 0 %}
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <i class="bi bi-exclamation-octagon me-1"></i>
+                                        {% for error in form.categorie_E.vars.errors %}
+                                        {{ error.message }}
+                                        {% endfor %}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="formFile" class="col-sm-2 col-form-label">Image</label>
+                                    {{ form_widget(form.imageEvent, {'attr': {'class': 'form-control', 'onchange': 'previewImage(this)'}}) }}
+                                    {% if form_errors(form.imageEvent) is not empty %}
+                                        <div class="alert alert-danger">
+                                            {{ form_errors(form.imageEvent) }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <img id="imagePreview" style="max-width: 50%; max-height: 50%;">
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text-center">
+                                    <div class="error-message"></div>
+                                    {{ form_widget(form.envoyer, {'attr': {'class': 'btn btn-primary'}}) }}
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End Quote Form -->
+        </div>
+    </div>
+</section>
+
+</div>
+
+<script>
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                document.getElementById('imagePreview').src = e.target.result;
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+{% endblock %}

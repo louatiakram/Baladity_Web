@@ -1,0 +1,137 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Statistiques des Evenements{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Pie Chart - Statistiques des Evenements</h5>
+                <!-- Pie Chart -->
+                <div id="pieChart" style="min-height: 400px;"></div>
+                <!-- End Pie Chart -->
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">  
+            <div class="card-body">
+                <h5 class="card-title">Line Chart - Statistiques des Evenements par Date</h5>
+                <!-- Line Chart -->
+                <canvas id="lineChart" style="max-height: 400px;"></canvas>
+                <!-- End Line Chart -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Bar Chart - Statistiques des Evenements par Mois</h5>
+                <!-- Bar Chart -->
+                <canvas id="barChart" style="max-height: 400px;"></canvas>
+                <!-- End Bar Chart -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Pie Chart
+        const pieStats = {{ evenementStats | json_encode | raw }};
+        console.log(pieStats); // Check the data structure in the browser console
+        const pieChartElement = document.getElementById("pieChart");
+        console.log(pieChartElement); // Check if pieChartElement exists
+        if (pieStats.length === 0) {
+            console.error("No data available for the pie chart.");
+        } else if (!pieChartElement) {
+            console.error("Pie chart element not found.");
+        } else {
+            const pieChart = echarts.init(pieChartElement);
+            pieChart.setOption({
+                title: {
+                    text: 'Statistiques des Evenements',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                },
+                series: [{
+                    name: 'Statistiques des Evenements',
+                    type: 'pie',
+                    radius: '50%',
+                    data: pieStats.map(entry => ({
+                        value: entry.eventCount,
+                        name: entry.categorie_E
+                    })),
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            });
+        }
+
+        // Line Chart
+        const lineStats = {{ evenementStatsDate | json_encode | raw }};
+        const dates = lineStats.map(entry => entry.date);
+        const counts = lineStats.map(entry => entry.count);
+        new Chart(document.getElementById("lineChart"), {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Nombre d\'evenements',
+                    data: counts,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Bar Chart
+        const barStats = {{ evenementStatsMonth | json_encode | raw }};
+        const monthNames = [
+            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+        ];
+        const months = barStats.map(entry => monthNames[entry.month - 1]);
+        const countsByMonth = barStats.map(entry => entry.count);
+        new Chart(document.getElementById("barChart"), {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Nombre d\'evenement par Mois',
+                    data: countsByMonth,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgb(75, 192, 192)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
