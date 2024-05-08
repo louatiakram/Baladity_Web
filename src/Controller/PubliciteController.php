@@ -130,7 +130,7 @@ class PubliciteController extends AbstractController
             $em->flush();
     
             // Redirect to the appropriate route
-            return $this->redirectToRoute('app_actualite');
+            return $this->redirectToRoute('payment');
         }
     
         return $this->render('publicite/ajouterPub.html.twig', [
@@ -206,7 +206,7 @@ public function index2(PubliciteRepository $repository): Response
     ]);
 }
 
-#[Route('/Payment', name: 'payment')]
+#[Route('/payment', name: 'payment')]
 public function payment(Request $request): Response
 {
     // Récupérer la durée de l'offre et le montant correspondant depuis la requête ou la base de données
@@ -240,11 +240,13 @@ public function payment(Request $request): Response
 
         // Si le paiement réussit, afficher un message de succès
         $paymentStatus = 'Paiement réussi. ID du paiement : ' . $paymentIntent->id;
+        $this->addFlash('success', 'Le paiement effectué avec success.');
     } catch (\Exception $e) {
+       
         // Si une erreur survient lors du traitement du paiement, afficher le message d'erreur
         $paymentStatus = 'Le paiement a échoué. Erreur : ' . $e->getMessage();
     }
-
+   // $this->addFlash('success', 'Le paiement effectué avec success.');
     // Rendre le template Twig avec le statut du paiement
     return $this->render('publicite/Payment.html.twig', [
         'paymentStatus' => $paymentStatus,

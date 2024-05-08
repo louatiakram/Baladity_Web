@@ -256,12 +256,16 @@ document.getElementById("exportPdfForm").addEventListener("submit", copyFormValu
                         <button type="submit" class="btn btn-primary">reçu de paiement</button>
                     </form>
                 </div>
+                <br>    
+               <div class="text-center">
+    <a href="{{ path('app_actualite') }}" class="btn btn-primary">Voir la liste des publicités</a>
+</div>
 
                 <!-- Affichage du code QR -->
                 <div class="qr-code-container text-center mt-4">
                     <div id="qrcode"></div> <!-- Espace pour le code QR -->
-                </div>
-            </div>
+
+
         </div>
     </div>
 </section>
