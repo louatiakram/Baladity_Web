@@ -1,0 +1,150 @@
+{% extends 'base-back.html.twig' %}
+{% block title %}Ajouter Tâche{% endblock %}
+{% block TacheNavState %}
+<a class="nav-link" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#" aria-expanded="true">
+{% endblock %}
+{% block TacheContentState %}
+<ul id="GestionTache-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+{% endblock %}
+{% block AjouterTacheNav %}
+<a href="{{ path('tache_add') }}" class="active">
+<i class="bi bi-circle"></i><span>Ajouter Tache</span>
+</a>
+{% endblock %}
+{% block body %}
+{{ form_start(f, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate'}}) }}
+{% if form_errors(f)|length > 0 %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+   <i class="bi bi-exclamation-octagon me-1"></i>
+   {{ form_errors(f) }}
+   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+<div class="col-md-4">
+   {{ form_widget(f.nom_Cat, { 'attr': {'class': 'form-control'} }) }}
+   {% if f.nom_Cat.vars.errors|length > 0 %}
+   <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-octagon me-1"></i>
+      {% for error in f.nom_Cat.vars.errors %}
+      {{ error.message }}
+      {% endfor %}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+   </div>
+   {% endif %}
+</div>
+<div class="col-md-4">
+   {{ form_widget(f.titre_T, { 'attr': {'class': 'form-control', 'placeholder': 'Titre Tache'} }) }}
+   {% if f.titre_T.vars.errors|length > 0 %}
+   <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-octagon me-1"></i>
+      {% for error in f.titre_T.vars.errors %}
+      {{ error.message }}
+      {% endfor %}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+   </div>
+   {% endif %}
+</div>
+<div class="col-sm-10">
+   <div class="col-sm-10">
+      {{ form_widget(f.pieceJointe_T, {'attr': {'class': 'form-control', 'onchange': 'afficherApercu(this)'}}) }}
+      {% if imagePath %}
+          <img id="imagePreview" src="{{ asset(imagePath) }}" alt="Aperçu de l'image" style="max-width: 100%; max-height: 100px; display: block; border: 1px solid #ccc; padding: 5px;">
+      {% else %}
+          <img id="imagePreview" src="#" alt="Aperçu de l'image" style="max-width: 100%; max-height: 100px; display: none; border: 1px solid #ccc; padding: 5px;">
+      {% endif %}
+  </div>
+</div>
+<div class="col-md-5">
+   {{ form_widget(f.date_DT, { 'attr': {'class': 'form-control'} }) }}
+   {% if f.date_DT.vars.errors|length > 0 %}
+   <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-octagon me-1"></i>
+      {% for error in f.date_DT.vars.errors %}
+      {{ error.message }}
+      {% endfor %}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+   </div>
+   {% endif %}
+</div>
+<div class="col-md-5">
+   {{ form_widget(f.date_FT, { 'attr': {'class': 'form-control'} }) }}
+   {% if f.date_FT.vars.errors|length > 0 %}
+   <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-octagon me-1"></i>
+      {% for error in f.date_FT.vars.errors %}
+      {{ error.message }}
+      {% endfor %}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+   </div>
+   {% endif %}
+</div>
+<div class="col-5">
+   {{ form_widget(f.desc_T, { 'attr': {'class': 'form-control', 'placeholder': 'Description Tache'} }) }}
+   {% if f.desc_T.vars.errors|length > 0 %}
+   <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-octagon me-1"></i>
+      {% for error in f.desc_T.vars.errors %}
+      {{ error.message }}
+      {% endfor %}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+   </div>
+   {% endif %}
+</div>
+<div class="col-5">
+   {% for choice in f.etat_T %}
+   <div class="form-check">
+      {{ form_widget(choice, { 'attr': {'class': 'form-check-input'} }) }}
+      {{ form_label(choice, null, { 'label_attr': {'class': 'form-check-label'} }) }}
+   </div>
+   {% endfor %}
+   {% if f.etat_T.vars.errors|length > 0 %}
+   <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-octagon me-1"></i>
+      {% for error in f.etat_T.vars.errors %}
+      {{ error.message }}
+      {% endfor %}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+   </div>
+   {% endif %}
+</div>
+<div class="text-center">
+   {{ form_widget(f.Save, { 'attr': {'class': 'btn btn-outline-primary'} }) }}
+   {{ form_widget(f.Reset, { 'attr': {'class': 'btn btn-secondary'} }) }}
+</div>
+</div>
+{{ form_end(f) }}
+<div class="col-md-4" style="margin-top: 10px;">
+   <!-- Adjust margin-top as needed -->
+   <button onclick="goBack()" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Go Back</button>
+   <script>
+      function goBack() {
+         window.history.back();
+      }
+   </script>
+</div>
+<script>
+   // Function to display the selected image preview
+   function afficherApercu(input) {
+       if (input.files && input.files[0]) {
+           var reader = new FileReader();
+           var file = input.files[0];
+           var fileType = file.type.toLowerCase();
+
+           // Check if the file type is an image
+           if (fileType.startsWith('image/')) {
+               reader.onload = function (e) {
+                   // Update the image source with the URL of the selected image
+                   document.getElementById('imagePreview').src = e.target.result;
+                   document.getElementById('imagePreview').style.display = 'block'; // Make the image visible
+               }
+
+               reader.readAsDataURL(input.files[0]); // Read the content of the image as a data URL
+           } else {
+               // If file type is not an image, hide the preview
+               document.getElementById('imagePreview').style.display = 'none';
+           }
+       }
+   }
+</script>
+
+{% endblock %}

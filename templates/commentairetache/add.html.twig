@@ -1,0 +1,43 @@
+{% extends 'base-back.html.twig' %}
+{% block title %}Ajouter Commentaire Tache{% endblock %}
+{% block TacheNavState %}
+<a class="nav-link" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#" aria-expanded="true">
+   {% endblock %}
+   {% block TacheContentState %}
+   <ul id="GestionTache-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+   {% endblock %}
+   {% block AjouterTacheNav %}
+<a href="{{ path('tache_add') }}" class="active">
+<i class="bi bi-circle"></i><span>Ajouter Commentaire</span>
+</a>
+{% endblock %}
+{% block body %}
+{{ form_start(f, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate'}}) }}
+<div class="col-md-4">
+   {{ form_widget(f.texte_C, { 'attr': {'class': 'form-control', 'style': 'height: 150px'} }) }}
+   {% if f.texte_C.vars.errors|length > 0 %}
+   <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-octagon me-1"></i>
+      {% for error in f.texte_C.vars.errors %}
+      {{ error.message }}
+      {% endfor %}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+   </div>
+   {% endif %}
+</div>
+<div class="text-center">
+   {{ form_widget(f.Save, { 'attr': {'class': 'btn btn-outline-primary'} }) }}
+   {{ form_widget(f.Reset, { 'attr': {'class': 'btn btn-secondary'} }) }}
+</div>
+</div>
+{{ form_end(f) }}
+<div class="col-md-4" style="margin-top: 10px;">
+   <!-- Adjust margin-top as needed -->
+   <button onclick="goBack()" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Go Back</button>
+   <script>
+      function goBack() {
+      	window.history.back();
+      }
+   </script>
+</div>
+{% endblock %}

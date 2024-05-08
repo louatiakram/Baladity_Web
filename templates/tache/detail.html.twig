@@ -1,0 +1,148 @@
+{% extends 'base-back.html.twig' %}
+{% block title %}Détails de la Tâche{% endblock %}
+{% block TacheNavState %}
+<a class="nav-link" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#" aria-expanded="true">
+   {% endblock %}
+   {% block TacheContentState %}
+   <ul id="GestionTache-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+   {% endblock %}
+   {% block ListeTacheNav %}
+<a href="{{ path('tache_list') }}" class="active"><i class="bi bi-circle"></i><span>Detail Tache</span></a>{% endblock %}
+{% block body %}
+<div class="container mt-4">
+<div class="row">
+   <div class="col-md-6">
+      <div class="card mb-3">
+         <div class="card-body">
+            <h5 class="card-title text-primary">Catégorie</h5>
+            <div class="card-text">
+            <h6>{{ tache.getNomCat() }}</h6>
+            </div>
+         </div>
+      </div>
+      <div class="card mb-3">
+         <div class="card-body">
+            <h5 class="card-title text-primary">Titre</h5>
+            <div class="card-text">
+            <h6>{{ tache.getTitreT() }}</h6>
+            </div>
+         </div>
+      </div>
+      <div class="card mb-3">
+         <div class="card-body">
+            <h5 class="card-title text-primary">Date Debut</h5>
+            <div class="card-text">
+            <h6>{{ tache.getDateDT()|date('d-m-Y') }}</h6>
+            </div>
+         </div>
+      </div>
+      <div class="card mb-3">
+         <div class="card-body">
+            <h5 class="card-title text-primary">Date Fin</h5>
+            <div class="card-text">
+            <h6>{{ tache.getDateFT()|date('d-m-Y') }}</h6>
+            </div>
+         </div>
+      </div>
+      <div class="card mb-3">
+         <div class="card-body">
+            <h5 class="card-title text-primary">Description</h5>
+            <div class="row mb-3">
+               <div class="col-sm-10">
+                  <h6><textarea class="form-control" style="height: 100px" readonly>{{ tache.getDescT() }}</textarea></h6>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="card mb-3">
+         <div class="card-body">
+            <h5 class="card-title text-primary">Etat</h5>
+            <div class="card-text">
+            <h6>{{ tache.getEtatT() }}</h6>
+            </div>
+         </div>
+      </div>
+      <!-- Comment Section -->
+      <div class="card mb-3">
+         <div class="card-body">
+            <div class="comment-section">
+               <h5 class="card-title text-primary">Commentaires</h5>
+               {% if tache.getCommentaireTache() is not empty %}
+               {% for commentaire in tache.getCommentaireTache() %}
+               <div class="comment">
+                  <div>
+                     <h6>Nom: {{ commentaire.getIdUser().getNomUser() }} | Date: {{ commentaire.getDateC()|date('d-m-Y') }}</h6>
+                     <!-- Add Edit and Remove Options for the Comment -->
+                     <div class="comment-options">
+                        <button onclick="location.href='{{ path('commentairetache_update', {'i': commentaire.getIdC()}) }}'" type="button" class="btn btn-outline-primary"><i class="bi bi-pencil"></i> Modifier</button>
+                        <button onclick="location.href='{{ path('commentairetache_delete', {'i': commentaire.getIdC()}) }}'" type="button" class="btn btn-danger"><i class="bi bi-trash"></i> Supprimer</button>
+                     </div>
+                  </div>
+                  <h6><textarea class="form-control" style="height: 150px" readonly>{{ commentaire.getTexteC() }}</textarea></h6>
+               </div>
+               {% endfor %}
+               {% endif %}
+            </div>
+         </div>
+         <div class="card-body">
+            <a href="{{ path('commentairetache_add', {'id': tache.getIdT()}) }}" class="btn btn-primary"><i class="bi bi-plus"></i> Ajouter un commentaire</a>
+         </div>
+      </div>
+      <div class="col-md-4" style="margin-top: 10px;">
+         <!-- Adjust margin-top as needed -->
+         <button onclick="goBack()" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Go Back</button>
+         <script>
+            function goBack() {
+            	window.history.back();
+            }
+         </script>
+      </div>
+   </div>
+   <div class="col-md-6">
+      <div class="card shadow-sm">
+         {% if tache.getPieceJointeT() %}
+         {% set fileExtension = tache.getPieceJointeT()|split('.')|last %}
+         {% if fileExtension in ['jpg', 'jpeg', 'png', 'gif'] %}
+         <img src="{{ asset('uploads/' ~ tache.getPieceJointeT()) }}" class="card-img-top" alt="Piece jointe">
+         <div class="card-body">
+            <div class="card-text text-muted mt-3">
+               Télécharger la pièce jointe : <a href="{{ asset('uploads/' ~ tache.getPieceJointeT()) }}">{{ tache.getPieceJointeT() }}</a>
+            </div>
+         </div>
+         {% elseif fileExtension == 'pdf' %}
+         {% set pdfPreviewPath = asset('uploads/' ~ tache.getPieceJointeT()) %}
+         <embed src="{{ pdfPreviewPath }}" type="application/pdf" width="100%" height="500px" />
+         <div class="card-body">
+            <div class="card-text text-muted mt-3">
+               Télécharger la pièce jointe : <a href="{{ asset('uploads/' ~ tache.getPieceJointeT()) }}">{{ tache.getPieceJointeT() }}</a>
+            </div>
+         </div>
+         {% elseif fileExtension == 'txt' %}
+         <div class="card-body">
+            <h5 class="card-title text-primary">{{ tache.getPieceJointeT() }} :</h5>
+         </div>
+         {% set textFilePath = asset('uploads/' ~ tache.getPieceJointeT()) %}
+         <iframe src="{{ textFilePath }}" class="card-text" style="width: 100%; min-height: 300px;"></iframe>
+         <div class="card-body">
+            <div class="card-text text-muted mt-3">
+               Télécharger la pièce jointe : <a href="{{ asset('uploads/' ~ tache.getPieceJointeT()) }}">{{ tache.getPieceJointeT() }}</a>
+            </div>
+         </div>
+         {% else %}
+         <div class="card-body">
+            <div class="card-text text-muted mt-3">
+               Télécharger la pièce jointe : <a href="{{ asset('uploads/' ~ tache.getPieceJointeT()) }}">{{ tache.getPieceJointeT() }}</a>
+            </div>
+         </div>
+         {% endif %}
+         {% else %}
+         <div class="card-body">
+            <div class="card-text text-muted mt-3">
+               Aucune pièce jointe pour cette tâche.
+            </div>
+         </div>
+         {% endif %}
+      </div>
+   </div>
+</div>
+{% endblock %}
