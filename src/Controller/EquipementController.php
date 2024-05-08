@@ -452,4 +452,35 @@ public function statsEquipements(EquipementRepository $equipementRepository): Re
         return new JsonResponse(['error' => $e->getMessage()], 400);
     }
 }
+#[Route('/equipement/showEquipementResponsable', name: 'equipement_show_responsable')]
+public function showEquipementResponsable(Request $request, EquipementRepository $repository): Response
+{
+    $query = $request->query->get('query');
+    $currentPage = $request->query->getInt('page', 1);
+    $limit = 10; // Nombre d'équipements par page
+
+    // Récupérer les équipements en fonction de la recherche et de la pagination
+    if ($query) {
+        $equipements = $repository->findByTitre($query, $limit, ($currentPage - 1) * $limit);
+        $totalEquipements = count($equipements); // Mise à jour du nombre total d'équipements
+    } else {
+        $equipements = $repository->findAllPaginated($limit, ($currentPage - 1) * $limit);
+        $totalEquipements = $repository->countAll(); // Mise à jour du nombre total d'équipements
+    }
+    
+    // Calculer et transmettre la quantité initiale pour chaque équipement
+    foreach ($equipements as $equipement) {
+        $equipement->quantiteInitiale = $equipement->getQuantiteEq();
+    }
+
+    // Calculer le nombre total de pages
+    $totalPages = ceil($totalEquipements / $limit);
+
+    return $this->render('equipement/showEquipementResponsable.html.twig', [
+        'equipements' => $equipements,
+        'query' => $query,
+        'currentPage' => $currentPage,
+        'totalPages' => $totalPages,
+    ]);
+}
 }
