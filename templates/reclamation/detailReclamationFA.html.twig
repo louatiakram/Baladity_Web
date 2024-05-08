@@ -1,0 +1,124 @@
+{% extends 'base-front.html.twig' %}
+
+{% block title %}Baladity Home{% endblock %}
+
+{% block barreTitre %}
+					<li><a href="{{ path('app_main_front') }}">Home</a></li>
+					<li><a href="about.html">Actualite</a></li>
+          <li class="dropdown"><a href="#"><span>Reclamation</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class="active"></i></a>
+						<ul>
+							<li><a href="{{ path('afficherReclamationFA') }}">Les Réclamations</a></li>
+							<li><a href="{{ path('afficherReclamationF') }}">Statistiques des Réclamations</a></li>
+						</ul>
+					</li>
+					<li><a href="pricing.html">Evenement</a></li>
+					<li><a href="contact.html">Contact</a></li>
+              <li><a href="{{ path('chatbot') }}">chatbot</a></li>
+
+                    <li><a href="contact.html">About Us</a></li>
+{% endblock %}
+{% block body %}
+
+{% endblock %}
+{% block rest %}
+
+<div class="breadcrumbs">
+  <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+    <div class="container position-relative">
+      <div class="row d-flex justify-content-center">
+        <div class="col-lg-6 text-center">
+          <h2>Reclamation</h2>
+          <p>Une réclamation dans une municipalité est comme un signal que vous envoyez à votre mairie, comme un trou dans la route, des poubelles qui débordent, ou un lampadaire cassé. En signalant ces problèmes, vous aidez la mairie à les résoudre et à rendre votre quartier plus agréable pour tout le monde.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav>
+    <div class="container">
+      <ol>
+        <li><a href="{{path('app_main_front')}}">Home</a></li>
+        <li><a href="{{ path('afficherReclamationFA') }}">Les Réclamations</a></li>
+        <li><a href="#">Traitement Réclamation</a></li>
+      </ol>
+    </div>
+  </nav>
+</div>
+<section id="about" class="about">
+    <div class="container aos-init aos-animate" data-aos="fade-up">
+     <div class="section-header">
+            <span>Traitement de la Réclamation</span>
+            <h2>Traitement de la Réclamation</h2>
+        </div>
+
+      <div class="row gy-4">
+        <div class="col-lg-6 position-relative align-self-start order-lg-last order-first">
+            <img src="{{ asset('uploads/' ~ reclamation.getImageReclamation()) }}" alt=""
+            class="img-fluid"
+           >
+        </div>
+        <div class="col-lg-6 content order-last  order-lg-first">
+          <h3>{{ reclamation.sujetReclamation }}
+        </h3>
+    
+          <ul>
+            <li data-aos="fade-up" data-aos-delay="100" class="aos-init aos-animate">
+              <i class="bi-body-text"></i>
+              <div>
+                <h5>Description du Réclamation : </h5>
+                <p>            {{ reclamation.descriptionReclamation }}
+</p>
+              </div>
+            </li>
+            <li data-aos="fade-up" data-aos-delay="200" class="aos-init aos-animate">
+              <i class="bi bi-calendar"></i>
+              <div>
+                <h5>Date du Réclamation :</h5>
+                <p>{{ reclamation.dateReclamation|date('Y-m-d') }}  </p>
+              </div>
+            </li>
+            <li data-aos="fade-up" data-aos-delay="300" class="aos-init aos-animate">
+              <i class="bi bi-map"></i>
+              <div>
+                <h5>Adresse du Réclamation :</h5>
+                <p>{{ reclamation.adresseReclamation }}
+                    <a href="{{ path('TomTomAPI', {'adresse': reclamation.adresseReclamation}) }}" target="_blank">Voir sur Google Maps</a>
+                </p>
+              </div>
+            </li>
+            <li data-aos="fade-up" data-aos-delay="300" class="aos-init aos-animate">
+                <i class="bi bi-activity"></i>
+                <div>
+                  <h5>Status du Réclamation :</h5>
+                  <p>{{ reclamation.statusReclamation }}</p>
+                </div>
+              </li>
+            <li >
+                <div>  
+                    <h3> Modifier le status du Réclamation : </h3>
+            </div>
+              </li>
+              <li >
+                <div> 
+                 
+                      
+                <a href="{{ path('modifier_statut_reclamation', {'id': reclamation.getIdReclamation()}) }}">
+                    <img src="{{ asset('images/cancel.png') }}" style="width: 35px; height: 35px;">
+                </a>
+
+                 <a href="{{ path('modifierStatutE', {'id': reclamation.getIdReclamation()}) }}">
+                    <img src="{{ asset('images/encours.png') }}" style="width: 35px; height: 35px;">
+                </a>
+                <a href="{{ path('modifierStatutD', {'id': reclamation.getIdReclamation()}) }}">
+                    <img src="{{ asset('images/done.png') }}" style="width: 35px; height: 35px;">
+                </a>
+        
+            </div>
+              </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+{% endblock %}

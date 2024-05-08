@@ -1,0 +1,87 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Détail de la réclamation{% endblock %}
+
+{% block body %}
+<div class="pagetitle">
+    <h1>Détail de la réclamation</h1>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Informations sur la réclamation</h5>
+
+        <div class="container">
+            <div class="row mb-3">
+                <div class="col-sm-4">
+                    <strong>Le nom d'utilisateur:</strong>
+                </div>
+                <div class="col-sm-8">
+                    {{ reclamation.idUser.nomUser }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-4">
+                    <strong>Sujet de la réclamation:</strong>
+                </div>
+                <div class="col-sm-8">
+                    {{ reclamation.sujetReclamation }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-4">
+                    <strong>Date de la réclamation:</strong>
+                </div>
+                <div class="col-sm-8">
+                    {{ reclamation.dateReclamation|date('Y-m-d') }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-4">
+                    <strong>Statut de la réclamation:</strong>
+                </div>
+                <div class="col-sm-8">
+                    {{ reclamation.statusReclamation }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-4">
+                    <strong>Description de la réclamation:</strong>
+                </div>
+                <div class="col-sm-8">
+                    {{ reclamation.descriptionReclamation }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-4">
+                    <strong>Image de la réclamation:</strong>
+                </div>
+                <div class="col-sm-8">
+                    <img src="{{ asset('uploads/' ~ reclamation.imageReclamation) }}" style="max-width: 50%;">
+                </div>
+            </div>
+
+            
+            <div class="row mb-3">
+                <div class="col-sm-4">
+                    <strong>Adresse de la réclamation:</strong>
+                </div>
+                <div class="col-sm-8">
+                    {{ reclamation.adresseReclamation }}
+                    <a href="{{ path('TomTomAPI', {'adresse': reclamation.adresseReclamation}) }}" class="btn btn-primary">Voir dans le maps</a>
+                </div>
+            </div>
+            {# Ajoutez d'autres informations sur la réclamation si nécessaire #}
+
+            <div class="form-group">
+                <a href="{{ path('afficherReclamation') }}" class="btn btn-dark">Retour</a>
+                <a href="{{ path('modifierReclamation', {'id': reclamation.getIdReclamation()}) }}" class="btn btn-primary">Modifier la réclamation</a>
+                <!-- Ajoutez d'autres boutons ou actions si nécessaire -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

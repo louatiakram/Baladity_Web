@@ -1,0 +1,68 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Modifier un message{% endblock %}
+
+{% block body %}
+    <div class="pagetitle">
+        <h1>Modifier un message</h1>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Les éléments du message</h5>
+
+            <div class="container">
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                <div class="row mb-3">
+                    <div class="form-group col-sm-12">
+                        {{ form_label(form.contenu_message, "Contenu du message", {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.contenu_message, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="form-group col-sm-12">
+                        {{ form_label(form.type_message, "Type de message", {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.type_message, {'attr': {'class': 'form-select'}}) }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-10">
+                        <label for="datePicker" class="form-label">Date:</label>
+                        <input type="date" id="datePicker" name="datePicker" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-10">
+                        <label for="timePicker" class="form-label">Heure:</label>
+                        <input type="time" id="timePicker" name="timePicker" class="form-control">
+                    </div>
+                </div>
+                
+                {{ form_widget(form.date_message, {'attr': {'class': 'form-control', 'id': 'form_date_message', 'type': 'hidden'}}) }}
+
+                <div class="form-group">
+                    {{ form_widget(form.modifier, {'attr': {'class': 'btn btn-primary'}}) }}
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            $('form').submit(function(e) {
+                var dateValue = $('#datePicker').val();
+                var timeValue = $('#timePicker').val();
+                var dateTimeValue = dateValue + ' ' + timeValue;
+                $('#form_date_message').val(dateTimeValue);
+            });
+        });
+    </script>
+{% endblock %}

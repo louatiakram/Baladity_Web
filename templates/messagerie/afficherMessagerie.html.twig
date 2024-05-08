@@ -1,0 +1,81 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Messagerie{% endblock %}
+
+{% block body %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Messages entre utilisateurs</h5>
+
+        <!-- Table with hoverable rows -->
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Expéditeur</th>
+                    <th scope="col">Destinataire</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Contenu</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for message in messages %}
+                    <tr>
+                        <th scope="row">{{ (messages.currentPageNumber - 1) * messages.getItemNumberPerPage() + loop.index }}</th>
+                        <td>{{ message.getSenderIdMessage().getNomUser() }}</td>
+                        <td>{{ message.getReceiverIdMessage().getNomUser() }}</td>
+                        <td>{{ message.getDateMessage()|date('Y-m-d H:i:s') }}</td>
+                        <td>{{ message.getContenuMessage() }}</td>
+                        <td>
+                            <a href="{{ path('modifierMessagerie', { id: message.getIdMessage() }) }}">
+                                <img src="{{ asset('images/edit.png') }}" width="25" height="25">
+                            </a>
+                            <a href="#" onclick="return confirmDelete('{{ path('supprimerMessagerie', { id: message.getIdMessage() }) }}');">
+                                <img src="{{ asset('images/delete.png') }}" width="25" height="25">
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- End Table with hoverable rows -->
+
+     <!-- Pagination -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item {% if messages.currentPageNumber == 1 %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('afficherMessagerie', {'id': id, 'page': 1}) }}" aria-label="Previous">
+                <span aria-hidden="true">«</span>
+            </a>
+        </li>
+        {% for page in 1..messages.pageCount %}
+            <li class="page-item {% if page == messages.currentPageNumber %}active{% endif %}">
+                <a class="page-link" href="{{ path('afficherMessagerie', {'id': id, 'page': page}) }}">{{ page }}</a>
+            </li>
+        {% endfor %}
+        <li class="page-item {% if messages.currentPageNumber == messages.pageCount %}disabled{% endif %}">
+            <a class="page-link" href="{{ path('afficherMessagerie', {'id': id, 'page': messages.pageCount}) }}" aria-label="Next">
+                <span aria-hidden="true">»</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+<!-- End Pagination -->
+
+    </div>
+</div>
+
+<script>
+    function confirmDelete(url) {
+        // Afficher une boîte de dialogue de confirmation
+        if (confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
+            // Rediriger vers l'URL de suppression si l'utilisateur clique sur "OK"
+            window.location.href = url;
+            return true;
+        }
+        // Annuler l'action de suppression si l'utilisateur clique sur "Annuler"
+        return false;
+    }
+</script>
+{% endblock %}

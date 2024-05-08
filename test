@@ -1,0 +1,26 @@
+import requests
+from symphony_api_client_python.clients.symphony_client import SymphonyClient
+
+def fetch_current_position(latitude, longitude):
+    url = f"https://nominatim.openstreetmap.org/reverse?format=json&lat={latitude}&lon={longitude}&zoom=18&addressdetails=1"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        display_name = data.get("display_name", "Unknown")
+        return display_name
+    else:
+        return "Error fetching position"
+
+def handle_message(message):
+    if message.contains_location_request():
+        latitude, longitude = message.extract_coordinates()
+        position = fetch_current_position(latitude, longitude)
+        symphony_client.send_message(message.sender, f"Current position: {position}")
+
+# Initialize Symphony client
+symphony_client = SymphonyClient("your_bot_token")
+
+# Main loop to listen for incoming messages
+while True:
+    message = symphony_client.get_next_message()
+    handle_message(message)

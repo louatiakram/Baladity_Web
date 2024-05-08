@@ -1,0 +1,59 @@
+{% extends 'base-front.html.twig' %}
+
+{% block title %}Baladity Home{% endblock %}
+
+{% block barreTitre %}
+    <li><a href="{{ path('app_main_front') }}">Home</a></li>
+    <li><a href="about.html">Actualite</a></li>
+    <li class="dropdown"><a href="#"><span>Reclamation</span> <i class="bi bi-chevron-down dropdown-indicator" class="active"></i></a>
+        <ul>
+            <li><a href="{{ path('typeReclamation') }}">Ajouter Réclamation</a></li>
+            <li><a href="{{ path('afficherReclamationF') }}">Mes réclamations</a></li>
+        </ul>
+    </li>
+    <li><a href="pricing.html">Evenement</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="{{ path('chatbot') }}">chatbot</a></li>
+    <li><a href="contact.html">About Us</a></li>
+{% endblock %}
+
+{% block body %}
+
+{% endblock %}
+
+{% block rest %}
+    <div class="breadcrumbs">
+        <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+            <div class="container position-relative">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <h2>Reclamation</h2>
+                        <p>Une réclamation dans une municipalité est comme un signal que vous envoyez à votre mairie, comme un trou dans la route, des poubelles qui débordent, ou un lampadaire cassé. En signalant ces problèmes, vous aidez la mairie à les résoudre et à rendre votre quartier plus agréable pour tout le monde.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <ol>
+                    <li><a href="{{path('app_main_front')}}">Home</a></li>
+                    <li>Reclamation</li>
+                </ol>
+            </div>
+        </nav>
+    </div>
+    <section id="get-a-quote" class="get-a-quote">
+        <div class="container aos-init aos-animate" data-aos="fade-up">
+            <div class="row justify-content-center"> {# Center the card horizontally #}
+                <div class="chat-footer">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                    {{ form_label(form.contenu_message, "Contenu du message", {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.contenu_message, {'attr': {'class': 'form-control'}}) }}
+                {{ form_widget(form.envoyer, {'attr': {'class': 'btn btn-primary'}}) }}
+                {{ form_end(form) }}
+                </div>  
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

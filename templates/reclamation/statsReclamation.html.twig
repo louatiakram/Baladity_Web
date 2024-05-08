@@ -1,0 +1,141 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Statistiques des Réclamations{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Pie Chart - Statistiques des Réclamations</h5>
+
+                <!-- Pie Chart -->
+                <div id="pieChart" style="min-height: 400px;"></div>
+                <!-- End Pie Chart -->
+
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">  
+            <div class="card-body">
+                <h5 class="card-title">Line Chart - Statistiques des Réclamations par Date</h5>
+
+                <!-- Line Chart -->
+                <canvas id="lineChart" style="max-height: 400px;"></canvas>
+                <!-- End Line Chart -->
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-6">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Bar Chart - Statistiques des Réclamations par Mois</h5>
+
+            <!-- Bar Chart -->
+            <canvas id="barChart" style="max-height: 400px;"></canvas>
+            <!-- End Bar Chart -->
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Récupérer les données de statistiques de réclamation transmises depuis le contrôleur
+        const stats = {{ reclamationStats | json_encode | raw }};
+        // Initialiser le graphique à secteurs (pie chart) avec les données récupérées
+        const pieChart = echarts.init(document.querySelector("#pieChart"));
+        pieChart.setOption({
+            title: {
+                text: 'Statistiques des Réclamations',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            series: [{
+                name: 'Statistiques des Réclamations',
+                type: 'pie',
+                radius: '50%',
+                data: stats.map(entry => ({
+                    value: entry.count,
+                    name: entry.status
+                })),
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        });
+
+        // Récupérer les données de statistiques de réclamation par date transmises depuis le contrôleur
+        const statsDate = {{ reclamationStatsDate | json_encode | raw }};
+        // Extraire les dates et les comptages
+        const dates = statsDate.map(entry => entry.date);
+        const counts = statsDate.map(entry => entry.count);
+        // Initialiser le graphique à lignes (line chart) avec les données récupérées
+        new Chart(document.querySelector('#lineChart'), {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Nombre de Réclamations',
+                    data: counts,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Récupérer les données de statistiques de réclamation par mois transmises depuis le contrôleur
+        const statsMonth = {{ reclamationStatsMonth | json_encode | raw }};
+        // Créer un tableau pour mapper les numéros de mois aux noms de mois correspondants
+        const monthNames = [
+            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+        ];
+        // Extraire les mois et les comptages
+        const months = statsMonth.map(entry => monthNames[entry.month - 1]);
+        const countsByMonth = statsMonth.map(entry => entry.count);
+        // Initialiser le graphique à barres (bar chart) avec les données récupérées
+        new Chart(document.querySelector('#barChart'), {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Nombre de Réclamations par Mois',
+                    data: countsByMonth,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgb(75, 192, 192)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

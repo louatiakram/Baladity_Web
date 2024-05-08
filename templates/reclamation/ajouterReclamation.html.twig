@@ -1,0 +1,111 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Ajout réclamation{% endblock %}
+
+{% block body %}
+<div class="pagetitle">
+    <h1>Ajouter une réclamation</h1>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Les éléments de la réclamation</h5>
+
+        <div class="container">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    {{ form_label(form.id_user, "Utilisateur qui fait la réclamation", {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.id_user, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    {{ form_label(form.sujet_reclamation, "Sujet de la réclamation", {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.sujet_reclamation, {'attr': {'class': 'form-control'}}) }}
+                    {% if form_errors(form.sujet_reclamation) is not empty %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form.sujet_reclamation) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    {{ form_label(form.type_reclamation, "Type de la réclamation", {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.type_reclamation, {'attr': {'class': 'form-select', 'id': 'typeReclamation'}}) }}
+                    {% if form_errors(form.type_reclamation) is not empty %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form.type_reclamation) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    {{ form_label(form.description_reclamation, "Description de la réclamation", {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.description_reclamation, {'attr': {'class': 'form-control'}}) }}
+                    {% if form_errors(form.description_reclamation) is not empty %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form.description_reclamation) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="formFile" class="col-sm-2 col-form-label">Image</label>
+                <div class="col-sm-10">
+                    {{ form_widget(form.image_reclamation, {'attr': {'class': 'form-control', 'onchange': 'previewImage(this)'}}) }}
+                    {% if form_errors(form.image_reclamation) is not empty %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form.image_reclamation) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    <img id="imagePreview" style="max-width: 50%; max-height: 50%;">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    {{ form_label(form.adresse_reclamation, "Adresse de la réclamation", {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.adresse_reclamation, {'attr': {'class': 'form-control'}}) }}
+                    {% if form_errors(form.adresse_reclamation) is not empty %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form.adresse_reclamation) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <a href="{{ path('typeReclamation') }}" class="btn btn-dark">Retour</a>
+                {{ form_widget(form.envoyer, {'attr': {'class': 'btn btn-primary'}}) }}
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+<script>
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                document.getElementById('imagePreview').src = e.target.result;
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+{% endblock %}

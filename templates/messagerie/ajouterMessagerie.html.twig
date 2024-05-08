@@ -1,0 +1,111 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Ajouter un message{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+{% block body %}
+<div class="pagetitle">
+    <h1>Ajouter un message</h1>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Les éléments du message</h5>
+
+        <div class="container">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    {{ form_label(form.senderId_message, "Expéditeur", {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.senderId_message, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    {{ form_label(form.receiverId_message, "Destinataire", {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.receiverId_message, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    {{ form_label(form.contenu_message, "Contenu", {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.contenu_message, {'attr': {'class': 'form-control'}}) }}
+                    {% if form_errors(form.contenu_message) is not empty %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form.contenu_message) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="form-group col-sm-12">
+                    {{ form_label(form.type_message, "Type de message", {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.type_message, {'attr': {'class': 'form-control'}}) }}
+                    {% if form_errors(form.type_message) is not empty %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form.type_message) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-sm-10">
+                    <label for="datePicker" class="form-label">Date:</label>
+                    <input type="date" id="datePicker" name="datePicker" class="form-control">
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-sm-10">
+                    <label for="timePicker" class="form-label">Heure:</label>
+                    <input type="time" id="timePicker" name="timePicker" class="form-control">
+                </div>
+            </div>
+            
+            {{ form_widget(form.date_message, {'attr': {'class': 'form-control', 'id': 'form_date_message', 'type': 'hidden'}}) }}
+            
+            <div class="form-group">
+                <a href="{{ path('afficherReclamation') }}" class="btn btn-dark">Retour</a>
+                {{ form_widget(form.envoyer, {'attr': {'class': 'btn btn-primary'}}) }}
+            </div>
+
+            {{ form_end(form) }}
+        
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        $(document).ready(function() {
+    // Lorsque le formulaire est soumis
+    $('form').submit(function(e) {
+        // Récupérer la valeur du champ de date
+        var dateValue = $('#datePicker').val();
+        // Récupérer la valeur du champ de temps
+        var timeValue = $('#timePicker').val();
+
+        // Concaténer la date et l'heure pour former une datetime complète
+        var dateTimeValue = dateValue + ' ' + timeValue;
+
+        // Assigner la valeur de dateTimeValue à la propriété date_message
+        $('#form_date_message').val(dateTimeValue);
+    });
+});
+    </script>
+{% endblock %}

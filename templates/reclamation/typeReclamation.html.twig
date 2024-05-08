@@ -1,0 +1,41 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}type de la réclamation{% endblock %}
+
+{% block body %}
+
+
+    <div class="pagetitle">
+      <h1>choisissez votre type de la réclamation</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section"> 
+      <div class="row">
+        <div class="col-lg-6">
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Cas urgent :</h5>
+              <a href="{{ path('ajouterReclamation', { cas: 1 }) }}"><img src="{{ asset('images/alarm.png') }}" width="100" height="100"></a>
+            </div><!-- End Default Accordion Example -->
+
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Cas non urgent</h5>
+              <a href="{{ path('ajouterReclamation', { cas: 2 }) }}"><img src="{{ asset('images/alarmjaune.png') }}" width="100" height="100"></a>
+
+              <!-- Ajoutez ici une autre image avec le lien de redirection -->
+            </div><!-- End Accordion without outline borders -->
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+{% endblock %}
