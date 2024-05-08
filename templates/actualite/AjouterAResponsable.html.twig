@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Baladity Home</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{{ asset('front-office/img/LOGOL.png') }}" rel="icon">
+    <link href="{{ asset('front-office/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{{ asset('front-office/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/aos/aos.css') }}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="{{ asset('front-office/css/main.css') }}" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: Logis
+    * Updated: Mar 13 2024 with Bootstrap v5.3.3
+    * Template URL: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+        <a href="index.html" class="logo d-flex align-items-center">
+            <!-- Uncomment the line below if you also wish to use an image logo -->
+         <img src="{{ asset('front-office/img/LOGOL.png') }}" class="img-fluid mb-3 mb-lg-0" alt="">
+            <h1>Baladity</h1>
+        </a>
+
+        <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+        <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a href="{{ path('app_main_front') }}" >Home</a></li>
+					<li><a href="about.html"  class="active">Actualite</a></li>
+					<li><a href="services.html">Reclamation</a></li>
+					<li><a href="pricing.html">Evenement</a></li>
+                    		<li><a href="services.html">Equipements</a></li>
+					<li><a href="pricing.html">Tache</a></li>
+					
+             
+                                
+            </ul>
+        </nav><!-- .navbar -->
+
+    </div>
+</header><!-- End Header -->
+
+<!-- ======= Hero Section ======= -->
+<section id="hero" class="hero d-flex align-items-center">
+    <div class="container">
+        <div class="row gy-4 d-flex justify-content-between">
+            <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
+                <h2 data-aos="fade-up">Là où il fait extrêmement bon de vivre</h2>
+                <p data-aos="fade-up" data-aos-delay="100">Baladity est une application innovante conçue pour simplifier la gestion des fonctionnalités municipales 
+au sein d'une municipalité. En combinant une interface conviviale avec des fonctionnalités intuitives, 
+Baladity offre aux résidents et aux responsables municipaux un outil efficace pour interagir 
+et coordonner divers aspects de la vie communautaire.</p>
+
+                <form action="#" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up"
+                      data-aos-delay="200">
+                    <input type="text" class="form-control" placeholder="ZIP code or CitY">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+
+                <div class="row gy-4" data-aos="fade-up" data-aos-delay="400">
+
+                    <div class="col-lg-3 col-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1"
+                                  class="purecounter"></span>
+                            <p>Citoyens</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                    <div class="col-lg-3 col-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1"
+                                  class="purecounter"></span>
+                            <p>évenements</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                    <div class="col-lg-3 col-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="1453" data-purecounter-duration="1"
+                                  class="purecounter"></span>
+                            <p>Publicité</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                    <div class="col-lg-3 col-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="32" data-purecounter-duration="1"
+                                  class="purecounter"></span>
+                            <p>employés</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                </div>
+            </div>
+
+            <div class="col-lg-5 order-1 order-lg-2 hero-img" data-aos="zoom-out">
+               <img src="{{ asset('front-office/img/LOGOL.png') }}" class="img-fluid mb-3 mb-lg-0" alt="">
+            </div>
+
+        </div>
+    </div>
+</section><!-- End Hero Section -->
+
+  <main id="main">
+
+   
+      <nav>
+
+
+    <!-- ======= Get a Quote Section ======= -->
+ {% block body %}
+<section class="section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center">
+                <img src="{{ asset('front-office/img/Baladia.png') }}" class="img-fluid mb-4" alt="">
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-4">Ajouter Actualite</h5>
+                        <form method="POST" action="{{ path('ajouterA2') }}" enctype="multipart/form-data">
+                            {{ form_start(form) }}
+                           <div class="mb-3 row">
+    <label for="inputText" class="col-sm-4 col-form-label">Titre</label>
+    <div class="col-sm-8">
+        {{ form_widget(form.titre_a, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.titre_a) }}
+    </div>
+</div>
+<div class="mb-3 row">
+    <label for="inputEmail" class="col-sm-4 col-form-label">Description</label>
+    <div class="col-sm-8">
+        {{ form_widget(form.description_a, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.description_a) }}
+    </div>
+</div>
+<div class="mb-3 row">
+    <label for="inputFile" class="col-sm-4 col-form-label">Image</label>
+    <div class="col-sm-8">
+        <div class="input-group">
+            {{ form_widget(form.image_a, {'attr': {'class': 'form-control', 'onchange': 'previewImage(this)'}}) }}
+        </div>
+        {% if form_errors(form.image_a) %}
+            <div class="invalid-feedback">
+                {{ form_errors(form.image_a) }}
+            </div>
+        {% endif %}
+        <img id="imagePreview" src="#" alt="Aperçu de l'image" class="img-fluid mt-2" style="max-width: 100%; max-height: 200px; display: none;">
+    </div>
+</div>
+
+
+
+
+                            <div class="row mb-3">
+                               <div class="col-sm-12 text-center">
+  <button type="submit" class="btn btn-primary">Ajouter</button>
+   <a href="{{ path('app_actualiteshowResponsable') }}" class="btn btn-primary">Voir la liste des Actualités</a>
+
+
+
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function previewImage(input) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var imgPreview = input.parentNode.parentNode.querySelector('#imagePreview');
+            imgPreview.src = e.target.result;
+            imgPreview.style.display = 'block';
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+</script>
+    
+{% endblock %}
+
+
+
+
+
+  </main><!-- End #main -->
+
+<footer id="footer" class="footer">
+
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-5 col-md-12 footer-info">
+                <a href="index.html" class="logo d-flex align-items-center">
+                    <span>Baladity</span>
+                </a>
+                <p>Baladity est une application innovante conçue pour simplifier la gestion des fonctionnalités municipales 
+au sein d'une municipalité. En combinant une interface conviviale avec des fonctionnalités intuitives, 
+Baladity offre aux résidents et aux responsables municipaux un outil efficace pour interagir 
+et coordonner divers aspects de la vie communautaire.</p>
+                <div class="social-links d-flex mt-4">
+                    <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-6 footer-links">
+                <h4>Useful Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Actualité</a></li>
+                    <li><a href="#">réclamation</a></li>
+                    <li><a href="#">evenement</a></li>
+                    <li><a href="#">Equipements</a></li>
+                    <li><a href="#">Tache</a></li>
+                </ul>
+            </div>
+
+      
+
+            <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+                <h4>Contact Us</h4>
+                <p>
+                   Ariana <br>
+                    la petite ariana<br>
+                    Tunis <br><br>
+                    <strong>Phone:</strong> +21694007815<br>
+                    <strong>Email:</strong> Baladity@gmail.com<br>
+                </p>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="copyright">
+            &copy; Copyright <strong><span>Logis</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+    </div>
+
+</footer><!-- End Footer -->
+<!-- End Footer -->
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center active"><i class="bi bi-arrow-up-short"></i></a>
+
+  
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+
+
+</body>
+
+
+<!-- ======= Hero Section ======= -->
+
+
+
+
+       
+
+   
+
+  </main>
+
+
+<a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<div id="preloader"></div>
+
+<!-- Vendor JS Files -->
+<script src="{{ asset('front-office/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('front-office/vendor/purecounter/purecounter_vanilla.js') }}"></script>
+<script src="{{ asset('front-office/vendor/glightbox/js/glightbox.min.js') }}"></script>
+<script src="{{ asset('front-office/vendor/swiper/swiper-bundle.min.js') }}"></script>
+<script src="{{ asset('front-office/vendor/aos/aos.js') }}"></script>
+<script src="{{ asset('front-office/vendor/php-email-form/validate.js') }}"></script>
+
+<!-- Template Main JS File -->
+<script src="{{ asset('front-office/js/main.js') }}"></script>
+
+</body>
+
+</html>
+

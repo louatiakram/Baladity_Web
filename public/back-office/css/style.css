@@ -1231,3 +1231,10 @@ h6 {
     font-size: 13px;
     color: #012970;
 }
+/* Ajoutez ces règles CSS à votre fichier CSS ou à votre balise <style> dans le fichier HTML */
+
+/* Pour agrandir toutes les images à une largeur maximale de 100% */
+img {
+    max-width: 100%;
+    height: auto; /* Permet de maintenir le ratio hauteur/largeur de l'image */
+}

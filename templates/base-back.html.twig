@@ -425,14 +425,22 @@
                 </a>
                 <ul id="GestionActualite-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="#">
-                            <i class="bi bi-circle"></i><span>Ajouter Actualite</span>
+                        <a href="{{ path('ajouterA') }}">
+    <i class="bi bi-circle"></i><span>Ajouter Actualite</span>
+</a>
+
+                    </li>
+                    <li>
+                     <a href="{{ path('actualite_show') }}">
+                            <i class="bi bi-circle"></i><span>Liste Actualite</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
-                            <i class="bi bi-circle"></i><span>Liste Actualite</span>
-                        </a>
+                    <a href="{{ path('stats') }}">
+    <i class="bi bi-circle"></i>
+    <span>Statistiques</span>
+</a>
+
                     </li>
                 </ul>
             </li>
