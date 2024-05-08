@@ -46,8 +46,8 @@ class RegistrationController extends AbstractController
                 // Add a form error for the email field
                 $form->get('email_user')->addError(new FormError('User with this email already exists.'));
                 // Render the form again with the error message
-                return $this->render('registration/register.html.twig', [
-                    'form' => $form->createView()
+                return $this->render('index.html.twig', [
+                    'f' => $form->createView()
                 ]);
             }
 
@@ -90,8 +90,8 @@ class RegistrationController extends AbstractController
 
         }
 
-        return $this->render('registration/register.html.twig', [
-            'form' => $form->createView(),
+        return $this->render('index.html.twig', [
+            'f' => $form->createView(),
         ]);
     }
 
