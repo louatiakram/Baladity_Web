@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     uploads_directory: '%kernel.project_dir%/public/uploads'
+    twilio_account_sid: 'ACc889cd2b52f6a09ca714c967c8c33cd1'
+    twilio_auth_token: '03899d558cdf5574b4566b0f644c7781'
 services:
   # default configuration for services in *this* file
   _defaults:
