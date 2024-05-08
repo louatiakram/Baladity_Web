@@ -41,6 +41,11 @@ class ReclamationController extends AbstractController
     {
         return $this->render('reclamation/typeReclamation.html.twig');
     }
+    #[Route('/reclamation/typeReclamationF', name: 'typeReclamationF')]
+    public function typeReclamationF(): Response
+    {
+        return $this->render('reclamation/typeReclamationF.html.twig');
+    }
 
     #[Route('/reclamation/ajouterReclamation/{cas}', name: 'ajouterReclamation')]
     public function ajouterReclamation(Request $request, $cas,SessionInterface $session): Response
@@ -119,7 +124,7 @@ class ReclamationController extends AbstractController
     }
 
     #[Route('/reclamation/ajouterReclamationF/{cas}', name: 'ajouterReclamationF')]
-public function ajouterReclamationF(Request $request, $cas,MailerInterface $mailer): Response
+public function ajouterReclamationF(Request $request, $cas,MailerInterface $mailer,ManagerRegistry $doctrine): Response
 {
     // Créer une nouvelle instance de l'entité Reclamation
     $reclamation = new Reclamation();
@@ -153,7 +158,11 @@ public function ajouterReclamationF(Request $request, $cas,MailerInterface $mail
 
     if ($form->isSubmitted() && $form->isValid()) {
         // Récupérer l'utilisateur à partir du formulaire
-        $userId = 48;
+        $userId = $request->getSession()->get('user_id');
+//get user
+        $userRepository = $doctrine->getRepository(enduser::class);
+        $users = $userRepository->findOneBy(['id_user' => $userId]);
+
         $user = $this->getDoctrine()->getRepository(EndUser::class)->find($userId);
 
 
@@ -268,9 +277,13 @@ public function afficherReclamation(Request $request, ReclamationRepository $rep
     ]);
 }
 #[Route('/reclamation/afficherReclamationF', name: 'afficherReclamationF')]
-public function afficherReclamationF(Request $request, ReclamationRepository $repository, PaginatorInterface $paginator): Response
+public function afficherReclamationF(Request $request, ReclamationRepository $repository, PaginatorInterface $paginator,ManagerRegistry $doctrine): Response
 {
-    $userId = 149;
+    $userId = $request->getSession()->get('user_id');
+//get user
+        $userRepository = $doctrine->getRepository(enduser::class);
+        $users = $userRepository->findOneBy(['id_user' => $userId]);
+
 
     // Récupérer les réclamations de l'utilisateur actuel
     $reclamations = $repository->findReclamationsByUserId($userId);
@@ -297,11 +310,17 @@ public function filtrerParDate(Request $request, ReclamationRepository $reposito
     $sortingState = $session->get('sorting_state', 'normal');
     
     if ($sortingState === 'normal') {
-        $userId = 48; // Utilisateur pour lequel vous souhaitez filtrer les réclamations par date
+        $userId = $request->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
         $reclamations = $repository->findReclamationsByDate($userId);
         $session->set('sorting_state', 'sorted');
     } else {
-        $userId = 48; // Utilisateur pour lequel vous souhaitez filtrer les réclamations par date
+        $userId = $request->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
         $reclamations = $repository->findReclamationsByUserId($userId);
         $session->set('sorting_state', 'normal');    }
 

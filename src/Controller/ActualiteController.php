@@ -35,7 +35,10 @@ class ActualiteController extends AbstractController
     public function ajouterA(ManagerRegistry $doctrine, Request $req): Response
     {
         $actualite = new Actualite();
-        $userId = 48;
+        $userId = $request->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
     
         if (!$user) {
@@ -205,7 +208,10 @@ public function index1(ActualiteRepository $repository): Response
 public function ajouterA2(ManagerRegistry $doctrine, Request $req): Response
 {
     $actualite = new Actualite();
-    $userId = 48; 
+    $userId = $request->getSession()->get('user_id');
+//get user
+        $userRepository = $doctrine->getRepository(enduser::class);
+        $users = $userRepository->findOneBy(['id_user' => $userId]);
     $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
 
     if (!$user) {

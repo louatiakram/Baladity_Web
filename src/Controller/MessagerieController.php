@@ -30,10 +30,12 @@ class MessagerieController extends AbstractController
     #[Route('/messagerie/afficherMessagerie/{id}', name: 'afficherMessagerie')]
 public function afficherMessagerie(int $id, MessagerieRepository $messagerieRepository, PaginatorInterface $paginator, Request $request): Response
 {
-    $userId2 = 49;
-
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     // Récupérer les messages entre les deux utilisateurs
-    $messagesQuery = $messagerieRepository->findByUsers($id, $userId2);
+    $messagesQuery = $messagerieRepository->findByUsers($id, $userId);
 
     // Paginer les résultats
     $messages = $paginator->paginate(
@@ -51,13 +53,16 @@ public function afficherMessagerie(int $id, MessagerieRepository $messagerieRepo
 public function afficherMessagerieF(MessagerieRepository $messagerieRepository, Request $request): Response
 {
     $entityManager = $this->getDoctrine()->getManager();
-
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     // Récupérer l'utilisateur actuellement connecté (ID statique)
-    $currentUserId = 49; // Exemple d'ID utilisateur
-    $currentUser = $entityManager->getRepository(enduser::class)->find($currentUserId);
+   
+    $currentUser = $entityManager->getRepository(enduser::class)->find($userId);
 
     // ID de l'autre utilisateur (statique)
-    $otherUserId = 48; // Exemple d'ID utilisateur
+    $otherUserId = 54; // Exemple d'ID utilisateur
     $currentUser2 = $entityManager->getRepository(enduser::class)->find($otherUserId);
 
 

@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\EvenementRepository;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use DateTimeInterface;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Entity\enduser;
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\EvenementRepository;
 use Doctrine\Common\Collections\Collection;
-use App\Entity\Enduser; // Make sure to import the
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
 class evenement
 {
@@ -58,7 +58,7 @@ class evenement
     }
 
     /**
-     * @return Collection|Enduser[]
+     * @return Collection|enduser[]
      */
     public function getAttendees(): Collection
 {
@@ -68,7 +68,7 @@ class evenement
     return $this->attendees;
 }
 
-    public function addAttendee(Enduser $enduser): self
+    public function addAttendee(enduser $enduser): self
     {
         if (!$this->attendees->contains($enduser)) {
             $this->attendees[] = $enduser;
@@ -78,7 +78,7 @@ class evenement
         return $this;
     }
 
-    public function removeAttendee(Enduser $enduser): self
+    public function removeAttendee(enduser $enduser): self
     {
         if ($this->attendees->removeElement($enduser)) {
             // set the owning side to null (unless already changed)

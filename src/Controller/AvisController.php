@@ -34,7 +34,10 @@ class AvisController extends AbstractController
     public function ajouterAvisFront($id, ManagerRegistry $doctrine, Request $req): Response
     {
         // Récupérer l'identifiant de l'utilisateur
-        $userId = 48; 
+             $userId = $request->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
     
         // Récupérer l'équipement depuis la base de données en utilisant son ID
         $equipement = $this->getDoctrine()->getRepository(Equipement::class)->find($id);

@@ -52,13 +52,17 @@ class VoteController extends AbstractController
     }
     
     #[Route('/vote/ajouter', name: 'ajouter_vote')]
-public function add(Request $request): Response
+public function add(Request $request,ManagerRegistry $doctrine): Response
 {
     $entityManager = $this->getDoctrine()->getManager();
 
     // Create a new Vote object
     $vote = new vote();
-    $vote->setIdUser(50);
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
+    $vote->setIdUser($userId);
     // Set the date_SV field to the current date
     $vote->setDateSV(new \DateTime());
 
@@ -84,13 +88,17 @@ public function add(Request $request): Response
 }
 
 #[Route('/vote/ajouterFront', name: 'ajouter_voteFront')]
-public function addFront(Request $request): Response
+public function addFront(Request $request,ManagerRegistry $doctrine): Response
 {
     $entityManager = $this->getDoctrine()->getManager();
 
     // Create a new Vote object
     $vote = new vote();
-    $vote->setIdUser(50);
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
+    $vote->setIdUser($userId);
     // Set the date_SV field to the current date
     $vote->setDateSV(new \DateTime());
 

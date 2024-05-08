@@ -33,7 +33,10 @@ class EquipementController extends AbstractController
     public function ajouterEquipement(ManagerRegistry $doctrine, Request $req): Response
     {
         $equipement = new Equipement();
-        $userId = 48; 
+        $userId = $request->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
     
         if (!$user) {
@@ -85,7 +88,10 @@ class EquipementController extends AbstractController
     public function ajouterEquipementResponsable(ManagerRegistry $doctrine, Request $req): Response
     {
         $equipement = new Equipement();
-        $userId = 48; 
+       $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
     
         if (!$user) {

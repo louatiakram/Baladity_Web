@@ -117,13 +117,16 @@ public function listCitoyen(Request $request, EvenementRepository $repository, P
 }
 
     #[Route('/evenement/ajouter', name: 'ajouter_evenement')]
-    public function ajouter(Request $request, EntityManagerInterface $entityManager, SessionInterface $session, MailerInterface $mailer): Response
+    public function ajouter(Request $request, EntityManagerInterface $entityManager, SessionInterface $session, MailerInterface $mailer,ManagerRegistry $doctrine): Response
     {
     // Créer une nouvelle instance d'événement
     $evenement = new Evenement();
-    
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     // Définir l'identifiant de l'utilisateur statique (48 dans ce cas)
-    $evenement->setIdUser(48);
+    $evenement->setIdUser($userId);
 
     // Gérer la soumission du formulaire
     $form = $this->createForm(EvenementType::class, $evenement);
@@ -160,13 +163,16 @@ public function listCitoyen(Request $request, EvenementRepository $repository, P
 }
 
 #[Route('/evenement/ajouterFront', name: 'ajouterFront_evenement')]
-    public function ajouterFront(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
+    public function ajouterFront(Request $request, EntityManagerInterface $entityManager, SessionInterface $session,ManagerRegistry $doctrine): Response
 {
     // Créer une nouvelle instance d'événement
     $evenement = new Evenement();
-    
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     // Définir l'identifiant de l'utilisateur statique (48 dans ce cas)
-    $evenement->setIdUser(48);
+    $evenement->setIdUser($userId);
 
     // Gérer la soumission du formulaire
     $form = $this->createForm(EvenementType::class, $evenement);
@@ -360,10 +366,13 @@ public function __construct(Security $security)
 }
 
 #[Route('/evenement/join/{id}', name: 'join_evenement')]
-public function joinEvenement($id, EvenementRepository $repository, EntityManagerInterface $entityManager, SessionInterface $session, Security $security): Response
+public function joinEvenement($id, EvenementRepository $repository, EntityManagerInterface $entityManager, SessionInterface $session, ManagerRegistry $doctrine, Request $request): Response
 {
-    // Static user ID for testing
-    $userId = 60; // Replace with the actual user ID
+    $userId = $request->getSession()->get('user_id');
+
+    // Get the user
+    $userRepository = $doctrine->getRepository(enduser::class);
+    $user = $userRepository->find($userId);
 
     // Get the event by ID
     $evenement = $repository->find($id);
@@ -380,16 +389,7 @@ public function joinEvenement($id, EvenementRepository $repository, EntityManage
         return $this->redirectToRoute('evenement_listCitoyen');
     }
 
-    // Get the authenticated user
-    $user = $security->getUser();
-
-    // Check if the user is authenticated
-    if (!$user) {
-        // Handle unauthenticated user
-        // Redirect to login page or handle the case accordingly
-    }
-
-    // Check if the user has already joined the event (using session or cache)
+    // Check if the user has already joined the event
     if ($evenement->getAttendees()->contains($user)) {
         $session->getFlashBag()->add('error', 'Vous avez déjà rejoint cet événement.');
         return $this->redirectToRoute('details_evenementFront', ['id' => $id]);
@@ -401,26 +401,20 @@ public function joinEvenement($id, EvenementRepository $repository, EntityManage
         return $this->redirectToRoute('evenement_listCitoyen');
     }
 
-    // Find the user by ID
-    $enduser = $entityManager->getRepository(enduser::class)->find($userId);
-
-    // Check if the user exists
-    if (!$enduser) {
-        throw $this->createNotFoundException('Utilisateur non trouvé avec l\'id : ' . $userId);
-    }
-
     // Add the user as an attendee to the event
-    $evenement->addAttendee($enduser);
+    $evenement->addAttendee($user);
+    $evenement->setCapaciteE($evenement->getCapaciteE() - 1); // Decrement the capacity
+    $entityManager->persist($evenement); // Persist changes to event
     $entityManager->flush();
-     // Decrement the capacity
-     $evenement->setCapaciteE($evenement->getCapaciteE() - 1);
-     $entityManager->flush();
+
     // Add success message
     $session->getFlashBag()->add('success', 'Vous avez rejoint l\'événement avec succès.');
 
     // Redirect to the event details page
     return $this->redirectToRoute('details_evenementCitoyen', ['id' => $id]);
 }
+
+
 
 #[Route('/evenement/stats', name: 'stats_evenement')]
     public function statsEvenement(EvenementRepository $evenementRep): Response

@@ -87,7 +87,11 @@ class PubliciteController extends AbstractController
     public function ajouterPub(ManagerRegistry $doctrine, Request $req): Response
     {
         $publicite = new publicite();
-        $userId = 48; 
+        $userId = $req->getSession()->get('user_id');
+//get user
+        $userRepository = $doctrine->getRepository(enduser::class);
+        $users = $userRepository->findOneBy(['id_user' => $userId]);
+    
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
     
         if (!$user) {
