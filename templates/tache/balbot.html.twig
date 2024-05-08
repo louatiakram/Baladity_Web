@@ -84,6 +84,8 @@
             <input type="text" id="user_message" name="user_message">
             <button class="button" type="submit" onclick="showLoading()"><i class="bi bi-arrow-up-circle-fill"></i></button>
             <button class="button" onclick="clearInput()"><i class="bi bi-trash-fill"></i></button>
+            <button class="button" onclick="readResponse()"><i class="bi bi-mic-fill"></i></button> <!-- Voice button -->
+            <button class="button" onclick="stopVoice()"><i class="bi bi-stop-fill"></i></button> <!-- Stop voice button -->
         </form>
         <div id="loading" class="loading"></div>
         {% if response %}
@@ -101,6 +103,8 @@
     </div>
 
     <script>
+        var speechSynthesisUtterance = null; // Variable to store speech synthesis instance
+        
         function clearInput() {
             // Show loading indicator
             document.getElementById("loading").style.display = "inline-block";
@@ -122,9 +126,24 @@
         // Function to read out the response
         function readResponse() {
             var responseText = document.getElementById("responseDiv").innerText;
-            var speech = new SpeechSynthesisUtterance();
-            speech.text = responseText;
-            window.speechSynthesis.speak(speech);
+            if (!speechSynthesisUtterance) {
+                speechSynthesisUtterance = new SpeechSynthesisUtterance();
+                speechSynthesisUtterance.text = responseText;
+                window.speechSynthesis.speak(speechSynthesisUtterance);
+            } else {
+                // If already speaking, stop and restart from beginning
+                window.speechSynthesis.cancel();
+                speechSynthesisUtterance.text = responseText;
+                window.speechSynthesis.speak(speechSynthesisUtterance);
+            }
+        }
+        
+        // Function to stop voice
+        function stopVoice() {
+            if (speechSynthesisUtterance) {
+                window.speechSynthesis.cancel();
+                speechSynthesisUtterance = null;
+            }
         }
         
         // Read out the response when the page loads

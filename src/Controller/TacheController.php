@@ -637,13 +637,13 @@ class TacheController extends AbstractController
                 "messages" => [
                     [
                         "role" => "system",
-                        "content" => "You are a virtual assistant. Your name is BalBot and you are a guide to the baladity project developed by 'Dev Masters' a group of 6 skilled IT Engineers, which is a virtual municipality with currently only one sector area: Ariana, tunisia."
+                        "content" => "You are a virtual assistant. Your name is BalBot and you are a guide to the baladity project developed by 'Dev Masters' a group of 6 skilled IT Engineers (louati akram - zayane yessine - kaboubi amine - sediri hadil - yahyaoui amine), which is a cross-platform project that simplifies the management of municipalities in Tunisia, as well as the customer service part, in fact our application is intended for employees and citizens, currently we are still under development, this will focus on the Ariana sector.",
                     ],
                     [
                         "role" => "user",
-                        "content" => $userMessage // Use the user message here
-                    ]
-                ]
+                        "content" => $userMessage, // Use the user message here
+                    ],
+                ],
             ]),
             'headers' => [
                 'X-RapidAPI-Host' => 'chat-gtp-free.p.rapidapi.com',
