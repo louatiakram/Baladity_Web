@@ -39,7 +39,7 @@ class ReclamationController extends AbstractController
     #[Route('/reclamation/typeReclamation', name: 'typeReclamation')]
     public function typeReclamation(): Response
     {
-        return $this->render('reclamation/typeReclamationF.html.twig');
+        return $this->render('reclamation/typeReclamation.html.twig');
     }
 
     #[Route('/reclamation/ajouterReclamation/{cas}', name: 'ajouterReclamation')]
@@ -270,7 +270,7 @@ public function afficherReclamation(Request $request, ReclamationRepository $rep
 #[Route('/reclamation/afficherReclamationF', name: 'afficherReclamationF')]
 public function afficherReclamationF(Request $request, ReclamationRepository $repository, PaginatorInterface $paginator): Response
 {
-    $userId = 48;
+    $userId = 149;
 
     // Récupérer les réclamations de l'utilisateur actuel
     $reclamations = $repository->findReclamationsByUserId($userId);
