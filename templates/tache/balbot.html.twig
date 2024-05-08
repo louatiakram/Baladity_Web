@@ -79,15 +79,15 @@
     </style>
 
     <div class="container">
-        <h1>Chatbot</h1>
-        <form id="chatForm" method="post" action="{{ path('chatbot') }}">
+        <h1>BalBot</h1>
+        <form id="chatForm" method="post" action="{{ path('balbot') }}">
             <input type="text" id="user_message" name="user_message">
             <button class="button" type="submit" onclick="showLoading()"><i class="bi bi-arrow-up-circle-fill"></i></button>
             <button class="button" onclick="clearInput()"><i class="bi bi-trash-fill"></i></button>
         </form>
         <div id="loading" class="loading"></div>
         {% if response %}
-            <div class="response">
+            <div class="response" id="responseDiv">
                 {% set lines = response|split('.') %}
                 {% for line in lines %}
                     <p>{{ line }}</p>
@@ -118,5 +118,18 @@
         function showLoading() {
             document.getElementById("loading").style.display = "inline-block";
         }
+        
+        // Function to read out the response
+        function readResponse() {
+            var responseText = document.getElementById("responseDiv").innerText;
+            var speech = new SpeechSynthesisUtterance();
+            speech.text = responseText;
+            window.speechSynthesis.speak(speech);
+        }
+        
+        // Read out the response when the page loads
+        window.onload = function() {
+            readResponse();
+        };
     </script>
 {% endblock %}

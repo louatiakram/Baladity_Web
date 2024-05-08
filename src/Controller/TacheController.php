@@ -621,7 +621,7 @@ class TacheController extends AbstractController
         return $this->redirectToRoute('tache_listfront');
     }
 
-    #[Route('/tache/chatbot', name: 'chatbot')]
+    #[Route('/tache/balbot', name: 'balbot')]
     public function chatbotAction(Request $request)
     {
         // Get the user message from the request
@@ -659,7 +659,7 @@ class TacheController extends AbstractController
         $displayText = $responseBody['text'] ?? null;
 
         // Render a Twig template with the response
-        return $this->render('tache/chatbot.html.twig', [
+        return $this->render('tache/balbot.html.twig', [
             'response' => $displayText,
         ]);
     }
