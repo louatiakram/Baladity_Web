@@ -1,8 +1,12 @@
 declare namespace _default {
     const id: string;
+
     function start(chart: any, _args: any, options: any): void;
+
     function stop(chart: any): void;
+
     function beforeUpdate(chart: any, _args: any, options: any): void;
+
     namespace defaults {
         export const align: string;
         export const display: boolean;
@@ -14,7 +18,7 @@ declare namespace _default {
         export const position: string;
         export const text: string;
         const weight_1: number;
-        export { weight_1 as weight };
+        export {weight_1 as weight};
     }
     namespace defaultRoutes {
         const color: string;

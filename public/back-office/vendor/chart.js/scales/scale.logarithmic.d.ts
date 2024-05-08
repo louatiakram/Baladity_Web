@@ -11,15 +11,20 @@ export default class LogarithmicScale extends Scale {
     /** @type {number} */
     _startValue: number;
     _valueRange: number;
-    parse(raw: any, index: any): number;
     _zero: boolean;
+
+    parse(raw: any, index: any): number;
+
     handleTickRangeOptions(): void;
+
     /**
-       * @param {number} value
-       * @return {string}
-       */
+     * @param {number} value
+     * @return {string}
+     */
     getLabelForValue(value: number): string;
+
     getPixelForValue(value: any): number;
+
     getValueForPixel(pixel: any): number;
 }
 import Scale from "../core/core.scale.js";

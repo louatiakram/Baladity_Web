@@ -4,17 +4,32 @@ export default class PolarAreaController extends DatasetController {
      * @type {any}
      */
     static overrides: any;
-    constructor(chart: any, datasetIndex: any);
     innerRadius: number;
     outerRadius: number;
+    /**
+     * @private
+     */
+    private _updateRadius;
+    /**
+     * @private
+     */
+    private _computeAngle;
+
+    constructor(chart: any, datasetIndex: any);
+
     getLabelAndValue(index: any): {
         label: any;
         value: string;
     };
+
     parseObjectData(meta: any, data: any, start: any, count: any): {
         r: unknown;
     }[];
+
     update(mode: any): void;
+
+    countVisibleElements(): number;
+
     /**
      * @protected
      */
@@ -22,14 +37,5 @@ export default class PolarAreaController extends DatasetController {
         min: number;
         max: number;
     };
-    /**
-       * @private
-       */
-    private _updateRadius;
-    countVisibleElements(): number;
-    /**
-       * @private
-       */
-    private _computeAngle;
 }
 import DatasetController from "../core/core.datasetController.js";

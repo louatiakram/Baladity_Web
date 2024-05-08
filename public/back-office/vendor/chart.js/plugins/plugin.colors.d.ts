@@ -1,8 +1,10 @@
-import type { Chart } from '../types.js';
+import type {Chart} from '../types.js';
+
 export interface ColorsPluginOptions {
     enabled?: boolean;
     forceOverride?: boolean;
 }
+
 declare const _default: {
     id: string;
     defaults: ColorsPluginOptions;

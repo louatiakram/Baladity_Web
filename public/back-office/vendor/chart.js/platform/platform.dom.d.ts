@@ -4,15 +4,16 @@
  */
 export default class DomPlatform extends BasePlatform {
     /**
-       * @param {HTMLCanvasElement} canvas
-       * @param {number} [aspectRatio]
-       * @return {CanvasRenderingContext2D|null}
-       */
+     * @param {HTMLCanvasElement} canvas
+     * @param {number} [aspectRatio]
+     * @return {CanvasRenderingContext2D|null}
+     */
     acquireContext(canvas: HTMLCanvasElement, aspectRatio?: number): CanvasRenderingContext2D | null;
+
     /**
-       * @param {Chart} chart
-       * @param {string} type
-       */
+     * @param {Chart} chart
+     * @param {string} type
+     */
     removeEventListener(chart: Chart, type: string): void;
 }
 export type Chart = import('../core/core.controller.js').default;

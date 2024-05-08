@@ -1,4 +1,5 @@
-import type { Point, SplinePoint } from '../types/geometric.js';
+import type {Point, SplinePoint} from '../types/geometric.js';
+
 /**
  * @private
  */
@@ -6,6 +7,7 @@ export declare function _pointInLine(p1: Point, p2: Point, t: number, mode?: any
     x: number;
     y: number;
 };
+
 /**
  * @private
  */
@@ -13,6 +15,7 @@ export declare function _steppedInterpolation(p1: Point, p2: Point, t: number, m
     x: number;
     y: number;
 };
+
 /**
  * @private
  */

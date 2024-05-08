@@ -1,5 +1,5 @@
 declare namespace _default {
-    export { formatters };
+    export {formatters};
 }
 export default _default;
 declare namespace formatters {
@@ -10,6 +10,7 @@ declare namespace formatters {
      * @return {string|string[]} the label to display
      */
     function values(value: any): string | string[];
+
     /**
      * Formatter for numeric ticks
      * @method Chart.Ticks.formatters.numeric
@@ -19,6 +20,7 @@ declare namespace formatters {
      * @return {string} string representation of the tickValue parameter
      */
     function numeric(tickValue: number, index: number, ticks: any[]): string;
+
     /**
      * Formatter for logarithmic ticks
      * @method Chart.Ticks.formatters.logarithmic
