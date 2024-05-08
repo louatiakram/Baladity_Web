@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ChatGPTController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
+    #[Route('/chatgpt', name: 'app_home')]
     public function index( ? string $question, ? string $response): Response
     {
         return $this->render('messagerie/chat.html.twig');
