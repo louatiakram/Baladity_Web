@@ -1,0 +1,84 @@
+{% extends 'base-back.html.twig' %}
+
+{% block title %}Liste des équipements{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="text-center">Liste des équipements</h1>
+
+        <!-- Button to navigate to the "ajouter" form -->
+        <div class="text-center mb-3">
+            <a href="{{ path('ajouterEquipement') }}" class="btn btn-primary">Ajouter équipement</a>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Référence</th>
+                    <th>Nom</th>
+                    <th>Quantité</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for equipement in equipements %}
+                    <tr>
+                        <td>{{ equipement.getReferenceEq() }}</td>
+                        <td>{{ equipement.getNomEq() }}</td>
+                        <td>{{ equipement.getQuantiteEq() }}</td>
+                        <td>
+                            <a href="{{ path('equipement_detail', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-info">
+                                <i class="bi bi-info-circle"></i> Détails
+                            </a>
+                            <a href="{{ path('modifierEquipement', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i> Modifier
+                            </a>
+                            <a href="{{ path('avis_show', {'id': equipement.getIdEquipement()}) }}" class="btn btn-sm btn-outline-info">
+                                <i class="bi bi-chat-square-text"></i> Avis
+                            </a>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete('{{ equipement.getIdEquipement() }}')">
+                                <i class="bi bi-trash"></i> Supprimer
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+                           <!-- Pagination -->
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item {% if currentPage == 1 %}disabled{% endif %}">
+                                    <a class="page-link" href="{{ path('equipement_show', {'page': 1}) }}" aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                    </a>
+                                </li>
+                                {% for page in 1..totalPages %}
+                                    <li class="page-item {% if page == currentPage %}active{% endif %}">
+                                        <a class="page-link" href="{{ path('equipement_show', {'page': page}) }}">{{ page }}</a>
+                                    </li>
+                                {% endfor %}
+                                <li class="page-item {% if currentPage == totalPages %}disabled{% endif %}">
+                                    <a class="page-link" href="{{ path('equipement_show', {'page': totalPages}) }}" aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- End Pagination -->
+                </div>
+            </div>
+        </div>
+
+        {% block ListeTalacheNav %}
+            <!-- Additional navigation elements if needed -->
+        {% endblock %}     
+<script>
+    function confirmDelete(equipementId) {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cet équipement?")) {
+            // Si l'utilisateur confirme la suppression, redirigez vers l'action de suppression appropriée
+            window.location.href = "{{ path('equipement_delete', {'id': 'EQUIPEMENT_ID'}) }}".replace('EQUIPEMENT_ID', equipementId);
+        }
+    }
+</script>
+{% endblock %}
+

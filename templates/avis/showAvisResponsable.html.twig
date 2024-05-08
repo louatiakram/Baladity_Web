@@ -1,0 +1,103 @@
+{% extends 'base-front.html.twig' %}
+
+{% block title %}Liste des avis{% endblock %}
+{% block body %}
+<div class="breadcrumbs">
+  <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+    <div class="container position-relative">
+      <div class="row d-flex justify-content-center">
+        <div class="col-lg-6 text-center">
+          <h2>Avis</h2>
+          <p>
+L'avis sur l'équipement est un retour d'expérience ou une évaluation fournie par les employés concernant un équipement spécifique. Il peut inclure des commentaires sur les performances, la qualité, l'utilité ou d'autres aspects pertinents de l'équipement, permettant ainsi aux autres employés potentiels de prendre des décisions éclairées.</p>
+        </div>
+      </div>
+    </div>
+  </div>  
+{% endblock %}
+
+
+{% block rest %}
+    <br>
+    <h1 class="card-title" style="text-align: center; font-size: 2em;">Liste des avis</h1>
+    <br>
+
+    <div class="col-10 mx-auto"> <!-- Ajustement de la largeur de la colonne -->
+        <div class="card">
+            <div class="card-body">
+                {% block avis_list %}
+                    {% if avis is not empty %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Note</th>
+                                    <th>Commentaire</th>
+                                    <th>Date</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for avis_item in avis %}
+                                    <tr>
+                                        <td>
+                                             {% set starCount = avis_item.getNoteAvis() %}
+                                                {% for i in 1..5 %}
+                                                {% if i <= starCount %}
+                                                    <i class="bi bi-star-fill text-warning"></i>
+                                                {% else %}
+                                                    <i class="bi bi-star text-warning"></i>
+                                                 {% endif %}
+                                                {% endfor %}
+                                        </td>
+                                        <td>{{ avis_item.getCommentaireAvis() }}</td>
+                                        <td>{{ avis_item.getDateAvis()|date('d/m/Y ') }}</td>
+                                        <td>
+                                            <form action="{{ path('avis_delete_responsable', {'id': avis_item.getIdAvis()}) }}" method="post">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ avis_item.getIdAvis()) }}">
+                                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>Aucun avis disponible.</p>
+                    {% endif %}
+                {% endblock %}
+                
+                <!-- Pagination et Bouton de retour -->
+                <div class="d-flex justify-content-between">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item {% if currentPage == 1 %}disabled{% endif %}">
+                                <a class="page-link" href="{{ path('equipement_show_responsable', {'page': 1}) }}" aria-label="Previous">
+                                    <span aria-hidden="true">«</span>
+                                </a>
+                            </li>
+                            {% for page in 1..totalPages %}
+                                <li class="page-item {% if page == currentPage %}active{% endif %}">
+                                    <a class="page-link" href="{{ path('equipement_show_responsable', {'page': page}) }}">{{ page }}</a>
+                                </li>
+                            {% endfor %}
+                            <li class="page-item {% if currentPage == totalPages %}disabled{% endif %}">
+                                <a class="page-link" href="{{ path('equipement_show_responsable', {'page': totalPages}) }}" aria-label="Next">
+                                    <span aria-hidden="true">»</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div>
+                        <a href="{{ path('equipement_show_responsable') }}" class="btn btn-primary">Retour</a>
+                    </div>
+                </div>
+                <!-- Fin Pagination et Bouton de retour -->
+            </div>
+        </div>
+    </div>
+
+    {% block ListeTalacheNav %}
+        <!-- Éléments de navigation supplémentaires si nécessaire -->
+    {% endblock %}
+{% endblock %}
