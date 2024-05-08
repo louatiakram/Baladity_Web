@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\enduserRepository;
+use App\Entity\evenement;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\enduserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: enduserRepository::class)]
 class enduser implements UserInterface, PasswordAuthenticatedUserInterface
@@ -228,6 +229,12 @@ class enduser implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->isVerified = $isVerified;
 
+        return $this;
+    }
+    //kaboubi event
+    public function setEvent(evenement $event): self
+    {
+        $this->event = $event;
         return $this;
     }
 }

@@ -135,7 +135,7 @@ public function listCitoyen(Request $request, EvenementRepository $repository, P
         if ($imageFile) {
             $fileName = uniqid().'.'.$imageFile->guessExtension();
             try {
-                $imageFile->move($this->getParameter('uploadsDirectory'), $fileName);
+                $imageFile->move($this->getParameter('uploads_directory'), $fileName);
                 $evenement->setImageEvent($fileName);
             } catch (FileException $e) {
                 $this->addFlash('error', 'Failed to upload image.');
@@ -178,7 +178,7 @@ public function listCitoyen(Request $request, EvenementRepository $repository, P
         if ($imageFile) {
             $fileName = uniqid().'.'.$imageFile->guessExtension();
             try {
-                $imageFile->move($this->getParameter('uploadsDirectory'), $fileName);
+                $imageFile->move($this->getParameter('uploads_directory'), $fileName);
                 $evenement->setImageEvent($fileName);
             } catch (FileException $e) {
                 $this->addFlash('error', 'Failed to upload image.');
@@ -255,7 +255,7 @@ public function update($id, EvenementRepository $rep, Request $req, ManagerRegis
                 // Move the file to the uploads directory
                 try {
                     $uploadedFile = $image->move(
-                        $this->getParameter('uploadsDirectory'), // Use the parameter defined in services.yaml
+                        $this->getParameter('uploads_directory'), // Use the parameter defined in services.yaml
                         $originalFilename . '.' . $image->guessExtension()
                     );
                     $x->setImageEvent($uploadedFile->getFilename());
@@ -292,7 +292,7 @@ public function updateFront($id, EvenementRepository $rep, Request $req, Manager
                 // Move the file to the uploads directory
                 try {
                     $uploadedFile = $image->move(
-                        $this->getParameter('uploadsDirectory'), // Use the parameter defined in services.yaml
+                        $this->getParameter('uploads_directory'), // Use the parameter defined in services.yaml
                         $originalFilename . '.' . $image->guessExtension()
                     );
                     $x->setImageEvent($uploadedFile->getFilename());
