@@ -57,7 +57,7 @@ class ActualiteController extends AbstractController
                 // Handle image upload and persist its filename to the database
                 $fileName = uniqid() . '.' . $image->guessExtension();
                 try {
-                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    $image->move($this->getParameter('uploads_directory'), $fileName);
                     $actualite->setImageA($fileName);
                 } catch (FileException $e) {
                     // Handle the exception if file upload fails
@@ -170,7 +170,7 @@ class ActualiteController extends AbstractController
             // Handle image upload and persist its filename to the database
             $fileName = uniqid().'.'.$image->guessExtension();
             try {
-                $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                $image->move($this->getParameter('uploads_directory'), $fileName);
                 $actualite->setImageA($fileName);
             } catch (FileException $e) {
                 // Handle the exception if file upload fails
@@ -227,7 +227,7 @@ public function ajouterA2(ManagerRegistry $doctrine, Request $req): Response
             // Handle image upload and persist its filename to the database
             $fileName = uniqid().'.'.$image->guessExtension();
             try {
-                $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                $image->move($this->getParameter('uploads_directory'), $fileName);
                 $actualite->setImageA($fileName);
             } catch (FileException $e) {
                 // Handle the exception if file upload fails
@@ -290,7 +290,7 @@ public function modifierA2($id, ManagerRegistry $doctrine, Request $request): Re
             // Handle image upload and persist its filename to the database
             $fileName = uniqid().'.'.$image->guessExtension();
             try {
-                $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                $image->move($this->getParameter('uploads_directory'), $fileName);
                 $actualite->setImageA($fileName);
             } catch (FileException $e) {
                 // Handle the exception if file upload fails

@@ -104,7 +104,7 @@ class PubliciteController extends AbstractController
             if ($image) {
                 $fileName = uniqid().'.'.$image->guessExtension();
                 try {
-                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    $image->move($this->getParameter('uploads_directory'), $fileName);
                     $publicite->setImagePub($fileName);
                 } catch (FileException $e) {
                     // Handle the exception if file upload fails
@@ -159,12 +159,12 @@ class PubliciteController extends AbstractController
                 // Gérer le téléchargement de la nouvelle image
                 $fileName = uniqid().'.'.$image->guessExtension();
                 try {
-                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    $image->move($this->getParameter('uploads_directory'), $fileName);
                     
                     // Supprimer l'ancienne image si elle existe
                     $oldImage = $publicite->getImagePub();
                     if ($oldImage) {
-                        unlink($this->getParameter('uploadsDirectory') . '/' . $oldImage);
+                        unlink($this->getParameter('uploads_directory') . '/' . $oldImage);
                     }
                     
                     // Mettre à jour le nom du fichier de l'image dans l'entité
@@ -276,7 +276,7 @@ public function generatePdf(Request $request): Response
 
         // Déplacer le fichier téléversé vers le répertoire de destination
         try {
-            $logoFile->move($uploadsDirectory, $logoFileName);
+            $logoFile->move($uploads_directory, $logoFileName);
         } catch (FileException $e) {
             // Gérer l'erreur de déplacement du fichier
             // ...
