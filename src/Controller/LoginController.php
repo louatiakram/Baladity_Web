@@ -67,7 +67,7 @@ class LoginController extends AbstractController
                     } else {
                         //redirect the user to the app_main route
                         if($user->getIsBanned() == 0){
-                            return $this->redirectToRoute('app_front_main');
+                            return $this->redirectToRoute('app_main_front');
                         }else{
                             $this->addFlash('error', 'Votre compte a été banni.');
                             return $this->redirectToRoute('app_login');
@@ -84,7 +84,7 @@ class LoginController extends AbstractController
         }
 
         // Render the login form
-        return $this->render('login/login.html.twig', [
+        return $this->render('index.html.twig', [
             'form' => $form->createView(),
             'error' => $error,
         ]);
