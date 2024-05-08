@@ -219,34 +219,44 @@ body{
 .container.active .toggle-right{
     transform: translateX(200%);
 }
+.container select {
+    /* Styles personnalisés pour le menu déroulant */
+    background-color: #eee;
+    border: none;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 8px;
+    width: 100%;
+    outline: none;
+}
+
     </style>
 </head>
 
 <body>
 
-    <div class="container" id="container">
-        <div class="form-container sign-up">
-            <form action="{{ path('app_register') }}" method="post"> <!-- Modification ici -->
-                <h1>Create Account</h1>
-                <span>or use your email for registeration</span>
-                <input type="text" name="login_type[email_user]" placeholder="Name"> <!-- Modification ici -->
-                <input type="email" name="login_type[email_user]" placeholder="Email"> <!-- Modification ici -->
-                <input type="password" name="login_type[password]" placeholder="Password"> <!-- Modification ici -->
-                <button type="submit">Sign Up</button>
-            </form>
-        </div>
+    <div class="container active" id="container"> <!-- Ajoutez la classe active ici -->
+        <div class="form-container sign-up active">
+    <form action="{{ path('app_register') }}" method="post" enctype="multipart/form-data"> <!-- Modification ici -->
+        <h1>Create Account</h1>
+        <span>or use your email for registration</span>
+         {{ form_start(f) }}
+        {{ form_widget(f.nom_user, {'attr': {'placeholder': 'Username'}}) }}
+        {{ form_widget(f.email_user, {'attr': {'placeholder': 'Email'}}) }}
+        {{ form_widget(f.plainPassword, {'attr': {'placeholder': 'Password'}}) }}
+        {{ form_widget(f.phoneNumber_user, {'attr': {'placeholder': 'Phone Number'}}) }}
+        {{ form_widget(f.location_user, {'attr': {'placeholder': 'Location'}}) }}
+        {{ form_widget(f.image_user) }}
+        {{ form_widget(f.id_muni, {'attr': {'class': 'custom-dropdown'}}) }}
+        {{ form_widget(f.captcha) }}
+        <button type="submit">Sign Up</button>
+         {{ form_end(f) }}
+    </form>
+    </div>
         <div class="form-container sign-in">
             <form action="{{ path('app_login') }}" method="post"> <!-- Modification ici -->
                 <h1>Sign In</h1>
-                {% if error %}
-                    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                {% endif %}
-                {{ form_start(form) }}
-                {{ form_widget(form.email_user, { 'attr': {'placeholder': 'Email'} }) }}
-                {{ form_widget(form.password, { 'attr': {'placeholder': 'Password'} }) }}
-                <a href="{{ path('app_reset_pwd') }}">Forget Your Password?</a>
-                <button type="submit">Sign In</button>
-                {{ form_end(form) }}
+                <button type="submit"  href="{{ path('app_login') }}">Sign In</button>
             </form>
         </div>
         <div class="toggle-container">

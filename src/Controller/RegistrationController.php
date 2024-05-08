@@ -46,7 +46,7 @@ class RegistrationController extends AbstractController
                 // Add a form error for the email field
                 $form->get('email_user')->addError(new FormError('User with this email already exists.'));
                 // Render the form again with the error message
-                return $this->render('index.html.twig', [
+                return $this->render('register.html.twig', [
                     'f' => $form->createView()
                 ]);
             }
@@ -66,7 +66,7 @@ class RegistrationController extends AbstractController
                 // Handle image upload and persist its filename to the database
                 $fileName = uniqid().'.'.$image->guessExtension();
                 try {
-                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    $image->move($this->getParameter('uploads_directory'), $fileName);
                     // Set the image filename to the user entity
                     $user->setImageUser($fileName);
                 } catch (FileException $e) {
@@ -90,7 +90,7 @@ class RegistrationController extends AbstractController
 
         }
 
-        return $this->render('index.html.twig', [
+        return $this->render('register.html.twig', [
             'f' => $form->createView(),
         ]);
     }
