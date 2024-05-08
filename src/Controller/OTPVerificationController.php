@@ -30,7 +30,7 @@ class OTPVerificationController extends AbstractController
             if ($userOTP === $storedOTP) {
                 // OTP valide, vous pouvez effectuer les actions appropriées ici (par exemple, activer le compte utilisateur)
                 // Rediriger vers une page de succès ou effectuer d'autres opérations nécessaires
-                return $this->redirectToRoute('app_front_main');
+                return $this->redirectToRoute('app_main_front');
             }
 
             // If OTP is invalid, render the form again with an error message
