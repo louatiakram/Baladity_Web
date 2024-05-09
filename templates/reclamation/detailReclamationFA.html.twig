@@ -18,6 +18,8 @@
 
                     <li><a href="contact.html">About Us</a></li>
 {% endblock %}
+  {% block imagegpt %} 
+  {% endblock %}
 {% block body %}
 
 {% endblock %}
@@ -67,7 +69,7 @@
               <div>
                 <h5>Description du Réclamation : </h5>
                 <p>            {{ reclamation.descriptionReclamation }}
-</p>
+                </p>
               </div>
             </li>
             <li data-aos="fade-up" data-aos-delay="200" class="aos-init aos-animate">
@@ -93,6 +95,7 @@
                   <p>{{ reclamation.statusReclamation }}</p>
                 </div>
               </li>
+             
             <li >
                 <div>  
                     <h3> Modifier le status du Réclamation : </h3>
@@ -102,7 +105,7 @@
                 <div> 
                  
                       
-                <a href="{{ path('modifier_statut_reclamation', {'id': reclamation.getIdReclamation()}) }}">
+                <a href="{{ path('send_reclamation_email', {'id': reclamation.getIdReclamation()}) }}">
                     <img src="{{ asset('images/cancel.png') }}" style="width: 35px; height: 35px;">
                 </a>
 
@@ -115,10 +118,22 @@
         
             </div>
               </li>
+               <li data-aos="fade-up" data-aos-delay="100" class="aos-init aos-animate">
+              <i class="bi bi-envelope-at-fill"></i>
+              <div>
+                <h5>Envoyer Mail  : </h5>
+                <p>
+                <a href="{{ path('send_reclamation_email', {'id': reclamation.getIdReclamation()}) }}">Envoi mail</a>
+                </p>
+              </div>
+            </li>
           </ul>
+          
         </div>
+        
       </div>
-
+      
     </div>
+    
   </section>
 {% endblock %}

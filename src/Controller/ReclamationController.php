@@ -578,5 +578,54 @@ public function redirectMessagerie(int $id): RedirectResponse
     // Rediriger vers la route afficherMessagerie du contrôleur MessagerieController
     return $this->redirectToRoute('afficherMessagerie', ['id' => $id]);
 }
+#[Route('/reclamation/send-email/{id}', name: 'send_reclamation_email')]
+public function sendReclamationEmail(MailerInterface $mailer, Request $request, ManagerRegistry $doctrine, $id): Response
+{
+    // Find the Reclamation object
+    $reclamation = $this->getDoctrine()->getRepository(Reclamation::class)->find($id);
+
+    // Check if the Reclamation object is found
+    if (!$reclamation) {
+        throw $this->createNotFoundException('Reclamation not found');
+    }
+    if ($request->isMethod('POST')) {
+        // Récupérer le sujet et le message du formulaire
+        $subject = $request->get('subject');
+        $message = $request->get('message');
+        
+
+        // Valider le formulaire
+    
+            // Find the Reclamation object
+            $reclamation = $this->getDoctrine()->getRepository(Reclamation::class)->find($id);
+
+            // Get the recipient's email address
+            $recipientEmail = $reclamation->getIdUser()->getEmailUser();
+
+
+            // Si l'e-mail est envoyé avec succès, redirigez l'utilisateur ou affichez un message de succès
+            // Par exemple, rediriger vers une page de confirmation
+            return $this->redirectToRoute('send_mail_reclamation', [
+                'emailSaisie' => $recipientEmail,
+                'subject' => $subject,
+                'message' => $message,
+            ]);
+
+    }
+    // If the email was sent successfully, render the success response
+    return $this->render('reclamation/traitementReclamation.html.twig', [
+        'reclamation' => $reclamation,
+    ]);
+}
+#[Route('/reclamation/sendReclamationEmaild/{id}', name: 'sendReclamationEmaild')]
+public function sendReclamationEmaild(MailerInterface $mailer, Request $request, ManagerRegistry $doctrine, $id): Response
+{
+    // Vérifie si le formulaire est soumis
+   
+
+    // Si le formulaire n'est pas soumis, affichez le formulaire
+    return $this->render('reclamation/afficherReclamationFA.html.twig');
+}
+
 }
 
