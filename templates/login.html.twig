@@ -219,6 +219,9 @@ body{
 .container.active .toggle-right{
     transform: translateX(200%);
 }
+.error-message {
+    color: red;
+}
     </style>
 </head>
 
@@ -234,12 +237,23 @@ body{
         <div class="form-container sign-in">
             <form action="{{ path('app_login') }}" method="post"> <!-- Modification ici -->
                 <h1>Sign In</h1>
-                {% if error %}
-                    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% if app.flashes('error') is not empty %}
+                    <div class="alert alert-danger">
+                        {% for message in app.flashes('error') %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
                 {% endif %}
-                {{ form_start(form) }}
-                {{ form_widget(form.email_user, { 'attr': {'placeholder': 'Email'} }) }}
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endif %}
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                {{ form_widget(form.email_user, {'attr': {'placeholder': 'Email'}}) }}
+                {{ form_errors(form.email_user) }}
                 {{ form_widget(form.password, { 'attr': {'placeholder': 'Password'} }) }}
+                {{ form_errors(form.password) }}
                 <a href="{{ path('app_reset_pwd') }}">Forget Your Password?</a>
                 <button type="submit">Sign In</button>
                 {{ form_end(form) }}

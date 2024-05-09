@@ -16,16 +16,31 @@ class muni
     private $id_muni;
 
     #[ORM\Column(name: 'nom_muni', type: 'string', length: 255)]
+    #[Assert\Regex(
+        pattern: '/\d/',
+        match: false,
+        message: "Le sujet de la réclamation ne peut pas contenir de chiffres."
+    )]    
     private $nom_muni;
 
     #[ORM\Column(name: 'email_muni', type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "L'email est requis.")]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/",
+        message: "L'email n'est pas au format valide."
+    )]
     private $email_muni;
 
     #[ORM\Column(name: 'password_muni', type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Vous devez mettre votre password.")]
+    #[Assert\Regex(
+        pattern: '/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%]{6,}$/',
+        message: "Le mot de passe doit contenir au moins 6 caractères, dont au moins un chiffre et une lettre."
+    )]
     private $password_muni;
 
     #[ORM\Column(type: 'string', length: 255)]
-    //#[Assert\NotBlank(message: "Vous devez sélectionner une image.")]
+    #[Assert\NotBlank(message: "Vous devez sélectionner une image.")]
     private $imagee_user;
 
     public function getIdMuni(): ?int

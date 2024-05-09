@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\enduserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: enduserRepository::class)]
 class enduser implements UserInterface, PasswordAuthenticatedUserInterface
@@ -23,9 +25,19 @@ class enduser implements UserInterface, PasswordAuthenticatedUserInterface
     private $nom_user;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "L'email est requis.")]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/",
+        message: "L'email n'est pas au format valide."
+    )]
     private $email_user;
 
     #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank(message: "Vous devez mettre votre password.")]
+    #[Assert\Regex(
+        pattern: '/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%]{6,}$/',
+        message: "Le mot de passe doit contenir au moins 6 caractères, dont au moins un chiffre et une lettre."
+    )]
     private $password;
 
     #[ORM\Column(name: 'phoneNumber_user', type: 'string', length: 255)]
