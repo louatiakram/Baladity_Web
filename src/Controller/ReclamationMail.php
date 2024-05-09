@@ -51,7 +51,7 @@ class ReclamationMail extends AbstractController
             $responseMessage = $e->getMessage();
         }
         
-        #return $this->redirectToRoute('verify_otp');
+
         return $this->redirectToRoute('afficherReclamationFA');
     }
 
