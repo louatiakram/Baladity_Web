@@ -38,7 +38,7 @@ class ChangePwdController extends AbstractController
                         $user,
                         $form->get('password')->getData()
                     )
-                );
+            );
     
             // Persist the modified actualite object to the database
             $entityManager->flush();

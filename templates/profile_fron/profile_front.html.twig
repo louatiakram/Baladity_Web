@@ -21,17 +21,7 @@
 {% endblock %}
 
 {% block rest %}
-<div class="breadcrumbs">
-  <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
-    <div class="container position-relative">
-      <div class="row d-flex justify-content-center">
-        <div class="col-lg-6 text-center">
-          <h2>Reclamation</h2>
-          <p>Une réclamation dans une municipalité est comme un signal que vous envoyez à votre mairie, comme un trou dans la route, des poubelles qui débordent, ou un lampadaire cassé. En signalant ces problèmes, vous aidez la mairie à les résoudre et à rendre votre quartier plus agréable pour tout le monde.</p>
-        </div>
-      </div>
-    </div>
-  </div>
+    <br>
   <nav>
     
     <!-- Insérez ici le contenu de la template de profil -->
@@ -60,7 +50,6 @@
                                     <p class="text-muted font-size-sm">{{user.getTypeUser}}</p>
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <button class="btn btn-outline-primary">Message</button>
                                             <a class="btn btn-info "  href="{{ path('app_profile_edit') }}">Edit</a>
                                         </div>
                                     </div>

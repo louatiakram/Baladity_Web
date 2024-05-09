@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileFronController extends AbstractController
@@ -41,7 +42,7 @@ class ProfileFronController extends AbstractController
 
 
     #[Route('/front/edit', name: 'app_profile_edit')]
-    public function profileEdit(Request $request, ManagerRegistry $doctrine): Response
+    public function profileEdit(Request $request,UserPasswordHasherInterface $userPasswordHasher, ManagerRegistry $doctrine): Response
     {
 
         $entityManager = $doctrine->getManager();
@@ -71,13 +72,21 @@ class ProfileFronController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                        $user,
+                        $form->get('password')->getData()
+                    )
+            );
+
             // Set the image_a field
             $image = $form->get('image_user')->getData();
             if ($image) {
                 // Handle image upload and persist its filename to the database
                 $fileName = uniqid().'.'.$image->guessExtension();
                 try {
-                    $image->move($this->getParameter('uploadsDirectory'), $fileName);
+                    $image->move($this->getParameter('uploads_directory'), $fileName);
                     // Set the image filename to the user entity
                     $user->setImageUser($fileName);
                 } catch (FileException $e) {
