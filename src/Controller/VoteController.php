@@ -2,19 +2,20 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\vote; 
+use App\Form\VoteType;
+use App\Entity\enduser;
+use Doctrine\ORM\Query\Expr;
+use App\Repository\VoteRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-use App\Repository\VoteRepository;
-use App\Entity\vote; 
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\EntityManagerInterface;  // Import the correct class
 use Symfony\Component\Form\FormFactoryInterface;
-use App\Form\VoteType;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\ORM\Query\Expr;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;  // Import the correct class
 
 
 class VoteController extends AbstractController

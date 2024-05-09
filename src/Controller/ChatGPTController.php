@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ChatGPTController extends AbstractController
 {
-    #[Route('/chatgpt', name: 'app_home')]
+    #[Route('/chatgpt', name: 'chatgpt')]
     public function index( ? string $question, ? string $response): Response
     {
         return $this->render('messagerie/chat.html.twig');
@@ -19,7 +19,7 @@ class ChatGPTController extends AbstractController
     #[Route('/messagerie/chatbot', name: 'chatbot')]
     public function index1( ? string $question, ? string $response): Response
     {
-        return $this->render('messagerie/chat.html.twig');
+        return $this->render('messagerie/chatgpt.html.twig');
     }
 
 

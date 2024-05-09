@@ -117,9 +117,12 @@ class TacheController extends AbstractController
     }
 
     #[Route('/tache/detail/{i}', name: 'tache_detail')]
-    public function detail($i, TacheRepository $rep, SessionInterface $session): Response
+    public function detail($i, TacheRepository $rep, SessionInterface $session, ManagerRegistry $doctrine,Request $request): Response
     {
-        $userId = 50; // Assuming the user ID is 50
+        $userId = $request->getSession()->get('user_id');
+//get user
+        $userRepository = $doctrine->getRepository(enduser::class);
+        $users = $userRepository->findOneBy(['id_user' => $userId]);
         $session->set('user_id', $userId); // Store user ID in session
 
         // Get the user by ID
@@ -176,7 +179,7 @@ class TacheController extends AbstractController
                     // Move the file to the uploads directory
                     try {
                         $uploadedFile = $pieceJointe->move(
-                            $this->getParameter('uploadsDirectory'), // Use the parameter defined in services.yaml
+                            $this->getParameter('uploads_directory'), // Use the parameter defined in services.yaml
                             $originalFilename . '.' . $pieceJointe->guessExtension()
                         );
                         $x->setPieceJointeT($uploadedFile->getFilename());
@@ -199,7 +202,7 @@ class TacheController extends AbstractController
 
         }
         // Pass the image path to the template
-        $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploadsDirectory') . '/' . $x->getPieceJointeT() : null;
+        $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploads_directory') . '/' . $x->getPieceJointeT() : null;
 
         return $this->renderForm('tache/add.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
     }
@@ -221,7 +224,7 @@ class TacheController extends AbstractController
                 // Move the file to the uploads directory
                 try {
                     $uploadedFile = $pieceJointe->move(
-                        $this->getParameter('uploadsDirectory'), // Use the parameter defined in services.yaml
+                        $this->getParameter('uploads_directory'), // Use the parameter defined in services.yaml
                         $originalFilename . '.' . $pieceJointe->guessExtension()
                     );
                     $x->setPieceJointeT($uploadedFile->getFilename());
@@ -242,7 +245,7 @@ class TacheController extends AbstractController
         }
 
         // Pass the image path to the template
-        $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploadsDirectory') . '/' . $x->getPieceJointeT() : null;
+        $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploads_directory') . '/' . $x->getPieceJointeT() : null;
 
         return $this->renderForm('tache/add.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
     }
@@ -280,9 +283,12 @@ class TacheController extends AbstractController
     }
 
     #[Route('/tache/listfront', name: 'tache_listfront')]
-    public function listfront(Request $request, TacheRepository $repository, SessionInterface $session): Response
+    public function listfront(Request $request, TacheRepository $repository, SessionInterface $session, ManagerRegistry $doctrine): Response
     {
-        $userId = 53; // You can get the user ID from wherever it's stored
+        $userId = $request->getSession()->get('user_id');
+        //get user
+        $userRepository = $doctrine->getRepository(enduser::class);
+        $users = $userRepository->findOneBy(['id_user' => $userId]);
         $session->set('user_id', $userId); // Store user ID in session
 
         // Get the user by ID
@@ -484,8 +490,8 @@ class TacheController extends AbstractController
             // Check if the task has a piece jointe
             if ($task->getPieceJointeT() !== null) {
                 // Create hyperlink for the file name
-                $uploadsDirectory = $this->getParameter('uploadsDirectory');
-                $hyperlinkUrl = $uploadsDirectory . '/' . $task->getPieceJointeT();
+                $uploads_directory = $this->getParameter('uploads_directory');
+                $hyperlinkUrl = $uploads_directory . '/' . $task->getPieceJointeT();
                 $hyperlinkText = $task->getPieceJointeT();
                 $sheet->getCell('B' . $row)->getHyperlink()->setUrl($hyperlinkUrl);
                 $sheet->getCell('B' . $row)->setValue($hyperlinkText);

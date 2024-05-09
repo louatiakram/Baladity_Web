@@ -88,7 +88,7 @@ class EquipementController extends AbstractController
     public function ajouterEquipementResponsable(ManagerRegistry $doctrine, Request $req): Response
     {
         $equipement = new Equipement();
-       $userId = $request->getSession()->get('user_id');
+       $userId = $req->getSession()->get('user_id');
     //get user
             $userRepository = $doctrine->getRepository(enduser::class);
             $users = $userRepository->findOneBy(['id_user' => $userId]);
