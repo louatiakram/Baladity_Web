@@ -94,8 +94,95 @@ class TacheController extends AbstractController
         ]);
     }
 
+    #[Route('/tachedir', name: 'tache_listdir')]
+    public function tachedir(Request $request, TacheRepository $repository, PaginatorInterface $paginator, SessionInterface $session): Response
+    {
+        $defaultOrderBy = 'date_FT';
+        $orderBy = $request->query->get('orderBy', 'date_FT'); // Default ordering by date_FT
+        $queryBuilder = $repository->createQueryBuilder('t')->orderBy('t.' . $defaultOrderBy, 'ASC');
+
+        // Set order by based on user input
+        switch ($orderBy) {
+            case 'titre':
+                $queryBuilder->orderBy('t.titre_T', 'ASC');
+                break;
+            case 'etat':
+                $queryBuilder->orderBy('t.etat_T', 'ASC');
+                break;
+            case 'date_FT':
+            default:
+                $queryBuilder->orderBy('t.date_FT', 'ASC');
+                break;
+        }
+
+        // Set order direction
+        $orderDirection = 'ASC';
+
+        // Get start and end dates from the query parameters if provided
+        $startDate = $request->query->get('startDate');
+        $endDate = $request->query->get('endDate');
+
+        // If start and end dates are provided, apply date filtering
+        if ($startDate && $endDate) {
+            $queryBuilder
+                ->andWhere('t.date_FT >= :startDate')
+                ->andWhere('t.date_FT <= :endDate')
+                ->setParameter('startDate', new \DateTime($startDate))
+                ->setParameter('endDate', new \DateTime($endDate));
+        }
+
+        $query = $queryBuilder->getQuery();
+
+        // Paginate the query
+        $tasks = $paginator->paginate(
+            $query, // Doctrine Query object
+            $request->query->getInt('page', 1), // Page number
+            3// Limit per page
+        );
+
+        // Calculate task counts for different "Etat" (status)
+        $tasksDoneCount = $repository->countByEtat('DONE');
+        $tasksDoingCount = $repository->countByEtat('DOING');
+        $tasksToDoCount = $repository->countByEtat('TODO');
+
+        $successMessage = $session->getFlashBag()->get('success');
+
+        return $this->render('tache/listdir.html.twig', [
+            'tasks' => $tasks,
+            'successMessage' => $successMessage ? $successMessage[0] : null,
+            'orderBy' => $orderBy,
+            'tasksDoneCount' => $tasksDoneCount,
+            'tasksDoingCount' => $tasksDoingCount,
+            'tasksToDoCount' => $tasksToDoCount,
+            'startDate' => $startDate, // Pass the start date to pre-fill the date picker
+            'endDate' => $endDate, // Pass the end date to pre-fill the date picker
+        ]);
+    }
+
     #[Route('/tache/search', name: 'tache_search', methods: ['GET'])]
     public function search(TacheRepository $tacheRepository, Request $request): JsonResponse
+    {
+        $query = $request->query->get('q');
+        dump($query);
+
+        $results = [];
+        if ($query !== null) {
+            $results = $tacheRepository->findByNom($query)->getQuery()->getResult();
+        }
+
+        $response = [];
+        foreach ($results as $result) {
+            $response[] = [
+                'url' => $this->generateUrl('tache_detail', ['i' => $result->getIdT()]),
+                'nom' => $result->getTitreT(),
+            ];
+        }
+
+        return new JsonResponse($response);
+    }
+
+    #[Route('/tache/searchdir', name: 'tache_searchdir', methods: ['GET'])]
+    public function searchdir(TacheRepository $tacheRepository, Request $request): JsonResponse
     {
         $query = $request->query->get('q');
         dump($query);
@@ -146,7 +233,7 @@ class TacheController extends AbstractController
     #[Route('/tache/add', name: 'tache_add')]
     public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
     {
-        $userId = 50;
+        $userId = $req->getSession()->get('user_id');
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
 
         if (!$user) {
@@ -207,6 +294,70 @@ class TacheController extends AbstractController
         return $this->renderForm('tache/add.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
     }
 
+    #[Route('/tache/adddir', name: 'tache_adddir')]
+    public function adddir(Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
+    {
+        $userId = $req->getSession()->get('user_id');
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+
+        if (!$user) {
+            throw $this->createNotFoundException('User Existe Pas');
+        }
+
+        $x = new tache();
+        $x->setIdUser($user);
+
+        $form = $this->createForm(TacheType::class, $x);
+        $form->handleRequest($req);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $em = $doctrine->getManager();
+            // Check if a task with the same titre_T and nom_Cat already exists
+            $existingTask = $em->getRepository(tache::class)->findOneBy([
+                'titre_T' => $x->getTitreT(),
+                'nom_Cat' => $x->getNomCat(),
+            ]);
+
+            if ($existingTask) {
+                $form->addError(new FormError('Une tâche avec le même titre et la même catégorie existe déjà !'));
+            } else {
+
+                // Handle file upload
+                /** @var UploadedFile|null $pieceJointe */
+                $pieceJointe = $form->get('pieceJointe_T')->getData();
+                if ($pieceJointe) {
+                    $originalFilename = pathinfo($pieceJointe->getClientOriginalName(), PATHINFO_FILENAME);
+                    // Move the file to the uploads directory
+                    try {
+                        $uploadedFile = $pieceJointe->move(
+                            $this->getParameter('uploads_directory'), // Use the parameter defined in services.yaml
+                            $originalFilename . '.' . $pieceJointe->guessExtension()
+                        );
+                        $x->setPieceJointeT($uploadedFile->getFilename());
+                    } catch (FileException $e) {}
+                }
+
+                // Get the selected etat_T value from the form
+                $selectedEtatT = $form->get('etat_T')->getData();
+
+                // Set the etat_T property of the tache entity
+                $x->setEtatT($selectedEtatT);
+
+                $em = $doctrine->getManager();
+                $em->persist($x);
+                $em->flush();
+
+                $session->getFlashBag()->add('success', 'Tâche ajoutée avec succès!');
+                return $this->redirectToRoute('tache_listdir');
+            }
+
+        }
+        // Pass the image path to the template
+        $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploads_directory') . '/' . $x->getPieceJointeT() : null;
+
+        return $this->renderForm('tache/adddir.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
+    }
+
     #[Route('/tache/update/{i}', name: 'tache_update')]
     public function update($i, TacheRepository $rep, Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
     {
@@ -250,6 +401,49 @@ class TacheController extends AbstractController
         return $this->renderForm('tache/add.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
     }
 
+    #[Route('/tache/updatedir/{i}', name: 'tache_updatedir')]
+    public function updatedir($i, TacheRepository $rep, Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
+    {
+        $x = $rep->find($i);
+        $form = $this->createForm(TacheType::class, $x);
+        $form->handleRequest($req);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // Handle file upload
+            /** @var UploadedFile|null $pieceJointe */
+            $pieceJointe = $form->get('pieceJointe_T')->getData();
+            if ($pieceJointe) {
+                $originalFilename = pathinfo($pieceJointe->getClientOriginalName(), PATHINFO_FILENAME);
+                // Move the file to the uploads directory
+                try {
+                    $uploadedFile = $pieceJointe->move(
+                        $this->getParameter('uploads_directory'), // Use the parameter defined in services.yaml
+                        $originalFilename . '.' . $pieceJointe->guessExtension()
+                    );
+                    $x->setPieceJointeT($uploadedFile->getFilename());
+                } catch (FileException $e) {}
+            }
+
+            // Get the selected etat_T value from the form
+            $selectedEtatT = $form->get('etat_T')->getData();
+
+            // Set the etat_T property of the tache entity
+            $x->setEtatT($selectedEtatT);
+
+            $em = $doctrine->getManager();
+            $em->flush();
+
+            $session->getFlashBag()->add('success', 'Tâche mise à jour avec succès!');
+            return $this->redirectToRoute('tache_listdir');
+        }
+
+        // Pass the image path to the template
+        $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploads_directory') . '/' . $x->getPieceJointeT() : null;
+
+        return $this->renderForm('tache/adddir.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
+    }
+
     #[Route('/tache/delete/{i}', name: 'tache_delete')]
     public function delete($i, TacheRepository $rep, ManagerRegistry $doctrine, SessionInterface $session): Response
     {
@@ -260,6 +454,18 @@ class TacheController extends AbstractController
 
         $session->getFlashBag()->add('success', 'Tâche supprimée avec succès!');
         return $this->redirectToRoute('tache_list');
+    }
+
+    #[Route('/tache/deletedir/{i}', name: 'tache_deletedir')]
+    public function deletedir($i, TacheRepository $rep, ManagerRegistry $doctrine, SessionInterface $session): Response
+    {
+        $xs = $rep->find($i);
+        $em = $doctrine->getManager();
+        $em->remove($xs);
+        $em->flush();
+
+        $session->getFlashBag()->add('success', 'Tâche supprimée avec succès!');
+        return $this->redirectToRoute('tache_listdir');
     }
 
     #[Route('/tache/piechart', name: 'tache_piechart')]
@@ -278,6 +484,26 @@ class TacheController extends AbstractController
         }
 
         return $this->render('tache/piechart.html.twig', [
+            'data' => $data, // Pass data to twig template
+        ]);
+    }
+
+    #[Route('/tache/piechartdir', name: 'tache_piechartdir')]
+    public function pieChartdir(TacheRepository $tacheRepository): Response
+    {
+        // Get the count of tasks done by each user
+        $usersTasksCount = $tacheRepository->getUsersTasksCount();
+
+        // Extract user names and task counts from the result
+        $data = [];
+        foreach ($usersTasksCount as $result) {
+            $userName = $result['user_name'];
+            $taskCount = $result['task_count'];
+            $data[] = ['user_name' => $userName,
+                'task_count' => $taskCount];
+        }
+
+        return $this->render('tache/piechartdir.html.twig', [
             'data' => $data, // Pass data to twig template
         ]);
     }

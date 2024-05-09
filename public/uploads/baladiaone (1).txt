@@ -1,0 +1,662 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Hôte : 127.0.0.1
+-- Généré le : jeu. 09 mai 2024 à 12:34
+-- Version du serveur : 10.4.28-MariaDB
+-- Version de PHP : 8.1.17
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de données : `baladiaone`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `actualite`
+--
+
+CREATE TABLE `actualite` (
+  `id_a` int(11) NOT NULL,
+  `description_a` varchar(255) NOT NULL,
+  `image_a` varchar(255) NOT NULL,
+  `date_a` date NOT NULL,
+  `titre_a` varchar(100) NOT NULL,
+  `id_user` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `actualite`
+--
+
+INSERT INTO `actualite` (`id_a`, `description_a`, `image_a`, `date_a`, `titre_a`, `id_user`) VALUES
+(122, 'ggggggg', '663bd345e759a.jpg', '2024-05-08', 'gggggggg', 48);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `avis`
+--
+
+CREATE TABLE `avis` (
+  `id_avis` int(11) NOT NULL,
+  `id_user` int(11) DEFAULT NULL,
+  `id_muni` int(11) DEFAULT NULL,
+  `id_equipement` int(11) DEFAULT NULL,
+  `note_avis` int(11) DEFAULT NULL,
+  `commentaire_avis` varchar(100) DEFAULT NULL,
+  `date_avis` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `avis`
+--
+
+INSERT INTO `avis` (`id_avis`, `id_user`, `id_muni`, `id_equipement`, `note_avis`, `commentaire_avis`, `date_avis`) VALUES
+(20, 48, NULL, 35, 3, 'aaaaaaa', '2024-05-08'),
+(21, 48, NULL, 35, 5, 'test', '2024-05-08');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `commentairetache`
+--
+
+CREATE TABLE `commentairetache` (
+  `id_C` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_T` int(11) NOT NULL,
+  `date_C` date NOT NULL,
+  `texte_C` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `commentairetache`
+--
+
+INSERT INTO `commentairetache` (`id_C`, `id_user`, `id_T`, `date_C`, `texte_C`) VALUES
+(149, 55, 294, '2024-04-19', 'comment 01 admin'),
+(151, 57, 292, '2024-04-19', 'test front 010101'),
+(157, 63, 304, '2024-04-26', 'TEST555555555555'),
+(158, 63, 294, '2024-04-26', 'jjjjjjjjjj'),
+(159, 63, 313, '2024-04-26', 'ffffffffffffffffffff'),
+(160, 63, 294, '2024-04-26', 'bejj20242024'),
+(161, 63, 292, '2024-04-27', 'hahahahahahaha'),
+(162, 63, 304, '2024-05-02', 'jjjjjjjjjjjjjj'),
+(163, 63, 307, '2024-05-02', 'kkklllllllllll'),
+(164, 50, 293, '2024-05-02', 'kkkkmmmmmmmmmm'),
+(165, 50, 316, '2024-05-02', 'blablablanlap'),
+(166, 63, 307, '2024-05-02', 'fghfhghfhfhhfh'),
+(168, 68, 313, '2024-05-03', 'jingujtfihfiugnhfnghb');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `doctrine_migration_versions`
+--
+
+CREATE TABLE `doctrine_migration_versions` (
+  `version` varchar(191) NOT NULL,
+  `executed_at` datetime DEFAULT NULL,
+  `execution_time` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `enduser`
+--
+
+CREATE TABLE `enduser` (
+  `email_user` varchar(30) NOT NULL,
+  `nom_user` varchar(30) NOT NULL,
+  `type_user` varchar(30) NOT NULL,
+  `phoneNumber_user` varchar(30) NOT NULL,
+  `id_muni` int(11) NOT NULL,
+  `location_user` varchar(30) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `image_user` varchar(255) NOT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  `isBanned` tinyint(1) DEFAULT 0,
+  `is_verified` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `enduser`
+--
+
+INSERT INTO `enduser` (`email_user`, `nom_user`, `type_user`, `phoneNumber_user`, `id_muni`, `location_user`, `id_user`, `image_user`, `password`, `isBanned`, `is_verified`) VALUES
+('yahyaouiamine029@gmail.com', 'Amine Yahyaoui', 'Responsable employé', '94007815', 13, 'Abd rabou', 48, 'C:\\Users\\werta\\Documents\\GitHub\\baladity\\src\\main\\resources\\assets\\TNT.png', 'cf4bde40e185934469e6ba5e36df4aea1279c97c193fe26acb45e833fe7eb8e2', 0, 0),
+('zayaneyassine6@gmail.com', 'yassine', 'Citoyen', '88888888', 13, 'Monastir', 49, 'C:\\Users\\werta\\Documents\\GitHub\\baladity\\src\\main\\resources\\assets\\complain.png', 'a4c0a6fd5ffea40dd0345fa86be90a1042f111710701a977da4c5f105ea2db8b', 0, 0),
+('baladityesprit@gmail.com', 'Baladity', 'Admin', '93007457', 13, 'Ariana', 50, 'C:\\Users\\werta\\Desktop\\piDev\\416357041_7292080424146130_7818462230523408065_n.png', '3392080392aa61bcccab09f42e72e8c6adfd25412bf13080c674abbca26b1cda', 0, 0),
+('kboubiamine78@gmail.com', 'Amine', 'Employé', '55651085', 13, 'ghazela', 53, 'src/main/resources/images/amineee.jpg', 'f100cb160cf7b48b5dec576128d00868ad97a58ea557a1b23d4d665a4c40da8d', 0, 0),
+('akram.louatitn@gmail.com', 'akram', 'Directeur', '11111111', 13, 'o,daezl', 54, 'src/main/resources/images/dz.jpg', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', 0, 0),
+('azizbj778@gmail.com', 'bejaoui med aziz', 'Citoyen', '97404777', 13, 'Erriadh', 147, '6634c68c74054.png', '$2y$13$6FTwUWKkH46o7eOtKliTUuXdmutkJg.x.szWKuz3u5UN17XltkCCG', 1, 0),
+('fadouwertatani@gmail.com', 'Fadi', 'Admin', '93007457', 16, 'Erriadh', 148, '6634de1e55624.jpg', '$2y$13$6lKj5Ndq8oP7jQphGWZDsefT8808ljEBjOz83sYIAI2fNjltT.XTq', 0, 0),
+('wertatanifadi@gmail.com', 'Fadi Tounsi', 'Citoyen', '93007458', 15, 'Erriadh', 149, '6634ead0761d6.jpg', '$2y$13$6lKj5Ndq8oP7jQphGWZDsefT8808ljEBjOz83sYIAI2fNjltT.XTq', 0, 0),
+('yassine.zayane@esprit.tn', 'yassine zay', 'Responsable employé', '97404777', 13, 'monastir', 150, '663bf5d379856.png', '$2y$13$f97azXfdtar2LuKJXcDpcuYfjefSB5STGLhJ39RoXe.foWi5kmHry', 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `equipement`
+--
+
+CREATE TABLE `equipement` (
+  `id_equipement` int(11) NOT NULL,
+  `reference_eq` varchar(100) DEFAULT NULL,
+  `nom_eq` varchar(100) DEFAULT NULL,
+  `categorie_eq` varchar(100) DEFAULT NULL,
+  `quantite_eq` int(11) DEFAULT NULL,
+  `date_ajouteq` date DEFAULT NULL,
+  `description_eq` varchar(100) DEFAULT NULL,
+  `image_eq` varchar(100) DEFAULT NULL,
+  `id_user` int(11) DEFAULT NULL,
+  `id_muni` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `equipement`
+--
+
+INSERT INTO `equipement` (`id_equipement`, `reference_eq`, `nom_eq`, `categorie_eq`, `quantite_eq`, `date_ajouteq`, `description_eq`, `image_eq`, `id_user`, `id_muni`) VALUES
+(33, 'AHGGA', 'camion', 'Mobile', 0, '2024-03-08', 'c\'est un nouveau equipement', 'C:\\Users\\werta\\Downloads\\429637649_320706500585694_2064218803066330667_n.jpg', 48, 13),
+(35, 'aaaaaaaaa', 'aaaaaaaa', 'Fixe', 21, '2024-05-08', 'aaaaaaaaa', '663bda7b8b540.jpg', 48, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `evenement`
+--
+
+CREATE TABLE `evenement` (
+  `id_E` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `nom_E` varchar(30) NOT NULL,
+  `date_DHE` date NOT NULL,
+  `date_DHF` date NOT NULL,
+  `capacite_E` int(11) NOT NULL,
+  `categorie_E` varchar(30) NOT NULL,
+  `imageEvent` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `evenement`
+--
+
+INSERT INTO `evenement` (`id_E`, `id_user`, `nom_E`, `date_DHE`, `date_DHF`, `capacite_E`, `categorie_E`, `imageEvent`) VALUES
+(78, 48, 'espritFoot', '2024-05-11', '2024-05-26', 430, 'Sportif', '119574744-flammes-de-feu-brûlant-des-étincelles-rouges.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `messagerie`
+--
+
+CREATE TABLE `messagerie` (
+  `id_message` int(11) NOT NULL,
+  `date_message` datetime NOT NULL,
+  `contenu_message` varchar(255) NOT NULL,
+  `type_message` varchar(255) NOT NULL,
+  `receiverId_message` int(11) DEFAULT NULL,
+  `senderId_message` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `messagerie`
+--
+
+INSERT INTO `messagerie` (`id_message`, `date_message`, `contenu_message`, `type_message`, `receiverId_message`, `senderId_message`) VALUES
+(4, '2024-03-30 00:00:00', 'aa fadi', 'text', 50, 49),
+(27, '2024-04-19 08:38:17', 'aa wenekaa', 'text', 48, 49),
+(28, '2024-04-19 08:38:44', 'hanyy houny', 'text', 49, 48),
+(29, '2024-04-19 15:14:44', 'aaaa', 'text', 49, 48),
+(30, '2024-04-19 15:15:02', 'test222', 'text', 48, 49),
+(31, '2024-04-19 15:15:26', 'haa', 'text', 49, 48),
+(32, '2024-04-23 14:25:04', 'yassine1111', 'text', NULL, 48),
+(33, '2024-04-23 14:25:47', 'AZERTYUIOP', 'text', NULL, 48),
+(34, '2024-04-23 14:26:56', 'raouf', 'text', 49, 48),
+(35, '2024-04-23 14:44:03', 'aaaa', 'text', 49, 48),
+(36, '2024-04-25 15:49:15', 'hello', 'text', 49, 48),
+(37, '2024-04-25 15:50:16', 'winek', 'text', 48, 49),
+(38, '2024-05-08 02:17:14', 'aaa', 'text', 48, 49);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `messenger_messages`
+--
+
+CREATE TABLE `messenger_messages` (
+  `id` int(11) NOT NULL,
+  `body` longtext NOT NULL,
+  `headers` longtext NOT NULL,
+  `queue_name` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `available_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `messenger_messages`
+--
+
+INSERT INTO `messenger_messages` (`id`, `body`, `headers`, `queue_name`, `created_at`, `available_at`) VALUES
+(10, 'O:36:\\\"Symfony\\\\Component\\\\Messenger\\\\Envelope\\\":2:{s:44:\\\"\\0Symfony\\\\Component\\\\Messenger\\\\Envelope\\0stamps\\\";a:1:{s:46:\\\"Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\\";a:1:{i:0;O:46:\\\"Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\\":1:{s:55:\\\"\\0Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\0busName\\\";s:21:\\\"messenger.bus.default\\\";}}}s:45:\\\"\\0Symfony\\\\Component\\\\Messenger\\\\Envelope\\0message\\\";O:51:\\\"Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\\":2:{s:60:\\\"\\0Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\0message\\\";O:39:\\\"Symfony\\\\Bridge\\\\Twig\\\\Mime\\\\TemplatedEmail\\\":4:{i:0;s:41:\\\"registration/confirmation_email.html.twig\\\";i:1;N;i:2;a:3:{s:9:\\\"signedUrl\\\";s:164:\\\"https://127.0.0.1:8000/verify/email?expires=1714515553&signature=gm4mCXF53FYxNcd77xiTnF3PpalsxsWNX8OtyrBPYWM%3D&token=bEx1vrfrHwOGmGOOHPfLzCXE4OUKFJbQ1N3Yzl5G8zQ%3D\\\";s:19:\\\"expiresAtMessageKey\\\";s:26:\\\"%count% hour|%count% hours\\\";s:20:\\\"expiresAtMessageData\\\";a:1:{s:7:\\\"%count%\\\";i:1;}}i:3;a:6:{i:0;N;i:1;N;i:2;N;i:3;N;i:4;a:0:{}i:5;a:2:{i:0;O:37:\\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\\":2:{s:46:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\0headers\\\";a:3:{s:4:\\\"from\\\";a:1:{i:0;O:47:\\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\\":5:{s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\\";s:4:\\\"From\\\";s:56:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\\";i:76;s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\\";N;s:53:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\\";s:5:\\\"utf-8\\\";s:58:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\0addresses\\\";a:1:{i:0;O:30:\\\"Symfony\\\\Component\\\\Mime\\\\Address\\\":2:{s:39:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0address\\\";s:23:\\\"wertatanifadi@gmail.com\\\";s:36:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0name\\\";s:8:\\\"Baladity\\\";}}}}s:2:\\\"to\\\";a:1:{i:0;O:47:\\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\\":5:{s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\\";s:2:\\\"To\\\";s:56:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\\";i:76;s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\\";N;s:53:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\\";s:5:\\\"utf-8\\\";s:58:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\0addresses\\\";a:1:{i:0;O:30:\\\"Symfony\\\\Component\\\\Mime\\\\Address\\\":2:{s:39:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0address\\\";s:22:\\\"wasselsghiri@gmail.com\\\";s:36:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0name\\\";s:0:\\\"\\\";}}}}s:7:\\\"subject\\\";a:1:{i:0;O:48:\\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\UnstructuredHeader\\\":5:{s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\\";s:7:\\\"Subject\\\";s:56:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\\";i:76;s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\\";N;s:53:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\\";s:5:\\\"utf-8\\\";s:55:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\UnstructuredHeader\\0value\\\";s:25:\\\"Please Confirm your Email\\\";}}}s:49:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\0lineLength\\\";i:76;}i:1;N;}}}s:61:\\\"\\0Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\0envelope\\\";N;}}', '[]', 'default', '2024-04-30 23:19:13', '2024-04-30 23:19:13'),
+(11, 'O:36:\\\"Symfony\\\\Component\\\\Messenger\\\\Envelope\\\":2:{s:44:\\\"\\0Symfony\\\\Component\\\\Messenger\\\\Envelope\\0stamps\\\";a:1:{s:46:\\\"Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\\";a:1:{i:0;O:46:\\\"Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\\":1:{s:55:\\\"\\0Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\0busName\\\";s:21:\\\"messenger.bus.default\\\";}}}s:45:\\\"\\0Symfony\\\\Component\\\\Messenger\\\\Envelope\\0message\\\";O:51:\\\"Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\\":2:{s:60:\\\"\\0Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\0message\\\";O:39:\\\"Symfony\\\\Bridge\\\\Twig\\\\Mime\\\\TemplatedEmail\\\":4:{i:0;s:41:\\\"registration/confirmation_email.html.twig\\\";i:1;N;i:2;a:3:{s:9:\\\"signedUrl\\\";s:164:\\\"https://127.0.0.1:8000/verify/email?expires=1714518821&signature=ArSZ6EUlLdKXW5iF0eGEgt7YbIok2m1LDTRjQIUkm3k%3D&token=8JnSJdtcwxHvyhwdA6xZLYnSbOwNP59e4lO5Qspbw4E%3D\\\";s:19:\\\"expiresAtMessageKey\\\";s:26:\\\"%count% hour|%count% hours\\\";s:20:\\\"expiresAtMessageData\\\";a:1:{s:7:\\\"%count%\\\";i:1;}}i:3;a:6:{i:0;N;i:1;N;i:2;N;i:3;N;i:4;a:0:{}i:5;a:2:{i:0;O:37:\\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\\":2:{s:46:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\0headers\\\";a:3:{s:4:\\\"from\\\";a:1:{i:0;O:47:\\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\\":5:{s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\\";s:4:\\\"From\\\";s:56:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\\";i:76;s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\\";N;s:53:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\\";s:5:\\\"utf-8\\\";s:58:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\0addresses\\\";a:1:{i:0;O:30:\\\"Symfony\\\\Component\\\\Mime\\\\Address\\\":2:{s:39:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0address\\\";s:23:\\\"wertatanifadi@gmail.com\\\";s:36:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0name\\\";s:8:\\\"Baladity\\\";}}}}s:2:\\\"to\\\";a:1:{i:0;O:47:\\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\\":5:{s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\\";s:2:\\\"To\\\";s:56:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\\";i:76;s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\\";N;s:53:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\\";s:5:\\\"utf-8\\\";s:58:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\0addresses\\\";a:1:{i:0;O:30:\\\"Symfony\\\\Component\\\\Mime\\\\Address\\\":2:{s:39:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0address\\\";s:24:\\\"fadouwertatani@gmail.com\\\";s:36:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0name\\\";s:0:\\\"\\\";}}}}s:7:\\\"subject\\\";a:1:{i:0;O:48:\\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\UnstructuredHeader\\\":5:{s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\\";s:7:\\\"Subject\\\";s:56:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\\";i:76;s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\\";N;s:53:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\\";s:5:\\\"utf-8\\\";s:55:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\UnstructuredHeader\\0value\\\";s:25:\\\"Please Confirm your Email\\\";}}}s:49:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\0lineLength\\\";i:76;}i:1;N;}}}s:61:\\\"\\0Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\0envelope\\\";N;}}', '[]', 'default', '2024-05-01 00:13:41', '2024-05-01 00:13:41'),
+(12, 'O:36:\\\"Symfony\\\\Component\\\\Messenger\\\\Envelope\\\":2:{s:44:\\\"\\0Symfony\\\\Component\\\\Messenger\\\\Envelope\\0stamps\\\";a:1:{s:46:\\\"Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\\";a:1:{i:0;O:46:\\\"Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\\":1:{s:55:\\\"\\0Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\0busName\\\";s:21:\\\"messenger.bus.default\\\";}}}s:45:\\\"\\0Symfony\\\\Component\\\\Messenger\\\\Envelope\\0message\\\";O:51:\\\"Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\\":2:{s:60:\\\"\\0Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\0message\\\";O:28:\\\"Symfony\\\\Component\\\\Mime\\\\Email\\\":6:{i:0;s:48:\\\" La réclamation a été envoyée avec succès. \\\";i:1;s:5:\\\"utf-8\\\";i:2;N;i:3;N;i:4;a:0:{}i:5;a:2:{i:0;O:37:\\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\\":2:{s:46:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\0headers\\\";a:4:{s:4:\\\"from\\\";a:1:{i:0;O:47:\\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\\":5:{s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\\";s:4:\\\"From\\\";s:56:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\\";i:76;s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\\";N;s:53:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\\";s:5:\\\"utf-8\\\";s:58:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\0addresses\\\";a:1:{i:0;O:30:\\\"Symfony\\\\Component\\\\Mime\\\\Address\\\":2:{s:39:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0address\\\";s:24:\\\"zayaneyassine6@gmail.com\\\";s:36:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0name\\\";s:0:\\\"\\\";}}}}s:2:\\\"to\\\";a:1:{i:0;O:47:\\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\\":5:{s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\\";s:2:\\\"To\\\";s:56:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\\";i:76;s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\\";N;s:53:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\\";s:5:\\\"utf-8\\\";s:58:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\0addresses\\\";a:1:{i:0;O:30:\\\"Symfony\\\\Component\\\\Mime\\\\Address\\\":2:{s:39:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0address\\\";s:24:\\\"yassine.zayane@esprit.tn\\\";s:36:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0name\\\";s:0:\\\"\\\";}}}}s:10:\\\"x-priority\\\";a:1:{i:0;O:48:\\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\UnstructuredHeader\\\":5:{s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\\";s:10:\\\"X-Priority\\\";s:56:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\\";i:76;s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\\";N;s:53:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\\";s:5:\\\"utf-8\\\";s:55:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\UnstructuredHeader\\0value\\\";s:8:\\\"2 (High)\\\";}}s:7:\\\"subject\\\";a:1:{i:0;O:48:\\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\UnstructuredHeader\\\":5:{s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\\";s:7:\\\"Subject\\\";s:56:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\\";i:76;s:50:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\\";N;s:53:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\\";s:5:\\\"utf-8\\\";s:55:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\UnstructuredHeader\\0value\\\";s:11:\\\"Reclamation\\\";}}}s:49:\\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\0lineLength\\\";i:76;}i:1;N;}}s:61:\\\"\\0Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\0envelope\\\";N;}}', '[]', 'default', '2024-05-09 00:50:57', '2024-05-09 00:50:57');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `muni`
+--
+
+CREATE TABLE `muni` (
+  `nom_muni` varchar(30) NOT NULL,
+  `email_muni` varchar(30) NOT NULL,
+  `password_muni` varchar(30) NOT NULL,
+  `id_muni` int(11) NOT NULL,
+  `imagee_user` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `muni`
+--
+
+INSERT INTO `muni` (`nom_muni`, `email_muni`, `password_muni`, `id_muni`, `imagee_user`) VALUES
+('Ariana Ville', 'ariana@gmail.com', 'ariana123', 13, 'C:\\Users\\werta\\Desktop\\Fadi\\MyPics\\rawdha.jpg'),
+('Mnihla', 'mnihla@gmail.com', 'mnihla123', 14, 'Fergha'),
+('La Soukra', 'sokra@gmail.com', 'sokra123', 15, 'C:\\Users\\werta\\Desktop\\Fadi\\MyPics\\flower.jpeg'),
+('Ettadhamen', 'ettadhamen@gmail.com', 'ettadhamen123', 16, 'C:\\Users\\werta\\Pictures\\Just the way you are.png'),
+('Raoued', 'raoued@gmail.com', 'raoued123', 17, 'C:\\Users\\werta\\Desktop\\Fadi\\MyPics\\IMG-20230531-WA0022.jpg'),
+('Sidi daoued', 'sididaoued@gmail.com', 'sidi123', 37, '66203e2214ddc.png');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `publicite`
+--
+
+CREATE TABLE `publicite` (
+  `id_pub` int(11) NOT NULL,
+  `titre_pub` varchar(30) NOT NULL,
+  `description_pub` varchar(100) NOT NULL,
+  `contact_pub` int(11) NOT NULL,
+  `localisation_pub` varchar(30) NOT NULL,
+  `id_a` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `image_pub` varchar(255) DEFAULT NULL,
+  `offre_pub` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `publicite`
+--
+
+INSERT INTO `publicite` (`id_pub`, `titre_pub`, `description_pub`, `contact_pub`, `localisation_pub`, `id_a`, `id_user`, `image_pub`, `offre_pub`) VALUES
+(612, 'aminee', 'aaaaaaaaaaaaaaaaa', 12345678, 'edzaz', 122, 150, '663c064e0d27e.png', '6 mois :90dt');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `reclamation`
+--
+
+CREATE TABLE `reclamation` (
+  `id_reclamation` int(11) NOT NULL,
+  `id_user` int(11) DEFAULT NULL,
+  `id_muni` int(11) DEFAULT NULL,
+  `sujet_reclamation` varchar(255) NOT NULL,
+  `date_reclamation` date NOT NULL,
+  `type_reclamation` varchar(255) NOT NULL,
+  `description_reclamation` varchar(255) NOT NULL,
+  `status_reclamation` varchar(255) NOT NULL,
+  `image_reclamation` varchar(255) NOT NULL,
+  `adresse_reclamation` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `reclamation`
+--
+
+INSERT INTO `reclamation` (`id_reclamation`, `id_user`, `id_muni`, `sujet_reclamation`, `date_reclamation`, `type_reclamation`, `description_reclamation`, `status_reclamation`, `image_reclamation`, `adresse_reclamation`) VALUES
+(54, 48, 5, 'bbbbbbbbbb', '2024-04-02', 'Incendies', 'bbbbbbbbbb', 'traité', '660b8de3ef209.png', 'sousse'),
+(62, 48, 5, 'chien mort', '2024-04-19', 'Urgences médicales', 'aaaaaaaaaaaaa', 'en cours', '6622027d888ad.png', 'mahdia'),
+(63, 50, 5, 'aaaaaaaaaaa', '2024-04-07', 'Incendies', 'aaaaaaaaaaa', 'non traité', '661235a7674e0.png', 'tunis'),
+(66, 48, 5, 'yassine', '2024-04-18', 'Urgences médicales', 'hey yo', 'non traité', '66214be0102d8.png', 'sousse'),
+(75, 48, 5, 'aaaaaaaaaaaa', '2024-05-02', 'Urgences médicales', 'aaaaaaaaaaa', 'non traité', '6633ddfe11f96.jpg', 'aaaaaaaa'),
+(76, 48, 5, 'aaaaaaaaaaaa', '2024-05-02', 'Urgences médicales', 'aaaaaaaaaaa', 'non traité', '6633de323b369.jpg', 'aaaaaaaa'),
+(77, 48, 5, 'aaaaaaaaaaaa', '2024-05-02', 'Urgences médicales', 'aaaaaaaaaaa', 'non traité', '6633de56426c9.jpg', 'aaaaaaaa'),
+(78, 48, 5, 'aaaaaaaaaa', '2024-05-03', 'Fuites de gaz', 'aaaaaaaaa', 'non traité', '66340dd94dbd2.jpg', 'aaaaaaaaaaaaaaa'),
+(79, 48, 5, 'vvvvvvv', '2024-05-03', 'Incendies', 'vvvvvvv', 'non traité', '66340fe95f079.png', 'vvvvv'),
+(80, 48, 5, 'aaaaaaaa', '2024-05-03', 'Fuites de gaz', 'aaaaaaaaa', 'non traité', '663489db20fe4.png', 'aaaaaaaaa'),
+(81, 48, 5, 'test', '2024-05-03', 'Incendies', 'aaaaaaaaa', 'non traité', '6634de60068a3.png', 'sousse'),
+(82, 48, 5, 'aaaaaa', '2024-05-03', 'Fuites de gaz', 'aaaaaa', 'non traité', '6634df1bdfa53.png', 'tunis'),
+(83, 149, 15, 'chien mort', '2024-05-08', 'Fuites de gaz', 'aaaaaa', 'non traité', '663bba6fe8bb9.png', 'mahdia'),
+(84, 49, 13, 'aaaaaaaaaa', '2024-05-08', 'Urgences médicales', 'aaaaaaaaaaaa', 'non traité', '663bd72c4f36d.jpg', 'mahdia'),
+(85, 150, 13, 'azzadza', '2024-05-09', 'Fuites de gaz', 'adzazdadza', 'non traité', '663c01d05f5dc.png', 'vvvvvvvvvvvv');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `tache`
+--
+
+CREATE TABLE `tache` (
+  `id_T` int(11) NOT NULL,
+  `id_C` int(11) DEFAULT NULL,
+  `nom_Cat` varchar(255) NOT NULL,
+  `titre_T` varchar(30) NOT NULL,
+  `pieceJointe_T` varchar(255) DEFAULT NULL,
+  `date_DT` date NOT NULL,
+  `date_FT` date NOT NULL,
+  `desc_T` varchar(255) DEFAULT NULL,
+  `etat_T` enum('TODO','DOING','DONE') NOT NULL,
+  `id_user` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `tache`
+--
+
+INSERT INTO `tache` (`id_T`, `id_C`, `nom_Cat`, `titre_T`, `pieceJointe_T`, `date_DT`, `date_FT`, `desc_T`, `etat_T`, `id_user`) VALUES
+(292, NULL, 'Responsable employé', 'pre tache RE', 'camera.png', '2024-04-19', '2024-05-06', '01010101010101010101', 'DONE', 63),
+(293, NULL, 'Employé', 'pre tache emp', 'New Microsoft Excel Worksheet.pdf', '2024-04-19', '2024-05-04', NULL, 'DONE', 60),
+(294, NULL, 'Responsable employé', 'de tache RE', 'Test.xlsx', '2024-04-27', '2024-06-08', NULL, 'DONE', 57),
+(303, NULL, 'Responsable employé', 'troi tache', 'BaladiaT.png', '2024-04-19', '2024-05-04', NULL, 'DOING', 57),
+(304, NULL, 'Responsable employé', 'quatre', '', '2024-04-19', '2024-05-11', '', 'TODO', 57),
+(305, NULL, 'Responsable employé', 'cinq', '', '2024-04-20', '2024-05-12', '', 'DONE', 57),
+(306, NULL, 'Responsable employé', 'six', '', '2024-04-21', '2024-05-13', '', 'DONE', 63),
+(307, NULL, 'Responsable employé', 'sept', '', '2024-04-22', '2024-05-14', '', 'DOING', 57),
+(308, NULL, 'Responsable employé', 'huit', '', '2024-04-23', '2024-05-15', '', 'DONE', 63),
+(311, NULL, 'Employé', 'ABCD', NULL, '2024-04-26', '2024-05-24', 'abcdefghij', 'TODO', 50),
+(312, NULL, 'Employé', 'ABCDEF', 'intégration templates.pdf', '2024-04-26', '2024-05-24', 'abcdefghij', 'TODO', 50),
+(313, NULL, 'Employé', 'EFGH', 'Workshop Reverse Engineering.pdf', '2024-04-26', '2024-05-04', NULL, 'TODO', 50),
+(314, NULL, 'Employé', 'Tache uuuu', 'data-transfer.png', '2024-04-15', '2024-05-11', NULL, 'DOING', 50),
+(315, NULL, 'Employé', 'Deuxieme Tache dd', NULL, '2024-04-10', '2024-05-11', 'dddddddddd', 'DOING', 50),
+(316, NULL, 'Employé', 'ABCDaaa', 'mdungeons.jpg', '2024-04-18', '2024-05-03', NULL, 'DOING', 50),
+(317, NULL, 'Employé', '2024tache2024', '', '2024-04-19', '2024-05-04', '', 'DONE', 68),
+(318, NULL, 'Employé', 'eeeeeee', 'WorkshopC_Fascicule1_Concepts-de-routage-1.docx', '2024-05-09', '2024-05-30', NULL, 'TODO', 50);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `vote`
+--
+
+CREATE TABLE `vote` (
+  `id_V` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `desc_E` varchar(255) NOT NULL,
+  `date_SV` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `vote`
+--
+
+INSERT INTO `vote` (`id_V`, `id_user`, `desc_E`, `date_SV`) VALUES
+(24, 50, 'bababababbabababa', '2024-05-08');
+
+--
+-- Index pour les tables déchargées
+--
+
+--
+-- Index pour la table `actualite`
+--
+ALTER TABLE `actualite`
+  ADD PRIMARY KEY (`id_a`),
+  ADD KEY `FK_ENDUSER_ACTUALITE` (`id_user`);
+
+--
+-- Index pour la table `avis`
+--
+ALTER TABLE `avis`
+  ADD PRIMARY KEY (`id_avis`),
+  ADD KEY `FK_EQUIPEMENT_AVIS` (`id_equipement`),
+  ADD KEY `FK_Muni_Avis` (`id_muni`),
+  ADD KEY `FK_Enduser_Avis` (`id_user`);
+
+--
+-- Index pour la table `commentairetache`
+--
+ALTER TABLE `commentairetache`
+  ADD PRIMARY KEY (`id_C`),
+  ADD KEY `FK_ENDUSER_COMMENTAIRE` (`id_user`),
+  ADD KEY `FK_TACHE_COMMENTAIRE` (`id_T`);
+
+--
+-- Index pour la table `doctrine_migration_versions`
+--
+ALTER TABLE `doctrine_migration_versions`
+  ADD PRIMARY KEY (`version`);
+
+--
+-- Index pour la table `enduser`
+--
+ALTER TABLE `enduser`
+  ADD PRIMARY KEY (`id_user`),
+  ADD UNIQUE KEY `UK_Email` (`email_user`),
+  ADD KEY `FK_MUNII_ENDUSER` (`id_muni`);
+
+--
+-- Index pour la table `equipement`
+--
+ALTER TABLE `equipement`
+  ADD PRIMARY KEY (`id_equipement`),
+  ADD KEY `FK_ENDUSER_EQUIPEMENTS` (`id_user`),
+  ADD KEY `FK_Muni_Equipement` (`id_muni`);
+
+--
+-- Index pour la table `evenement`
+--
+ALTER TABLE `evenement`
+  ADD PRIMARY KEY (`id_E`),
+  ADD KEY `FK_ENDUSER_EVENEMENT` (`id_user`);
+
+--
+-- Index pour la table `messagerie`
+--
+ALTER TABLE `messagerie`
+  ADD PRIMARY KEY (`id_message`),
+  ADD KEY `IDX_14E8F60CA70E98AA` (`receiverId_message`),
+  ADD KEY `IDX_14E8F60C30E8DF34` (`senderId_message`);
+
+--
+-- Index pour la table `messenger_messages`
+--
+ALTER TABLE `messenger_messages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `muni`
+--
+ALTER TABLE `muni`
+  ADD PRIMARY KEY (`id_muni`);
+
+--
+-- Index pour la table `publicite`
+--
+ALTER TABLE `publicite`
+  ADD PRIMARY KEY (`id_pub`),
+  ADD KEY `FK_ACTUALITE_PUB` (`id_a`),
+  ADD KEY `FK_ENDUSER_PUB` (`id_user`);
+
+--
+-- Index pour la table `reclamation`
+--
+ALTER TABLE `reclamation`
+  ADD PRIMARY KEY (`id_reclamation`),
+  ADD KEY `IDX_CE6064046B3CA4B` (`id_user`),
+  ADD KEY `IDX_CE606404FE02D9AE` (`id_muni`);
+
+--
+-- Index pour la table `tache`
+--
+ALTER TABLE `tache`
+  ADD PRIMARY KEY (`id_T`),
+  ADD KEY `FK_ENDUSER_TACHE` (`id_user`),
+  ADD KEY `FK_COMMENTAIRE_TACHE` (`id_C`);
+
+--
+-- Index pour la table `vote`
+--
+ALTER TABLE `vote`
+  ADD PRIMARY KEY (`id_V`),
+  ADD KEY `FK_ENDUSER_VOTE` (`id_user`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `actualite`
+--
+ALTER TABLE `actualite`
+  MODIFY `id_a` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
+
+--
+-- AUTO_INCREMENT pour la table `avis`
+--
+ALTER TABLE `avis`
+  MODIFY `id_avis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT pour la table `commentairetache`
+--
+ALTER TABLE `commentairetache`
+  MODIFY `id_C` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=169;
+
+--
+-- AUTO_INCREMENT pour la table `enduser`
+--
+ALTER TABLE `enduser`
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=151;
+
+--
+-- AUTO_INCREMENT pour la table `equipement`
+--
+ALTER TABLE `equipement`
+  MODIFY `id_equipement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+
+--
+-- AUTO_INCREMENT pour la table `evenement`
+--
+ALTER TABLE `evenement`
+  MODIFY `id_E` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+
+--
+-- AUTO_INCREMENT pour la table `messagerie`
+--
+ALTER TABLE `messagerie`
+  MODIFY `id_message` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+
+--
+-- AUTO_INCREMENT pour la table `messenger_messages`
+--
+ALTER TABLE `messenger_messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT pour la table `muni`
+--
+ALTER TABLE `muni`
+  MODIFY `id_muni` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+
+--
+-- AUTO_INCREMENT pour la table `publicite`
+--
+ALTER TABLE `publicite`
+  MODIFY `id_pub` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=613;
+
+--
+-- AUTO_INCREMENT pour la table `reclamation`
+--
+ALTER TABLE `reclamation`
+  MODIFY `id_reclamation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+
+--
+-- AUTO_INCREMENT pour la table `tache`
+--
+ALTER TABLE `tache`
+  MODIFY `id_T` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=319;
+
+--
+-- AUTO_INCREMENT pour la table `vote`
+--
+ALTER TABLE `vote`
+  MODIFY `id_V` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `actualite`
+--
+ALTER TABLE `actualite`
+  ADD CONSTRAINT `FK_ENDUSER_ACTUALITE` FOREIGN KEY (`id_user`) REFERENCES `enduser` (`id_user`);
+
+--
+-- Contraintes pour la table `avis`
+--
+ALTER TABLE `avis`
+  ADD CONSTRAINT `FK_EQUIPEMENT_AVIS` FOREIGN KEY (`id_equipement`) REFERENCES `equipement` (`id_equipement`),
+  ADD CONSTRAINT `FK_Enduser_Avis` FOREIGN KEY (`id_user`) REFERENCES `enduser` (`id_user`),
+  ADD CONSTRAINT `FK_Muni_Avis` FOREIGN KEY (`id_muni`) REFERENCES `muni` (`id_muni`);
+
+--
+-- Contraintes pour la table `enduser`
+--
+ALTER TABLE `enduser`
+  ADD CONSTRAINT `FK_MUNII_ENDUSER` FOREIGN KEY (`id_muni`) REFERENCES `muni` (`id_muni`);
+
+--
+-- Contraintes pour la table `equipement`
+--
+ALTER TABLE `equipement`
+  ADD CONSTRAINT `FK_ENDUSER_EQUIPEMENTS` FOREIGN KEY (`id_user`) REFERENCES `enduser` (`id_user`),
+  ADD CONSTRAINT `FK_Muni_Equipement` FOREIGN KEY (`id_muni`) REFERENCES `muni` (`id_muni`);
+
+--
+-- Contraintes pour la table `evenement`
+--
+ALTER TABLE `evenement`
+  ADD CONSTRAINT `FK_ENDUSER_EVENEMENT` FOREIGN KEY (`id_user`) REFERENCES `enduser` (`id_user`);
+
+--
+-- Contraintes pour la table `messagerie`
+--
+ALTER TABLE `messagerie`
+  ADD CONSTRAINT `FK_14E8F60C30E8DF34` FOREIGN KEY (`senderId_message`) REFERENCES `enduser` (`id_user`),
+  ADD CONSTRAINT `FK_14E8F60CA70E98AA` FOREIGN KEY (`receiverId_message`) REFERENCES `enduser` (`id_user`);
+
+--
+-- Contraintes pour la table `publicite`
+--
+ALTER TABLE `publicite`
+  ADD CONSTRAINT `FK_ACTUALITE_PUB` FOREIGN KEY (`id_a`) REFERENCES `actualite` (`id_a`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_ENDUSER_PUB` FOREIGN KEY (`id_user`) REFERENCES `enduser` (`id_user`);
+
+--
+-- Contraintes pour la table `vote`
+--
+ALTER TABLE `vote`
+  ADD CONSTRAINT `FK_ENDUSER_VOTE` FOREIGN KEY (`id_user`) REFERENCES `enduser` (`id_user`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

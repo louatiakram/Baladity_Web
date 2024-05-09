@@ -2,34 +2,6 @@
 
 {% block title %}Liste des Tâches{% endblock %}
 
-{% block barreTitre %}
-    {% if user_type == "Employé" %}
-        <li><a href="{{ path('app_main_front') }}">Home</a></li>
-        <li><a href="{{ path('tache_listfront') }}" class="active">Tache</a></li>
-        <li><a href="equipement.html">Equipement</a></li>
-        <li><a href="reclamation.html">Reclamation</a></li>
-        <li style="margin-left: 20px;"></li>
-        <label class="switch" id="dark-mode-toggle">
-            <input type="checkbox" id="dark-mode-checkbox">
-            <span class="slider"></span>
-        </label>
-    {% elseif user_type == "Responsable employé" %}
-        <li><a href="{{ path('app_main_front') }}">Home</a></li>
-        <li><a href="{{ path('tache_listfront') }}" class="active">Tache</a></li>
-        <li><a href="actualite.html">Actualite</a></li>
-        <li><a href="reclamation.html">Reclamation</a></li>
-        <li><a href="evenement.html">Evenement</a></li>
-        <li><a href="equipement.html">Equipement</a></li>
-        <li style="margin-left: 20px;"></li>
-        <label class="switch" id="dark-mode-toggle">
-            <input type="checkbox" id="dark-mode-checkbox">
-            <span class="slider"></span>
-        </label>
-    {% else %}
-        <li>Error: Page not found</li>
-    {% endif %}
-{% endblock %}
-
 {% block body %}
     {% if flash_message is not empty %}
         <div class="alert alert-danger alert-dismissible fade show" role="alert">

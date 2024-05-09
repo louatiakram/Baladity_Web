@@ -102,6 +102,66 @@ class CommentaireTacheController extends AbstractController
         $em->flush();
         return $this->redirectToRoute('tache_list');
     }
+    #[Route('/commentairetache/adddir/{id}', name: 'commentairetache_adddir')]
+    public function adddir($id, Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
+    {
+        $userId = $session->get('user_id');
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+
+        if (!$user) {
+            throw $this->createNotFoundException('User Existe Pas');
+        }
+
+        $tacheId = $this->getDoctrine()->getRepository(tache::class)->find($id);
+
+        if (!$tacheId) {
+            throw $this->createNotFoundException('Tache Existe Pas');
+        }
+
+        $x = new commentairetache();
+        $x->setIdUser($user);
+        $x->setIdT($tacheId);
+        $x->setDateC(new \DateTime()); // Set current date
+
+        $form = $this->createForm(CommentaireTacheType::class, $x);
+        $form->handleRequest($req);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $doctrine->getManager();
+            $em->persist($x);
+            $em->flush();
+
+            return $this->redirectToRoute('tache_listdir');
+        }
+
+        return $this->renderForm('commentairetache/adddir.html.twig', ['f' => $form]);
+    }
+
+    #[Route('/commentairetache/updatedir/{i}', name: 'commentairetache_updatedir')]
+    public function updatedir($i, CommentaireTacheRepository $rep, Request $req, ManagerRegistry $doctrine): Response
+    {
+        $x = $rep->find($i);
+        $x->setDateC(new \DateTime()); // Set current date
+        $form = $this->createForm(CommentaireTacheType::class, $x);
+        $form->handleRequest($req);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $doctrine->getManager();
+            $em->flush();
+            return $this->redirectToRoute('tache_listdir');
+        }
+        return $this->renderForm('commentairetache/adddir.html.twig', ['f' => $form]);
+    }
+
+    #[Route('/commentairetache/deletedir/{i}', name: 'commentairetache_deletedir')]
+    public function deletedir($i, CommentaireTacheRepository $rep, ManagerRegistry $doctrine): Response
+    {
+        $xs = $rep->find($i);
+        $em = $doctrine->getManager();
+        $em->remove($xs);
+        $em->flush();
+        return $this->redirectToRoute('tache_listdir');
+    }
 
     #[Route('/commentairetache/deletefront/{i}', name: 'commentairetache_deletefront')]
     public function deletefront($i, CommentaireTacheRepository $rep, ManagerRegistry $doctrine): Response
