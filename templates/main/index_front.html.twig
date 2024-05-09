@@ -16,11 +16,17 @@
 					 <li class="dropdown"><a href="#"><span>Reclamation</span> <i
 						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
 						<ul>
-							<li><a href="{{ path('typeReclamation') }}">Ajouter Réclamation</a></li>
+							<li><a href="{{ path('typeReclamationF') }}">Ajouter Réclamation</a></li>
 							<li><a href="{{ path('afficherReclamationF') }}">Mes réclamations</a></li>
 						</ul>
 					</li>
-					<li><a href="{{ path('evenement_listCitoyen') }}">Evénement</a></li>
+					<li class="dropdown"><a href="#"><span>Evénement</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('evenement_listCitoyen') }}">liste des Evenements</a></li>
+							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter proposition</a></li>
+						</ul>
+					</li>
 					<li><a href="{{ path('chatgpt') }}">ChatGpt</a></li>
 					<li><a href="contact.html">Contact</a></li>
                     <li><a href="contact.html">About Us</a></li>
@@ -43,7 +49,7 @@
 					 <li class="dropdown"><a href="#"><span>Reclamation</span> <i
 						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
 						<ul>
-							<li><a href="{{ path('typeReclamation') }}">Ajouter Réclamation</a></li>
+							<li><a href="{{ path('typeReclamationF') }}">Ajouter Réclamation</a></li>
 							<li><a href="{{ path('afficherReclamationF') }}">Mes réclamations</a></li>
 						</ul>
 					</li>
@@ -80,20 +86,17 @@
 					 <li class="dropdown"><a href="#"><span>Reclamation</span> <i
 						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
 						<ul>
-							<li><a href="{{ path('typeReclamation') }}">Ajouter Réclamation</a></li>
+							<li><a href="{{ path('typeReclamationF') }}">Ajouter Réclamation</a></li>
 							<li><a href="{{ path('afficherReclamationF') }}">Mes réclamations</a></li>
 						</ul>
 					</li>
-					 {# <li class="dropdown"><a href="#"><span>Evenement</span> <i
-						class="bi bi-chevron-down dropdown-indicator" class="active"></i></a>
+					<li class="dropdown"><a href="#"><span>Evénement</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
 						<ul>
-							<li><a href="{{ path('evenement_listFront') }}">Liste des evenements</a></li>
-							<li><a href="{{ path('ajouterFront_evenement') }}">Ajouter un evenement</a></li>
-							<li><a href="{{ path('calendar') }}">Calendrier des evenements</a></li>
-							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter une proposition</a></li>
-
+							<li><a href="{{ path('evenement_listCitoyen') }}">liste des Evenements</a></li>
+							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter proposition</a></li>
 						</ul>
-					</li> #}
+					</li>
 					<li><a href="{{ path('equipement_show_front') }}">Equipement</a></li>
 					<li><a href="{{ path('tache_listfront') }}">Taches</a></li>
 					<li><a href="{{ path('chatgpt') }}">ChatGpt</a></li>
@@ -122,7 +125,7 @@
 							<li><a href="{{ path('chatbot') }}">Chat for help</a></li>
 						</ul>
 					</li>
-					 {# <li class="dropdown"><a href="#"><span>Evenement</span> <i
+					<li class="dropdown"><a href="#"><span>Evenement</span> <i
 						class="bi bi-chevron-down dropdown-indicator" class="active"></i></a>
 						<ul>
 							<li><a href="{{ path('evenement_listFront') }}">Liste des evenements</a></li>
@@ -131,8 +134,8 @@
 							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter une proposition</a></li>
 
 						</ul>
-					</li> #}
-					<li><a href="{{ path('equipement_show_front') }}">Equipement</a></li>
+					</li>
+					<li><a href="{{ path('equipement_show_responsable') }}">Equipement</a></li>
 					<li><a href="{{ path('tache_listdir') }}">Taches</a></li>
 					<li><a href="{{ path('chatgpt') }}">ChatGpt</a></li>
 					<li class="dropdown"><a href="#"><span>Profile</span> <i

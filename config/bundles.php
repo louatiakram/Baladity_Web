@@ -20,4 +20,5 @@ return [
     Flasher\Symfony\FlasherSymfonyBundle::class => ['all' => true],
     MercurySeries\FlashyBundle\MercurySeriesFlashyBundle::class => ['all' => true],
     Sbyaute\StarRatingBundle\StarRatingBundle::class => ['all' => true],
+    League\FlysystemBundle\FlysystemBundle::class => ['all' => true],
 ];

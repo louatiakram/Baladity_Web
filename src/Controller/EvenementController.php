@@ -66,8 +66,12 @@ class EvenementController extends AbstractController
     }
     
     #[Route('/evenement/listFront', name: 'evenement_listFront')]
-public function listFront(Request $request, EvenementRepository $repository, PaginatorInterface $paginator): Response
+public function listFront(Request $request, EvenementRepository $repository, PaginatorInterface $paginator, ManagerRegistry $doctrine): Response
 {
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     $query = $request->query->get('query');
 
     // Fetch all events
@@ -88,11 +92,16 @@ public function listFront(Request $request, EvenementRepository $repository, Pag
     return $this->render('evenement/listFront.html.twig', [
         'evenements' => $evenements,
         'query' => $query, // Pass the query to the template for displaying in the search bar
+        'user' => $users,
     ]);
 }
 #[Route('/evenement/listCitoyen', name: 'evenement_listCitoyen')]
-public function listCitoyen(Request $request, EvenementRepository $repository, PaginatorInterface $paginator): Response
+public function listCitoyen(Request $request, EvenementRepository $repository, PaginatorInterface $paginator,ManagerRegistry $doctrine): Response
 {
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     $query = $request->query->get('query');
 
     // Fetch all events
@@ -113,6 +122,7 @@ public function listCitoyen(Request $request, EvenementRepository $repository, P
     return $this->render('evenement/listCitoyen.html.twig', [
         'evenements' => $evenements,
         'query' => $query, // Pass the query to the template for displaying in the search bar
+        'user' => $users,
     ]);
 }
 
@@ -205,6 +215,7 @@ public function listCitoyen(Request $request, EvenementRepository $repository, P
     // Rendre la vue du formulaire
     return $this->render('evenement/ajouterFront.html.twig', [
         'form' => $form->createView(),
+        'user' => $users,
     ]);
 }
 
@@ -284,6 +295,10 @@ public function update($id, EvenementRepository $rep, Request $req, ManagerRegis
     #[Route('/evenement/modifierFront/{id}', name: 'modifierFront_evenement')]
 public function updateFront($id, EvenementRepository $rep, Request $req, ManagerRegistry $doctrine): Response
     {
+        $userId = $req->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
         $x = $rep->find($id);
         $form = $this->createForm(EvenementType::class, $x);
         $form->handleRequest($req);
@@ -315,7 +330,8 @@ public function updateFront($id, EvenementRepository $rep, Request $req, Manager
 
             return $this->redirectToRoute('evenement_listFront');
         }
-        return $this->renderForm('evenement/modifierFront.html.twig', ['form' => $form]);
+        return $this->renderForm('evenement/modifierFront.html.twig', ['form' => $form,
+    'user' => $users]);
     }
 
     
@@ -333,8 +349,12 @@ public function detailsEvenement($id, EntityManagerInterface $entityManager): Re
     ]);
 }
 #[Route('/evenement/detailsFront/{id}', name: 'details_evenementFront')]
-public function detailsEvenementFront($id, EntityManagerInterface $entityManager): Response
+public function detailsEvenementFront($id, EntityManagerInterface $entityManager,ManagerRegistry $doctrine, Request $request): Response
 {
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     $evenement = $entityManager->getRepository(Evenement::class)->find($id);
 
     if (!$evenement) {
@@ -343,12 +363,17 @@ public function detailsEvenementFront($id, EntityManagerInterface $entityManager
 
     return $this->render('evenement/detailsFront.html.twig', [
         'evenement' => $evenement,
+        'user' => $users,
     ]);
 }
 
 #[Route('/evenement/detailsCitoyen/{id}', name: 'details_evenementCitoyen')]
-public function detailsEvenementCitoyen($id, EntityManagerInterface $entityManager): Response
+public function detailsEvenementCitoyen($id, EntityManagerInterface $entityManager, ManagerRegistry $doctrine, Request $request): Response
 {
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     $evenement = $entityManager->getRepository(Evenement::class)->find($id);
 
     if (!$evenement) {
@@ -357,6 +382,7 @@ public function detailsEvenementCitoyen($id, EntityManagerInterface $entityManag
 
     return $this->render('evenement/detailsCitoyen.html.twig', [
         'evenement' => $evenement,
+        'user' => $users,
     ]);
 }
 

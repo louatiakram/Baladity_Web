@@ -293,13 +293,18 @@ public function afficherReclamationF(Request $request, ReclamationRepository $re
     ]);
 }
 #[Route('/reclamation/afficherReclamationFA', name: 'afficherReclamationFA')]
-public function afficherReclamationFA(Request $request, ReclamationRepository $repository, PaginatorInterface $paginator): Response
+public function afficherReclamationFA(Request $request, ReclamationRepository $repository, PaginatorInterface $paginator,ManagerRegistry $doctrine): Response
 {
     // Récupérer toutes les réclamations
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     $reclamations = $repository->findAll();
 
     return $this->render('reclamation/afficherReclamationA.html.twig', [
         'reclamations' => $reclamations,
+        'user' => $users,
     ]);
 }
 

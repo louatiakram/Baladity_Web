@@ -34,7 +34,7 @@ class AvisController extends AbstractController
     public function ajouterAvisFront($id, ManagerRegistry $doctrine, Request $req): Response
     {
         // Récupérer l'identifiant de l'utilisateur
-             $userId = $request->getSession()->get('user_id');
+             $userId = $req->getSession()->get('user_id');
         //get user
                 $userRepository = $doctrine->getRepository(enduser::class);
                 $users = $userRepository->findOneBy(['id_user' => $userId]);
@@ -91,6 +91,7 @@ class AvisController extends AbstractController
             'form' => $form->createView(),
             'equipement' => $equipement,
             'avis' => $avis, // Passer la variable 'avis' à votre template Twig
+            'user' => $users,
         ]);
     }
     
@@ -154,6 +155,10 @@ public function deleteAvisAdmin($id, AvisRepository $rep, ManagerRegistry $doctr
     #[Route('/avis/modifierAvis/{id}', name: 'modifierAvis')]
     public function modifierAvis($id, ManagerRegistry $doctrine, Request $request): Response
     {
+        $userId = $request->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
         $entityManager = $doctrine->getManager();
         $avis = $entityManager->getRepository(Avis::class)->find($id);
     
@@ -179,6 +184,7 @@ public function deleteAvisAdmin($id, AvisRepository $rep, ManagerRegistry $doctr
             'form' => $form->createView(),
             'avis' => $avis,
             'equipement' => $avis->getEquipement(),
+            'user' => $users,
         ]);
     }
     #[Route('/avis/showAvis/{id}', name: 'avis_show')]
@@ -229,8 +235,12 @@ public function deleteAvisAdmin($id, AvisRepository $rep, ManagerRegistry $doctr
     }
     #[Route('/avis/showAvisFront/{id}', name: 'avis_show_front')]
     
-public function showAvisFront($id, Request $request, EquipementRepository $equipementRepository, AvisRepository $avisRepository): Response
+public function showAvisFront($id, Request $request, EquipementRepository $equipementRepository, AvisRepository $avisRepository, ManagerRegistry $doctrine): Response
 {
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     // Récupérer l'équipement par son ID
     $equipement = $equipementRepository->find($id);
 
@@ -273,13 +283,18 @@ public function showAvisFront($id, Request $request, EquipementRepository $equip
         'query' => $query,
         'currentPage' => $currentPage,
         'totalPages' => $totalPages,
+        'user' => $users,
     ]);
 }
 
 #[Route('/avis/showAvisResponsable/{id}', name: 'avis_show_responsable')]
     
-public function showAvisResponsable($id, Request $request, EquipementRepository $equipementRepository, AvisRepository $avisRepository): Response
+public function showAvisResponsable($id, Request $request, EquipementRepository $equipementRepository, AvisRepository $avisRepository, ManagerRegistry $doctrine): Response
 {
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     // Récupérer l'équipement par son ID
     $equipement = $equipementRepository->find($id);
 
@@ -322,6 +337,7 @@ public function showAvisResponsable($id, Request $request, EquipementRepository 
         'query' => $query,
         'currentPage' => $currentPage,
         'totalPages' => $totalPages,
+        'user' => $users,
     ]);
 }
 }    

@@ -135,7 +135,8 @@ class EquipementController extends AbstractController
         }
     
         return $this->render('equipement/ajouterEquipementResponsable.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'user' => $users,
         ]);
     }
     #[Route('/equipement/deleteEquipement/{id}', name: 'equipement_delete')]
@@ -220,6 +221,10 @@ public function modifierEquipement($id, ManagerRegistry $doctrine, Request $requ
 #[Route('/equipement/modifierEquipementResponsable/{id}', name: 'modifierEquipementResponsable')]
 public function modifierEquipementResponsable($id, ManagerRegistry $doctrine, Request $request): Response
 {
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     $entityManager = $doctrine->getManager();
     $equipement = $entityManager->getRepository(Equipement::class)->find($id);
 
@@ -259,6 +264,7 @@ public function modifierEquipementResponsable($id, ManagerRegistry $doctrine, Re
     return $this->render('equipement/modifierEquipementResponsable.html.twig', [
         'form' => $form->createView(),
         'equipement' => $equipement,
+        'user' => $users,
     ]);
 }
 #[Route('/equipement/showEquipement', name: 'equipement_show')]
@@ -303,8 +309,12 @@ public function detailEquipement($id, EquipementRepository $equipementRepository
     ]);
 }
 #[Route('/equipement/detailFront/{id}', name: 'equipement_detail_front')]
-public function detailEquipementFront($id, EquipementRepository $equipementRepository): Response
+public function detailEquipementFront($id, EquipementRepository $equipementRepository, ManagerRegistry $doctrine, Request $request): Response
 {
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     // Récupérer l'équipement par son ID
     $equipement = $equipementRepository->find($id);
 
@@ -315,11 +325,16 @@ public function detailEquipementFront($id, EquipementRepository $equipementRepos
     // Passer l'équipement à la vue Twig pour affichage
     return $this->render('equipement/detailEquipementFront.html.twig', [
         'equipement' => $equipement,
+        'user' => $users,
     ]);
 }
 #[Route('/equipement/detailEquipementResponsable/{id}', name: 'equipement_detail_responsable')]
-public function detailEquipementResponsable($id, EquipementRepository $equipementRepository): Response
+public function detailEquipementResponsable($id, EquipementRepository $equipementRepository, ManagerRegistry $doctrine, Request $request): Response
 {
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     // Récupérer l'équipement par son ID
     $equipement = $equipementRepository->find($id);
 
@@ -330,12 +345,17 @@ public function detailEquipementResponsable($id, EquipementRepository $equipemen
     // Passer l'équipement à la vue Twig pour affichage
     return $this->render('equipement/detailEquipementResponsable.html.twig', [
         'equipement' => $equipement,
+        'user' => $users,
     ]);
 }
 
 #[Route('/equipement/showEquipementFront', name: 'equipement_show_front')]
-public function showEquipementFront(Request $request, EquipementRepository $repository): Response
+public function showEquipementFront(Request $request, EquipementRepository $repository, ManagerRegistry $doctrine): Response
 {
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);    
     $query = $request->query->get('query');
     $category = $request->query->get('category');
     $currentPage = $request->query->getInt('page', 1);
@@ -367,6 +387,7 @@ public function showEquipementFront(Request $request, EquipementRepository $repo
         'currentPage' => $currentPage,
         'totalPages' => $totalPages,
         'categories' => $categories,
+        'user' => $users,
     ]);
 }
 #[Route('/equipement/utiliser/{id}', name: 'equipement_utiliser')]
@@ -459,8 +480,12 @@ public function statsEquipements(EquipementRepository $equipementRepository): Re
     }
 }
 #[Route('/equipement/showEquipementResponsable', name: 'equipement_show_responsable')]
-public function showEquipementResponsable(Request $request, EquipementRepository $repository): Response
+public function showEquipementResponsable(Request $request, EquipementRepository $repository, ManagerRegistry $doctrine): Response
 {
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     $query = $request->query->get('query');
     $currentPage = $request->query->getInt('page', 1);
     $limit = 10; // Nombre d'équipements par page
@@ -487,6 +512,7 @@ public function showEquipementResponsable(Request $request, EquipementRepository
         'query' => $query,
         'currentPage' => $currentPage,
         'totalPages' => $totalPages,
+        'user' => $users,
     ]);
 }
 }

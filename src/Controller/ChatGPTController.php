@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use OpenAI;
+use App\Entity\enduser;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,9 +19,15 @@ class ChatGPTController extends AbstractController
     }
 
     #[Route('/messagerie/chatbot', name: 'chatbot')]
-    public function index1( ? string $question, ? string $response): Response
+    public function index1( ? string $question, ? string $response, ManagerRegistry $doctrine, Request $request): Response
     {
-        return $this->render('messagerie/chatgpt.html.twig');
+        $userId = $request->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
+        return $this->render('messagerie/chatgpt.html.twig', [
+            'user' => $users,
+        ]);
     }
 
 

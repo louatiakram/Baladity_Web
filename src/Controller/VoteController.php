@@ -121,6 +121,7 @@ public function addFront(Request $request,ManagerRegistry $doctrine): Response
 
     return $this->render('vote/ajouterFront.html.twig', [
         'form' => $form->createView(),
+        'user' => $users,
     ]);
 }
 
