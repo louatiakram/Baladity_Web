@@ -42,9 +42,15 @@ class ReclamationController extends AbstractController
         return $this->render('reclamation/typeReclamation.html.twig');
     }
     #[Route('/reclamation/typeReclamationF', name: 'typeReclamationF')]
-    public function typeReclamationF(): Response
+    public function typeReclamationF(ManagerRegistry $doctrine, Request $request): Response
     {
-        return $this->render('reclamation/typeReclamationF.html.twig');
+        $userId = $request->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
+        return $this->render('reclamation/typeReclamationF.html.twig', [
+            'user' => $users,
+        ]);
     }
 
     #[Route('/reclamation/ajouterReclamation/{cas}', name: 'ajouterReclamation')]
@@ -290,6 +296,7 @@ public function afficherReclamationF(Request $request, ReclamationRepository $re
 
     return $this->render('reclamation/afficherReclamationF.html.twig', [
         'reclamations' => $reclamations,
+        'user' => $users,
     ]);
 }
 #[Route('/reclamation/afficherReclamationFA', name: 'afficherReclamationFA')]

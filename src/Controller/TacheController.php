@@ -95,8 +95,12 @@ class TacheController extends AbstractController
     }
 
     #[Route('/tachedir', name: 'tache_listdir')]
-    public function tachedir(Request $request, TacheRepository $repository, PaginatorInterface $paginator, SessionInterface $session): Response
+    public function tachedir(Request $request, TacheRepository $repository, PaginatorInterface $paginator, SessionInterface $session, ManagerRegistry $doctrine): Response
     {
+        $userId = $request->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
         $defaultOrderBy = 'date_FT';
         $orderBy = $request->query->get('orderBy', 'date_FT'); // Default ordering by date_FT
         $queryBuilder = $repository->createQueryBuilder('t')->orderBy('t.' . $defaultOrderBy, 'ASC');
@@ -156,6 +160,7 @@ class TacheController extends AbstractController
             'tasksToDoCount' => $tasksToDoCount,
             'startDate' => $startDate, // Pass the start date to pre-fill the date picker
             'endDate' => $endDate, // Pass the end date to pre-fill the date picker
+            'user' => $users,
         ]);
     }
 
@@ -355,7 +360,8 @@ class TacheController extends AbstractController
         // Pass the image path to the template
         $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploads_directory') . '/' . $x->getPieceJointeT() : null;
 
-        return $this->renderForm('tache/adddir.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
+        return $this->renderForm('tache/adddir.html.twig', ['f' => $form, 'imagePath' => $imagePath,
+    'user' => $user]);
     }
 
     #[Route('/tache/update/{i}', name: 'tache_update')]
@@ -404,6 +410,10 @@ class TacheController extends AbstractController
     #[Route('/tache/updatedir/{i}', name: 'tache_updatedir')]
     public function updatedir($i, TacheRepository $rep, Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
     {
+        $userId = $req->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
         $x = $rep->find($i);
         $form = $this->createForm(TacheType::class, $x);
         $form->handleRequest($req);
@@ -441,7 +451,8 @@ class TacheController extends AbstractController
         // Pass the image path to the template
         $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploads_directory') . '/' . $x->getPieceJointeT() : null;
 
-        return $this->renderForm('tache/adddir.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
+        return $this->renderForm('tache/adddir.html.twig', ['f' => $form, 'imagePath' => $imagePath,
+    'user' => $users, ]);
     }
 
     #[Route('/tache/delete/{i}', name: 'tache_delete')]
@@ -489,8 +500,12 @@ class TacheController extends AbstractController
     }
 
     #[Route('/tache/piechartdir', name: 'tache_piechartdir')]
-    public function pieChartdir(TacheRepository $tacheRepository): Response
+    public function pieChartdir(TacheRepository $tacheRepository,ManagerRegistry $doctrine,Request $request): Response
     {
+        $userId = $request->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
         // Get the count of tasks done by each user
         $usersTasksCount = $tacheRepository->getUsersTasksCount();
 
@@ -505,6 +520,7 @@ class TacheController extends AbstractController
 
         return $this->render('tache/piechartdir.html.twig', [
             'data' => $data, // Pass data to twig template
+            'user' => $users,
         ]);
     }
 
@@ -564,6 +580,7 @@ class TacheController extends AbstractController
             'flash_message' => $flashMessage,
             'user_type' => $typeUser,
             'quote' => $quote, // Pass the quote to the Twig template
+            'user' => $users,
         ]);
     }
 
@@ -614,6 +631,7 @@ class TacheController extends AbstractController
             'commentForm' => $commentForm->createView(),
             'userId' => $userId,
             'user_type' => $typeUser,
+            'user' => $user,
         ]);
     }
 
