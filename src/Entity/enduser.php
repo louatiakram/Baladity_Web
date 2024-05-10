@@ -33,11 +33,6 @@ class enduser implements UserInterface, PasswordAuthenticatedUserInterface
     private $email_user;
 
     #[ORM\Column(type: 'string')]
-    #[Assert\NotBlank(message: "Vous devez mettre votre password.")]
-    #[Assert\Regex(
-        pattern: '/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%]{6,}$/',
-        message: "Le mot de passe doit contenir au moins 6 caractères, dont au moins un chiffre et une lettre."
-    )]
     private $password;
 
     #[ORM\Column(name: 'phoneNumber_user', type: 'string', length: 255)]

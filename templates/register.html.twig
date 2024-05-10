@@ -289,6 +289,29 @@ loginBtn.addEventListener('click', () => {
     container.classList.remove("active");
 });
     </script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Stop the form from submitting immediately
+
+            // Show SweetAlert
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Your Account Has Been Created",
+                showConfirmButton: false,
+                timer: 1500
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    // When the timer runs out, submit the form
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
 </body>
 
 </html>
