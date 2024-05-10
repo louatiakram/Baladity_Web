@@ -124,8 +124,6 @@ class ChatbotController extends AbstractController
             "yaakoubi" => "om mtaa ommek ella ma *****",
             "ti cha3el" => "thaw",
             "barra" => "nayek",
-            "zebi mnayek miboun" => "hassen",
-            "tn" => "tunis zebi",
             "waa" => "waywa",
             "ai" => "artificial intelligence",
             "yesine zayane" => "limhaf",
@@ -163,7 +161,6 @@ class ChatbotController extends AbstractController
             "what is baladity c quoi ce projet chnowa projet baladity baladia" => "baladity est un projet qui simplifie la gestions des municipalitees en tunisie, ainsi que la partie service client, en fait notre application est destinee au employee et les citoyens, actuallement nous sommes encore en cours de developpement, ce consontront sur le secteur ariana.",
             "devs membres developpeurs de baladity" => "louati akram, zayane yassine, yahyaoui amine, sediri hadil et kaboubi amine.",
             "fine nikel mrigel" => "great, how can i help",
-            "ki zebi pas grave pas mal not bad just fine" => "i hope i can change ur mood, how can i help",
             "bb" => "hobi rak",
             "m3alem rak yre the bos t le patron" => "thank you ya rayes",
         ];
