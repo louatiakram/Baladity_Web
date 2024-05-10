@@ -25,11 +25,6 @@ class enduser implements UserInterface, PasswordAuthenticatedUserInterface
     private $nom_user;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank(message: "L'email est requis.")]
-    #[Assert\Regex(
-        pattern: "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/",
-        message: "L'email n'est pas au format valide."
-    )]
     private $email_user;
 
     #[ORM\Column(type: 'string')]
