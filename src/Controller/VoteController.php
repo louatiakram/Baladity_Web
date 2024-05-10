@@ -116,12 +116,12 @@ public function addFront(Request $request,ManagerRegistry $doctrine): Response
         $this->addFlash('success', 'Proposition added successfully.');
 
         // Redirect to the vote list page
-        return $this->redirectToRoute('evenement_listFront');
+        return $this->redirectToRoute('evenement_listCitoyen');
     }
 
     return $this->render('vote/ajouterFront.html.twig', [
         'form' => $form->createView(),
-        'user' => $users,
+        'user' => $users
     ]);
 }
 
