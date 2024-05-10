@@ -621,7 +621,7 @@ class TacheController extends AbstractController
         return $this->redirectToRoute('tache_listfront');
     }
 
-    #[Route('/tache/balbot', name: 'balbot')]
+    #[Route('/balbot', name: 'app_main_balbot')]
     public function chatbotAction(Request $request)
     {
         // Get the user message from the request

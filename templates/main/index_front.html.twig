@@ -21,3 +21,26 @@ au sein d'une municipalité. En combinant une interface conviviale avec des fonc
 Baladity offre aux résidents et aux responsables municipaux un outil efficace pour interagir 
 et coordonner divers aspects de la vie communautaire.
 {%endblock %}
+
+
+{%block rest%}
+{% block balbot %}
+<section id="call-to-action" style="background-color: #f8f9fa; padding: 80px 0;">
+    <div class="container" data-aos="fade-up">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 style="font-size: 2.5rem; color: #333;">Balbot</h2>
+                <p style="font-size: 1.1rem; color: #666; line-height: 1.6;">
+                    Balbot is a baladity chatbot designed to engage in meaningful conversations, 
+                    providing assistance and support. Powered by advanced AI algorithms, 
+                    Balbot aims to enhance user experience and interaction.
+                </p>
+                <a class="btn btn-primary btn-lg" href="{{ path('app_main_balbot') }}" style="margin-top: 20px;">Interact with Balbot</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+
+{% endblock %}
