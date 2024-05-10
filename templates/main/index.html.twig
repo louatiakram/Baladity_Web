@@ -1,2 +1,29 @@
 {% extends 'base-back.html.twig' %}
 
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 text-center">
+            <img src="{{ asset('back-office/img/chat-botT.gif') }}" class="img-fluid mb-3 mb-lg-0" style="max-width: 200px;" alt="Chatbot">
+            <h1 class="mt-4">Là où il fait extrêmement bon de vivre</h1>
+            <p class="lead">
+                Baladity est une application innovante conçue pour simplifier la gestion des fonctionnalités municipales au sein d'une municipalité. En combinant une interface conviviale avec des fonctionnalités intuitives, Baladity offre aux résidents et aux responsables municipaux un outil efficace pour interagir et coordonner divers aspects de la vie communautaire.
+            </p>
+        </div>
+    </div>
+</div>
+
+<section id="call-to-action" style="background-color: #f8f9fa; padding: 80px 0;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="mb-4">Balbot</h2>
+                <p class="lead">
+                    Balbot est un chatbot Baladity conçu pour engager des conversations significatives, fournissant assistance et support. Propulsé par des algorithmes d'IA avancés, Balbot vise à améliorer l'expérience utilisateur et l'interaction.
+                </p>
+                <a class="btn btn-primary btn-lg" href="{{ path('balbot') }}">Interagir avec Balbot</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -17,14 +17,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class CommentaireTacheController extends AbstractController
 {
     #[Route('/commentairetache', name: 'app_commentairetache')]
-    public function index(CommentaireTacheRepository $r): Response
+    public function index(CommentaireTacheRepository $r, SessionInterface $session): Response
     {
         $xs = $r->findAll();
         return $this->render('commentairetache/list.html.twig', ['l' => $xs]);
     }
 
     #[Route('/commentairetache/list', name: 'commentairetache_list')]
-    public function list(Request $request, CommentaireTacheRepository $repository): Response
+    public function list(Request $request, CommentaireTacheRepository $repository, SessionInterface $session): Response
     {
         $query = $request->query->get('query');
 
@@ -74,12 +74,18 @@ class CommentaireTacheController extends AbstractController
             return $this->redirectToRoute('tache_list');
         }
 
-        return $this->renderForm('commentairetache/add.html.twig', ['f' => $form]);
+        return $this->renderForm('commentairetache/add.html.twig', ['f' => $form, 'user' => $user,]);
     }
 
     #[Route('/commentairetache/update/{i}', name: 'commentairetache_update')]
-    public function update($i, CommentaireTacheRepository $rep, Request $req, ManagerRegistry $doctrine): Response
+    public function update($i, CommentaireTacheRepository $rep, Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
     {
+        $userId = $session->get('user_id');
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+
+        if (!$user) {
+            throw $this->createNotFoundException('User Existe Pas');
+        }
         $x = $rep->find($i);
         $x->setDateC(new \DateTime()); // Set current date
         $form = $this->createForm(CommentaireTacheType::class, $x);
@@ -90,7 +96,7 @@ class CommentaireTacheController extends AbstractController
             $em->flush();
             return $this->redirectToRoute('tache_list');
         }
-        return $this->renderForm('commentairetache/add.html.twig', ['f' => $form]);
+        return $this->renderForm('commentairetache/add.html.twig', ['f' => $form, 'user' => $user,]);
     }
 
     #[Route('/commentairetache/delete/{i}', name: 'commentairetache_delete')]
@@ -134,12 +140,18 @@ class CommentaireTacheController extends AbstractController
             return $this->redirectToRoute('tache_listdir');
         }
 
-        return $this->renderForm('commentairetache/adddir.html.twig', ['f' => $form]);
+        return $this->renderForm('commentairetache/adddir.html.twig', ['f' => $form, 'user' => $user,]);
     }
 
     #[Route('/commentairetache/updatedir/{i}', name: 'commentairetache_updatedir')]
-    public function updatedir($i, CommentaireTacheRepository $rep, Request $req, ManagerRegistry $doctrine): Response
+    public function updatedir($i, CommentaireTacheRepository $rep, Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
     {
+        $userId = $session->get('user_id');
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+
+        if (!$user) {
+            throw $this->createNotFoundException('User Existe Pas');
+        }
         $x = $rep->find($i);
         $x->setDateC(new \DateTime()); // Set current date
         $form = $this->createForm(CommentaireTacheType::class, $x);
@@ -150,7 +162,7 @@ class CommentaireTacheController extends AbstractController
             $em->flush();
             return $this->redirectToRoute('tache_listdir');
         }
-        return $this->renderForm('commentairetache/adddir.html.twig', ['f' => $form]);
+        return $this->renderForm('commentairetache/adddir.html.twig', ['f' => $form, 'user' => $user,]);
     }
 
     #[Route('/commentairetache/deletedir/{i}', name: 'commentairetache_deletedir')]

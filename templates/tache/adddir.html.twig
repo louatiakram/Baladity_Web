@@ -154,6 +154,71 @@
 {% endblock %}
 
 {% block body %}
+<style>
+	body {
+	   font-family: Arial, sans-serif;
+	   background-color: #f8f9fa;
+	   margin: 0;
+	   padding: 0;
+	}
+
+	form {
+	   background-color: #ffffff;
+	   padding: 20px;
+	   border-radius: 10px;
+	   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+	   margin: 20px auto;
+	   max-width: 600px;
+	}
+
+	input[type="text"],
+	input[type="date"] {
+	   width: 100%;
+	   padding: 10px;
+	   margin: 5px 0;
+	   border: 1px solid #ccc;
+	   border-radius: 5px;
+	   box-sizing: border-box;
+	}
+
+	select {
+	   width: 100%;
+	   padding: 10px;
+	   margin: 5px 0;
+	   border: 1px solid #ccc;
+	   border-radius: 5px;
+	   box-sizing: border-box;
+	}
+
+	.alert {
+	   margin-bottom: 10px;
+	}
+
+	button {
+	   padding: 10px 20px;
+	   border: none;
+	   border-radius: 5px;
+	   background-color: #007bff;
+	   color: #ffffff;
+	   cursor: pointer;
+	}
+
+	button:hover {
+	   background-color: #0056b3;
+	}
+
+	.form-check {
+	   margin-bottom: 10px;
+	}
+
+	.form-check input[type="radio"] {
+	   margin-right: 10px;
+	}
+
+	.form-check label {
+	   color: #000000; /* Black text for radio button labels */
+	}
+ </style>
 {{ form_start(f, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate'}}) }}
 {% if form_errors(f)|length > 0 %}
 <div class="alert alert-danger alert-dismissible fade show" role="alert">
