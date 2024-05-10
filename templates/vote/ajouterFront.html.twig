@@ -60,6 +60,7 @@
 							<li><a href="{{ path('ajouterFront_evenement') }}">Ajouter un evenement</a></li>
 							<li><a href="{{ path('calendar') }}">Calendrier des evenements</a></li>
 							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter une proposition</a></li>
+							<li><a href="{{ path('statsF') }}">Statistiques des evenements</a></li>
 
 						</ul>
 					</li>
@@ -121,7 +122,7 @@
 						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
 						<ul>
 							<li><a href="{{ path('afficherReclamationFA') }}">les Réclamations</a></li>
-							<li><a href="#">Statistiques des Réclamations</a></li>
+							<li><a href="{{ path('statsReclamationF') }}">Statistiques des Réclamations</a></li>
 							<li><a href="{{ path('chatbot') }}">Chat for help</a></li>
 						</ul>
 					</li>
@@ -132,6 +133,7 @@
 							<li><a href="{{ path('ajouterFront_evenement') }}">Ajouter un evenement</a></li>
 							<li><a href="{{ path('calendar') }}">Calendrier des evenements</a></li>
 							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter une proposition</a></li>
+							<li><a href="{{ path('statsF') }}">Statistiques des evenements</a></li>
 
 						</ul>
 					</li>
@@ -151,10 +153,14 @@
 					
 {% endblock %}
 
-{% block body %}
+{% block imagegpt %} 
+  {% endblock %}
 
+{% block body %}
+{% endblock %}
+{% block rest %}
 <div class="breadcrumbs">
-    <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+    <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/suggestion.webp') }}');">
         <div class="container position-relative">
             <div class="row d-flex justify-content-center">
                 <div class="col-lg-6 text-center">
@@ -177,7 +183,7 @@
 <section id="get-a-quote" class="get-a-quote">
     <div class="container aos-init aos-animate" data-aos="fade-up">
         <div class="row g-0">
-            <div class="col-lg-5 quote-bg" style="background-image: url('{{ asset('images/quote-bg.jpg') }}');"></div>
+            <div class="col-lg-5 quote-bg" style="background-image: url('{{ asset('images/sugg.jpg') }}');"></div>
             <div class="col-lg-7">
                 <div class="card">
                     <div class="card-body">
@@ -228,5 +234,4 @@
 </div>
 
 </div>
-
 {% endblock %}

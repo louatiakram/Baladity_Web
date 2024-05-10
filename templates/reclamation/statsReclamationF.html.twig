@@ -1,0 +1,308 @@
+{% extends 'base-front.html.twig' %}
+
+{% block title %}Baladity Home{% endblock %}
+
+{% block barreTitre %}
+{% if 'Citoyen' in user.getTypeUser() %}
+<li><a href="{{ path('app_main_front') }}" >Home</a></li>
+					 <li class="dropdown"><a href="#"><span>Actualité</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_actualite') }}">Afficher Actualité</a></li>
+							<li><a href="{{ path('app_publicite') }}">Afficher Publicité</a></li>
+							<li><a href="{{ path('ajouterPub') }}">Ajouter Publicité</a></li>
+						</ul>
+					</li>
+					 <li class="dropdown"><a href="#" class="active"><span>Reclamation</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('typeReclamationF') }}">Ajouter Réclamation</a></li>
+							<li><a href="{{ path('afficherReclamationF') }}">Mes réclamations</a></li>
+						</ul>
+					</li>
+                    <li class="dropdown"><a href="#"><span>Evénement</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('evenement_listCitoyen') }}">liste des Evenements</a></li>
+							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter proposition</a></li>
+						</ul>
+					</li>
+					<li><a href="{{ path('chatgpt') }}">ChatGpt</a></li>
+					<li><a href="contact.html">Contact</a></li>
+                    <li><a href="contact.html">About Us</a></li>
+					<li class="dropdown"><a href="#"><span>Profile</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_profile_fron') }}">Profile</a></li>
+							<li><a href="{{ path('sign_out') }}">Logout</a></li>
+						</ul>
+					</li>
+{% elseif 'Responsable employé' in user.getTypeUser() %}
+<li><a href="{{ path('app_main_front') }}" >Home</a></li>
+					<li class="dropdown"><a href="#"><span>Actualité</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_actualiteshowResponsable') }}">Afficher Actualité</a></li>
+							<li><a href="{{ path('ajouterA2') }}">Ajouter Actualité</a></li>
+						</ul>
+					</li>
+					 <li class="dropdown"><a href="#" class="active"><span>Reclamation</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('typeReclamationF') }}">Ajouter Réclamation</a></li>
+							<li><a href="{{ path('afficherReclamationF') }}">Mes réclamations</a></li>
+						</ul>
+					</li>
+					 <li class="dropdown"><a href="#" ><span>Evenement</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class="active"></i></a>
+						<ul>
+							<li><a href="{{ path('evenement_listFront') }}">Liste des evenements</a></li>
+							<li><a href="{{ path('ajouterFront_evenement') }}">Ajouter un evenement</a></li>
+							<li><a href="{{ path('calendar') }}">Calendrier des evenements</a></li>
+							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter une proposition</a></li>
+                            <li><a href="{{ path('statsF') }}">Statistiques des evenements</a></li>
+
+						</ul>
+					</li>
+					<li><a href="{{ path('equipement_show_responsable') }}">Equipement</a></li>
+					<li><a href="{{ path('tache_listfront') }}">Taches</a></li>
+					<li><a href="{{ path('chatgpt') }}">ChatGpt</a></li>
+					 <li class="dropdown"><a href="#"><span>Profile</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_profile_fron') }}">Profile</a></li>
+							<li><a href="{{ path('sign_out') }}">Logout</a></li>
+						</ul>
+					</li>
+{% elseif 'Employé' in user.getTypeUser() %}
+<li><a href="{{ path('app_main_front') }}">Home</a></li>
+					 <li class="dropdown"><a href="#"><span>Actualité</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_actualite') }}">Afficher Actualité</a></li>
+							<li><a href="{{ path('app_publicite') }}">Afficher Publicité</a></li>
+							<li><a href="{{ path('ajouterPub') }}">Ajouter Publicité</a></li>
+						</ul>
+					</li>
+					 <li class="dropdown"><a href="#"><span>Reclamation</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('typeReclamationF') }}">Ajouter Réclamation</a></li>
+							<li><a href="{{ path('afficherReclamationF') }}">Mes réclamations</a></li>
+						</ul>
+					</li>
+					  <li class="dropdown"><a href="#"><span>Evénement</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('evenement_listCitoyen') }}">liste des Evenements</a></li>
+							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter proposition</a></li>
+						</ul>
+					</li>
+					<li><a href="{{ path('equipement_show_front') }}">Equipement</a></li>
+					<li><a href="{{ path('tache_listfront') }}">Taches</a></li>
+					<li><a href="{{ path('chatgpt') }}">ChatGpt</a></li>
+					<li class="dropdown"><a href="#"><span>Profile</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_profile_fron') }}">Profile</a></li>
+							<li><a href="{{ path('sign_out') }}">Logout</a></li>
+						</ul>
+					</li>
+
+{% elseif 'Directeur' in user.getTypeUser() %}
+<li><a href="{{ path('app_main_front') }}" >Home</a></li>
+					<li class="dropdown"><a href="#"><span>Actualité</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_actualiteshowResponsable') }}">Afficher Actualité</a></li>
+							<li><a href="{{ path('ajouterA2') }}">Ajouter Actualité</a></li>
+						</ul>
+					</li>
+					 <li class="dropdown"><a href="#" class="active"><span>Reclamation</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('afficherReclamationFA') }}">les Réclamations</a></li>
+							<li><a href="{{ path('statsReclamationF') }}">Statistiques des Réclamations</a></li>
+							<li><a href="{{ path('chatbot') }}">Chat for help</a></li>
+						</ul>
+					</li>
+					<li class="dropdown"><a href="#" ><span>Evenement</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class="active"></i></a>
+						<ul>
+							<li><a href="{{ path('evenement_listFront') }}">Liste des evenements</a></li>
+							<li><a href="{{ path('ajouterFront_evenement') }}">Ajouter un evenement</a></li>
+							<li><a href="{{ path('calendar') }}">Calendrier des evenements</a></li>
+							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter une proposition</a></li>
+							<li><a href="{{ path('statsF') }}">Statistiques des evenements</a></li>
+
+						</ul>
+					</li>
+					<li><a href="{{ path('equipement_show_responsable') }}">Equipement</a></li>
+					<li><a href="{{ path('tache_listdir') }}">Taches</a></li>
+					<li><a href="{{ path('chatgpt') }}">ChatGpt</a></li>
+					<li class="dropdown"><a href="#"><span>Profile</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_profile_fron') }}">Profile</a></li>
+							<li><a href="{{ path('sign_out') }}">Logout</a></li>
+						</ul>
+					</li>
+
+{% endif %}
+{% endblock %}
+  {% block imagegpt %} 
+  {% endblock %}
+{% block body %}
+
+{% endblock %}
+{% block rest %}
+<div class="breadcrumbs">
+    <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+        <div class="container position-relative">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <h2>Reclamation</h2>
+                    <p>Une réclamation dans une municipalité est comme un signal que vous envoyez à votre mairie, comme un trou dans la route, des poubelles qui débordent, ou un lampadaire cassé. En signalant ces problèmes, vous aidez la mairie à les résoudre et à rendre votre quartier plus agréable pour tout le monde.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav>
+        <div class="container">
+            <ol>
+                <li><a href="{{ path('app_main_front') }}">Home</a></li>
+                <li>Reclamation</li>
+            </ol>
+        </div>
+    </nav>
+</div>
+<section id="get-a-quote" class="get-a-quote">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <canvas id="reclamationByStatusPieChart"></canvas>
+            </div>
+            <div class="col-md-4">
+                <canvas id="reclamationByDateLineChart"></canvas>
+            </div>
+            <div class="col-md-4">
+                <canvas id="reclamationByMonthBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const data = {
+        "reclamationStats": {{ reclamationStats|json_encode|raw }},
+        "reclamationStatsDate": {{ reclamationStatsDate|json_encode|raw }},
+        "reclamationStatsMonth": {{ reclamationStatsMonth|json_encode|raw }},
+        "user": {{ user|json_encode|raw }}
+    };
+
+    // Réclamations par statut (Pie Chart)
+    const reclamationByStatusData = data.reclamationStats;
+    const statusLabels = [];
+    const statusCounts = [];
+    reclamationByStatusData.forEach(item => {
+        statusLabels.push(item.status);
+        statusCounts.push(item.count);
+    });
+    const statusCtx = document.getElementById('reclamationByStatusPieChart').getContext('2d');
+    new Chart(statusCtx, {
+        type: 'pie',
+        data: {
+            labels: statusLabels,
+            datasets: [{
+                label: 'Réclamations par statut',
+                data: statusCounts,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+   
+    // Réclamations par date (Line Chart)
+    const reclamationByDateData = data.reclamationStatsDate;
+    const dateLabels = [];
+    const dateCounts = [];
+    reclamationByDateData.forEach(item => {
+        dateLabels.push(item.date);
+        dateCounts.push(item.count);
+    });
+    const dateCtx = document.getElementById('reclamationByDateLineChart').getContext('2d');
+    new Chart(dateCtx, {
+        type: 'line',
+        data: {
+            labels: dateLabels,
+            datasets: [{
+                label: 'Réclamations par date',
+                data: dateCounts,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    // Réclamations par mois (Bar Chart)
+    const reclamationByMonthData = data.reclamationStatsMonth;
+    const monthLabels = [];
+    const monthCounts = [];
+    reclamationByMonthData.forEach(item => {
+        monthLabels.push(item.month);
+        monthCounts.push(item.count);
+    });
+    const monthCtx = document.getElementById('reclamationByMonthBarChart').getContext('2d');
+    new Chart(monthCtx, {
+        type: 'bar',
+        data: {
+            labels: monthLabels,
+            datasets: [{
+                label: 'Réclamations par mois',
+                data: monthCounts,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
+
+
+

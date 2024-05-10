@@ -60,6 +60,7 @@
 							<li><a href="{{ path('ajouterFront_evenement') }}">Ajouter un evenement</a></li>
 							<li><a href="{{ path('calendar') }}">Calendrier des evenements</a></li>
 							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter une proposition</a></li>
+							<li><a href="{{ path('statsF') }}">Statistiques des evenements</a></li>
 
 						</ul>
 					</li>
@@ -121,7 +122,7 @@
 						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
 						<ul>
 							<li><a href="{{ path('afficherReclamationFA') }}">les Réclamations</a></li>
-							<li><a href="#">Statistiques des Réclamations</a></li>
+							<li><a href="{{ path('statsReclamationF') }}">Statistiques des Réclamations</a></li>
 							<li><a href="{{ path('chatbot') }}">Chat for help</a></li>
 						</ul>
 					</li>
@@ -132,6 +133,7 @@
 							<li><a href="{{ path('ajouterFront_evenement') }}">Ajouter un evenement</a></li>
 							<li><a href="{{ path('calendar') }}">Calendrier des evenements</a></li>
 							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter une proposition</a></li>
+							<li><a href="{{ path('statsF') }}">Statistiques des evenements</a></li>
 
 						</ul>
 					</li>
@@ -151,9 +153,14 @@
 					
 {% endblock %}
 
+{% block imagegpt %} 
+  {% endblock %}
 {% block body %}
-    <div class="breadcrumbs">
-        <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+{% endblock %}
+
+{% block rest %}
+<div class="breadcrumbs">
+        <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/eventt.avif') }}');">
             <div class="container position-relative">
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-6 text-center">
@@ -172,9 +179,14 @@
             </div>
         </nav>
     </div>
-
-    <!-- Event cards section -->
+<br>
+ <!-- Event cards section -->
     <section id="service" class="services pt-0">
+	<div class="container aos-init aos-animate" data-aos="fade-up">
+        <div class="section-header">
+            <span>Les événements</span>
+            <h2>Les événements</h2>
+        </div>
         <div class="container aos-init aos-animate" data-aos="fade-up">
             <div class="row gy-4">
                 {% if evenements is not empty %}
@@ -236,16 +248,4 @@
             </li>
         </ul>
     </nav>
-
-    <section id="call-to-action">
-        <div class="container aos-init aos-animate" data-aos="zoom-out">
-            <div class="row justify-content-center">
-                <div class="col-lg-8 text-center">
-                    <h3>Contactez-nous pour plus d'informations</h3>
-                </div>
-            </div>
-        </div>
-    </section>
 {% endblock %}
-
-{% block rest %}{% endblock %}

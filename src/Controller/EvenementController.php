@@ -455,6 +455,25 @@ public function joinEvenement($id, EvenementRepository $repository, EntityManage
         'evenementStatsMonth' => $evenementStatsMonth,
     ]);
 }
+#[Route('/evenement/statsF', name: 'statsF')]
+    public function statsF(EvenementRepository $evenementRep, ManagerRegistry $doctrine, Request $request): Response
+{
+    
+        $userId = $request->getSession()->get('user_id');
+        //get user
+         $userRepository = $doctrine->getRepository(enduser::class);
+         $users = $userRepository->findOneBy(['id_user' => $userId]);
+    $evenementStats = $evenementRep->countByCategorie();
+    $evenementStatsDate = $evenementRep->countByDateDebut();
+    $evenementStatsMonth = $evenementRep->countByMonth();
+
+    return $this->render('evenement/statsF.html.twig', [
+        'evenementStats' => $evenementStats,
+        'evenementStatsDate' => $evenementStatsDate,
+        'evenementStatsMonth' => $evenementStatsMonth,
+        'user' => $users,
+    ]);
+}
 #[Route('/evenement/generate-pdf/{id}', name: 'generate_pdf')]
 public function generatePdfForEvenement($id, EntityManagerInterface $entityManager): Response
 {

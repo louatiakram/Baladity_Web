@@ -39,5 +39,19 @@ class MainController extends AbstractController
             'user' => $users,  
         ]);
     }
+    #[Route('/about', name: 'about')]
+    public function about(Request $request, ManagerRegistry $doctrine): Response
+    {
+        $userId = $request->getSession()->get('user_id');
+        //$userId=81;
+
+        //get user
+        $userRepository = $doctrine->getRepository(enduser::class);
+        $users = $userRepository->findOneBy(['id_user' => $userId]);
+
+        return $this->render('about.html.twig',[
+            'user' => $users,  
+        ]);
+    }
     
 }

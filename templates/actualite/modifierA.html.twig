@@ -269,9 +269,8 @@
 
     </header><!-- End Header -->
 {% endblock %}
-
 {% block sidebar %}
-    <!-- ======= Sidebar ======= -->
+    <!-- ======= Sidebar =======se -->
     <aside id="sidebar" class="sidebar">
 
         <ul class="sidebar-nav" id="sidebar-nav">
@@ -293,39 +292,65 @@
                 </a>
                 <ul id="GestionUser-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="#">
-                            <i class="bi bi-circle"></i><span>Ajouter User</span>
+                        <a href="{{ path('afficher_user') }}">
+                            <i class="bi bi-circle"></i><span>Liste User</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
-                            <i class="bi bi-circle"></i><span>Liste User</span>
+                        <a href="{{ path('stat') }}">
+                            <i class="bi bi-circle"></i><span>User Stat</span>
                         </a>
                     </li>
                 </ul>
             </li>
             <!-- Gestion User -->
-            <!-- Gestion Tache -->
+            <!-- Gestion Muni -->
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-layout-text-window-reverse"></i><span>Gestion Tache</span><i
+                <a class="nav-link collapsed" data-bs-target="#GestionMuni-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-layout-text-window-reverse"></i><span>Gestion Municipalité</span><i
                             class="bi bi-chevron-down ms-auto"></i>
                 </a>
-                <ul id="GestionTache-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <ul id="GestionMuni-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="#">
-                            <i class="bi bi-circle"></i><span>Ajouter Tache</span>
+                        <a href="{{ path('ajouter_municipality') }}">
+                            <i class="bi bi-circle"></i><span>Ajouter Municipalité</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
-                            <i class="bi bi-circle"></i><span>Liste Tache</span>
+                        <a href="{{ path('afficher_muni') }}">
+                            <i class="bi bi-circle"></i><span>Liste Municipalité</span>
                         </a>
                     </li>
                 </ul>
             </li>
-            <!-- Gestion Taches -->
-            <!-- Gestion Reclamation -->
+            <!-- Gestion Muni -->
+            <!-- Gestion tache -->
+			<li class="nav-item">
+				{% block TacheNavState %}<a class="nav-link collapsed" data-bs-target="#GestionTache-nav" data-bs-toggle="collapse" href="#">{% endblock %}
+					<i class="bi bi-layout-text-window-reverse"></i><span>Gestion Tache</span><i
+						class="bi bi-chevron-down ms-auto"></i>
+				</a>
+				{% block TacheContentState %}<ul id="GestionTache-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+					{% endblock %}
+
+					<li>
+						{% block AjouterTacheNav %}
+						<a href="{{ path('tache_add') }}">
+							<i class="bi bi-circle"></i><span>Ajouter Tache</span>
+						</a>
+						{% endblock %}
+					</li>
+					<li>
+						{% block ListeTacheNav %}
+						<a href="{{ path('tache_list') }}">
+							<i class="bi bi-circle"></i><span>Liste Tache</span>
+						</a>
+						{% endblock %}
+					</li>
+				</ul>
+			</li>
+			<!-- Gestion Taches -->
+                <!-- Gestion Reclamation -->
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#GestionReclamation-nav" data-bs-toggle="collapse"
                    href="#">
@@ -334,13 +359,18 @@
                 </a>
                 <ul id="GestionReclamation-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="#">
+                        <a href="{{ path('typeReclamation') }}">
                             <i class="bi bi-circle"></i><span>Ajouter Reclamation</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{ path('afficherReclamation') }}">
                             <i class="bi bi-circle"></i><span>Liste Reclamation</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('statsReclamation') }}">
+                            <i class="bi bi-circle"></i><span>Statistiques des Reclamations</span>
                         </a>
                     </li>
                 </ul>
@@ -354,12 +384,12 @@
                 </a>
                 <ul id="GestionEvenement-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="#">
+                        <a href="{{ path('ajouter_evenement') }}">
                             <i class="bi bi-circle"></i><span>Ajouter Evenement</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{ path('evenement_list') }}">
                             <i class="bi bi-circle"></i><span>Liste Evenement</span>
                         </a>
                     </li>
@@ -375,19 +405,24 @@
                 </a>
                 <ul id="GestionEquipement-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="#">
+                        <a href="{{ path('ajouterEquipement') }}">
                             <i class="bi bi-circle"></i><span>Ajouter Equipement</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{ path('equipement_show') }}">
                             <i class="bi bi-circle"></i><span>Liste Equipement</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('stats_equipements') }}">
+                            <i class="bi bi-circle"></i><span>Statistiques</span>
                         </a>
                     </li>
                 </ul>
             </li>
             <!-- Gestion Equipement -->
-             <!-- GestionActualite -->
+            <!-- GestionActualite -->
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#GestionActualite-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-layout-text-window-reverse"></i><span>Gestion Actualite</span><i
@@ -401,7 +436,7 @@
 
                     </li>
                     <li>
-                      <a href="{{ path('actualite_show') }}">
+                     <a href="{{ path('actualite_show') }}">
                             <i class="bi bi-circle"></i><span>Liste Actualite</span>
                         </a>
                     </li>

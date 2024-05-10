@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Baladity Home</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{{ asset('front-office/img/LOGOL.png') }}" rel="icon">
+    <link href="{{ asset('front-office/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{{ asset('front-office/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('front-office/vendor/aos/aos.css') }}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="{{ asset('front-office/css/main.css') }}" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: Logis
+    * Updated: Mar 13 2024 with Bootstrap v5.3.3
+    * Template URL: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+        <a href="index.html" class="logo d-flex align-items-center">
+            <!-- Uncomment the line below if you also wish to use an image logo -->
+         <img src="{{ asset('front-office/img/LOGOL.png') }}" class="img-fluid mb-3 mb-lg-0" alt="">
+            <h1>Baladity</h1>
+        </a>
+
+        <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+        <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a href="{{ path('app_main_front') }}" >Home</a></li>
+					 <li class="dropdown"><a href="#" class="active"><span>Actualité</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_actualite') }}">Afficher Actualité</a></li>
+							<li><a href="{{ path('app_publicite') }}">Afficher Publicité</a></li>
+							<li><a href="{{ path('ajouterPub') }}">Ajouter Publicité</a></li>
+						</ul>
+					</li>
+					 <li class="dropdown"><a href="#"><span>Reclamation</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('typeReclamationF') }}">Ajouter Réclamation</a></li>
+							<li><a href="{{ path('afficherReclamationF') }}">Mes réclamations</a></li>
+						</ul>
+					</li>
+					<li class="dropdown"><a href="#"><span>Evénement</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('evenement_listCitoyen') }}">liste des Evenements</a></li>
+							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter proposition</a></li>
+						</ul>
+					</li>
+					<li><a href="{{ path('chatgpt') }}">ChatGpt</a></li>
+					<li><a href="contact.html">Contact</a></li>
+                    <li><a href="contact.html">About Us</a></li>
+					<li class="dropdown"><a href="#"><span>Profile</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_profile_fron') }}">Profile</a></li>
+							<li><a href="{{ path('sign_out') }}">Logout</a></li>
+						</ul>
+					</li>
+             
+                                
+            </ul>
+        </nav><!-- .navbar -->
+
+    </div>
+</header><!-- End Header -->
+<!-- End Header -->
+
+<!-- ======= Hero Section ======= -->
+<section id="hero" class="hero d-flex align-items-center">
+    <div class="container">
+        <div class="row gy-4 d-flex justify-content-between">
+            <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
+                <h2 data-aos="fade-up">Là où il fait extrêmement bon de vivre</h2>
+                <p data-aos="fade-up" data-aos-delay="100">Baladity est une application innovante conçue pour simplifier la gestion des fonctionnalités municipales 
+au sein d'une municipalité. En combinant une interface conviviale avec des fonctionnalités intuitives, 
+Baladity offre aux résidents et aux responsables municipaux un outil efficace pour interagir 
+et coordonner divers aspects de la vie communautaire.</p>
+
+                <form action="#" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up"
+                      data-aos-delay="200">
+                    <input type="text" class="form-control" placeholder="ZIP code or CitY">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+
+                <div class="row gy-4" data-aos="fade-up" data-aos-delay="400">
+
+                    <div class="col-lg-3 col-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1"
+                                  class="purecounter"></span>
+                            <p>Citoyens</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                    <div class="col-lg-3 col-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1"
+                                  class="purecounter"></span>
+                            <p>évenements</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                    <div class="col-lg-3 col-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="1453" data-purecounter-duration="1"
+                                  class="purecounter"></span>
+                            <p>Publicité</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                    <div class="col-lg-3 col-6">
+                        <div class="stats-item text-center w-100 h-100">
+                            <span data-purecounter-start="0" data-purecounter-end="32" data-purecounter-duration="1"
+                                  class="purecounter"></span>
+                            <p>employés</p>
+                        </div>
+                    </div><!-- End Stats Item -->
+
+                </div>
+            </div>
+
+            <div class="col-lg-5 order-1 order-lg-2 hero-img" data-aos="zoom-out">
+               <img src="{{ asset('front-office/img/LOGOL.png') }}" class="img-fluid mb-3 mb-lg-0" alt="">
+            </div>
+
+        </div>
+    </div>
+</section><!-- End Hero Section -->
+
+  <main id="main">
+
+   <section id="team" class="team pt-0">
+      <div class="container aos-init aos-animate" data-aos="fade-up">
+
+        <div class="section-header">
+          <span>Our Team</span>
+          <h2>Our Team</h2>
+
+        </div>
+
+        <div class="row aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+
+          <div class="col-lg-4 col-md-6 d-flex">
+            <div class="member">
+              <img src="{{ asset('images/amine.png') }}" class="img-fluid" alt="">
+
+              <div class="member-content">
+                <h4>med amine yahyaoui</h4>
+                <span>Web Development</span>
+                <p> 
+                  Magni qui quod omnis unde et eos fuga et exercitationem. Odio veritatis perspiciatis quaerat qui aut aut aut
+                </p>
+                <div class="social">
+          
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Team Member -->
+
+          <div class="col-lg-4 col-md-6 d-flex">
+            <div class="member">
+              <img src="{{ asset('images/yassine.png') }}" class="img-fluid" alt="">
+              <div class="member-content">
+                <h4>yassine zayen</h4>
+                <span>Web Development</span>
+                <p>
+                  Repellat fugiat adipisci nemo illum nesciunt voluptas repellendus. In architecto rerum rerum temporibus
+                </p>
+                <div class="social">
+                
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Team Member -->
+
+          <div class="col-lg-4 col-md-6 d-flex">
+            <div class="member">
+             <img src="{{ asset('images/hadil.png') }}" class="img-fluid" alt="">
+              <div class="member-content">
+                <h4>hadil sediri </h4>
+                <span>Content</span>
+                <p>
+                  Voluptas necessitatibus occaecati quia. Earum totam consequuntur qui porro et laborum toro des clara
+                </p>
+                <div class="social">
+     
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Team Member -->
+ <div class="col-lg-4 col-md-6 d-flex">
+            <div class="member">
+             <img src="{{ asset('images/akrem.png') }}" class="img-fluid" alt="">
+              <div class="member-content">
+                <h4>akrem louati </h4>
+                <span>Content</span>
+                <p>
+                  Voluptas necessitatibus occaecati quia. Earum totam consequuntur qui porro et laborum toro des clara
+                </p>
+                <div class="social">
+     
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+           <div class="col-lg-4 col-md-6 d-flex">
+            <div class="member">
+             <img src="{{ asset('images/kboubi.png') }}" class="img-fluid" alt="">
+              <div class="member-content">
+                <h4>med amin kboubi </h4>
+                <span>Content</span>
+                <p>
+                  Voluptas necessitatibus occaecati quia. Earum totam consequuntur qui porro et laborum toro des clara
+                </p>
+                <div class="social">
+     
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+           <div class="col-lg-4 col-md-6 d-flex">
+            <div class="member">
+             <img src="{{ asset('images/fedi.png') }}" class="img-fluid" alt="">
+              <div class="member-content">
+                <h4>fedi wertateni </h4>
+                <span>Content</span>
+                <p>
+                  Voluptas necessitatibus occaecati quia. Earum totam consequuntur qui porro et laborum toro des clara
+                </p>
+                <div class="social">
+     
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div><!--
+
+        </div>
+
+      </div>
+    </section>
+      
+  </main >
+
+   
+
+
+
+<footer id="footer" class="footer">
+
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-5 col-md-12 footer-info">
+                <a href="index.html" class="logo d-flex align-items-center">
+                    <span>Baladity</span>
+                </a>
+                <p>Baladity est une application innovante conçue pour simplifier la gestion des fonctionnalités municipales 
+au sein d'une municipalité. En combinant une interface conviviale avec des fonctionnalités intuitives, 
+Baladity offre aux résidents et aux responsables municipaux un outil efficace pour interagir 
+et coordonner divers aspects de la vie communautaire.</p>
+                <div class="social-links d-flex mt-4">
+                    <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-6 footer-links">
+                <h4>Useful Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Actualité</a></li>
+                    <li><a href="#">réclamation</a></li>
+                    <li><a href="#">evenement</a></li>
+                    <li><a href="#">Equipements</a></li>
+                    <li><a href="#">Tache</a></li>
+                </ul>
+            </div>
+
+      
+
+            <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+                <h4>Contact Us</h4>
+                <p>
+                   Ariana <br>
+                    la petite ariana<br>
+                    Tunis <br><br>
+                    <strong>Phone:</strong> +21694007815<br>
+                    <strong>Email:</strong> Baladity@gmail.com<br>
+                </p>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="copyright">
+            &copy; Copyright <strong><span>Logis</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+    </div>
+
+</footer><!-- End Footer -->
+<!-- End Footer -->
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center active"><i class="bi bi-arrow-up-short"></i></a>
+
+  
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+
+
+</body>
+
+
+<!-- ======= Hero Section ======= -->
+
+
+
+
+       
+
+   
+
+  </main>
+
+
+<a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<div id="preloader"></div>
+
+<!-- Vendor JS Files -->
+<script src="{{ asset('front-office/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('front-office/vendor/purecounter/purecounter_vanilla.js') }}"></script>
+<script src="{{ asset('front-office/vendor/glightbox/js/glightbox.min.js') }}"></script>
+<script src="{{ asset('front-office/vendor/swiper/swiper-bundle.min.js') }}"></script>
+<script src="{{ asset('front-office/vendor/aos/aos.js') }}"></script>
+<script src="{{ asset('front-office/vendor/php-email-form/validate.js') }}"></script>
+
+<!-- Template Main JS File -->
+<script src="{{ asset('front-office/js/main.js') }}"></script>
+
+</body>
+
+</html>
+

@@ -1,0 +1,245 @@
+{% extends 'base-front.html.twig' %}
+
+{% block title %}Baladity Home{% endblock %}
+
+{% block barreTitre %}
+{% if 'Citoyen' in user.getTypeUser() %}
+<li><a href="{{ path('app_main_front') }}" >Home</a></li>
+					 <li class="dropdown"><a href="#"><span>Actualité</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_actualite') }}">Afficher Actualité</a></li>
+							<li><a href="{{ path('app_publicite') }}">Afficher Publicité</a></li>
+							<li><a href="{{ path('ajouterPub') }}">Ajouter Publicité</a></li>
+						</ul>
+					</li>
+					 <li class="dropdown"><a href="#" class="active"><span>Reclamation</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('typeReclamationF') }}">Ajouter Réclamation</a></li>
+							<li><a href="{{ path('afficherReclamationF') }}">Mes réclamations</a></li>
+						</ul>
+					</li>
+                    <li class="dropdown"><a href="#"><span>Evénement</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('evenement_listCitoyen') }}">liste des Evenements</a></li>
+							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter proposition</a></li>
+						</ul>
+					</li>
+					<li><a href="{{ path('chatgpt') }}">ChatGpt</a></li>
+					<li><a href="contact.html">Contact</a></li>
+                    <li><a href="contact.html">About Us</a></li>
+					<li class="dropdown"><a href="#"><span>Profile</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_profile_fron') }}">Profile</a></li>
+							<li><a href="{{ path('sign_out') }}">Logout</a></li>
+						</ul>
+					</li>
+{% elseif 'Responsable employé' in user.getTypeUser() %}
+<li><a href="{{ path('app_main_front') }}" >Home</a></li>
+					<li class="dropdown"><a href="#"><span>Actualité</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_actualiteshowResponsable') }}">Afficher Actualité</a></li>
+							<li><a href="{{ path('ajouterA2') }}">Ajouter Actualité</a></li>
+						</ul>
+					</li>
+					 <li class="dropdown"><a href="#" class="active"><span>Reclamation</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('typeReclamationF') }}">Ajouter Réclamation</a></li>
+							<li><a href="{{ path('afficherReclamationF') }}">Mes réclamations</a></li>
+						</ul>
+					</li>
+					 <li class="dropdown"><a href="#" ><span>Evenement</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class="active"></i></a>
+						<ul>
+							<li><a href="{{ path('evenement_listFront') }}">Liste des evenements</a></li>
+							<li><a href="{{ path('ajouterFront_evenement') }}">Ajouter un evenement</a></li>
+							<li><a href="{{ path('calendar') }}">Calendrier des evenements</a></li>
+							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter une proposition</a></li>
+							<li><a href="{{ path('statsF') }}">Statistiques des evenements</a></li>
+
+						</ul>
+					</li>
+					<li><a href="{{ path('equipement_show_responsable') }}">Equipement</a></li>
+					<li><a href="{{ path('tache_listfront') }}">Taches</a></li>
+					<li><a href="{{ path('chatgpt') }}">ChatGpt</a></li>
+					 <li class="dropdown"><a href="#"><span>Profile</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_profile_fron') }}">Profile</a></li>
+							<li><a href="{{ path('sign_out') }}">Logout</a></li>
+						</ul>
+					</li>
+{% elseif 'Employé' in user.getTypeUser() %}
+<li><a href="{{ path('app_main_front') }}">Home</a></li>
+					 <li class="dropdown"><a href="#"><span>Actualité</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_actualite') }}">Afficher Actualité</a></li>
+							<li><a href="{{ path('app_publicite') }}">Afficher Publicité</a></li>
+							<li><a href="{{ path('ajouterPub') }}">Ajouter Publicité</a></li>
+						</ul>
+					</li>
+					 <li class="dropdown"><a href="#"><span>Reclamation</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('typeReclamationF') }}">Ajouter Réclamation</a></li>
+							<li><a href="{{ path('afficherReclamationF') }}">Mes réclamations</a></li>
+						</ul>
+					</li>
+					  <li class="dropdown"><a href="#"><span>Evénement</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('evenement_listCitoyen') }}">liste des Evenements</a></li>
+							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter proposition</a></li>
+						</ul>
+					</li>
+					<li><a href="{{ path('equipement_show_front') }}">Equipement</a></li>
+					<li><a href="{{ path('tache_listfront') }}">Taches</a></li>
+					<li><a href="{{ path('chatgpt') }}">ChatGpt</a></li>
+					<li class="dropdown"><a href="#"><span>Profile</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_profile_fron') }}">Profile</a></li>
+							<li><a href="{{ path('sign_out') }}">Logout</a></li>
+						</ul>
+					</li>
+
+{% elseif 'Directeur' in user.getTypeUser() %}
+<li><a href="{{ path('app_main_front') }}" >Home</a></li>
+					<li class="dropdown"><a href="#"><span>Actualité</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_actualiteshowResponsable') }}">Afficher Actualité</a></li>
+							<li><a href="{{ path('ajouterA2') }}">Ajouter Actualité</a></li>
+						</ul>
+					</li>
+					 <li class="dropdown"><a href="#" class="active"><span>Reclamation</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('afficherReclamationFA') }}">les Réclamations</a></li>
+							<li><a href="{{ path('statsReclamationF') }}">Statistiques des Réclamations</a></li>
+							<li><a href="{{ path('chatbot') }}">Chat for help</a></li>
+						</ul>
+					</li>
+					<li class="dropdown"><a href="#" ><span>Evenement</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class="active"></i></a>
+						<ul>
+							<li><a href="{{ path('evenement_listFront') }}">Liste des evenements</a></li>
+							<li><a href="{{ path('ajouterFront_evenement') }}">Ajouter un evenement</a></li>
+							<li><a href="{{ path('calendar') }}">Calendrier des evenements</a></li>
+							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter une proposition</a></li>
+							<li><a href="{{ path('statsF') }}">Statistiques des evenements</a></li>
+
+
+						</ul>
+					</li>
+					<li><a href="{{ path('equipement_show_responsable') }}">Equipement</a></li>
+					<li><a href="{{ path('tache_listdir') }}">Taches</a></li>
+					<li><a href="{{ path('chatgpt') }}">ChatGpt</a></li>
+					<li class="dropdown"><a href="#"><span>Profile</span> <i
+						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
+						<ul>
+							<li><a href="{{ path('app_profile_fron') }}">Profile</a></li>
+							<li><a href="{{ path('sign_out') }}">Logout</a></li>
+						</ul>
+					</li>
+
+{% endif %}
+{% endblock %}
+  {% block imagegpt %} 
+  {% endblock %}
+
+{% block body %}
+
+{% endblock %}
+
+{% block rest %}
+    <div class="breadcrumbs">
+        <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+            <div class="container position-relative">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <h2>Reclamation</h2>
+                        <p>Une réclamation dans une municipalité est comme un signal que vous envoyez à votre mairie, comme un trou dans la route, des poubelles qui débordent, ou un lampadaire cassé. En signalant ces problèmes, vous aidez la mairie à les résoudre et à rendre votre quartier plus agréable pour tout le monde.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <ol>
+                    <li><a href="{{path('app_main_front')}}">Home</a></li>
+                    <li><a href="{{ path('afficherReclamationF') }}">Reclamation</a></li>
+                    <li>Messagerie</li>
+
+
+                </ol>
+            </div>
+        </nav>
+    </div>
+    <section id="get-a-quote" class="get-a-quote">
+        <div class="container aos-init aos-animate" data-aos="fade-up">
+            <div class="row justify-content-center"> {# Center the card horizontally #}
+                <div class="col-lg-8"> {# Set the width of the card #}
+                    <div class="card">
+                        <div class="card-body" id="message-container" style="overflow-y: auto; height: 400px;"> {# Adjust the height of the card #}
+                            <h4 class="text-center">Messages</h4>
+                            <!-- Boucle à travers chaque message dans l'ordre inverse -->
+                            {% for message in messages|reverse %}
+                                <div class="message {% if message.typeMessage == 'my-message' %} my-message {% else %} info {% endif %}">
+                                    <img alt="" class="img-circle medium-image" src="{{ message.senderIdMessage.getImageUser() }}">
+                                    <div class="message-body">
+                                        <div class="message-body-inner">
+                                            <div class="message-info">  
+                                                <h4>{{ message.senderIdMessage.getNomUser() }}</h4>
+                                                <h7> <i class="bi bi-clock"></i> {{ message.dateMessage|date('Y-m-d H:i:s') }}</h7>
+                                                <a href="{{ path('supprimerMessagerieF', { id: message.getIdMessage() }) }}">
+                                                    <img src="{{ asset('images/delete.png') }}" width="25" height="25" >
+                                                </a>
+                                                <a href="{{ path('modifierMessagerieF', { id: message.getIdMessage() }) }}">
+                                                    <img src="{{ asset('images/edit.png') }}" width="25" height="25" >
+                                                </a>
+                                            </div>
+                                            <hr>
+                                            <div class="message-text">{{ message.contenuMessage }}</div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="chat-footer">
+                           {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                    {{ form_label(form.contenu_message, "Contenu du message", {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.contenu_message, {'attr': {'class': 'form-control'}}) }}
+                {{ form_widget(form.envoyer, {'attr': {'class': 'btn btn-primary'}}) }}
+                {{ form_end(form) }}
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Fonction pour faire défiler la fenêtre vers le bas
+        function scrollToBottom() {
+            var messageContainer = $('#message-container');
+            messageContainer.scrollTop(messageContainer.prop("scrollHeight"));
+        }
+
+        // Faire défiler vers le bas lorsque la page est chargée
+        $(document).ready(function () {
+            scrollToBottom();
+        });
+    </script>
+{% endblock %}

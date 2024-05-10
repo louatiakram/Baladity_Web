@@ -6,6 +6,7 @@ use DateTime;
 use App\Entity\enduser;
 use App\Entity\reclamation;
 use App\Form\ReclamationType;
+use Symfony\Component\Mime\Email;
 use App\Form\ReclamationAdminType;
 use App\Form\ReclamationModifierType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,12 +18,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\Mime\Email;
 
 
 
@@ -132,6 +133,14 @@ class ReclamationController extends AbstractController
     #[Route('/reclamation/ajouterReclamationF/{cas}', name: 'ajouterReclamationF')]
 public function ajouterReclamationF(Request $request, $cas,MailerInterface $mailer,ManagerRegistry $doctrine): Response
 {
+     // Récupérer l'utilisateur à partir du formulaire
+     $userId = $request->getSession()->get('user_id');
+     //get user
+             $userRepository = $doctrine->getRepository(enduser::class);
+             $users = $userRepository->findOneBy(['id_user' => $userId]);
+     
+             $user = $this->getDoctrine()->getRepository(EndUser::class)->find($userId);
+    
     // Créer une nouvelle instance de l'entité Reclamation
     $reclamation = new Reclamation();
 
@@ -163,13 +172,7 @@ public function ajouterReclamationF(Request $request, $cas,MailerInterface $mail
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        // Récupérer l'utilisateur à partir du formulaire
-        $userId = $request->getSession()->get('user_id');
-//get user
-        $userRepository = $doctrine->getRepository(enduser::class);
-        $users = $userRepository->findOneBy(['id_user' => $userId]);
-
-        $user = $this->getDoctrine()->getRepository(EndUser::class)->find($userId);
+       
 
 
         // Assurez-vous que l'utilisateur est valide
@@ -249,6 +252,7 @@ public function ajouterReclamationF(Request $request, $cas,MailerInterface $mail
 
     return $this->render('reclamation/ajouterReclamationF.html.twig', [
         'form' => $form->createView(),
+        'user' => $users,
     ]);
 }
 
@@ -319,6 +323,10 @@ public function afficherReclamationFA(Request $request, ReclamationRepository $r
 #[Route('/reclamation/filtrerParDate', name: 'filtrerParDate')]
 public function filtrerParDate(Request $request, ReclamationRepository $repository, SessionInterface $session, ManagerRegistry $doctrine): Response
 {
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     $sortingState = $session->get('sorting_state', 'normal');
     
     if ($sortingState === 'normal') {
@@ -339,6 +347,7 @@ public function filtrerParDate(Request $request, ReclamationRepository $reposito
     return $this->render('reclamation/afficherReclamationF.html.twig', [
         'reclamations' => $reclamations,
         'sorting_state' => $sortingState,
+        'user' => $users,
     ]);
 }
 
@@ -431,6 +440,10 @@ public function filtrerParDate(Request $request, ReclamationRepository $reposito
     #[Route('/reclamation/modifierReclamationF/{id}', name: 'modifierReclamationF')]
     public function modifierReclamationF($id, ManagerRegistry $doctrine, Request $request): Response
     {
+        $userId = $request->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
         // Récupérer l'entity manager
         $entityManager = $doctrine->getManager();
         
@@ -477,6 +490,7 @@ public function filtrerParDate(Request $request, ReclamationRepository $reposito
         return $this->render('reclamation/modifierReclamationF.html.twig', [
             'form' => $form->createView(),
             'reclamation' => $reclamation,
+            'user' => $users,
         ]);
     }
 
@@ -490,21 +504,31 @@ public function filtrerParDate(Request $request, ReclamationRepository $reposito
 
     }
     #[Route('/reclamation/detailReclamationF/{id}', name: 'detailReclamationF')]
-    public function detailReclamationF($id, ReclamationRepository $rep): Response
+    public function detailReclamationF($id, ReclamationRepository $rep,ManagerRegistry $doctrine,Request $request): Response
     {
+        $userId = $request->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
         $reclamation=$rep->find($id);
         return $this->render('reclamation/detailReclamationF.html.twig', [
             'reclamation' => $reclamation,
+            'user' => $users,
         ]);
 
     }
 
     #[Route('/reclamation/detailReclamationFA/{id}', name: 'detailReclamationFA')]
-    public function detailReclamationFA($id, ReclamationRepository $rep): Response
+    public function detailReclamationFA($id, ReclamationRepository $rep,ManagerRegistry $doctrine,Request $request): Response
     {
+        $userId = $request->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
         $reclamation=$rep->find($id);
         return $this->render('reclamation/detailReclamationFA.html.twig', [
             'reclamation' => $reclamation,
+            'user' => $users,
         ]);
 
     }
@@ -584,6 +608,26 @@ public function filtrerParDate(Request $request, ReclamationRepository $reposito
         'reclamationStatsMonth' => $reclamationStatsMonth,
     ]);
 }
+#[Route('/reclamation/statsReclamationF', name: 'statsReclamationF')]
+public function statsReclamationF(ReclamationRepository $reclamationRepository, ManagerRegistry $doctrine, Request $request): Response
+{
+    $userId = $request->getSession()->get('user_id');
+    // Récupérer l'utilisateur
+    $userRepository = $doctrine->getRepository(Enduser::class);
+    $user = $userRepository->findOneBy(['id_user' => $userId]);
+
+    // Récupérer les statistiques de réclamation
+    $reclamationStats = $reclamationRepository->countByStatus();
+    $reclamationStatsDate = $reclamationRepository->countByDate();
+    $reclamationStatsMonth = $reclamationRepository->countByMonth();
+
+    return $this->render('reclamation/statsReclamationF.html.twig', [
+        'reclamationStats' => $reclamationStats,
+        'reclamationStatsDate' => $reclamationStatsDate,
+        'reclamationStatsMonth' => $reclamationStatsMonth,
+        'user' => $user,
+    ]);
+}
     #[Route('/reclamation/redirectMessagerie/{id}', name: 'redirectMessagerie')]
 public function redirectMessagerie(int $id): RedirectResponse
 {
@@ -594,6 +638,10 @@ public function redirectMessagerie(int $id): RedirectResponse
 #[Route('/reclamation/send-email/{id}', name: 'send_reclamation_email')]
 public function sendReclamationEmail(MailerInterface $mailer, Request $request, ManagerRegistry $doctrine, $id): Response
 {
+    $userId = $request->getSession()->get('user_id');
+    //get user
+            $userRepository = $doctrine->getRepository(enduser::class);
+            $users = $userRepository->findOneBy(['id_user' => $userId]);
     // Find the Reclamation object
     $reclamation = $this->getDoctrine()->getRepository(Reclamation::class)->find($id);
 
@@ -628,6 +676,7 @@ public function sendReclamationEmail(MailerInterface $mailer, Request $request, 
     // If the email was sent successfully, render the success response
     return $this->render('reclamation/traitementReclamation.html.twig', [
         'reclamation' => $reclamation,
+        'user' => $users,
     ]);
 }
 

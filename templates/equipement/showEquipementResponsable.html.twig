@@ -60,6 +60,7 @@
 							<li><a href="{{ path('ajouterFront_evenement') }}">Ajouter un evenement</a></li>
 							<li><a href="{{ path('calendar') }}">Calendrier des evenements</a></li>
 							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter une proposition</a></li>
+														<li><a href="{{ path('statsF') }}">Statistiques des evenements</a></li>
 
 						</ul>
 					</li>
@@ -121,7 +122,7 @@
 						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
 						<ul>
 							<li><a href="{{ path('afficherReclamationFA') }}">les Réclamations</a></li>
-							<li><a href="#">Statistiques des Réclamations</a></li>
+							<li><a href="{{ path('statsReclamationF') }}">Statistiques des Réclamations</a></li>
 							<li><a href="{{ path('chatbot') }}">Chat for help</a></li>
 						</ul>
 					</li>
@@ -132,6 +133,8 @@
 							<li><a href="{{ path('ajouterFront_evenement') }}">Ajouter un evenement</a></li>
 							<li><a href="{{ path('calendar') }}">Calendrier des evenements</a></li>
 							<li><a href="{{ path('ajouter_voteFront') }}">Ajouter une proposition</a></li>
+														<li><a href="{{ path('statsF') }}">Statistiques des evenements</a></li>
+
 
 						</ul>
 					</li>
@@ -150,9 +153,15 @@
 
 					
 {% endblock %}
-{% block body %}
+
+{% block imagegpt %} 
+  {% endblock %}
+{% block body %}  
+{% endblock %}
+
+{% block rest %}
 <div class="breadcrumbs">
-  <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/1698797913755.jfif') }}');">
+  <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/equip.jpg') }}');">
     <div class="container position-relative">
       <div class="row d-flex justify-content-center">
         <div class="col-lg-6 text-center">
@@ -164,10 +173,6 @@ L'équipement municipal désigne l'ensemble des infrastructures, équipements et
     </div>
   </div>
   
-  
-{% endblock %}
-
-{% block rest %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <br>
     <h1 class="card-title" style="text-align: center; font-size: 2em;">La liste des équipements</h1>

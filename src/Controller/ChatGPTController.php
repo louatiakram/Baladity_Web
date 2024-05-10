@@ -13,9 +13,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ChatGPTController extends AbstractController
 {
     #[Route('/chatgpt', name: 'chatgpt')]
-    public function index( ? string $question, ? string $response): Response
+    public function index( ? string $question, ? string $response,ManagerRegistry $doctrine, Request $request): Response
     {
-        return $this->render('messagerie/chat.html.twig');
+        $userId = $request->getSession()->get('user_id');
+        //get user
+                $userRepository = $doctrine->getRepository(enduser::class);
+                $users = $userRepository->findOneBy(['id_user' => $userId]);
+        return $this->render('messagerie/chat.html.twig', [
+            'user' => $users,
+        ]);
     }
 
     #[Route('/messagerie/chatbot', name: 'chatbot')]
