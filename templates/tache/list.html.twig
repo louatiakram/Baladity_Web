@@ -152,6 +152,9 @@
 </div>
 <button onclick="location.href='{{ path('tache_add') }}'" class="btn btn-outline-primary"><i class="bi bi-plus"></i> Ajouter Tâche</button>
 <button onclick="location.href='{{ path('tache_piechart') }}'" class="btn btn-outline-primary"><i class="bi bi-star me-1"></i> TOP 10 Meilleurs Employées</button>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 <script>
    function filterByDate() {
        const startDate = document.getElementById('startDate').value;
@@ -160,7 +163,6 @@
        window.location.href = url;
    }
 </script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <style>
    .btn-group {
    display: flex;

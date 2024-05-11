@@ -186,27 +186,6 @@ class TacheController extends AbstractController
         return new JsonResponse($response);
     }
 
-    #[Route('/tache/searchdir', name: 'tache_searchdir', methods: ['GET'])]
-    public function searchdir(TacheRepository $tacheRepository, Request $request): JsonResponse
-    {
-        $query = $request->query->get('q');
-        dump($query);
-
-        $results = [];
-        if ($query !== null) {
-            $results = $tacheRepository->findByNom($query)->getQuery()->getResult();
-        }
-
-        $response = [];
-        foreach ($results as $result) {
-            $response[] = [
-                'url' => $this->generateUrl('tache_detail', ['i' => $result->getIdT()]),
-                'nom' => $result->getTitreT(),
-            ];
-        }
-
-        return new JsonResponse($response);
-    }
 
     #[Route('/tache/detail/{i}', name: 'tache_detail')]
     public function detail($i, TacheRepository $rep, SessionInterface $session, ManagerRegistry $doctrine,Request $request): Response
@@ -537,9 +516,7 @@ class TacheController extends AbstractController
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
 
         // Check if the user exists
-        if (!$user) {
-            throw $this->createNotFoundException('Utilisateur non trouvé.');
-        }
+
 
         // Get the type of the current user
         $typeUser = $user->getTypeUser();
@@ -589,15 +566,9 @@ class TacheController extends AbstractController
     {
         $userId = $session->get('user_id');
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
-        if (!$user) {
-            throw $this->createNotFoundException('User Existe Pas');
-        }
+
         // Retrieve user type from session
         $typeUser = $session->get('user_type');
-
-        if (!$typeUser) {
-            throw $this->createNotFoundException('User type not found in session.');
-        }
 
         $tache = $rep->find($i);
         if (!$tache) {
@@ -676,12 +647,6 @@ class TacheController extends AbstractController
     {
         // Retrieve user type from session
         $typeUser = $session->get('user_type');
-
-        if (!$typeUser) {
-            // If user type is not found in session, handle the error (redirect or display message)
-            // For example:
-            throw $this->createNotFoundException('User type not found in session.');
-        }
 
         // Fetch tasks associated with the current user type
         $tasks = [];
@@ -802,16 +767,11 @@ class TacheController extends AbstractController
         $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
 
         // Check if the user exists
-        if (!$user) {
-            throw $this->createNotFoundException('Utilisateur non trouvé.');
-        }
 
         // Retrieve user type from session
         $typeUser = $session->get('user_type');
 
-        if (!$typeUser) {
-            throw $this->createNotFoundException('User type not found in session.');
-        }
+
 
         // Check if the form is submitted and valid
         if ($request->isMethod('POST')) {
