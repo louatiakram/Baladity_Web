@@ -25,6 +25,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+
 
 class TacheController extends AbstractController
 {
@@ -215,68 +217,76 @@ class TacheController extends AbstractController
     }
 
     #[Route('/tache/add', name: 'tache_add')]
-    public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
-    {
-        $userId = $req->getSession()->get('user_id');
-        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
+{
+    $userId = $req->getSession()->get('user_id');
+    $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
 
-        if (!$user) {
-            throw $this->createNotFoundException('User Existe Pas');
-        }
+    if (!$user) {
+        throw $this->createNotFoundException('User Existe Pas');
+    }
 
-        $x = new tache();
-        $x->setIdUser($user);
+    $x = new tache();
+    $x->setIdUser($user);
 
-        $form = $this->createForm(TacheType::class, $x);
-        $form->handleRequest($req);
-        if ($form->isSubmitted() && $form->isValid()) {
+    $form = $this->createForm(TacheType::class, $x);
+    $form->handleRequest($req);
 
-            $em = $doctrine->getManager();
-            // Check if a task with the same titre_T and nom_Cat already exists
-            $existingTask = $em->getRepository(tache::class)->findOneBy([
-                'titre_T' => $x->getTitreT(),
-                'nom_Cat' => $x->getNomCat(),
-            ]);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $em = $doctrine->getManager();
+        // Check if a task with the same titre_T and nom_Cat already exists
+        $existingTask = $em->getRepository(tache::class)->findOneBy([
+            'titre_T' => $x->getTitreT(),
+            'nom_Cat' => $x->getNomCat(),
+        ]);
 
-            if ($existingTask) {
-                $form->addError(new FormError('Une tâche avec le même titre et la même catégorie existe déjà !'));
-            } else {
+        if ($existingTask) {
+            $form->addError(new FormError('Une tâche avec le même titre et la même catégorie existe déjà !'));
+        } else {
+            // Handle file upload
+            $pieceJointe = $form->get('pieceJointe_T')->getData();
+            if ($pieceJointe) {
+                $originalFilename = pathinfo($pieceJointe->getClientOriginalName(), PATHINFO_FILENAME);
+                $slugger = new AsciiSlugger();
+                $safeFilename = $slugger->slug($originalFilename)->lower()->toString();
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$pieceJointe->guessExtension();
 
-                // Handle file upload
-                /** @var UploadedFile|null $pieceJointe */
-                $pieceJointe = $form->get('pieceJointe_T')->getData();
-                if ($pieceJointe) {
-                    $originalFilename = pathinfo($pieceJointe->getClientOriginalName(), PATHINFO_FILENAME);
-                    // Move the file to the uploads directory
-                    try {
-                        $uploadedFile = $pieceJointe->move(
-                            $this->getParameter('uploads_directory'), // Use the parameter defined in services.yaml
-                            $originalFilename . '.' . $pieceJointe->guessExtension()
-                        );
-                        $x->setPieceJointeT($uploadedFile->getFilename());
-                    } catch (FileException $e) {}
+                try {
+                    $pieceJointe->move(
+                        $this->getParameter('uploads_directory'),
+                        $newFilename
+                    );
+                    
+                    // Copy the file to the other directory
+                    $targetDirectoryJava = 'C:/Users/ASUS/Desktop/3A5S2/PIDEV/3A5_DevMasters/src/main/resources/assets';
+                    $targetPathJava = $targetDirectoryJava . '/' . $newFilename;
+                    copy($this->getParameter('uploads_directory').'/'.$newFilename, $targetPathJava);
+                } catch (FileException $e) {
+                    // Handle exception if necessary
                 }
 
-                // Get the selected etat_T value from the form
-                $selectedEtatT = $form->get('etat_T')->getData();
-
-                // Set the etat_T property of the tache entity
-                $x->setEtatT($selectedEtatT);
-
-                $em = $doctrine->getManager();
-                $em->persist($x);
-                $em->flush();
-
-                $session->getFlashBag()->add('success', 'Tâche ajoutée avec succès!');
-                return $this->redirectToRoute('tache_list');
+                $x->setPieceJointeT($newFilename);
             }
 
-        }
-        // Pass the image path to the template
-        $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploads_directory') . '/' . $x->getPieceJointeT() : null;
+            // Get the selected etat_T value from the form
+            $selectedEtatT = $form->get('etat_T')->getData();
 
-        return $this->renderForm('tache/add.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
+            // Set the etat_T property of the tache entity
+            $x->setEtatT($selectedEtatT);
+
+            $em->persist($x);
+            $em->flush();
+
+            $session->getFlashBag()->add('success', 'Tâche ajoutée avec succès!');
+            return $this->redirectToRoute('tache_list');
+        }
     }
+
+    // Pass the image path to the template
+    $imagePath = $x->getPieceJointeT() ? $this->getParameter('uploads_directory') . '/' . $x->getPieceJointeT() : null;
+
+    return $this->renderForm('tache/add.html.twig', ['f' => $form, 'imagePath' => $imagePath]);
+}
 
     #[Route('/tache/adddir', name: 'tache_adddir')]
     public function adddir(Request $req, ManagerRegistry $doctrine, SessionInterface $session): Response
@@ -305,22 +315,31 @@ class TacheController extends AbstractController
             if ($existingTask) {
                 $form->addError(new FormError('Une tâche avec le même titre et la même catégorie existe déjà !'));
             } else {
-
                 // Handle file upload
-                /** @var UploadedFile|null $pieceJointe */
                 $pieceJointe = $form->get('pieceJointe_T')->getData();
                 if ($pieceJointe) {
                     $originalFilename = pathinfo($pieceJointe->getClientOriginalName(), PATHINFO_FILENAME);
-                    // Move the file to the uploads directory
+                    $slugger = new AsciiSlugger();
+                    $safeFilename = $slugger->slug($originalFilename)->lower()->toString();
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$pieceJointe->guessExtension();
+    
                     try {
-                        $uploadedFile = $pieceJointe->move(
-                            $this->getParameter('uploads_directory'), // Use the parameter defined in services.yaml
-                            $originalFilename . '.' . $pieceJointe->guessExtension()
+                        $pieceJointe->move(
+                            $this->getParameter('uploads_directory'),
+                            $newFilename
                         );
-                        $x->setPieceJointeT($uploadedFile->getFilename());
-                    } catch (FileException $e) {}
+                        
+                        // Copy the file to the other directory
+                        $targetDirectoryJava = 'C:/Users/ASUS/Desktop/3A5S2/PIDEV/3A5_DevMasters/src/main/resources/assets';
+                        $targetPathJava = $targetDirectoryJava . '/' . $newFilename;
+                        copy($this->getParameter('uploads_directory').'/'.$newFilename, $targetPathJava);
+                    } catch (FileException $e) {
+                        
+                    }
+    
+                    $x->setPieceJointeT($newFilename);
                 }
-
+    
                 // Get the selected etat_T value from the form
                 $selectedEtatT = $form->get('etat_T')->getData();
 
@@ -352,19 +371,27 @@ class TacheController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Handle file upload
-            /** @var UploadedFile|null $pieceJointe */
-            $pieceJointe = $form->get('pieceJointe_T')->getData();
-            if ($pieceJointe) {
-                $originalFilename = pathinfo($pieceJointe->getClientOriginalName(), PATHINFO_FILENAME);
-                // Move the file to the uploads directory
-                try {
-                    $uploadedFile = $pieceJointe->move(
-                        $this->getParameter('uploads_directory'), // Use the parameter defined in services.yaml
-                        $originalFilename . '.' . $pieceJointe->guessExtension()
-                    );
-                    $x->setPieceJointeT($uploadedFile->getFilename());
-                } catch (FileException $e) {}
+                // Handle file upload
+                $pieceJointe = $form->get('pieceJointe_T')->getData();
+                if ($pieceJointe) {
+                    $originalFilename = pathinfo($pieceJointe->getClientOriginalName(), PATHINFO_FILENAME);
+                    $slugger = new AsciiSlugger();
+                    $safeFilename = $slugger->slug($originalFilename)->lower()->toString();
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$pieceJointe->guessExtension();
+    
+                    try {
+                        $pieceJointe->move(
+                            $this->getParameter('uploads_directory'),
+                            $newFilename
+                        );
+                        
+                        // Copy the file to the other directory
+                        $targetDirectoryJava = 'C:/Users/ASUS/Desktop/3A5S2/PIDEV/3A5_DevMasters/src/main/resources/assets';
+                        $targetPathJava = $targetDirectoryJava . '/' . $newFilename;
+                        copy($this->getParameter('uploads_directory').'/'.$newFilename, $targetPathJava);
+                    } catch (FileException $e) {
+                        
+                    }
             }
 
             // Get the selected etat_T value from the form
@@ -399,19 +426,27 @@ class TacheController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Handle file upload
-            /** @var UploadedFile|null $pieceJointe */
-            $pieceJointe = $form->get('pieceJointe_T')->getData();
-            if ($pieceJointe) {
-                $originalFilename = pathinfo($pieceJointe->getClientOriginalName(), PATHINFO_FILENAME);
-                // Move the file to the uploads directory
-                try {
-                    $uploadedFile = $pieceJointe->move(
-                        $this->getParameter('uploads_directory'), // Use the parameter defined in services.yaml
-                        $originalFilename . '.' . $pieceJointe->guessExtension()
-                    );
-                    $x->setPieceJointeT($uploadedFile->getFilename());
-                } catch (FileException $e) {}
+                // Handle file upload
+                $pieceJointe = $form->get('pieceJointe_T')->getData();
+                if ($pieceJointe) {
+                    $originalFilename = pathinfo($pieceJointe->getClientOriginalName(), PATHINFO_FILENAME);
+                    $slugger = new AsciiSlugger();
+                    $safeFilename = $slugger->slug($originalFilename)->lower()->toString();
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$pieceJointe->guessExtension();
+    
+                    try {
+                        $pieceJointe->move(
+                            $this->getParameter('uploads_directory'),
+                            $newFilename
+                        );
+                        
+                        // Copy the file to the other directory
+                        $targetDirectoryJava = 'C:/Users/ASUS/Desktop/3A5S2/PIDEV/3A5_DevMasters/src/main/resources/assets';
+                        $targetPathJava = $targetDirectoryJava . '/' . $newFilename;
+                        copy($this->getParameter('uploads_directory').'/'.$newFilename, $targetPathJava);
+                    } catch (FileException $e) {
+                        
+                    }
             }
 
             // Get the selected etat_T value from the form
