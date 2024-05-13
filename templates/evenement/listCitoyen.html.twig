@@ -150,10 +150,13 @@
 
 {% endif %}
 
-					
+	{% block imagegpt %} 
+  {% endblock %}				
+{% endblock %}
+{% block body %}
 {% endblock %}
 
-{% block body %}
+{% block rest %}
     <div class="breadcrumbs">
         <div class="page-header d-flex align-items-center" style="background-image: url('{{ asset('images/eventt.avif') }}');">
             <div class="container position-relative">
@@ -244,4 +247,3 @@
     </section>
 {% endblock %}
 
-{% block rest %}{% endblock %}
