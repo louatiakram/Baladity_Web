@@ -45,8 +45,8 @@ class LoginController extends AbstractController
             $emailSaisie = $form->get('email_user')->getData();
             $passwordSaisie = $form->get('password')->getData();
 
-            $hashedPassword = $this->passwordEncoder->encodePassword($user, $form->get('password')->getData());
-            $user->setPassword($hashedPassword);
+            //$hashedPassword = $this->passwordEncoder->encodePassword($user, $form->get('password')->getData());
+            //$user->setPassword($hashedPassword);
 
             // Retrieve the user from the database based on the provided email
             $userRepository = $doctrine->getRepository(Enduser::class);
@@ -55,8 +55,9 @@ class LoginController extends AbstractController
             // Check if a user with the provided email exists
             if ($user) {
                 // Verify if the password from the form matches the hashed password stored in the database
-                $hashedPassword = $user->getPassword();
-                if ($this->passwordEncoder->isPasswordValid($user, $passwordSaisie)) {
+                $userpwd = $user->getPassword();
+                //if ($this->passwordEncoder->isPasswordValid($user, $passwordSaisie)) {
+                if ($passwordSaisie == $userpwd) {
                     // Password is correct, store user ID in session
                     $request->getSession()->set('user_id', $user->getIdUser());
 
