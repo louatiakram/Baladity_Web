@@ -20,7 +20,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormError;
 use DateTime;
 use App\Repository\ActualiteRepository;
-
+use Symfony\Component\String\Slugger\AsciiSlugger;
 class ActualiteController extends AbstractController
 {
     #[Route('/actualite', name: 'app_actualite')]
@@ -56,16 +56,27 @@ class ActualiteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Set the image_a field
             $image = $form->get('image_a')->getData();
+              $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $slugger = new AsciiSlugger();
+            $safeFilename = $slugger->slug($originalFilename)->lower()->toString();
+            $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
             if ($image) {
                 // Handle image upload and persist its filename to the database
                 $fileName = uniqid() . '.' . $image->guessExtension();
                 try {
-                    $image->move($this->getParameter('uploads_directory'), $fileName);
+                    $image->move($this->getParameter('uploads_directory'),  $newFilename, $fileName);
+                    
                     $actualite->setImageA($fileName);
+ // Copy the file to the other directory
+ $targetDirectoryJava = 'C:/Users/amine/Desktop/PiDev/3A5_DevMasters/src/main/resources/assets';
+ $targetPathJava = $targetDirectoryJava . '/' . $newFilename;
+ copy($this->getParameter('uploads_directory').'/'.$newFilename, $targetPathJava);
+
                 } catch (FileException $e) {
                     // Handle the exception if file upload fails
                     // For example, log the error or display a flash message
                 }
+                $actualite->setImageA($newFilename);
             } else {
                 // Add an error to the image_a field if no image is selected
                 $form->get('image_a')->addError(new FormError('Vous devez sélectionner une image.'));
