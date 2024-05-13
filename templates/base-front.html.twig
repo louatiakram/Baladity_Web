@@ -9,6 +9,9 @@
 	<meta content="" name="description">
 	<meta content="" name="keywords">
 
+	<!-- Include Intro.js library -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.1.0/intro.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.1.0/introjs.min.css">
 	<!-- Favicons -->
 	<link href="{{ asset('front-office/img/logo.png') }}" rel="icon">
 	<link href="{{ asset('front-office/img/logo.png') }}" rel="apple-touch-icon">
@@ -790,6 +793,8 @@
 		
 	</main><!-- End #main -->
 	{% endblock %}
+	
+{% block javascripts %}{% endblock %}
 	<!-- ======= Footer ======= -->
 	<footer id="footer" class="footer">
 
@@ -879,6 +884,7 @@
 
 	<!-- Template Main JS File -->
 	<script src="{{ asset('front-office/js/main.js') }}"></script>
+
 
 </body>
 

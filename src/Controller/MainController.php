@@ -58,5 +58,11 @@ class MainController extends AbstractController
             'user' => $users,  
         ]);
     }
+
+    #[Route('/hello', name: 'hello_world')]
+    public function hello(): Response
+    {
+        return $this->render('hello_world/hello.html.twig');
+    }
     
 }
