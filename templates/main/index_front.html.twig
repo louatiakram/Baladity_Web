@@ -165,15 +165,45 @@ Baladity offre aux résidents et aux responsables municipaux un outil efficace p
 et coordonner divers aspects de la vie communautaire.
 {% endblock %}
 {% block rest %}
+
+{# code instruction #}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.1.0/introjs.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.1.0/intro.min.js"></script>
+    
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Intro.js
+            var intro = introJs();
+            intro.setOptions({
+                steps: [
+                    {
+                        intro: "Welcome! This is a tutorial for the Hello World page."
+                    },
+                    {
+                        element: '#hello-heading',
+                        intro: "This is the 'Hello World' heading."
+                    },
+					{
+                        element: '#bot_desc',
+                        intro: "This is tbot desc."
+                    }
+                ]
+            });
+            intro.start();
+        });
+    </script>
+{# code instruction #}
 {% block balbot %}
+
 <section id="call-to-action" style="background-color: #f8f9fa; padding: 80px 0;">
     <div class="container" data-aos="fade-up">
         <div class="row justify-content-center">
             <div class="col-lg-8 text-center">
-				<img src="{{ asset('back-office/img/chat-botT.gif') }}" class="img-fluid mb-3 mb-lg-0" style="max-width: 200px;" alt="Chatbot">
+				<img {# id #}id="hello-heading" src="{{ asset('back-office/img/chat-botT.gif') }}" class="img-fluid mb-3 mb-lg-0" style="max-width: 200px;" alt="Chatbot">
 
                 <h2 style="font-size: 2.5rem; color: #333;">Balbot</h2>
-                <p style="font-size: 1.1rem; color: #666; line-height: 1.6;">
+                <p {# id #}id="bot_desc" style="font-size: 1.1rem; color: #666; line-height: 1.6;">
                     Balbot is a baladity chatbot designed to engage in meaningful conversations, 
                     providing assistance and support. Powered by advanced AI algorithms, 
                     Balbot aims to enhance user experience and interaction.
