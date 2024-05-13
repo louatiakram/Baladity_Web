@@ -111,6 +111,15 @@ class enduserRepository extends ServiceEntityRepository implements PasswordUpgra
         ->getQuery()
         ->getResult();
 }
-
+public function countUsersPerType(): array
+{
+    return $this->createQueryBuilder('u')
+        ->select('COUNT(u.id_user) as userCount', 'u.type_user')
+        ->where('u.type_user != :type')
+        ->setParameter('type', 'admin')
+        ->groupBy('u.type_user')
+        ->getQuery()
+        ->getResult();
+}
 
 }
