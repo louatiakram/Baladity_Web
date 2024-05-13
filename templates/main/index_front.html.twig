@@ -4,7 +4,7 @@
 
 {% block barreTitre %}
 {% if 'Citoyen' in user.getTypeUser() %}
-<li><a href="{{ path('app_main_front') }}" class="active">Home</a></li>
+<li ><a {# id #}id="navbar_I" href="{{ path('app_main_front') }}" class="active">Home</a></li>
 					 <li class="dropdown"><a href="#"><span>Actualité</span> <i
 						class="bi bi-chevron-down dropdown-indicator" class=""></i></a>
 						<ul>
@@ -168,25 +168,47 @@ et coordonner divers aspects de la vie communautaire.
 
 {# code instruction #}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.1.0/introjs.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.1.0/intro.min.js"></script>
-    
-    
-    <script>
+<style>
+	/* Custom styles for Intro.js tutorial */
+	.introjs-tooltip {
+		max-width: 400px;
+		background-color: #012545; /* Marine blue color */
+		color: #fff; /* White text color */
+		border-radius: 8px;
+		box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+	}
+	.introjs-arrow {
+		display: none; /* Hide arrow */
+	}
+	.introjs-tooltipbuttons button {
+		background-color: #fff; /* White button background */
+		color: #012545; /* Marine blue button text color */
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.1.0/intro.min.js"></script>
+  
+<script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize Intro.js
             var intro = introJs();
             intro.setOptions({
                 steps: [
                     {
-                        intro: "Welcome! This is a tutorial for the Hello World page."
+                        intro: " Welcome To Baladity Homepage! ",
                     },
                     {
-                        element: '#hello-heading',
-                        intro: "This is the 'Hello World' heading."
+                        element: '#navbar_I',
+                        intro: "these are nav elements"
                     },
 					{
-                        element: '#bot_desc',
-                        intro: "This is tbot desc."
+                        element: '#bolbot_I',
+                        intro: "This is balbot, baladity virtual asistant"
+                    },
+					{
+						intro: "Thats it, Have a nice day!",
                     }
                 ]
             });
@@ -194,16 +216,17 @@ et coordonner divers aspects de la vie communautaire.
         });
     </script>
 {# code instruction #}
+
 {% block balbot %}
 
 <section id="call-to-action" style="background-color: #f8f9fa; padding: 80px 0;">
     <div class="container" data-aos="fade-up">
         <div class="row justify-content-center">
-            <div class="col-lg-8 text-center">
-				<img {# id #}id="hello-heading" src="{{ asset('back-office/img/chat-botT.gif') }}" class="img-fluid mb-3 mb-lg-0" style="max-width: 200px;" alt="Chatbot">
+            <div  class="col-lg-8 text-center">
+				<img src="{{ asset('back-office/img/chat-botT.gif') }}" {# id #}id="bolbot_I" class="img-fluid mb-3 mb-lg-0" style="max-width: 200px;" alt="Chatbot">
 
                 <h2 style="font-size: 2.5rem; color: #333;">Balbot</h2>
-                <p {# id #}id="bot_desc" style="font-size: 1.1rem; color: #666; line-height: 1.6;">
+                <p style="font-size: 1.1rem; color: #666; line-height: 1.6;">
                     Balbot is a baladity chatbot designed to engage in meaningful conversations, 
                     providing assistance and support. Powered by advanced AI algorithms, 
                     Balbot aims to enhance user experience and interaction.
