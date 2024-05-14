@@ -258,7 +258,7 @@ public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $s
                     );
                     
                     // Copy the file to the other directory
-                    $targetDirectoryJava = 'C:/Users/ASUS/Desktop/3A5S2/PIDEV/3A5_DevMasters/src/main/resources/assets';
+                    $targetDirectoryJava = 'C:/Users/amine/Desktop/PiDev/3A5_DevMasters/src/main/resources/assets';
                     $targetPathJava = $targetDirectoryJava . '/' . $newFilename;
                     copy($this->getParameter('uploads_directory').'/'.$newFilename, $targetPathJava);
                 } catch (FileException $e) {
@@ -330,7 +330,7 @@ public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $s
                         );
                         
                         // Copy the file to the other directory
-                        $targetDirectoryJava = 'C:/Users/ASUS/Desktop/3A5S2/PIDEV/3A5_DevMasters/src/main/resources/assets';
+                        $targetDirectoryJava = 'C:/Users/amine/Desktop/PiDev/3A5_DevMasters/src/main/resources/assets';
                         $targetPathJava = $targetDirectoryJava . '/' . $newFilename;
                         copy($this->getParameter('uploads_directory').'/'.$newFilename, $targetPathJava);
                     } catch (FileException $e) {
@@ -386,7 +386,7 @@ public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $s
                         );
                         
                         // Copy the file to the other directory
-                        $targetDirectoryJava = 'C:/Users/ASUS/Desktop/3A5S2/PIDEV/3A5_DevMasters/src/main/resources/assets';
+                        $targetDirectoryJava = 'C:/Users/amine/Desktop/PiDev/3A5_DevMasters/src/main/resources/assets';
                         $targetPathJava = $targetDirectoryJava . '/' . $newFilename;
                         copy($this->getParameter('uploads_directory').'/'.$newFilename, $targetPathJava);
                     } catch (FileException $e) {
@@ -441,7 +441,7 @@ public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $s
                         );
                         
                         // Copy the file to the other directory
-                        $targetDirectoryJava = 'C:/Users/ASUS/Desktop/3A5S2/PIDEV/3A5_DevMasters/src/main/resources/assets';
+                        $targetDirectoryJava = 'C:/Users/amine/Desktop/PiDev/3A5_DevMasters/src/main/resources/assets';
                         $targetPathJava = $targetDirectoryJava . '/' . $newFilename;
                         copy($this->getParameter('uploads_directory').'/'.$newFilename, $targetPathJava);
                     } catch (FileException $e) {
