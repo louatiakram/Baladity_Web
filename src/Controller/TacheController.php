@@ -867,8 +867,15 @@ public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $s
     }
 
     #[Route('/balbot', name: 'balbot')]
-    public function chatbotAction(Request $request)
+    public function chatbotAction(Request $request, SessionInterface $session)
     {
+
+        $userId = $session->get('user_id');
+        $user = $this->getDoctrine()->getRepository(enduser::class)->find($userId);
+
+        // Retrieve user type from session
+        $typeUser = $session->get('user_type');
+        
         // Get the user message from the request
         $userMessage = $request->request->get('user_message');
 
@@ -906,6 +913,9 @@ public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $s
         // Render a Twig template with the response
         return $this->render('tache/balbot.html.twig', [
             'response' => $displayText,
+            'userId' => $userId,
+            'user_type' => $typeUser,
+            'user' => $user,
         ]);
     }
 }

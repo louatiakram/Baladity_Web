@@ -148,9 +148,7 @@
 						</ul>
 					</li>
 
-{% endif %}
-
-					
+{% endif %}		
 {% endblock %}
 
 
@@ -164,7 +162,7 @@
             box-sizing: border-box;
         }
 
-        .container {
+        .containerchatbot {
             max-width: 800px;
             margin: 20px auto;
             background-color: #fff;
@@ -231,7 +229,7 @@
         }
     </style>
 
-    <div class="container">
+    <div class="containerchatbot">
         <h1>BalBot</h1>
         <form id="chatForm" method="post" action="{{ path('balbot') }}">
             <input type="text" id="user_message" name="user_message">
@@ -305,3 +303,4 @@
         };
     </script>
 {% endblock %}
+{%block rest%}{% endblock %}
