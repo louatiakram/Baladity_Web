@@ -1,4 +1,4 @@
-# Baladity-web
+# Baladity Web
  
 Baladity is a cutting-edge application designed to bridge the communication gap between citizens and their local municipal authorities. Our platform empowers both citizens and municipal employees by providing a streamlined, efficient means of interaction and task management.
 
