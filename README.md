@@ -6,7 +6,7 @@ Here is the demo of our application:
 
 https://www.youtube.com/watch?v=_SEiQ2j_JvM
 
-Baladity Desktop[https://pages.github.com/](https://github.com/louatiakram/Baladity_Desktop).
+Baladity [Desktop](https://github.com/louatiakram/Baladity_Desktop).
 
 Here are some screenshots of our application:
 
