@@ -1,10 +1,12 @@
 # Baladity Web
- 
+
 Baladity is a cutting-edge application designed to bridge the communication gap between citizens and their local municipal authorities. Our platform empowers both citizens and municipal employees by providing a streamlined, efficient means of interaction and task management.
 
 Here is the demo of our application:
 
 https://www.youtube.com/watch?v=_SEiQ2j_JvM
+
+Baladity Desktop[https://pages.github.com/](https://github.com/louatiakram/Baladity_Desktop).
 
 Here are some screenshots of our application:
 
