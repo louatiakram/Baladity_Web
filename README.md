@@ -17,4 +17,7 @@ Here are some screenshots of our application:
  <img src="public/images//img3.jpg">
  <img src="public/images//img4.jpg">
  <img src="public/images//img5.jpg">
+ <img src="public/images//img6.jpg">
+ <img src="public/images//img7.jpg">
+ <img src="public/images//img8.jpg">
 </p>
