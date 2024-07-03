@@ -21,6 +21,7 @@ Baladity is a cutting-edge application designed to bridge the communication gap 
 ## TOP 12 BAL PI 2024:
 
 <p align="center">
+ <img src="public/images//imgx.jpg">
  <img src="public/images//img6.jpg">
  <img src="public/images//img7.jpg">
 </p>
