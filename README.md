@@ -9,6 +9,36 @@ Baladity is a cutting-edge application designed to bridge the communication gap 
 2) [Mobile](https://github.com/louatiakram/Baladity_Mobile)
 3) [Desktop](https://github.com/louatiakram/Baladity_Desktop)
 
+### Prerequisites
+
+- PHP 8.0 or higher
+- Composer
+- Symfony CLI
+- MySQL
+- Git
+
+### Installation
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/louatiakram/Baladity_Web.git
+   ```
+   
+2. Install Dependencies:
+   ```sh
+   composer install
+   ```
+
+3. Database Migration:
+   ```sh
+   symfony console doctrine:database:create
+   symfony console doctrine:migrations:migrate
+   ```
+
+4. Run the Server:
+   ```sh
+   symfony serve
+   ```
 ## Here are some screenshots of our application:
 
 <p align="center">
