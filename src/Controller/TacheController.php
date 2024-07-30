@@ -558,7 +558,7 @@ public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $s
 
         // Store the user type in the session
         $session->set('user_type', $typeUser);
-
+/*
         // Define the API base URL
         $api_url = 'https://api.quotable.io/';
 
@@ -567,7 +567,7 @@ public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $s
             'base_uri' => $api_url,
             'timeout' => 10, // Adjust timeout as needed
         ]);
-
+*/
         // Fetch taches based on the current user's category
         $taches = [];
         if ($typeUser === "Responsable employé" || $typeUser === "Employé") {
@@ -576,7 +576,7 @@ public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $s
         }
         // Get flash message from the request
         $flashMessage = $request->query->get('flash_message');
-
+/*
         // Make the API request to get a random quote
         try {
             $response = $httpClient->get('random');
@@ -586,12 +586,12 @@ public function add(Request $req, ManagerRegistry $doctrine, SessionInterface $s
             // Log or handle the error as needed
             $quote = null;
         }
-
+*/
         return $this->render('tache/listfront.html.twig', [
             'taches' => $taches,
             'flash_message' => $flashMessage,
             'user_type' => $typeUser,
-            'quote' => $quote, // Pass the quote to the Twig template
+            //'quote' => $quote, // Pass the quote to the Twig template
             'user' => $users,
         ]);
     }
