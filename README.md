@@ -39,6 +39,11 @@ Baladity is a cutting-edge application designed to bridge the communication gap 
    ```sh
    symfony serve
    ```
+
+## Demo Video
+
+[![Watch the demo](https://img.youtube.com/vi/_SEiQ2j_JvM/maxresdefault.jpg)](https://youtu.be/_SEiQ2j_JvM?si=keT4Lrc2SMhwkj7O)
+
 ## Here are some screenshots of our application:
 
 <p align="center">
